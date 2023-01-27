@@ -4,17 +4,33 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 public class LED extends SubsystemBase {
+
+  Spark spark;
   /** Creates a new LED. */
   public LED() {
+    spark = new Spark(Constants.SPARK_MOTOR);
+  }
 
-    
+  public void ledOff(){
+    spark.set(Constants.LED_OFF);
+  }
+
+  public void ledYellow(){
+    spark.set(Constants.LED_YELLOW);
+  }
+
+  public void ledVoilet(){
+    spark.set(Constants.LED_VIOLET);
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    ledYellow();
   }
 }
