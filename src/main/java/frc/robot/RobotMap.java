@@ -7,4 +7,6 @@ public class RobotMap {
     public static final int[] ENCODERS = {0, 1, 2, 3};
 
     public static final int GYRO = 7;
+
+    public static final int SPARK_MOTOR = 0;
 }
