@@ -103,7 +103,7 @@ public final class Constants {
 
     public static final double[] LIMELIGHT_COEFS = {0, 0, 0, 0};
 
-    public static final double LED_YELLOW = 0.69;
+    public static final double LED_YELLOW = 0.66;
 
     public static final double LED_VIOLET = 0.91;
 }
