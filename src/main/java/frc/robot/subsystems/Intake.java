@@ -33,6 +33,7 @@ public class Intake extends SubsystemBase {
 
     intake.configIntegratedSensorInitializationStrategy(SensorInitializationStrategy.BootToAbsolutePosition);
     intake.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
+    intake.configFeedbackNotContinuous(true, 0);
 
     initalIntakeTicks = intake.getSelectedSensorPosition(); 
 
