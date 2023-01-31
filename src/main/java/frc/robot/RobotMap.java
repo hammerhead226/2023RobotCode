@@ -7,4 +7,9 @@ public class RobotMap {
     public static final int[] ENCODERS = {0, 1, 2, 3};
 
     public static final int GYRO = 7;
+
+
+    //Intake Constants
+    public static final int INTAKE_FALCON_PORT = 0; 
+    public static final int ROLLER_FALCON_PORT = 0; 
 }

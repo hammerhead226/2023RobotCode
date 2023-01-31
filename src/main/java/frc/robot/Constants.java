@@ -102,4 +102,12 @@ public final class Constants {
     public static final double[] ACCELERATION_PARAMETERS = {ACCELERATION_RATE, INITIAL_SPEED};
 
     public static final double[] LIMELIGHT_COEFS = {0, 0, 0, 0};
+
+
+
+    //Intake Constants
+    public static final double ROLLER_RUN_SPEED = 0.5; 
+    public static final double[] INTAKE_GAINS = {0,0,0};
+    public static final int INTAKE_OFFSET = 0;
+     
 }

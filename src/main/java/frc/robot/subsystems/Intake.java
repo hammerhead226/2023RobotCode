@@ -4,12 +4,62 @@
 
 package frc.robot.subsystems;
 
+import java.io.Console;
+
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.ctre.phoenix.sensors.SensorInitializationStrategy;
+
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
+import frc.robot.RobotMap;
 
 public class Intake extends SubsystemBase {
-  /** Creates a new Intake. */
-  public Intake() {}
 
+  private TalonFX roller; 
+  private TalonFX intake; 
+  private PIDController intakePID; 
+  private double initalIntakeTicks; 
+
+  /** Creates a new Intake. */
+  public Intake() {
+    intake = new TalonFX(RobotMap.INTAKE_FALCON_PORT);
+    roller = new TalonFX(RobotMap.ROLLER_FALCON_PORT);
+    intake.setNeutralMode(NeutralMode.Brake);
+    roller.setNeutralMode(NeutralMode.Coast);
+
+    intake.configIntegratedSensorInitializationStrategy(SensorInitializationStrategy.BootToAbsolutePosition);
+    intake.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
+
+    initalIntakeTicks = intake.getSelectedSensorPosition(); 
+
+    intakePID = new PIDController(Constants.INTAKE_GAINS[0], Constants.INTAKE_GAINS[1], Constants.INTAKE_GAINS[2]);
+  }
+
+  //Intake Methods
+  public void extend(){
+    intake.set(ControlMode.PercentOutput, intakePID.calculate(intake.getSelectedSensorPosition(),initalIntakeTicks + Constants.INTAKE_OFFSET));
+  }
+
+  public void retract(){
+    intake.set(ControlMode.PercentOutput, intakePID.calculate(intake.getSelectedSensorPosition(),initalIntakeTicks));
+  }
+
+  //Roller Methods
+  public void runIn(){
+    intake.set(ControlMode.PercentOutput, Constants.ROLLER_RUN_SPEED);
+  }
+
+  public void runOut(){
+    intake.set(ControlMode.PercentOutput, -Constants.ROLLER_RUN_SPEED);
+  }
+
+  public void stop(){
+    intake.set(ControlMode.PercentOutput, 0);
+  }
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
