@@ -102,4 +102,12 @@ public final class Constants {
     public static final double[] ACCELERATION_PARAMETERS = {ACCELERATION_RATE, INITIAL_SPEED};
 
     public static final double[] LIMELIGHT_COEFS = {0, 0, 0, 0};
+
+    //Elevator Constants (change these values after testing)
+    public static final double ELEVATOR_COEFFICIENT = 0.7;
+    public static final double[] ELEVATOR_GAINS = {0, 0, 0};
+
+    public static final double LOW_SETPOINT = 0;
+    public static final double MID_SETPOINT = 0;
+    public static final double HIGH_SETPOINT = 0;
 }
