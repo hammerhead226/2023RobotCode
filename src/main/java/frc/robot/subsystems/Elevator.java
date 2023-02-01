@@ -19,6 +19,8 @@ public class Elevator extends SubsystemBase {
   private TalonFX elevatorTalon1;
   private TalonFX elevatorTalon2;
   private PIDController pid;
+  private boolean isManual; 
+  private double initialPos;
 
   public Elevator() {
     elevatorTalon1 = new TalonFX(RobotMap.ELEVATOR_MOTOR_1);
@@ -30,13 +32,24 @@ public class Elevator extends SubsystemBase {
 
     pid = new PIDController(Constants.ELEVATOR_GAINS[0], Constants.ELEVATOR_GAINS[1], Constants.ELEVATOR_GAINS[2]);
     
+    elevatorTalon2.follow(elevatorTalon1);
     elevatorTalon2.setInverted(true);
+
+    //For Testing
+    initialPos = elevatorTalon1.getSelectedSensorPosition(); 
   }
 
-  public void runAt(double speed)
+  public void toggleManual(){
+    isManual = !isManual; 
+  }
+
+
+  public void runManual(double speed)
   {
-    elevatorTalon1.set(ControlMode.PercentOutput, speed * Constants.ELEVATOR_COEFFICIENT);
-    elevatorTalon1.set(ControlMode.PercentOutput, speed * Constants.ELEVATOR_COEFFICIENT);
+    if(isManual){
+      if(!(elevatorTalon1.getSelectedSensorPosition() <= Constants.MIN_POSITION || elevatorTalon1.getSelectedSensorPosition() >= Constants.MAX_POSITION))
+        elevatorTalon1.set(ControlMode.PercentOutput, speed * Constants.ELEVATOR_COEFFICIENT);
+    }
   }
 
   public void setLow()
@@ -55,6 +68,11 @@ public class Elevator extends SubsystemBase {
   {
     elevatorTalon1.set(ControlMode.PercentOutput, pid.calculate(elevatorTalon1.getSelectedSensorPosition(), Constants.HIGH_SETPOINT));
     elevatorTalon1.set(ControlMode.PercentOutput, pid.calculate(elevatorTalon1.getSelectedSensorPosition(), Constants.HIGH_SETPOINT));
+  }
+
+  //Potentially make one function and use lambdas to make simpler
+  public void setTo(double setpoint){
+    elevatorTalon1.set(ControlMode.PercentOutput, pid.calculate(elevatorTalon1.getSelectedSensorPosition(), initialPos + setpoint));
   }
 
   @Override

@@ -110,4 +110,7 @@ public final class Constants {
     public static final double LOW_SETPOINT = 0;
     public static final double MID_SETPOINT = 0;
     public static final double HIGH_SETPOINT = 0;
+
+    public static final double MIN_POSITION = 0; 
+    public static final double MAX_POSITION = 0; 
 }
