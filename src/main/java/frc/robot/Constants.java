@@ -75,6 +75,8 @@ public final class Constants {
 
     public static double[] LIMELIGHT_GAINS = {0.065, 0.0, 0.0};
 
+    
+
     public static final double STEER_GAINS_THRESHOLD = 2146.5; // 9%
     public static final double ROTATE_GAINS_THRESHOLD = 0.15; //TODO: Convert to velocity
     public static final double ROTATE_VELOCITY_THRESHOLD = 0.2;
@@ -102,4 +104,29 @@ public final class Constants {
     public static final double[] ACCELERATION_PARAMETERS = {ACCELERATION_RATE, INITIAL_SPEED};
 
     public static final double[] LIMELIGHT_COEFS = {0, 0, 0, 0};
+
+    //Elevator Constants (change these values after testing)
+    public static final double ELEVATOR_COEFFICIENT = 0.7;
+    public static final double[] ELEVATOR_GAINS = {0, 0, 0};
+
+    public static final double LOW_SETPOINT = 0;
+    public static final double MID_SETPOINT = 0;
+    public static final double HIGH_SETPOINT = 0;
+
+    public static final double MIN_POSITION = 0; 
+    public static final double MAX_POSITION = 0;
+
+
+    //Linear Slide Constants
+    public static final double SLIDE_MIN_POSITION = 0;
+    public static final double LINEAR_SLIDE_COEFFICIENT = 0;
+    public static final double SLIDE_MAX_POSITION = 0;
+
+    public static final double EXTEND_HIGH = 0;
+    public static final double EXTEND_MID = 0;
+    public static final double EXTEND_LOW = 0;
+
+    public static final double[] LINEAR_SLIDE_GAINS = {0,0,0}; 
+
+    public static final double distanceSensorRadius = 0;
 }
