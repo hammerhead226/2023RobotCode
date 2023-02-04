@@ -79,6 +79,8 @@ public final class Constants {
     public static final double ROTATE_GAINS_THRESHOLD = 0.15; //TODO: Convert to velocity
     public static final double ROTATE_VELOCITY_THRESHOLD = 0.2;
 
+    public static final double[] CLAW_GAINS = {0, 0, 0};
+
 
     // REFORMATTED SWERVE PARAMETERS
     public static final double[][] MODULE_GAINS = {DRIVE_GAINS,
@@ -102,4 +104,17 @@ public final class Constants {
     public static final double[] ACCELERATION_PARAMETERS = {ACCELERATION_RATE, INITIAL_SPEED};
 
     public static final double[] LIMELIGHT_COEFS = {0, 0, 0, 0};
+
+    //CLAW PARAMETERS
+    public static final double LEFT_CLAW_CLOSE = 0.0;
+    public static final double RIGHT_CLAW_CLOSE = 180.0;
+
+    public static final double LEFT_CLAW_RELEASE = 180.0;
+    public static final double RIGHT_CLAW_RELEASE = 0.0;
+
+    public static final double LEFT_CLAW_CUBE = 80.0; //yea idk these yet, test out later
+    public static final double RIGHT_CLAW_CUBE = 80.0;
+
+    public static final double LEFT_CLAW_CONE = 80.0;
+    public static final double RIGHT_CLAW_CONE = 80.0;
 }
