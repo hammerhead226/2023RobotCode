@@ -5,15 +5,15 @@
 package frc.robot.subsystems;
 
 
-import com.revrobotics.CANSparkMax;
+import com.ctre.phoenix.motorcontrol.can.TalonFX;
 //import com.revrobotics.RelativeEncoder;
-import com.revrobotics.Rev2mDistanceSensor;
+// import com.revrobotics.Rev2mDistanceSensor;
 //import com.revrobotics.SparkMaxPIDController; COULD POTENTIALLY USE THIS
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-import com.revrobotics.Rev2mDistanceSensor.Port;
-import com.revrobotics.Rev2mDistanceSensor.RangeProfile;
-import com.revrobotics.Rev2mDistanceSensor.Unit;
+// import com.revrobotics.Rev2mDistanceSensor.Port;
+// import com.revrobotics.Rev2mDistanceSensor.RangeProfile;
+// import com.revrobotics.Rev2mDistanceSensor.Unit;
 
+import frc.libs.wrappers.GenericMotor;
 import frc.robot.Constants;
 import frc.robot.RobotMap;
 import edu.wpi.first.math.controller.PIDController;
@@ -22,25 +22,25 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class LinearSlide extends SubsystemBase {
   /** Creates a new LinearSlide. */
-  private CANSparkMax slider;
-  private Rev2mDistanceSensor distanceSensor;
+  private GenericMotor slider;
+  private TalonFX sliderTalon;
+  // private Rev2mDistanceSensor distanceSensor;
   private double initialPos;
   private boolean manual;
   //PIDController pid;
   private PIDController pid;
   public LinearSlide() {
-      slider = new CANSparkMax(RobotMap.SLIDER_SPARK_MAX, MotorType.kBrushless);
-      distanceSensor = new Rev2mDistanceSensor(Port.kOnboard);
-      distanceSensor.setDistanceUnits(Unit.kInches);
-      distanceSensor.setRangeProfile(RangeProfile.kHighAccuracy);
-      initialPos = distanceSensor.getRange();
+      slider = new GenericMotor(sliderTalon);
+      // distanceSensor = new Rev2mDistanceSensor(Port.kOnboard);
+      // distanceSensor.setDistanceUnits(Unit.kInches);
+      // distanceSensor.setRangeProfile(RangeProfile.kHighAccuracy);
+      // initialPos = distanceSensor.getRange();
       
       pid = new PIDController(Constants.LINEAR_SLIDE_GAINS[0], Constants.LINEAR_SLIDE_GAINS[1], Constants.LINEAR_SLIDE_GAINS[2]);
   }
 
-  public double getDistanceTicks() {
-      //42 ticks in one rev, arbitrary radius (assumed) of 1inch
-      return (distanceSensor.getRange()) * (42)/(2 * (Math.PI) * Constants.distanceSensorRadius);
+  public double getDistance() {
+      return (slider.getSensorPose());
   }
 
   public void toggleManual(){
@@ -48,24 +48,23 @@ public class LinearSlide extends SubsystemBase {
   }
 
   public void extendDistanceLow() {
-    slider.set(pid.calculate(getDistanceTicks(), Constants.EXTEND_LOW));
-    slider.getPIDController();
+    slider.set(pid.calculate(getDistance(), Constants.EXTEND_LOW));
   }
   public void extendDistanceMid() {
-    slider.set(pid.calculate(getDistanceTicks(), Constants.EXTEND_MID));
+    slider.set(pid.calculate(getDistance(), Constants.EXTEND_MID));
   }
   public void extendDistanceHigh() {
-    slider.set(pid.calculate(getDistanceTicks(), Constants.EXTEND_HIGH));
+    slider.set(pid.calculate(getDistance(), Constants.EXTEND_HIGH));
   }
 
   public void retractSlider() {
-    slider.set(pid.calculate(getDistanceTicks(), initialPos));
+    slider.set(pid.calculate(getDistance(), initialPos));
   }
 
   public void runManual(double speed)
   {
     if(manual){
-      if(!(getDistanceTicks() <= Constants.SLIDE_MIN_POSITION || getDistanceTicks() >= Constants.SLIDE_MAX_POSITION))
+      if(!(getDistance() <= Constants.SLIDE_MIN_POSITION || getDistance() >= Constants.SLIDE_MAX_POSITION))
         slider.set(speed * Constants.LINEAR_SLIDE_COEFFICIENT);
     }
   }

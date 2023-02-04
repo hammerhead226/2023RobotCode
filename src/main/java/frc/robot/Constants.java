@@ -128,5 +128,4 @@ public final class Constants {
 
     public static final double[] LINEAR_SLIDE_GAINS = {0,0,0}; 
 
-    public static final double distanceSensorRadius = 0;
 }
