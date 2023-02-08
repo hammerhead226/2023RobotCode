@@ -10,6 +10,6 @@ public class RobotMap {
 
 
     //Intake Constants
-    public static final int INTAKE_FALCON_PORT = 0; 
-    public static final int ROLLER_FALCON_PORT = 0; 
+    public static final int INTAKE_PORT = 0; 
+    public static final int ROLLER_PORT = 0; 
 }

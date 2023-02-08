@@ -4,13 +4,11 @@
 
 package frc.robot.subsystems;
 
-import java.io.Console;
-
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
-import com.ctre.phoenix.sensors.SensorInitializationStrategy;
+
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -26,8 +24,8 @@ public class Intake extends SubsystemBase {
 
   /** Creates a new Intake. */
   public Intake() {
-    intake = new TalonFX(RobotMap.INTAKE_FALCON_PORT);
-    roller = new TalonFX(RobotMap.ROLLER_FALCON_PORT);
+    intake = new TalonFX(RobotMap.INTAKE_PORT);
+    roller = new TalonFX(RobotMap.ROLLER_PORT);
     intake.setNeutralMode(NeutralMode.Brake);
     roller.setNeutralMode(NeutralMode.Coast);
 
