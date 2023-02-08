@@ -65,7 +65,7 @@ public class LinearSlide extends SubsystemBase {
   {
     if(manual){
       if(!(getDistance() <= Constants.SLIDE_MIN_POSITION || getDistance() >= Constants.SLIDE_MAX_POSITION))
-        slider.set(speed * Constants.LINEAR_SLIDE_COEFFICIENT);
+        slider.set(ControlMode.PercentOutput, speed * Constants.LINEAR_SLIDE_COEFFICIENT);
     }
   }
 
