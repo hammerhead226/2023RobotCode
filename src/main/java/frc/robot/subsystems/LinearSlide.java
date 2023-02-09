@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 //import com.revrobotics.RelativeEncoder;
 // import com.revrobotics.Rev2mDistanceSensor;
@@ -65,7 +66,7 @@ public class LinearSlide extends SubsystemBase {
   {
     if(manual){
       if(!(getDistance() <= Constants.SLIDE_MIN_POSITION || getDistance() >= Constants.SLIDE_MAX_POSITION))
-        slider.set(ControlMode.PercentOutput, speed * Constants.LINEAR_SLIDE_COEFFICIENT);
+        slider.set(speed * Constants.LINEAR_SLIDE_COEFFICIENT);
     }
   }
 
