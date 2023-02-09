@@ -27,6 +27,9 @@ public class LinearSlide extends SubsystemBase {
   private TalonFX sliderTalon;
   // private Rev2mDistanceSensor distanceSensor;
   private double initialPos;
+  private boolean togglelow;
+  private boolean togglemid;
+  boolean togglehigh;
   private boolean manual;
   //PIDController pid;
   private PIDController pid;
@@ -69,6 +72,41 @@ public class LinearSlide extends SubsystemBase {
         slider.set(speed * Constants.LINEAR_SLIDE_COEFFICIENT);
     }
   }
+
+  public void run(){
+    if(togglelow){
+    extendDistanceLow();
+    }
+    else {
+      slider.set(0);
+    }
+
+    if (togglemid) {
+      extendDistanceMid();
+    } 
+    else {
+      slider.set(0);
+    }
+
+    if(togglehigh){
+      extendDistanceHigh();
+    } 
+    else {
+      slider.set(0);
+    }
+  }
+
+public void togglelow() {
+togglelow = !togglelow;
+}
+
+public void togglemid() {
+  togglemid = !togglemid;
+}
+
+public void togglehigh() {
+  togglehigh = !togglehigh;
+}
 
   @Override
   public void periodic() {
