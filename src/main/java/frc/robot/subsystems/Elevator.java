@@ -25,6 +25,9 @@ public class Elevator extends SubsystemBase {
   private double initialPos;
   private GenericEncoder gen;
   private AnalogInput input = new AnalogInput(0);
+  private boolean togglelow;
+  private boolean togglemid;
+  boolean togglehigh;
   /**
    * Edits to make to Elevator:
    * add 3 commands for Low, Mid, and High
@@ -50,6 +53,7 @@ public class Elevator extends SubsystemBase {
 
     elevator1.setInverted(Constants.ELEVATOR_MOTOR_1_INVERT);
     elevator2.setInverted(Constants.ELEVATOR_MOTOR_2_INVERT);
+    elevator2.follow(elevator1);
 
     gen = new GenericEncoder(input, 0, 2048, 0);
   }
@@ -70,19 +74,18 @@ public class Elevator extends SubsystemBase {
   public void setLow()
   {
     elevator1.set(ControlMode.PercentOutput, elevatorPID.calculate(elevator1.getSelectedSensorPosition(), Constants.LOW_SETPOINT));
-    elevator2.set(ControlMode.PercentOutput, elevatorPID.calculate(elevator1.getSelectedSensorPosition(), Constants.LOW_SETPOINT));
   }
 
   public void setMid()
   {
     elevator1.set(ControlMode.PercentOutput, elevatorPID.calculate(elevator1.getSelectedSensorPosition(), Constants.MID_SETPOINT));
-    elevator2.set(ControlMode.PercentOutput, elevatorPID.calculate(elevator1.getSelectedSensorPosition(), Constants.MID_SETPOINT));
+    
   }
 
   public void setHigh()
   {
     elevator1.set(ControlMode.PercentOutput, elevatorPID.calculate(elevator1.getSelectedSensorPosition(), Constants.HIGH_SETPOINT));
-    elevator2.set(ControlMode.PercentOutput, elevatorPID.calculate(elevator1.getSelectedSensorPosition(), Constants.HIGH_SETPOINT));
+    
   }
 
   //Potentially make one function and use lambdas to make simpler
@@ -90,6 +93,33 @@ public class Elevator extends SubsystemBase {
     elevator1.set(ControlMode.PercentOutput, elevatorPID.calculate(elevator1.getSelectedSensorPosition(), initialPos + setpoint));
   }
 
+  public void run(){
+    if(togglelow){
+      setLow();
+    }
+    else if (togglemid) {
+      setMid();
+    }
+    else if (togglehigh) {
+      setHigh();
+    } 
+    else {
+      elevator1.set(ControlMode.PercentOutput, 0);
+    }
+  }
+
+  public void toggleLow() {
+    togglelow = !togglelow;
+  }
+
+  public void toggleMid() {
+    togglemid = !togglemid;
+  }
+
+  public void toggleHigh() {
+    togglehigh = !togglehigh;
+  }
+  
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
