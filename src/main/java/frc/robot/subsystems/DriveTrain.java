@@ -4,7 +4,10 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 import com.ctre.phoenix.sensors.CANCoder;
 
 import edu.wpi.first.math.controller.PIDController;
@@ -34,13 +37,28 @@ public class DriveTrain extends SubsystemBase {
     GenericMotor[] drives = new GenericMotor[Constants.NUMBER_OF_MODULES];
     GenericMotor[] steers = new GenericMotor[Constants.NUMBER_OF_MODULES];
     GenericEncoder[] encoders = new GenericEncoder[Constants.NUMBER_OF_MODULES];
-
+    //TalonFXConfiguration driveConfig;
+    //TalonFXConfiguration steerConfig;
+    //driveConfig = new TalonFXConfiguration();
+    //
+    //steerConfig = new TalonFXConfiguration();
+    
     for(int i = 0; i < Constants.NUMBER_OF_MODULES; i++) {
         TalonFX drive = new TalonFX(RobotMap.DRIVE_MOTORS[i]);
+        //drive.configAllSettings(driveConfig);
         TalonFX steer = new TalonFX(RobotMap.STEER_MOTORS[i]);
         CANCoder encoder = new CANCoder(RobotMap.ENCODERS[i]);
 
+        drive.setNeutralMode(NeutralMode.Brake);
+        steer.setNeutralMode(NeutralMode.Brake);
         steer.setInverted(true);
+
+        drive.configSupplyCurrentLimit(
+          new SupplyCurrentLimitConfiguration(Constants.DRIVETRAIN_CURRENT_ENABLE, Constants.DRIVETRAIN_CURRENT_LIMIT,
+                  Constants.DRIVETRAIN_CURRENT_THRESHOLD_LIMIT, Constants.DRIVETRAIN_CURRENT_THRESHOLD_TIME));
+        steer.configSupplyCurrentLimit(
+          new SupplyCurrentLimitConfiguration(Constants.DRIVETRAIN_CURRENT_ENABLE, Constants.DRIVETRAIN_CURRENT_LIMIT,
+                  Constants.DRIVETRAIN_CURRENT_THRESHOLD_LIMIT, Constants.DRIVETRAIN_CURRENT_THRESHOLD_TIME));
 
         drives[i] = new GenericMotor(drive);
         steers[i] = new GenericMotor(steer);
@@ -60,6 +78,8 @@ public class DriveTrain extends SubsystemBase {
     this.limelightController = new PIDController(Constants.LIMELIGHT_GAINS[0], Constants.LIMELIGHT_GAINS[1], Constants.LIMELIGHT_GAINS[2]);
     this.limelightController.setTolerance(0.9);
     //swerve.enableRobotCentric();
+    
+    
   }
 
   public void control(double x, double y, double rotate) {
