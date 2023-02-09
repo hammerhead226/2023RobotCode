@@ -18,9 +18,9 @@ import frc.robot.RobotMap;
 
 public class Elevator extends SubsystemBase {
   /** Creates a new Elevator. */
-  private TalonFX elevatorTalon1;
-  private TalonFX elevatorTalon2;
-  private PIDController pid;
+  private TalonFX elevator1;
+  private TalonFX elevator2;
+  private PIDController elevatorPID;
   private boolean isManual; 
   private double initialPos;
   private GenericEncoder gen;
@@ -40,20 +40,17 @@ public class Elevator extends SubsystemBase {
    */
 
   public Elevator() {
-    elevatorTalon1 = new TalonFX(RobotMap.ELEVATOR_MOTOR_1);
-    elevatorTalon2 = new TalonFX(RobotMap.ELEVATOR_MOTOR_2);
+    elevator1 = new TalonFX(RobotMap.ELEVATOR_MOTOR_1);
+    elevator2 = new TalonFX(RobotMap.ELEVATOR_MOTOR_2);
 
-    elevatorTalon1.configIntegratedSensorInitializationStrategy(SensorInitializationStrategy.BootToAbsolutePosition);
-    elevatorTalon1.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
-    elevatorTalon1.configFeedbackNotContinuous(true, 0);
+    elevator1.configIntegratedSensorInitializationStrategy(SensorInitializationStrategy.BootToAbsolutePosition);
+    elevator1.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
 
-    pid = new PIDController(Constants.ELEVATOR_GAINS[0], Constants.ELEVATOR_GAINS[1], Constants.ELEVATOR_GAINS[2]);
-    
-    elevatorTalon2.follow(elevatorTalon1);
-    elevatorTalon2.setInverted(true);
+    elevatorPID = new PIDController(Constants.ELEVATOR_GAINS[0], Constants.ELEVATOR_GAINS[1], Constants.ELEVATOR_GAINS[2]);
 
-    //For Testing
-    initialPos = elevatorTalon1.getSelectedSensorPosition(); 
+    elevator1.setInverted(Constants.ELEVATOR_MOTOR_1_INVERT);
+    elevator2.setInverted(Constants.ELEVATOR_MOTOR_2_INVERT);
+
     gen = new GenericEncoder(input, 0, 2048, 0);
   }
 
@@ -65,32 +62,32 @@ public class Elevator extends SubsystemBase {
   public void runManual(double speed)
   {
     if(isManual){
-      if(!(elevatorTalon1.getSelectedSensorPosition() <= Constants.MIN_POSITION || elevatorTalon1.getSelectedSensorPosition() >= Constants.MAX_POSITION))
-        elevatorTalon1.set(ControlMode.PercentOutput, speed * Constants.ELEVATOR_COEFFICIENT);
+      if(!(elevator1.getSelectedSensorPosition() <= Constants.MIN_POSITION || elevator1.getSelectedSensorPosition() >= Constants.MAX_POSITION))
+        elevator1.set(ControlMode.PercentOutput, speed * Constants.ELEVATOR_COEFFICIENT);
     }
   }
 
   public void setLow()
   {
-    elevatorTalon1.set(ControlMode.PercentOutput, pid.calculate(elevatorTalon1.getSelectedSensorPosition(), Constants.LOW_SETPOINT));
-    elevatorTalon2.set(ControlMode.PercentOutput, pid.calculate(elevatorTalon1.getSelectedSensorPosition(), Constants.LOW_SETPOINT));
+    elevator1.set(ControlMode.PercentOutput, elevatorPID.calculate(elevator1.getSelectedSensorPosition(), Constants.LOW_SETPOINT));
+    elevator2.set(ControlMode.PercentOutput, elevatorPID.calculate(elevator1.getSelectedSensorPosition(), Constants.LOW_SETPOINT));
   }
 
   public void setMid()
   {
-    elevatorTalon1.set(ControlMode.PercentOutput, pid.calculate(elevatorTalon1.getSelectedSensorPosition(), Constants.MID_SETPOINT));
-    elevatorTalon2.set(ControlMode.PercentOutput, pid.calculate(elevatorTalon1.getSelectedSensorPosition(), Constants.MID_SETPOINT));
+    elevator1.set(ControlMode.PercentOutput, elevatorPID.calculate(elevator1.getSelectedSensorPosition(), Constants.MID_SETPOINT));
+    elevator2.set(ControlMode.PercentOutput, elevatorPID.calculate(elevator1.getSelectedSensorPosition(), Constants.MID_SETPOINT));
   }
 
   public void setHigh()
   {
-    elevatorTalon1.set(ControlMode.PercentOutput, pid.calculate(elevatorTalon1.getSelectedSensorPosition(), Constants.HIGH_SETPOINT));
-    elevatorTalon2.set(ControlMode.PercentOutput, pid.calculate(elevatorTalon1.getSelectedSensorPosition(), Constants.HIGH_SETPOINT));
+    elevator1.set(ControlMode.PercentOutput, elevatorPID.calculate(elevator1.getSelectedSensorPosition(), Constants.HIGH_SETPOINT));
+    elevator2.set(ControlMode.PercentOutput, elevatorPID.calculate(elevator1.getSelectedSensorPosition(), Constants.HIGH_SETPOINT));
   }
 
   //Potentially make one function and use lambdas to make simpler
   public void setTo(double setpoint){
-    elevatorTalon1.set(ControlMode.PercentOutput, pid.calculate(elevatorTalon1.getSelectedSensorPosition(), initialPos + setpoint));
+    elevator1.set(ControlMode.PercentOutput, elevatorPID.calculate(elevator1.getSelectedSensorPosition(), initialPos + setpoint));
   }
 
   @Override
