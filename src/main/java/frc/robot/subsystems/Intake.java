@@ -4,11 +4,13 @@
 
 package frc.robot.subsystems;
 
+import java.io.Console;
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
-
+import com.ctre.phoenix.sensors.SensorInitializationStrategy;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -22,7 +24,9 @@ public class Intake extends SubsystemBase {
   private PIDController intakePID; 
   private double initalIntakeTicks; 
 
-  /** Creates a new Intake. */
+  /** Creates a new Intake. 
+   * instead of using Commands, we can use run {} methods 
+  */
   public Intake() {
     intake = new TalonFX(RobotMap.INTAKE_PORT);
     roller = new TalonFX(RobotMap.ROLLER_PORT);
