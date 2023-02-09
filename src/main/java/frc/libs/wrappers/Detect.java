@@ -8,17 +8,18 @@ public class Detect {
     public String classID;
     public String instanceID;
     public double area;
+    public double bottom;
     public double centerX;
     public double centerY;
     public double confidence;
+    public double width;
+    public double height;
     public double left;
     public double right;
     public double top;
-    public double bottom;
-    public double width;
-    public double height;
     public double timestamp;
     public double targetX;
     public double targetY;
     public double targetDistance;
+    public double areaPercent;
 }
