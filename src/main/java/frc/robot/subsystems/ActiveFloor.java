@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -13,22 +14,22 @@ import frc.robot.RobotMap;
 
 public class ActiveFloor extends SubsystemBase {
   /** Creates a new ActiveFloor. */
-  TalonSRX activeFMotor = new TalonSRX(RobotMap.ACTIVE_FLOOR_MOTOR_PORT);
+  TalonFX activeMotor;
 
   public ActiveFloor() {
+   activeMotor = new TalonFX(RobotMap.ACTIVE_FLOOR_MOTOR_PORT);
   }
 
   public void runConstantSpeed() {
-    activeFMotor.set(ControlMode.PercentOutput, Constants.ACTIVE_FLOOR_CONSTANT_SPEED);
+    activeMotor.set(ControlMode.PercentOutput, Constants.ACTIVE_FLOOR_CONSTANT_SPEED);
   }
 
   public void stop() {
-    activeFMotor.set(ControlMode.PercentOutput, 0);
+    activeMotor.set(ControlMode.PercentOutput, 0);
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    runConstantSpeed();
   }
 }
