@@ -16,29 +16,27 @@ public class Gripper extends SubsystemBase {
    * 1 HiTEC servo to rotate linear slide
    * 2 REV Smart Robot Servos that move the claw
    */
-  private Servo hitec;
+  private Servo armPivot;
   private Servo leftClaw;
   private Servo rightClaw;
   private PIDController pid;
 
-  private double hitecAngle = 0.0;
-  private double revLeftAngle = 0.0;
-  private double revRightAngle = 180.0;
+  
 
   private boolean toggleCube = false;
   private boolean toggleCone = false;
   private boolean toggleOpen = false;
 
   public Gripper() {
-    hitec = new Servo(RobotMap.GRIPPER_HITEC);
+    armPivot = new Servo(RobotMap.GRIPPER_HITEC);
     leftClaw = new Servo(RobotMap.REV_LEFT_HITEC);
     rightClaw = new Servo(RobotMap.REV_RIGHT_HITEC);
 
     pid = new PIDController(Constants.CLAW_GAINS[0], Constants.CLAW_GAINS[1], Constants.CLAW_GAINS[2]);
 
-    hitec.setAngle(hitecAngle);
-    leftClaw.setAngle(revLeftAngle);
-    rightClaw.setAngle(revRightAngle);
+    armPivot.setAngle(Constants.hitecAngle);
+    leftClaw.setAngle(Constants.revLeftAngle);
+    rightClaw.setAngle(Constants.revRightAngle);
   }
 
   /**
@@ -55,27 +53,17 @@ public class Gripper extends SubsystemBase {
    * cube, cone, close, and release mode
    * use PID
    */
-  public void incrementHitec() {
-    if (hitecAngle <= 180.0) {
-      hitecAngle++;
-    }
-    hitec.setAngle(hitecAngle);
-  }
+  
 
   /* implement button bindings */
-  public void decrementHitec() {
-    if (hitecAngle >= 180.0) {
-      hitecAngle--;
-    }
-    hitec.setAngle(hitecAngle);
-  }
+  
 
   public void setClawToCube() {
     leftClaw.setAngle(pid.calculate(leftClaw.get(), Constants.LEFT_CLAW_CUBE)); // getAngle is a ballsack function
     rightClaw.setAngle(pid.calculate(rightClaw.get(), Constants.RIGHT_CLAW_CUBE));
   }
 
-  public void setClawToCone() {
+   public void setClawToCone() {
     leftClaw.setAngle(pid.calculate(leftClaw.get(), Constants.LEFT_CLAW_CONE));
     rightClaw.setAngle(pid.calculate(rightClaw.get(), Constants.RIGHT_CLAW_CONE));
   }
@@ -90,12 +78,8 @@ public class Gripper extends SubsystemBase {
     rightClaw.setAngle(pid.calculate(rightClaw.get(), Constants.RIGHT_CLAW_RELEASE));
   }
 
-  // don't think we need this method but why not
-  public void set() {
-    hitec.setAngle(hitecAngle);
-    leftClaw.setAngle(revLeftAngle);
-    rightClaw.setAngle(revRightAngle);
-  }
+  
+  
 
   public void run() {
     if (toggleCube) {

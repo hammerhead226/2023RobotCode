@@ -117,4 +117,8 @@ public final class Constants {
 
     public static final double LEFT_CLAW_CONE = 80.0;
     public static final double RIGHT_CLAW_CONE = 80.0;
+
+    public static final double hitecAngle = 0.0;
+    public static final double revLeftAngle = 0.0;
+    public static final double revRightAngle = 180.0;
 }
