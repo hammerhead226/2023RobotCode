@@ -4,7 +4,6 @@
 
 package frc.robot.subsystems;
 
-
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 //import com.revrobotics.RelativeEncoder;
@@ -31,32 +30,36 @@ public class LinearSlide extends SubsystemBase {
   private boolean togglemid;
   boolean togglehigh;
   private boolean manual;
-  //PIDController pid;
+  // PIDController pid;
   private PIDController pid;
+
   public LinearSlide() {
-      slider = new GenericMotor(sliderTalon);
-      // distanceSensor = new Rev2mDistanceSensor(Port.kOnboard);
-      // distanceSensor.setDistanceUnits(Unit.kInches);
-      // distanceSensor.setRangeProfile(RangeProfile.kHighAccuracy);
-      // initialPos = distanceSensor.getRange();
-      
-      pid = new PIDController(Constants.LINEAR_SLIDE_GAINS[0], Constants.LINEAR_SLIDE_GAINS[1], Constants.LINEAR_SLIDE_GAINS[2]);
+    slider = new GenericMotor(sliderTalon);
+    // distanceSensor = new Rev2mDistanceSensor(Port.kOnboard);
+    // distanceSensor.setDistanceUnits(Unit.kInches);
+    // distanceSensor.setRangeProfile(RangeProfile.kHighAccuracy);
+    // initialPos = distanceSensor.getRange();
+
+    pid = new PIDController(Constants.LINEAR_SLIDE_GAINS[0], Constants.LINEAR_SLIDE_GAINS[1],
+        Constants.LINEAR_SLIDE_GAINS[2]);
   }
 
   public double getDistance() {
-      return (slider.getSensorPose());
+    return (slider.getSensorPose());
   }
 
-  public void toggleManual(){
-      manual = !manual;
+  public void toggleManual() {
+    manual = !manual;
   }
 
   public void extendDistanceLow() {
     slider.set(pid.calculate(getDistance(), Constants.EXTEND_LOW));
   }
+
   public void extendDistanceMid() {
     slider.set(pid.calculate(getDistance(), Constants.EXTEND_MID));
   }
+
   public void extendDistanceHigh() {
     slider.set(pid.calculate(getDistance(), Constants.EXTEND_HIGH));
   }
@@ -65,48 +68,48 @@ public class LinearSlide extends SubsystemBase {
     slider.set(pid.calculate(getDistance(), initialPos));
   }
 
-  public void runManual(double speed)
-  {
-    if(manual){
-      if(!(getDistance() <= Constants.SLIDE_MIN_POSITION || getDistance() >= Constants.SLIDE_MAX_POSITION))
+  public void runManual(double speed) {
+    if (manual) {
+      if (!(getDistance() <= Constants.SLIDE_MIN_POSITION || getDistance() >= Constants.SLIDE_MAX_POSITION))
         slider.set(speed * Constants.LINEAR_SLIDE_COEFFICIENT);
     }
   }
 
-  public void run(){
-    if(togglelow){
-    extendDistanceLow();
-    }
-    else {
+  public void run() {
+    if (togglelow) {
+      extendDistanceLow();
+    } else {
       slider.set(0);
     }
 
     if (togglemid) {
       extendDistanceMid();
-    } 
-    else {
+    } else {
       slider.set(0);
     }
 
-    if(togglehigh){
+    if (togglehigh) {
       extendDistanceHigh();
-    } 
-    else {
+    } else {
       slider.set(0);
     }
   }
 
-public void togglelow() {
-togglelow = !togglelow;
-}
+  public void togglelow() {
+    togglelow = !togglelow;
+  }
 
-public void togglemid() {
-  togglemid = !togglemid;
-}
+  public void togglemid() {
+    togglemid = !togglemid;
+  }
 
-public void togglehigh() {
-  togglehigh = !togglehigh;
-}
+  public void togglehigh() {
+    togglehigh = !togglehigh;
+  }
+
+  public void control(double speed) {
+    slider.set(speed);
+  }
 
   @Override
   public void periodic() {
