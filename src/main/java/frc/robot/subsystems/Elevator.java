@@ -25,9 +25,10 @@ public class Elevator extends SubsystemBase {
   private double initialPos;
   private GenericEncoder gen;
   private AnalogInput input = new AnalogInput(0);
-  private boolean togglelow;
-  private boolean togglemid;
-  boolean togglehigh;
+  // private boolean togglelow;
+  // private boolean togglemid;
+  // private boolean togglehigh;
+  private double target;
 
   /**
    * Edits to make to Elevator:
@@ -99,27 +100,12 @@ public class Elevator extends SubsystemBase {
   }
 
   public void run() {
-    if (togglelow) {
-      setLow();
-    } else if (togglemid) {
-      setMid();
-    } else if (togglehigh) {
-      setHigh();
-    } else {
-      elevator1.set(ControlMode.PercentOutput, 0);
-    }
+    elevator1.set(ControlMode.PercentOutput, elevatorPID.calculate(elevator1.getSelectedSensorPosition(), target));
+
   }
 
-  public void toggleLow() {
-    togglelow = !togglelow;
-  }
-
-  public void toggleMid() {
-    togglemid = !togglemid;
-  }
-
-  public void toggleHigh() {
-    togglehigh = !togglehigh;
+  public void setTarget(double t) {
+    target = t;
   }
 
   public void control(double speed) {
