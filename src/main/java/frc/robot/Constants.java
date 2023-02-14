@@ -124,6 +124,10 @@ public final class Constants {
   public static final double EXTEND_MID = 0;
   public static final double EXTEND_LOW = 0;
 
+  public static final double TARGET_LOW = 0;
+  public static final double TARGET_MIDDLE = 0;
+  public static final double TARGET_HIGH = 0;
+
   public static final double[] LINEAR_SLIDE_GAINS = { 0, 0, 0 };
 
   // Intake Constants
