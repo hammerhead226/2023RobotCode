@@ -62,6 +62,11 @@ public class Intake extends SubsystemBase {
   public void stop(){
     intake.set(ControlMode.PercentOutput, 0);
   }
+
+  public void control(double speed){
+      intake.set(ControlMode.PercentOutput, speed);
+
+  }
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
