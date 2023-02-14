@@ -12,6 +12,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonFX;
 // import com.revrobotics.Rev2mDistanceSensor.Port;
 // import com.revrobotics.Rev2mDistanceSensor.RangeProfile;
 // import com.revrobotics.Rev2mDistanceSensor.Unit;
+import com.revrobotics.CANSparkMax;
 
 import frc.libs.wrappers.GenericMotor;
 import frc.robot.Constants;
@@ -23,18 +24,20 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class LinearSlide extends SubsystemBase {
   /** Creates a new LinearSlide. */
   private GenericMotor slider;
-  private TalonFX sliderTalon;
+  private CANSparkMax sliderCANSparkMax;
   // private Rev2mDistanceSensor distanceSensor;
   private double initialPos;
-  private boolean togglelow;
-  private boolean togglemid;
-  boolean togglehigh;
+  // private boolean togglelow;
+  // private boolean togglemid;
+  // boolean togglehigh;
+
+  private double target;
   private boolean manual;
   // PIDController pid;
   private PIDController pid;
 
   public LinearSlide() {
-    slider = new GenericMotor(sliderTalon);
+    slider = new GenericMotor(sliderCANSparkMax);
     // distanceSensor = new Rev2mDistanceSensor(Port.kOnboard);
     // distanceSensor.setDistanceUnits(Unit.kInches);
     // distanceSensor.setRangeProfile(RangeProfile.kHighAccuracy);
@@ -76,35 +79,11 @@ public class LinearSlide extends SubsystemBase {
   }
 
   public void run() {
-    if (togglelow) {
-      extendDistanceLow();
-    } else {
-      slider.set(0);
-    }
-
-    if (togglemid) {
-      extendDistanceMid();
-    } else {
-      slider.set(0);
-    }
-
-    if (togglehigh) {
-      extendDistanceHigh();
-    } else {
-      slider.set(0);
-    }
+    slider.set(pid.calculate(slider.getSensorPose(), target));
   }
 
-  public void togglelow() {
-    togglelow = !togglelow;
-  }
-
-  public void togglemid() {
-    togglemid = !togglemid;
-  }
-
-  public void togglehigh() {
-    togglehigh = !togglehigh;
+  public void setTarget(double t) {
+    target = t;
   }
 
   public void control(double speed) {
