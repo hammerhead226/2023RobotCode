@@ -56,8 +56,8 @@ public class Elevator extends SubsystemBase {
     elevatorPID = new PIDController(Constants.ELEVATOR_GAINS[0], Constants.ELEVATOR_GAINS[1],
         Constants.ELEVATOR_GAINS[2]);
 
-    elevator1.setInverted(Constants.ELEVATOR_MOTOR_1_INVERT);
-    elevator2.setInverted(Constants.ELEVATOR_MOTOR_2_INVERT);
+    // elevator1.setInverted(Constants.ELEVATOR_MOTOR_1_INVERT);
+    // elevator2.setInverted(Constants.ELEVATOR_MOTOR_2_INVERT);
     elevator2.follow(elevator1);
 
     gen = new GenericEncoder(input, 0, 2048, 0);
