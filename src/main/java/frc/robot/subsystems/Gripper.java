@@ -21,8 +21,6 @@ public class Gripper extends SubsystemBase {
   private Servo rightClaw;
   private PIDController pid;
 
-  
-
   private boolean toggleCube = false;
   private boolean toggleCone = false;
   private boolean toggleOpen = false;
@@ -53,17 +51,15 @@ public class Gripper extends SubsystemBase {
    * cube, cone, close, and release mode
    * use PID
    */
-  
 
   /* implement button bindings */
-  
 
   public void setClawToCube() {
     leftClaw.setAngle(pid.calculate(leftClaw.get(), Constants.LEFT_CLAW_CUBE)); // getAngle is a ballsack function
     rightClaw.setAngle(pid.calculate(rightClaw.get(), Constants.RIGHT_CLAW_CUBE));
   }
 
-   public void setClawToCone() {
+  public void setClawToCone() {
     leftClaw.setAngle(pid.calculate(leftClaw.get(), Constants.LEFT_CLAW_CONE));
     rightClaw.setAngle(pid.calculate(rightClaw.get(), Constants.RIGHT_CLAW_CONE));
   }
@@ -77,9 +73,6 @@ public class Gripper extends SubsystemBase {
     leftClaw.setAngle(pid.calculate(leftClaw.get(), Constants.LEFT_CLAW_RELEASE));
     rightClaw.setAngle(pid.calculate(rightClaw.get(), Constants.RIGHT_CLAW_RELEASE));
   }
-
-  
-  
 
   public void run() {
     if (toggleCube) {
@@ -112,6 +105,12 @@ public class Gripper extends SubsystemBase {
 
   public void toggleOpen() {
     toggleOpen = !toggleOpen;
+  }
+
+  public void control(double angle) {
+    armPivot.setAngle(angle);
+    leftClaw.setAngle(angle);
+    rightClaw.setAngle(angle);
   }
 
   @Override
