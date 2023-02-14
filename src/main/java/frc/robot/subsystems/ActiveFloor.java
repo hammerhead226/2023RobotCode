@@ -27,6 +27,10 @@ public class ActiveFloor extends SubsystemBase {
   public void stop() {
     activeMotor.set(ControlMode.PercentOutput, 0);
   }
+  public void control(double speed){
+
+    activeMotor.set(ControlMode.PercentOutput, speed);
+  }
 
   @Override
   public void periodic() {
