@@ -21,25 +21,29 @@ public class Elevator extends SubsystemBase {
   private TalonFX elevator1;
   private TalonFX elevator2;
   private PIDController elevatorPID;
-  private boolean isManual; 
+  private boolean isManual;
   private double initialPos;
   private GenericEncoder gen;
   private AnalogInput input = new AnalogInput(0);
   private boolean togglelow;
   private boolean togglemid;
   boolean togglehigh;
+
   /**
    * Edits to make to Elevator:
    * add 3 commands for Low, Mid, and High
-    * this is so that the elevator will keep moving until we need it to stop
-    * with the code right now, the driver will have to continuously press the button to run the InstantCommand
-   * create a method that stops the elevator once it gets ~10 or so ticks within setpoint
-    * check the shooter class from last year to get an example
+   * this is so that the elevator will keep moving until we need it to stop
+   * with the code right now, the driver will have to continuously press the
+   * button to run the InstantCommand
+   * create a method that stops the elevator once it gets ~10 or so ticks within
+   * setpoint
+   * check the shooter class from last year to get an example
    * Create a GenericEncoder object to use instead of getSelectedSensorPosition();
-    * using a Magnum encoder
-    * the Falcon motor needs ~5.5 rotations to rotate elevator from top to bottom
-    * we are planning to create a 1:6 gear mechanism so that <1 rotation of Talon moves the elevator
-    * use GenericEncoder to see how many ticks rotated
+   * using a Magnum encoder
+   * the Falcon motor needs ~5.5 rotations to rotate elevator from top to bottom
+   * we are planning to create a 1:6 gear mechanism so that <1 rotation of Talon
+   * moves the elevator
+   * use GenericEncoder to see how many ticks rotated
    */
 
   public Elevator() {
@@ -49,7 +53,8 @@ public class Elevator extends SubsystemBase {
     elevator1.configIntegratedSensorInitializationStrategy(SensorInitializationStrategy.BootToAbsolutePosition);
     elevator1.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
 
-    elevatorPID = new PIDController(Constants.ELEVATOR_GAINS[0], Constants.ELEVATOR_GAINS[1], Constants.ELEVATOR_GAINS[2]);
+    elevatorPID = new PIDController(Constants.ELEVATOR_GAINS[0], Constants.ELEVATOR_GAINS[1],
+        Constants.ELEVATOR_GAINS[2]);
 
     elevator1.setInverted(Constants.ELEVATOR_MOTOR_1_INVERT);
     elevator2.setInverted(Constants.ELEVATOR_MOTOR_2_INVERT);
@@ -58,52 +63,49 @@ public class Elevator extends SubsystemBase {
     gen = new GenericEncoder(input, 0, 2048, 0);
   }
 
-  public void toggleManual(){
-    isManual = !isManual; 
+  public void toggleManual() {
+    isManual = !isManual;
   }
 
-
-  public void runManual(double speed)
-  {
-    if(isManual){
-      if(!(elevator1.getSelectedSensorPosition() <= Constants.MIN_POSITION || elevator1.getSelectedSensorPosition() >= Constants.MAX_POSITION))
+  public void runManual(double speed) {
+    if (isManual) {
+      if (!(elevator1.getSelectedSensorPosition() <= Constants.MIN_POSITION
+          || elevator1.getSelectedSensorPosition() >= Constants.MAX_POSITION))
         elevator1.set(ControlMode.PercentOutput, speed * Constants.ELEVATOR_COEFFICIENT);
     }
   }
 
-  public void setLow()
-  {
-    elevator1.set(ControlMode.PercentOutput, elevatorPID.calculate(elevator1.getSelectedSensorPosition(), Constants.LOW_SETPOINT));
+  public void setLow() {
+    elevator1.set(ControlMode.PercentOutput,
+        elevatorPID.calculate(elevator1.getSelectedSensorPosition(), Constants.LOW_SETPOINT));
   }
 
-  public void setMid()
-  {
-    elevator1.set(ControlMode.PercentOutput, elevatorPID.calculate(elevator1.getSelectedSensorPosition(), Constants.MID_SETPOINT));
-    
+  public void setMid() {
+    elevator1.set(ControlMode.PercentOutput,
+        elevatorPID.calculate(elevator1.getSelectedSensorPosition(), Constants.MID_SETPOINT));
+
   }
 
-  public void setHigh()
-  {
-    elevator1.set(ControlMode.PercentOutput, elevatorPID.calculate(elevator1.getSelectedSensorPosition(), Constants.HIGH_SETPOINT));
-    
+  public void setHigh() {
+    elevator1.set(ControlMode.PercentOutput,
+        elevatorPID.calculate(elevator1.getSelectedSensorPosition(), Constants.HIGH_SETPOINT));
+
   }
 
-  //Potentially make one function and use lambdas to make simpler
-  public void setTo(double setpoint){
-    elevator1.set(ControlMode.PercentOutput, elevatorPID.calculate(elevator1.getSelectedSensorPosition(), initialPos + setpoint));
+  // Potentially make one function and use lambdas to make simpler
+  public void setTo(double setpoint) {
+    elevator1.set(ControlMode.PercentOutput,
+        elevatorPID.calculate(elevator1.getSelectedSensorPosition(), initialPos + setpoint));
   }
 
-  public void run(){
-    if(togglelow){
+  public void run() {
+    if (togglelow) {
       setLow();
-    }
-    else if (togglemid) {
+    } else if (togglemid) {
       setMid();
-    }
-    else if (togglehigh) {
+    } else if (togglehigh) {
       setHigh();
-    } 
-    else {
+    } else {
       elevator1.set(ControlMode.PercentOutput, 0);
     }
   }
@@ -119,7 +121,12 @@ public class Elevator extends SubsystemBase {
   public void toggleHigh() {
     togglehigh = !togglehigh;
   }
-  
+
+  public void control(double speed) {
+    // -1 to 1
+    elevator1.set(ControlMode.PercentOutput, speed);
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
