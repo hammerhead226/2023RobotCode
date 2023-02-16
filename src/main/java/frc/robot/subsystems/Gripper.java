@@ -24,7 +24,7 @@ public class Gripper extends SubsystemBase {
   private boolean toggleCube = false;
   //private boolean toggleCone = false;
   private boolean toggleOpen = false;
-
+  private boolean isGripped = false;
   public Gripper() {
     armPivot = new Servo(RobotMap.GRIPPER_HITEC);
     leftClaw = new Servo(RobotMap.REV_LEFT_HITEC);
@@ -55,44 +55,40 @@ public class Gripper extends SubsystemBase {
   /* implement button bindings */
 
   public void setClawToCube() {
-    leftClaw.setAngle(pid.calculate(leftClaw.get(), Constants.LEFT_CLAW_CUBE)); // getAngle is a ballsack function
-    rightClaw.setAngle(pid.calculate(rightClaw.get(), Constants.RIGHT_CLAW_CUBE));
+    leftClaw.setAngle(Constants.LEFT_CLAW_CLOSE); // getAngle is a ballsack function
+    rightClaw.setAngle(Constants.RIGHT_CLAW_CLOSE);
   }
 
  
 
   public void close() {
-    leftClaw.setAngle(pid.calculate(leftClaw.get(), Constants.LEFT_CLAW_CLOSE));
-    rightClaw.setAngle(pid.calculate(rightClaw.get(), Constants.RIGHT_CLAW_CLOSE));
+    leftClaw.setAngle(Constants.LEFT_CLAW_CLOSE);
+    rightClaw.setAngle(Constants.RIGHT_CLAW_CLOSE);
   }
 
   public void open() {
-    leftClaw.setAngle(pid.calculate(leftClaw.get(), Constants.LEFT_CLAW_RELEASE));
-    rightClaw.setAngle(pid.calculate(rightClaw.get(), Constants.RIGHT_CLAW_RELEASE));
+    leftClaw.setAngle(Constants.LEFT_CLAW_CLOSE);
+    rightClaw.setAngle(Constants.RIGHT_CLAW_CLOSE);
   }
 
   public void run() {
-    if (toggleCube) {
-      setClawToCube();
+    if (isGripped){
+       close();
+
     } else {
-      close();
-    }
-
-    
-
-    if (toggleOpen) {
       open();
-    } else {
-      close();
-    }
 
+    }
   }
 
   public void toggleCube() {
     toggleCube = !toggleCube;
   }
 
-  
+  public void toggleGripper(){
+     isGripped = !isGripped;
+
+  }
 
   public void toggleOpen() {
     toggleOpen = !toggleOpen;
