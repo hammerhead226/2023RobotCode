@@ -22,7 +22,7 @@ public class Gripper extends SubsystemBase {
   private PIDController pid;
 
   private boolean toggleCube = false;
-  private boolean toggleCone = false;
+  //private boolean toggleCone = false;
   private boolean toggleOpen = false;
 
   public Gripper() {
@@ -59,10 +59,7 @@ public class Gripper extends SubsystemBase {
     rightClaw.setAngle(pid.calculate(rightClaw.get(), Constants.RIGHT_CLAW_CUBE));
   }
 
-  public void setClawToCone() {
-    leftClaw.setAngle(pid.calculate(leftClaw.get(), Constants.LEFT_CLAW_CONE));
-    rightClaw.setAngle(pid.calculate(rightClaw.get(), Constants.RIGHT_CLAW_CONE));
-  }
+ 
 
   public void close() {
     leftClaw.setAngle(pid.calculate(leftClaw.get(), Constants.LEFT_CLAW_CLOSE));
@@ -81,11 +78,7 @@ public class Gripper extends SubsystemBase {
       close();
     }
 
-    if (toggleCone) {
-      setClawToCone();
-    } else {
-      close();
-    }
+    
 
     if (toggleOpen) {
       open();
@@ -99,9 +92,7 @@ public class Gripper extends SubsystemBase {
     toggleCube = !toggleCube;
   }
 
-  public void toggleCone() {
-    toggleCone = !toggleCone;
-  }
+  
 
   public void toggleOpen() {
     toggleOpen = !toggleOpen;
