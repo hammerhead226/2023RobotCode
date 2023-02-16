@@ -105,11 +105,11 @@ public final class Constants {
 
 
     //LED COLOR CONSTANTS
-    public static final double STARTING_LED = 0.87; //blue
+    public static final double LED_ALLIANCE = 0.87; //blue
     public static final double LED_YELLOW = 0.66;
     public static final double LED_VIOLET = 0.91;
 
-    public static final double LED_OFF = 0;
+
 
     public static int SPARK_MOTOR = 0;
 }

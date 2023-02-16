@@ -10,7 +10,7 @@ import frc.robot.Constants;
 import frc.robot.RobotMap;
 
 public class LED extends SubsystemBase {
-  double sparkSpeed = Constants.STARTING_LED;
+  double sparkSpeed = Constants.LED_ALLIANCE;
   Spark spark;
   
   /** Creates a new LED. */
@@ -18,16 +18,16 @@ public class LED extends SubsystemBase {
     spark = new Spark(RobotMap.SPARK_MOTOR);
   }
 
-  public void ledOff(){
-    spark.disable();
+  public void noBumpersPressed(){
+    sparkSpeed = Constants.LED_ALLIANCE;
   }
 
-  public void ledYellow(){
+  public void rightBumperPressed(){
     sparkSpeed = Constants.LED_YELLOW;
     
   }
 
-  public void ledViolet(){
+  public void leftBumperPressed(){
     sparkSpeed = Constants.LED_VIOLET;
     
   }
