@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import frc.libs.wrappers.GenericMotor;
 import frc.robot.Constants;
@@ -26,6 +27,8 @@ public class LinearSlide extends SubsystemBase {
   private PIDController pid;
 
   public LinearSlide() {
+    sliderCANSparkMax = new CANSparkMax(RobotMap.SLIDER_SPARK_MAX_PORT, MotorType.kBrushless);
+    sliderCANSparkMax.setInverted(true);
     slider = new GenericMotor(sliderCANSparkMax);
     pid = new PIDController(Constants.LINEAR_SLIDE_GAINS[0], Constants.LINEAR_SLIDE_GAINS[1],
         Constants.LINEAR_SLIDE_GAINS[2]);
@@ -33,10 +36,6 @@ public class LinearSlide extends SubsystemBase {
 
   public void toggleManual() {
     manual = !manual;
-  }
-
-  public void retractSlider() {
-    slider.set(pid.calculate(slider.getSensorPose(), initialPos));
   }
 
   public void runManual(double speed) {
@@ -48,7 +47,16 @@ public class LinearSlide extends SubsystemBase {
   }
 
   public void run() {
-    slider.set(pid.calculate(slider.getSensorPose(), target));
+    // slider.set(pid.calculate(slider.getSensorPose(), target));
+    double goofy = pid.calculate(slider.getSensorPose(), target);
+    if (goofy > Constants.MAX_SPEED) {
+      goofy = Constants.MAX_SPEED;
+    } else if (goofy < -Constants.MAX_SPEED) {
+      goofy = -Constants.MAX_SPEED;
+    } 
+    slider.set(goofy);
+    
+    // slider.set(0.01);
   }
 
   public void setTarget(double t) {
@@ -62,6 +70,8 @@ public class LinearSlide extends SubsystemBase {
   @Override
   public void periodic() {
     SmartDashboard.putNumber("Motor Position", slider.getSensorPose());
+    
+    
     // This method will be called once per scheduler run
   }
 }

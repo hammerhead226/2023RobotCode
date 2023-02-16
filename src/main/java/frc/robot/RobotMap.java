@@ -12,7 +12,9 @@ public class RobotMap {
     public static final int ELEVATOR_MOTOR_2 = 0;
 
     public static final int DISTANCE_SENSOR_PORT = 0;
-    public static final int SLIDER_SPARK_MAX = 0;
+
+    // Linear Slider Constants 
+    public static final int SLIDER_SPARK_MAX_PORT = 20;
 
     // Intake Constants
     public static final int INTAKE_PORT = 0;
