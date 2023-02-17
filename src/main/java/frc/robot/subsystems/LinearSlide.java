@@ -19,8 +19,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class LinearSlide extends SubsystemBase {
   /** Creates a new LinearSlide. */
   private GenericMotor slider;
-  private CANSparkMax sliderCANSparkMax;
-  private double initialPos;
 
   private double target;
   private double speedLimit;
@@ -28,9 +26,8 @@ public class LinearSlide extends SubsystemBase {
   private PIDController pid;
 
   public LinearSlide() {
-    sliderCANSparkMax = new CANSparkMax(RobotMap.SLIDER_SPARK_MAX_PORT, MotorType.kBrushless);
-    sliderCANSparkMax.setInverted(true);
-    slider = new GenericMotor(sliderCANSparkMax);
+    slider = new GenericMotor(new CANSparkMax(RobotMap.SLIDER_SPARK_MAX_PORT, MotorType.kBrushless));
+    slider.inverted(true);
     pid = new PIDController(Constants.LINEAR_SLIDE_GAINS[0], Constants.LINEAR_SLIDE_GAINS[1],
         Constants.LINEAR_SLIDE_GAINS[2]);
   }
@@ -43,29 +40,30 @@ public class LinearSlide extends SubsystemBase {
     if (manual) {
       if (!(slider.getSensorPose() <= Constants.SLIDE_MIN_POSITION
           || slider.getSensorPose() >= Constants.SLIDE_MAX_POSITION))
-        slider.set(speed * Constants.LINEAR_SLIDE_COEFFICIENT);
+        control(speed * Constants.LINEAR_SLIDE_COEFFICIENT);
     }
   }
 
   public void run() {
-    // slider.set(pid.calculate(slider.getSensorPose(), target));
-    double goofy = pid.calculate(slider.getSensorPose(), target);
-    if (goofy > speedLimit) {
-      goofy = speedLimit;
-    } else if (goofy < -speedLimit) {
-      goofy = -speedLimit;
-    } 
-    slider.set(goofy);
-    
-    // slider.set(0.01);
+    if (!manual) {
+      double motorSpeed = pid.calculate(slider.getSensorPose(), target);
+      if (motorSpeed > speedLimit) {
+        motorSpeed = speedLimit;
+      } else if (motorSpeed < -speedLimit) {
+        motorSpeed = -speedLimit;
+      }
+      control(motorSpeed);
+    } else {
+      control(0);
+    }
+
   }
 
   public void setTarget(double t) {
     target = t;
   }
 
-  public void setSpeedLimit(double s)
-  {
+  public void setSpeedLimit(double s) {
     speedLimit = s;
   }
 
@@ -76,8 +74,7 @@ public class LinearSlide extends SubsystemBase {
   @Override
   public void periodic() {
     SmartDashboard.putNumber("Motor Position", slider.getSensorPose());
-    
-    
+
     // This method will be called once per scheduler run
   }
 }
