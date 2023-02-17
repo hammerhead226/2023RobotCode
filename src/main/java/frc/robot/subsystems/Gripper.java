@@ -4,7 +4,6 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -19,22 +18,18 @@ public class Gripper extends SubsystemBase {
   private Servo armPivot;
   private Servo leftClaw;
   private Servo rightClaw;
-  private PIDController pid;
 
-  private boolean toggleCube = false;
-  //private boolean toggleCone = false;
   private boolean toggleOpen = false;
   private boolean isGripped = false;
+
   public Gripper() {
     armPivot = new Servo(RobotMap.GRIPPER_HITEC);
     leftClaw = new Servo(RobotMap.REV_LEFT_HITEC);
     rightClaw = new Servo(RobotMap.REV_RIGHT_HITEC);
 
-    pid = new PIDController(Constants.CLAW_GAINS[0], Constants.CLAW_GAINS[1], Constants.CLAW_GAINS[2]);
-
-    armPivot.setAngle(Constants.hitecAngle);
-    leftClaw.setAngle(Constants.revLeftAngle);
-    rightClaw.setAngle(Constants.revRightAngle);
+    armPivot.setAngle(Constants.ARM_PIVOT_ANGLE);
+    leftClaw.setAngle(Constants.REV_LEFT_ANGLE);
+    rightClaw.setAngle(Constants.REV_RIGHT_ANGLE);
   }
 
   /**
@@ -49,17 +44,9 @@ public class Gripper extends SubsystemBase {
    * claws can be set to different modes
    * instead of manually controlling claw movement, set it to 4 different modes
    * cube, cone, close, and release mode
-   * use PID
    */
 
   /* implement button bindings */
-
-  public void setClawToCube() {
-    leftClaw.setAngle(Constants.LEFT_CLAW_CLOSE); // getAngle is a ballsack function
-    rightClaw.setAngle(Constants.RIGHT_CLAW_CLOSE);
-  }
-
- 
 
   public void close() {
     leftClaw.setAngle(Constants.LEFT_CLAW_CLOSE);
@@ -72,8 +59,8 @@ public class Gripper extends SubsystemBase {
   }
 
   public void run() {
-    if (isGripped){
-       close();
+    if (isGripped) {
+      close();
 
     } else {
       open();
@@ -81,23 +68,10 @@ public class Gripper extends SubsystemBase {
     }
   }
 
-  public void toggleCube() {
-    toggleCube = !toggleCube;
-  }
-
-  public void toggleGripper(){
-     isGripped = !isGripped;
-
-  }
-
-  public void toggleOpen() {
-    toggleOpen = !toggleOpen;
-  }
-
-  public void control(double angle) {
-    armPivot.setAngle(angle);
-    leftClaw.setAngle(angle);
-    rightClaw.setAngle(angle);
+  public void control(double armPivotAngle, double leftClawAngle, double rightClawAngle) {
+    armPivot.setAngle(armPivotAngle);
+    leftClaw.setAngle(leftClawAngle);
+    rightClaw.setAngle(rightClawAngle);
   }
 
   @Override
