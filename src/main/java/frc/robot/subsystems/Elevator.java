@@ -7,27 +7,18 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
-import com.ctre.phoenix.sensors.SensorInitializationStrategy;
 
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.libs.wrappers.GenericEncoder;
 import frc.robot.Constants;
 import frc.robot.RobotMap;
 
 public class Elevator extends SubsystemBase {
   /** Creates a new Elevator. */
-  private TalonFX elevator1;
-  private TalonFX elevator2;
+  private TalonFX elevatorLeft;
+  private TalonFX elevatorRight;
   private PIDController elevatorPID;
   private boolean isManual;
-  private double initialPos;
-  private GenericEncoder gen;
-  private AnalogInput input = new AnalogInput(0);
-  // private boolean togglelow;
-  // private boolean togglemid;
-  // private boolean togglehigh;
   private double target;
 
   /**
@@ -48,59 +39,29 @@ public class Elevator extends SubsystemBase {
    */
 
   public Elevator() {
-    elevator1 = new TalonFX(RobotMap.ELEVATOR_MOTOR_1);
-    elevator2 = new TalonFX(RobotMap.ELEVATOR_MOTOR_2);
+    elevatorLeft = new TalonFX(RobotMap.ELEVATOR_MOTOR_LEFT);
+    elevatorRight = new TalonFX(RobotMap.ELEVATOR_MOTOR_RIGHT);
 
-    elevator1.configIntegratedSensorInitializationStrategy(SensorInitializationStrategy.BootToAbsolutePosition);
-    elevator1.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
+    elevatorLeft.setSelectedSensorPosition(0);
+    elevatorRight.setSelectedSensorPosition(0);
+
+    elevatorLeft.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
 
     elevatorPID = new PIDController(Constants.ELEVATOR_GAINS[0], Constants.ELEVATOR_GAINS[1],
         Constants.ELEVATOR_GAINS[2]);
-
-    // elevator1.setInverted(Constants.ELEVATOR_MOTOR_1_INVERT);
-    // elevator2.setInverted(Constants.ELEVATOR_MOTOR_2_INVERT);
-    elevator2.follow(elevator1);
-
-    gen = new GenericEncoder(input, 0, 2048, 0);
+    elevatorRight.follow(elevatorLeft);
   }
 
   public void toggleManual() {
     isManual = !isManual;
   }
 
-  public void runManual(double speed) {
-    if (isManual) {
-      if (!(elevator1.getSelectedSensorPosition() <= Constants.MIN_POSITION
-          || elevator1.getSelectedSensorPosition() >= Constants.MAX_POSITION))
-        elevator1.set(ControlMode.PercentOutput, speed * Constants.ELEVATOR_COEFFICIENT);
-    }
-  }
-
-  public void setLow() {
-    elevator1.set(ControlMode.PercentOutput,
-        elevatorPID.calculate(elevator1.getSelectedSensorPosition(), Constants.LOW_SETPOINT));
-  }
-
-  public void setMid() {
-    elevator1.set(ControlMode.PercentOutput,
-        elevatorPID.calculate(elevator1.getSelectedSensorPosition(), Constants.MID_SETPOINT));
-
-  }
-
-  public void setHigh() {
-    elevator1.set(ControlMode.PercentOutput,
-        elevatorPID.calculate(elevator1.getSelectedSensorPosition(), Constants.HIGH_SETPOINT));
-
-  }
-
-  // Potentially make one function and use lambdas to make simpler
-  public void setTo(double setpoint) {
-    elevator1.set(ControlMode.PercentOutput,
-        elevatorPID.calculate(elevator1.getSelectedSensorPosition(), initialPos + setpoint));
-  }
-
   public void run() {
-    elevator1.set(ControlMode.PercentOutput, elevatorPID.calculate(elevator1.getSelectedSensorPosition(), target));
+    if (!isManual) {
+      control(elevatorPID.calculate(elevatorLeft.getSelectedSensorPosition(), target));
+    } else {
+      control(0);
+    }
 
   }
 
@@ -110,11 +71,16 @@ public class Elevator extends SubsystemBase {
 
   public void control(double speed) {
     // -1 to 1
-    elevator1.set(ControlMode.PercentOutput, speed);
+    elevatorLeft.set(ControlMode.PercentOutput, speed);
   }
 
   @Override
   public void periodic() {
+    if (isManual) {
+      if (!(elevatorLeft.getSelectedSensorPosition() <= Constants.MIN_POSITION
+          || elevatorLeft.getSelectedSensorPosition() >= Constants.MAX_POSITION))
+        control(1 * Constants.ELEVATOR_COEFFICIENT);
+    }
     // This method will be called once per scheduler run
   }
 }
