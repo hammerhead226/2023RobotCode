@@ -13,6 +13,7 @@ import frc.robot.subsystems.LED;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 /**
@@ -25,6 +26,7 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   private final Controller driver = new Controller(0, Constants.CONTROLLER_DEADBAND);
+ 
   public LED led = new LED();
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
@@ -54,9 +56,16 @@ public class RobotContainer {
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
     m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
+  //dont really think we need this 
+    //driver.getRBButton().onTrue(new InstantCommand(led::incrementLED));
+    //driver.getLBButton().onTrue(new InstantCommand(led::decrementLED));
+    //rightbumper pressed is yellow leftbumper pressed is purple, when both are not on change to alliance colors 
+      driver.getRBButton().onTrue(new InstantCommand(led::rightBumperPressed));
+      driver.getRBButton().onFalse(new InstantCommand(led::noBumpersPressed));
+      driver.getLBButton().onTrue(new InstantCommand(led::leftBumperPressed));
+      driver.getLBButton().onFalse(new InstantCommand(led::noBumpersPressed));
 
-    driver.getRBButton().onTrue(new InstantCommand(led::incrementLED));
-    driver.getLBButton().onTrue(new InstantCommand(led::decrementLED));
+
   }
 
   /**
