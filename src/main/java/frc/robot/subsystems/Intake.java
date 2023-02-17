@@ -21,8 +21,9 @@ public class Intake extends SubsystemBase {
 
   private TalonFX roller; 
   private TalonFX intake; 
+  private boolean intakeOn;
   private PIDController intakePID; 
-  private double initalIntakeTicks; 
+ 
 
   /** Creates a new Intake. 
    * instead of using Commands, we can use run {} methods 
@@ -36,18 +37,30 @@ public class Intake extends SubsystemBase {
     intake.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
     intake.configFeedbackNotContinuous(true, 0);
 
-    initalIntakeTicks = intake.getSelectedSensorPosition(); 
+   
 
     intakePID = new PIDController(Constants.INTAKE_GAINS[0], Constants.INTAKE_GAINS[1], Constants.INTAKE_GAINS[2]);
   }
 
   //Intake Methods
-  public void extend(){
-    intake.set(ControlMode.PercentOutput, intakePID.calculate(intake.getSelectedSensorPosition(),initalIntakeTicks + Constants.INTAKE_OFFSET));
-  }
+  public void toggleIntake(){
+     intakeOn = !intakeOn;
 
-  public void retract(){
-    intake.set(ControlMode.PercentOutput, intakePID.calculate(intake.getSelectedSensorPosition(),initalIntakeTicks));
+  }
+  public void run(){
+     if (intakeOn){
+         intakePID.calculate(intake.getSelectedSensorPosition(), Constants.INTAKE_EXTEND);
+
+     } else {
+
+      intakePID.calculate(intake.getSelectedSensorPosition(), Constants.INTAKE_RETRACT);
+      
+     }
+
+
+
+
+
   }
 
   //Roller Methods

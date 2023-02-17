@@ -109,5 +109,6 @@ public final class Constants {
     public static final double ROLLER_RUN_SPEED = 0.5; 
     public static final double[] INTAKE_GAINS = {0,0,0};
     public static final int INTAKE_OFFSET = 0;
-     
+    public static final double INTAKE_EXTEND = 0;
+    public static final double INTAKE_RETRACT = 0;
 }
