@@ -23,6 +23,7 @@ public class LinearSlide extends SubsystemBase {
   private double initialPos;
 
   private double target;
+  private double speedLimit;
   private boolean manual;
   private PIDController pid;
 
@@ -49,10 +50,10 @@ public class LinearSlide extends SubsystemBase {
   public void run() {
     // slider.set(pid.calculate(slider.getSensorPose(), target));
     double goofy = pid.calculate(slider.getSensorPose(), target);
-    if (goofy > Constants.MAX_SPEED) {
-      goofy = Constants.MAX_SPEED;
-    } else if (goofy < -Constants.MAX_SPEED) {
-      goofy = -Constants.MAX_SPEED;
+    if (goofy > speedLimit) {
+      goofy = speedLimit;
+    } else if (goofy < -speedLimit) {
+      goofy = -speedLimit;
     } 
     slider.set(goofy);
     
@@ -61,6 +62,11 @@ public class LinearSlide extends SubsystemBase {
 
   public void setTarget(double t) {
     target = t;
+  }
+
+  public void setSpeedLimit(double s)
+  {
+    speedLimit = s;
   }
 
   public void control(double speed) {

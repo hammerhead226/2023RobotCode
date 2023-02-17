@@ -63,15 +63,15 @@ public class RobotContainer {
   private void configureBindings() {
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
 
-    joy.getAButton().onTrue(new InstantCommand(() -> linearSlide.setTarget(1500)));
-    joy.getBButton().onTrue(new InstantCommand(() -> linearSlide.setTarget(100)));
+    joy.getAButton().onTrue(new InstantCommand(() -> linearSlide.setTarget(2250)).andThen(new InstantCommand(() -> linearSlide.setSpeedLimit(0.25))));
+    joy.getBButton().onTrue(new InstantCommand(() -> linearSlide.setTarget(50)).andThen(new InstantCommand(() -> linearSlide.setSpeedLimit(0.1))));
     new Trigger(m_exampleSubsystem::exampleCondition)
         .onTrue(new ExampleCommand(m_exampleSubsystem));
 
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is
     // pressed,
     // cancelling on release.
-    m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
+    // m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
   }
 
   /**

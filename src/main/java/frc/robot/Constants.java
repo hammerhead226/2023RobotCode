@@ -128,9 +128,9 @@ public final class Constants {
   public static final double LS_TARGET_MIDDLE = 0;
   public static final double LS_TARGET_HIGH = 0;
 
-  public static final double[] LINEAR_SLIDE_GAINS = { 0.00075, 0, 0 };
+  public static final double[] LINEAR_SLIDE_GAINS = { 0.0025, 0, 0 };
 
-  public static final double MAX_SPEED = 0.35;
+  public static final double MAX_SPEED = 0.10;
 
   // Intake Constants
   public static final double ROLLER_RUN_SPEED = 0.5;
