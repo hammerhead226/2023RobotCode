@@ -19,7 +19,6 @@ public class Gripper extends SubsystemBase {
   private Servo leftClaw;
   private Servo rightClaw;
 
-  private boolean toggleOpen = false;
   private boolean isGripped = false;
 
   public Gripper() {
