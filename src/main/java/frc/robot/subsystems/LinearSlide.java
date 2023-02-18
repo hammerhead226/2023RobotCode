@@ -4,8 +4,6 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
@@ -27,7 +25,7 @@ public class LinearSlide extends SubsystemBase {
 
   public LinearSlide() {
     slider = new GenericMotor(new CANSparkMax(RobotMap.SLIDER_SPARK_MAX_PORT, MotorType.kBrushless));
-    slider.inverted(true);
+    slider.inverted(Constants.LS_SET_INVERTED);
     pid = new PIDController(Constants.LINEAR_SLIDE_GAINS[0], Constants.LINEAR_SLIDE_GAINS[1],
         Constants.LINEAR_SLIDE_GAINS[2]);
   }
@@ -45,10 +43,7 @@ public class LinearSlide extends SubsystemBase {
         motorSpeed = -speedLimit;
       }
       control(motorSpeed);
-    } else {
-      control(0);
     }
-
   }
 
   public void setTarget(double t) {

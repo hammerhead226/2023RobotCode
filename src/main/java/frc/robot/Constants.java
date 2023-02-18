@@ -132,6 +132,8 @@ public final class Constants {
 
   public static final double MAX_SPEED = 0.10;
 
+  public static final boolean LS_SET_INVERTED = true;
+
   // Intake Constants
   public static final double ROLLER_RUN_SPEED = 0.5;
   public static final double[] INTAKE_GAINS = { 0, 0, 0 };
