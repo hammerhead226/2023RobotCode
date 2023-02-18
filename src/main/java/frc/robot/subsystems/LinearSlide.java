@@ -36,14 +36,6 @@ public class LinearSlide extends SubsystemBase {
     manual = !manual;
   }
 
-  public void runManual(double speed) {
-    if (manual) {
-      if (!(slider.getSensorPose() <= Constants.SLIDE_MIN_POSITION
-          || slider.getSensorPose() >= Constants.SLIDE_MAX_POSITION))
-        control(speed * Constants.LINEAR_SLIDE_COEFFICIENT);
-    }
-  }
-
   public void run() {
     if (!manual) {
       double motorSpeed = pid.calculate(slider.getSensorPose(), target);
@@ -74,7 +66,11 @@ public class LinearSlide extends SubsystemBase {
   @Override
   public void periodic() {
     SmartDashboard.putNumber("Motor Position", slider.getSensorPose());
-
+    if (manual) {
+      if (!(slider.getSensorPose() <= Constants.SLIDE_MIN_POSITION
+          || slider.getSensorPose() >= Constants.SLIDE_MAX_POSITION))
+        control(1 * Constants.LINEAR_SLIDE_COEFFICIENT);
+    }
     // This method will be called once per scheduler run
   }
 }
