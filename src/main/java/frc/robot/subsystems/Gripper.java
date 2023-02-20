@@ -31,22 +31,6 @@ public class Gripper extends SubsystemBase {
     rightClaw.setAngle(Constants.REV_RIGHT_ANGLE);
   }
 
-  /**
-   * the servo has to start out at 0 degrees
-   * whenever a button/trigger is held, the servo should turn without any jerk
-   * if we incremement angle by 1 degree, it should theoretically move smoothly
-   * should be a separate method to increment/decrement angles
-   * one method to increment angles
-   * one method to decrement angles
-   * do this for the Hitec and the claws
-   * can have one method to just set all the servos tbh
-   * claws can be set to different modes
-   * instead of manually controlling claw movement, set it to 4 different modes
-   * cube, cone, close, and release mode
-   */
-
-  /* implement button bindings */
-
   public void close() {
     leftClaw.setAngle(Constants.LEFT_CLAW_CLOSE);
     rightClaw.setAngle(Constants.RIGHT_CLAW_CLOSE);
