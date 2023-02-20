@@ -43,6 +43,10 @@ public class Elevator extends SubsystemBase {
     isManual = !isManual;
   }
 
+  public double get() {
+    return elevatorEncoder.getSelectedSensorPosition();
+  }
+
   public void run() {
     if (!isManual) {
       control(elevatorPID.calculate(elevatorEncoder.getSelectedSensorPosition(), target));
