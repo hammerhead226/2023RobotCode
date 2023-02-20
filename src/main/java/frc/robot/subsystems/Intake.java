@@ -19,15 +19,15 @@ import frc.robot.RobotMap;
 
 public class Intake extends SubsystemBase {
 
-  private TalonFX roller; 
-  private TalonFX intake; 
+  private TalonFX roller;
+  private TalonFX intake;
   private boolean intakeOn;
-  private PIDController intakePID; 
- 
+  private PIDController intakePID;
 
-  /** Creates a new Intake. 
-   * instead of using Commands, we can use run {} methods 
-  */
+  /**
+   * Creates a new Intake.
+   * instead of using Commands, we can use run {} methods
+   */
   public Intake() {
     intake = new TalonFX(RobotMap.INTAKE_PORT);
     roller = new TalonFX(RobotMap.ROLLER_PORT);
@@ -37,49 +37,40 @@ public class Intake extends SubsystemBase {
     intake.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
     intake.configFeedbackNotContinuous(true, 0);
 
-   
-
     intakePID = new PIDController(Constants.INTAKE_GAINS[0], Constants.INTAKE_GAINS[1], Constants.INTAKE_GAINS[2]);
   }
 
-  //Intake Methods
-  public void toggleIntake(){
-     intakeOn = !intakeOn;
+  public void run() {
+    if (intakeOn) {
+      control(intakePID.calculate(intake.getSelectedSensorPosition(), Constants.INTAKE_EXTEND));
 
-  }
-  public void run(){
-     if (intakeOn){
-         intakePID.calculate(intake.getSelectedSensorPosition(), Constants.INTAKE_EXTEND);
-
-     } else {
-
-      intakePID.calculate(intake.getSelectedSensorPosition(), Constants.INTAKE_RETRACT);
-      
-     }
-
-
-
-
+    } else {
+      control(intakePID.calculate(intake.getSelectedSensorPosition(), Constants.INTAKE_RETRACT));
+    }
 
   }
 
-  //Roller Methods
-  public void runIn(){
-    intake.set(ControlMode.PercentOutput, Constants.ROLLER_RUN_SPEED);
+  // Roller Methods
+  public void runIn() {
+    control(Constants.ROLLER_RUN_SPEED);
+    intakeOn = true;
   }
 
-  public void runOut(){
-    intake.set(ControlMode.PercentOutput, -Constants.ROLLER_RUN_SPEED);
+  public void runOut() {
+    control(-Constants.ROLLER_RUN_SPEED);
+    intakeOn = true;
   }
 
-  public void stop(){
-    intake.set(ControlMode.PercentOutput, 0);
+  public void stop() {
+    control(0);
+    intakeOn = false;
   }
 
-  public void control(double speed){
-      intake.set(ControlMode.PercentOutput, speed);
+  public void control(double speed) {
+    intake.set(ControlMode.PercentOutput, speed);
 
   }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
