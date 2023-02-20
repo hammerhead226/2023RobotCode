@@ -12,31 +12,31 @@ import frc.robot.RobotMap;
 public class LED extends SubsystemBase {
   double sparkSpeed = Constants.LED_ALLIANCE;
   Spark spark;
-  
+
   /** Creates a new LED. */
   public LED() {
     spark = new Spark(RobotMap.SPARK_MOTOR);
   }
 
-  public void noBumpersPressed(){
+  public void noBumpersPressed() {
     sparkSpeed = Constants.LED_ALLIANCE;
   }
 
-  public void rightBumperPressed(){
+  public void rightBumperPressed() {
     sparkSpeed = Constants.LED_YELLOW;
-    
+
   }
 
-  public void leftBumperPressed(){
+  public void leftBumperPressed() {
     sparkSpeed = Constants.LED_VIOLET;
-    
+
   }
 
-  public void incrementLED(){
+  public void incrementLED() {
     sparkSpeed += 0.01;
   }
 
-  public void decrementLED(){
+  public void decrementLED() {
     sparkSpeed -= 0.01;
   }
 
