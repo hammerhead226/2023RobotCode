@@ -4,12 +4,12 @@
 
 package frc.robot.subsystems;
 
-import java.io.Console;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.sensors.SensorInitializationStrategy;
 
 import edu.wpi.first.math.controller.PIDController;
@@ -21,6 +21,7 @@ public class Intake extends SubsystemBase {
 
   private TalonFX roller;
   private TalonFX intake;
+  private TalonSRX intakeEncoder; 
   private boolean intakeOn;
   private PIDController intakePID;
 
@@ -31,44 +32,43 @@ public class Intake extends SubsystemBase {
   public Intake() {
     intake = new TalonFX(RobotMap.INTAKE_PORT);
     roller = new TalonFX(RobotMap.ROLLER_PORT);
+    intakeEncoder = new TalonSRX(RobotMap.INTAKE_ENCODER_PORT);
     intake.setNeutralMode(NeutralMode.Brake);
     roller.setNeutralMode(NeutralMode.Coast);
 
-    intake.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
-    intake.configFeedbackNotContinuous(true, 0);
+    intakeEncoder.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute);
 
     intakePID = new PIDController(Constants.INTAKE_GAINS[0], Constants.INTAKE_GAINS[1], Constants.INTAKE_GAINS[2]);
   }
 
   public void run() {
     if (intakeOn) {
-      control(intakePID.calculate(intake.getSelectedSensorPosition(), Constants.INTAKE_EXTEND));
+      control(intakePID.calculate(intakeEncoder.getSelectedSensorPosition(), Constants.INTAKE_EXTEND));
 
     } else {
-      control(intakePID.calculate(intake.getSelectedSensorPosition(), Constants.INTAKE_RETRACT));
+      control(intakePID.calculate(intakeEncoder.getSelectedSensorPosition(), Constants.INTAKE_RETRACT));
     }
 
   }
 
+  public void toggleIntake(){
+    intakeOn = !intakeOn; 
+  }
   // Roller Methods
   public void runIn() {
     control(Constants.ROLLER_RUN_SPEED);
-    intakeOn = true;
   }
 
   public void runOut() {
     control(-Constants.ROLLER_RUN_SPEED);
-    intakeOn = true;
   }
 
   public void stop() {
     control(0);
-    intakeOn = false;
   }
 
   public void control(double speed) {
     intake.set(ControlMode.PercentOutput, speed);
-
   }
 
   @Override

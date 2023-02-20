@@ -11,5 +11,8 @@ public class RobotMap {
 
     //Intake Constants
     public static final int INTAKE_PORT = 0; 
+    public static final int INTAKE_ENCODER_PORT = 0; 
     public static final int ROLLER_PORT = 0; 
+    
+
 }
