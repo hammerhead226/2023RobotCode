@@ -4,13 +4,11 @@
 
 package frc.robot.subsystems;
 
-
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-import com.ctre.phoenix.sensors.SensorInitializationStrategy;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -21,7 +19,7 @@ public class Intake extends SubsystemBase {
 
   private TalonFX roller;
   private TalonFX intake;
-  private TalonSRX intakeEncoder; 
+  private TalonSRX intakeEncoder;
   private boolean intakeOn;
   private PIDController intakePID;
 
@@ -51,9 +49,10 @@ public class Intake extends SubsystemBase {
 
   }
 
-  public void toggleIntake(){
-    intakeOn = !intakeOn; 
+  public void toggleIntake() {
+    intakeOn = !intakeOn;
   }
+
   // Roller Methods
   public void runIn() {
     control(Constants.ROLLER_RUN_SPEED);
@@ -69,6 +68,14 @@ public class Intake extends SubsystemBase {
 
   public void control(double speed) {
     intake.set(ControlMode.PercentOutput, speed);
+  }
+
+  public double getIntake() {
+    return intakeEncoder.getMotorOutputPercent();
+  }
+
+  public double getRoller() {
+    return roller.getMotorOutputPercent();
   }
 
   @Override
