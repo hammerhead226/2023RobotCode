@@ -30,6 +30,7 @@ public class Elevator extends SubsystemBase {
 
     elevatorLeft.setSelectedSensorPosition(0);
     elevatorRight.setSelectedSensorPosition(0);
+    elevatorEncoder.setSelectedSensorPosition(0);
 
     elevatorEncoder.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute);
 
@@ -59,8 +60,8 @@ public class Elevator extends SubsystemBase {
   @Override
   public void periodic() {
     if (isManual) {
-      if (!(elevatorLeft.getSelectedSensorPosition() <= Constants.MIN_POSITION
-          || elevatorLeft.getSelectedSensorPosition() >= Constants.MAX_POSITION))
+      if (!(elevatorEncoder.getSelectedSensorPosition() <= Constants.MIN_POSITION
+          || elevatorEncoder.getSelectedSensorPosition() >= Constants.MAX_POSITION))
         control(1 * Constants.ELEVATOR_COEFFICIENT);
     }
     // This method will be called once per scheduler run
