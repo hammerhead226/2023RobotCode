@@ -29,6 +29,7 @@ public class Robot extends TimedRobot {
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
     PortForwarder.add(1181, "hammerheads-jetson.local", 1181);
+    PortForwarder.add(1182, "hammerheads-jetson.local", 1182);
   }
 
   /**

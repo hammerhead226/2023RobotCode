@@ -14,8 +14,9 @@ public class Jetson {
     
     private static ObjectMapper objectMapper = new ObjectMapper();
 
-    private static final StringSubscriber sub = jetson.getStringTopic("Closest Detection").subscribe("");
-    private static Detect detect;
+    private static final StringSubscriber subIntake = jetson.getStringTopic("Intake Closest Detection").subscribe("");
+    private static Detect intakeDetect;
+    private static Detect gripperDetect;
 
     public static double getNetworkFPS() {
         return jetson.getEntry("Network FPS").getDouble(0.0);
@@ -29,29 +30,58 @@ public class Jetson {
         return jetson.getEntry("Latency").getDouble(0.0);
     }
 
-    public static String getClosestDetection() {
-        return jetson.getEntry("Closest Detection").getString("");
+    public static void enable() {
+        jetson.getEntry("Enabled").setBoolean(true);
+    }
+    
+    public static void disable() {
+        jetson.getEntry("Enabled").setBoolean(false);
+    }
+    
+    public static void shutdown() {
+        jetson.getEntry("Shutdown").setBoolean(true);
     }
 
-    public static void updateClosest(){
+    public static String getClosestIntakeDetection() {
+        return jetson.getEntry("Intake Closest Detection").getString("");
+    }
+
+    public static String getClosestGripperDetection() {
+        return jetson.getEntry("Gripper Closest Detection").getString("");
+    }
+
+    public static void updateIntakeClosest(){
         try {
-            String closest = getClosestDetection();
+            String closest = getClosestIntakeDetection();
             if (closest == ""){
-                detect = null;
+                intakeDetect = null;
             } else {
-                detect = objectMapper.readValue(closest, Detect.class);
+                intakeDetect = objectMapper.readValue(closest, Detect.class);
             }
         } catch (Exception e) {
-            detect = null;
+            intakeDetect = null;
         }
     }
 
-    public static Detect getClosestDetect() {
-        return detect;
+    public static void updateGripperClosest () {
+        try {
+            String closest = getClosestGripperDetection();
+            if (closest == ""){
+                gripperDetect = null;
+            } else {
+                gripperDetect = objectMapper.readValue(closest, Detect.class);
+            }
+        } catch (Exception e){
+            gripperDetect = null;
+        }
     }
 
-    public static String get() {
-        return sub.get();
+    public static Detect getClosestIntakeDetect() {
+        return intakeDetect;
+    }
+
+    public static String getIntake() {
+        return subIntake.get();
     }
 
 }

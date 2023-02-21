@@ -6,37 +6,27 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.libs.wrappers.Jetson;
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableInstance;
 
 public class Vision extends SubsystemBase {
-  private static final Jetson vision = new Jetson();
-  private static NetworkTable jetson = NetworkTableInstance.getDefault().getTable("Jetson");
 
-  public static boolean toggleEnabled = true;
+  private static boolean toggleEnabled = true;
+
+
+  public Vision() {}
 
   public static void toggle() {
     if (toggleEnabled) {
-      disable();
+      Jetson.disable();
       toggleEnabled = false;
     } else {
-      enable();
+      Jetson.enable();
       toggleEnabled = true;
     }
   }
-  public static void enable() {
-    jetson.getEntry("Enabled").setBoolean(true);
-  }
-
-  public static void disable() {
-    jetson.getEntry("Disabled").setBoolean(false);
-  }
 
   public static void shutdown() {
-    jetson.getEntry("Shutdown").setBoolean(true);
+    Jetson.shutdown();
   }
-
-  public Vision() {}
 
   @Override
   public void periodic() {
