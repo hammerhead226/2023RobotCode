@@ -1,8 +1,5 @@
 package frc.libs.wrappers;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import edu.wpi.first.networktables.NetworkTable;
@@ -36,6 +33,10 @@ public class Jetson {
     
     public static void disable() {
         jetson.getEntry("Enabled").setBoolean(false);
+    }
+
+    public static boolean isEnabled() {
+        return jetson.getEntry("Enabled").getBoolean(true) == true;
     }
     
     public static void shutdown() {
@@ -78,6 +79,10 @@ public class Jetson {
 
     public static Detect getClosestIntakeDetect() {
         return intakeDetect;
+    }
+
+    public static Detect getClosestGripperDetect() {
+        return gripperDetect;
     }
 
     public static String getIntake() {

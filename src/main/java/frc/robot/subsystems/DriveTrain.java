@@ -15,6 +15,7 @@ import frc.libs.swervey.SwerveBuilder;
 import frc.libs.wrappers.GenericEncoder;
 import frc.libs.wrappers.GenericMotor;
 import frc.libs.wrappers.Gyro;
+import frc.libs.wrappers.Jetson;
 import frc.robot.Constants;
 import frc.robot.RobotMap;
 
@@ -28,6 +29,7 @@ public class DriveTrain extends SubsystemBase {
   private Swerve swerve;
   private boolean driveTrainLock = false;
   private PIDController limelightController;
+  private PIDController jetsonController;
   
   /** Creates a new DriveTrain. */
   public DriveTrain() {
@@ -59,11 +61,20 @@ public class DriveTrain extends SubsystemBase {
 
     this.limelightController = new PIDController(Constants.LIMELIGHT_GAINS[0], Constants.LIMELIGHT_GAINS[1], Constants.LIMELIGHT_GAINS[2]);
     this.limelightController.setTolerance(0.9);
+
+    this.jetsonController = new PIDController(Constants.JETSON_INTAKE_GAINS[0], Constants.JETSON_INTAKE_GAINS[1], Constants.JETSON_INTAKE_GAINS[2]);
+    this.jetsonController.setTolerance(0.9);
     //swerve.enableRobotCentric();
   }
 
   public void control(double x, double y, double rotate) {
     swerve.control(x, y, rotate);
+  }
+
+  public void jetsonLineUp(double angle){
+    if (Jetson.isEnabled() && Jetson.getClosestIntakeDetect() != null){
+      control(0, 0, Math.abs(Jetson.getClosestIntakeDetect().targetX) >= 20 ? jetsonController.calculate(Jetson.getClosestIntakeDetect().targetX, angle) : 0);
+    }
   }
 
   public void toggleSpeed() {
