@@ -4,57 +4,90 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.Servo;
+import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.libs.wrappers.GenericMotor;
 import frc.robot.Constants;
 import frc.robot.RobotMap;
 
 public class Gripper extends SubsystemBase {
   /**
    * Three servos in total
-   * 1 HiTEC servo to rotate linear slide
-   * 2 REV Smart Robot Servos that move the claw
+   * 1 NEO motor as the joint
+   * 1 NEO motor to open/close the gripper
+   * 1 servo to rotate hand
    */
-  private Servo armPivot;
-  private Servo leftClaw;
-  private Servo rightClaw;
+  private Servo wrist;
+  private GenericMotor joint;
+  private GenericMotor claw; 
+
+  private PIDController jointPID;
+  private PIDController clawPID;
 
   private boolean isGripped = false;
+  private boolean jointToggle = false;
+  private boolean clawToggle = false;
 
   public Gripper() {
-    armPivot = new Servo(RobotMap.GRIPPER_HITEC);
-    leftClaw = new Servo(RobotMap.REV_LEFT_HITEC);
-    rightClaw = new Servo(RobotMap.REV_RIGHT_HITEC);
+    wrist = new Servo(RobotMap.GRIPPER_HITEC);
+    joint = new GenericMotor(new CANSparkMax(RobotMap.JOINT, MotorType.kBrushless));
+    claw = new GenericMotor(new CANSparkMax(RobotMap.CLAW, MotorType.kBrushless));
 
-    armPivot.setAngle(Constants.ARM_PIVOT_ANGLE);
-    leftClaw.setAngle(Constants.REV_LEFT_ANGLE);
-    rightClaw.setAngle(Constants.REV_RIGHT_ANGLE);
-  }
+    joint.setSensorPose(0);
+    claw.setSensorPose(0);
 
-  public void close() {
-    leftClaw.setAngle(Constants.LEFT_CLAW_CLOSE);
-    rightClaw.setAngle(Constants.RIGHT_CLAW_CLOSE);
-  }
+    jointPID = new PIDController(Constants.JOINT_GAINS[0], Constants.JOINT_GAINS[1], Constants.JOINT_GAINS[2]);
+    clawPID = new PIDController(Constants.CLAW_GAINS[0], Constants.CLAW_GAINS[1], Constants.CLAW_GAINS[2]);
 
-  public void open() {
-    leftClaw.setAngle(Constants.LEFT_CLAW_CLOSE);
-    rightClaw.setAngle(Constants.RIGHT_CLAW_CLOSE);
+    wrist.setAngle(Constants.ARM_PIVOT_ANGLE);
   }
 
   public void run() {
-    if (isGripped) {
-      close();
-
+    if(clawToggle) {
+      control(clawPID.calculate(claw.getSensorPose(), Constants.CLAW_CLOSE), Constants.CLAW_SETTING);
     } else {
-      open();
+      control(clawPID.calculate(claw.getSensorPose(), Constants.CLAW_OPEN), Constants.CLAW_SETTING);
+    }
 
+    if(jointToggle) {
+      control(jointPID.calculate(joint.getSensorPose(), Constants.JOINT_POS_1), Constants.JOINT_SETTING);
+    } else {
+      control(jointPID.calculate(joint.getSensorPose(), Constants.JOINT_POS_2), Constants.JOINT_SETTING);
+    }
+
+    if(isGripped) {
+      control(Constants.WRIST_POS_1, Constants.WRIST_SETTING);
+    } else {
+      control(Constants.WRIST_POS_2, Constants.WRIST_SETTING);
     }
   }
 
-  public void control(double armPivotAngle, double leftClawAngle, double rightClawAngle) {
-    armPivot.setAngle(armPivotAngle);
-    leftClaw.setAngle(leftClawAngle);
-    rightClaw.setAngle(rightClawAngle);
+  public void toggleWrist() {
+    isGripped = !isGripped;
+  }
+
+  public void toggleJoint() {
+    jointToggle = !jointToggle;
+  }
+
+  public void toggleClaw() {
+    clawToggle = !clawToggle;
+  }
+
+  public void control(double position, int setting) {
+    if(setting == 0) {
+      wrist.setAngle(position);
+    } else if (setting == 1) {
+      joint.set(position);
+    } else if (setting == 2) {
+      claw.set(position);
+    }
   }
 
   @Override

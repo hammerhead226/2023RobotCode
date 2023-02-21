@@ -80,8 +80,6 @@ public final class Constants {
   public static final double ROTATE_GAINS_THRESHOLD = 0.15; // TODO: Convert to velocity
   public static final double ROTATE_VELOCITY_THRESHOLD = 0.2;
 
-  public static final double[] CLAW_GAINS = { 0, 0, 0 };
-
   // REFORMATTED SWERVE PARAMETERS
   public static final double[][] MODULE_GAINS = { DRIVE_GAINS,
       STEER_GAINS_LOW,
@@ -122,4 +120,21 @@ public final class Constants {
   public static final double ARM_PIVOT_ANGLE = 0.0;
   public static final double REV_LEFT_ANGLE = 0.0;
   public static final double REV_RIGHT_ANGLE = 180.0;
+
+  public static final double CLAW_OPEN = 0;
+  public static final double CLAW_CLOSE = 0.5;
+
+  public static final double JOINT_POS_1 = 0;
+  public static final double JOINT_POS_2 = 0.5;
+
+  public static final double WRIST_POS_1 = 0;
+  public static final double WRIST_POS_2 = 0.5;
+
+  public static final double[] JOINT_GAINS = {0, 0, 0};
+  public static final double[] CLAW_GAINS = {0, 0, 0};
+
+  //CONTROL METHOD SETTINGS FOR GRIPPER
+  public static final int WRIST_SETTING = 0;
+  public static final int JOINT_SETTING = 1;
+  public static final int CLAW_SETTING = 2;
 }
