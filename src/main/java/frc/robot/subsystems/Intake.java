@@ -11,8 +11,10 @@ import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.RobotContainer;
 import frc.robot.RobotMap;
 
 public class Intake extends SubsystemBase {
@@ -80,6 +82,7 @@ public class Intake extends SubsystemBase {
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
+    control(RobotContainer.balls.getLeftJoyX());
+    SmartDashboard.putNumber("Intake Encoder", intakeEncoder.getSelectedSensorPosition());
   }
 }
