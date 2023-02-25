@@ -104,6 +104,16 @@ public final class Constants {
 
   public static final double[] LIMELIGHT_COEFS = { 0, 0, 0, 0 };
 
+  // Intake Constants
+  public static final double ROLLER_RUN_SPEED = 0.6;
+  public static final double[] INTAKE_GAINS = { 0.0006, 0, 0 };
+  public static final int INTAKE_OFFSET = 0;
+
+  public static final double INTAKE_EXTEND = 3600;
+  public static final double INTAKE_RETRACT = 3000;
+  
+  public static final double MAX_SPEED_UP = 0.5;
+  public static final double MAX_SPEED_DOWN = 0.25;
   // Elevator Constants (change these values after testing)
   public static final double ELEVATOR_COEFFICIENT = 0.7;
   public static final double[] ELEVATOR_GAINS = { 0, 0, 0 };
@@ -133,10 +143,5 @@ public final class Constants {
   public static final double MAX_SPEED = 0.10;
 
   public static final boolean LS_SET_INVERTED = true;
-
-  // Intake Constants
-  public static final double ROLLER_RUN_SPEED = 0.5;
-  public static final double[] INTAKE_GAINS = { 0, 0, 0 };
-  public static final int INTAKE_OFFSET = 0;
 
 }
