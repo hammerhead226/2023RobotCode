@@ -9,6 +9,6 @@ public class RobotMap {
     public static final int GYRO = 7;
 
     public static final int GRIPPER_HITEC = 0;
-    public static final int REV_LEFT_HITEC = 0;
-    public static final int REV_RIGHT_HITEC = 0;
+
+    public static final int[] GRIPPER_MOTORS = {2, 1};
 }
