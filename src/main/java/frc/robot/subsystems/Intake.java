@@ -76,7 +76,7 @@ public class Intake extends SubsystemBase {
   }
 
   public double getIntake() {
-    return intakeEncoder.getMotorOutputPercent();
+    return intakeEncoder.getSelectedSensorPosition();
   }
 
   public double getRoller() {
