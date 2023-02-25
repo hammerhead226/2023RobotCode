@@ -9,7 +9,7 @@ import frc.libs.wrappers.SharkSight;
 
 public class Vision extends SubsystemBase {
 
-  private static boolean toggleEnabled = true;
+  private static boolean toggleEnabled = SharkSight.isEnabled();
 
 
   public Vision() {}
@@ -31,5 +31,7 @@ public class Vision extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    SharkSight.updateIntakeClosest();
+    SharkSight.updateGripperClosest();
   }
 }

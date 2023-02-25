@@ -5,7 +5,6 @@
 package frc.robot;
 
 import edu.wpi.first.net.PortForwarder;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -39,6 +38,7 @@ public class Robot extends TimedRobot {
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
     state = Phase.DISABLED;
+
     PortForwarder.add(1181, "hammerheads-jetson.local", 1181);
     PortForwarder.add(1182, "hammerheads-jetson.local", 1182);
   }
@@ -62,9 +62,10 @@ public class Robot extends TimedRobot {
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
   public void disabledInit() {
-    if (state == Phase.TELEOP) {
-      SharkSight.shutdown();
-    }
+    // Need to Test Later to Shutdown after match end
+    // if (state == Phase.TELEOP) {
+    //   SharkSight.shutdown();
+    // }
     state = Phase.DISABLED;
   }
 
