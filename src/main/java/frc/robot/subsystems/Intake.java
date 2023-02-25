@@ -11,10 +11,9 @@ import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+// import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.RobotContainer;
 import frc.robot.RobotMap;
 
 public class Intake extends SubsystemBase {
@@ -25,10 +24,6 @@ public class Intake extends SubsystemBase {
   private boolean intakeOn;
   private PIDController intakePID;
 
-  /**
-   * Creates a new Intake.
-   * instead of using Commands, we can use run {} methods
-   */
   public Intake() {
     intake = new TalonFX(RobotMap.INTAKE_PORT);
     roller = new TalonFX(RobotMap.ROLLER_PORT);
@@ -36,17 +31,25 @@ public class Intake extends SubsystemBase {
     intake.setNeutralMode(NeutralMode.Brake);
     roller.setNeutralMode(NeutralMode.Coast);
 
+    roller.setInverted(true);
+    
     intakeEncoder.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute);
-
     intakePID = new PIDController(Constants.INTAKE_GAINS[0], Constants.INTAKE_GAINS[1], Constants.INTAKE_GAINS[2]);
   }
 
   public void run() {
     if (intakeOn) {
-      control(intakePID.calculate(intakeEncoder.getSelectedSensorPosition(), Constants.INTAKE_EXTEND));
-
+      double extendSpeed = intakePID.calculate(intakeEncoder.getSelectedSensorPosition(), Constants.INTAKE_EXTEND);
+      if (extendSpeed > Constants.MAX_SPEED_UP) {
+        extendSpeed = Constants.MAX_SPEED_UP;
+      }
+      control(extendSpeed);
     } else {
-      control(intakePID.calculate(intakeEncoder.getSelectedSensorPosition(), Constants.INTAKE_RETRACT));
+      double retractSpeed = intakePID.calculate(intakeEncoder.getSelectedSensorPosition(), Constants.INTAKE_RETRACT);
+      if (retractSpeed > Constants.MAX_SPEED_DOWN){
+        retractSpeed = Constants.MAX_SPEED_DOWN;
+      }
+      control(retractSpeed);
     }
 
   }
@@ -57,15 +60,15 @@ public class Intake extends SubsystemBase {
 
   // Roller Methods
   public void runIn() {
-    control(Constants.ROLLER_RUN_SPEED);
+    roller.set(ControlMode.PercentOutput, Constants.ROLLER_RUN_SPEED);
   }
 
   public void runOut() {
-    control(-Constants.ROLLER_RUN_SPEED);
+    roller.set(ControlMode.PercentOutput, -Constants.ROLLER_RUN_SPEED);
   }
 
   public void stop() {
-    control(0);
+    roller.set(ControlMode.PercentOutput, 0);
   }
 
   public void control(double speed) {
@@ -82,7 +85,6 @@ public class Intake extends SubsystemBase {
 
   @Override
   public void periodic() {
-    control(RobotContainer.balls.getLeftJoyX());
-    SmartDashboard.putNumber("Intake Encoder", intakeEncoder.getSelectedSensorPosition());
+    // SmartDashboard.putNumber("Intake Encoder", intakeEncoder.getSelectedSensorPosition());
   }
 }

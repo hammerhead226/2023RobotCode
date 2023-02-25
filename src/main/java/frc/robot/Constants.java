@@ -105,9 +105,13 @@ public final class Constants {
   public static final double[] LIMELIGHT_COEFS = { 0, 0, 0, 0 };
 
   // Intake Constants
-  public static final double ROLLER_RUN_SPEED = 0.4;
-  public static final double[] INTAKE_GAINS = { 0, 0, 0 };
+  public static final double ROLLER_RUN_SPEED = 0.6;
+  public static final double[] INTAKE_GAINS = { 0.0006, 0, 0 };
   public static final int INTAKE_OFFSET = 0;
-  public static final double INTAKE_EXTEND = 0;
-  public static final double INTAKE_RETRACT = 0;
+
+  public static final double INTAKE_EXTEND = 3600;
+  public static final double INTAKE_RETRACT = 3000;
+  
+  public static final double MAX_SPEED_UP = 0.5;
+  public static final double MAX_SPEED_DOWN = 0.25;
 }
