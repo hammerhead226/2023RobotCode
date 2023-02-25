@@ -15,7 +15,7 @@ import frc.libs.swervey.SwerveBuilder;
 import frc.libs.wrappers.GenericEncoder;
 import frc.libs.wrappers.GenericMotor;
 import frc.libs.wrappers.Gyro;
-import frc.libs.wrappers.Jetson;
+import frc.libs.wrappers.SharkSight;
 import frc.robot.Constants;
 import frc.robot.RobotMap;
 
@@ -62,7 +62,7 @@ public class DriveTrain extends SubsystemBase {
     this.limelightController = new PIDController(Constants.LIMELIGHT_GAINS[0], Constants.LIMELIGHT_GAINS[1], Constants.LIMELIGHT_GAINS[2]);
     this.limelightController.setTolerance(0.9);
 
-    this.jetsonController = new PIDController(Constants.JETSON_INTAKE_GAINS[0], Constants.JETSON_INTAKE_GAINS[1], Constants.JETSON_INTAKE_GAINS[2]);
+    this.jetsonController = new PIDController(Constants.SHARKSIGHT_INTAKE_GAINS[0], Constants.SHARKSIGHT_INTAKE_GAINS[1], Constants.SHARKSIGHT_INTAKE_GAINS[2]);
     this.jetsonController.setTolerance(0.9);
     //swerve.enableRobotCentric();
   }
@@ -71,11 +71,12 @@ public class DriveTrain extends SubsystemBase {
     swerve.control(x, y, rotate);
   }
 
-  public void jetsonLineUp(double angle){
-    if (Jetson.isEnabled() && Jetson.getClosestIntakeDetect() != null){
-      control(0, 0, Math.abs(Jetson.getClosestIntakeDetect().targetX) >= 20 ? jetsonController.calculate(Jetson.getClosestIntakeDetect().targetX, angle) : 0);
+  public void jetsonLineUp(double angle) {
+    if (SharkSight.isEnabled() && SharkSight.getClosestIntakeDetect() != null){
+      control(0, 0, Math.abs(SharkSight.getClosestIntakeDetect().targetX) >= Constants.SHARKSIGHT_ERROR_MARGIN ? jetsonController.calculate(SharkSight.getClosestIntakeDetect().targetX, angle) : 0);
     }
   }
+
 
   public void toggleSpeed() {
     swerve.toggleSpeed();

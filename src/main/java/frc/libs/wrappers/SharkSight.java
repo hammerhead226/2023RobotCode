@@ -4,14 +4,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.networktables.StringSubscriber;
 
-public class Jetson {
-    private static NetworkTable jetson = NetworkTableInstance.getDefault().getTable("Jetson");
+public class SharkSight {
+    private static NetworkTable jetson = NetworkTableInstance.getDefault().getTable("SharkSight");
     
     private static ObjectMapper objectMapper = new ObjectMapper();
 
-    private static final StringSubscriber subIntake = jetson.getStringTopic("Intake Closest Detection").subscribe("");
     private static Detect intakeDetect;
     private static Detect gripperDetect;
 
@@ -27,6 +25,38 @@ public class Jetson {
         return jetson.getEntry("Latency").getDouble(0.0);
     }
 
+    public static String getClosestIntakeDetection() {
+        return jetson.getEntry("Intake Closest Detection").getString("");
+    }
+
+    public static String getClosestGripperDetection() {
+        return jetson.getEntry("Gripper Closest Detection").getString("");
+    }
+
+    public static Detect getClosestIntakeDetect() {
+        return intakeDetect;
+    }
+
+    public static Detect getClosestGripperDetect() {
+        return gripperDetect;
+    }
+
+    public static String getConeRotation() {
+        return jetson.getEntry("Cone Rotation").getString("");
+    }
+
+    public static double getCpuTemp() {
+        return jetson.getEntry("CPU Temp").getDouble(0);
+    }
+
+    public static double getGpuTemp() {
+        return jetson.getEntry("GPU Temp").getDouble(0);
+    }
+
+    public static void shutdown() {
+        jetson.getEntry("Shutdown").setBoolean(true);
+    }
+
     public static void enable() {
         jetson.getEntry("Enabled").setBoolean(true);
     }
@@ -37,18 +67,6 @@ public class Jetson {
 
     public static boolean isEnabled() {
         return jetson.getEntry("Enabled").getBoolean(true) == true;
-    }
-    
-    public static void shutdown() {
-        jetson.getEntry("Shutdown").setBoolean(true);
-    }
-
-    public static String getClosestIntakeDetection() {
-        return jetson.getEntry("Intake Closest Detection").getString("");
-    }
-
-    public static String getClosestGripperDetection() {
-        return jetson.getEntry("Gripper Closest Detection").getString("");
     }
 
     public static void updateIntakeClosest(){
@@ -75,18 +93,6 @@ public class Jetson {
         } catch (Exception e){
             gripperDetect = null;
         }
-    }
-
-    public static Detect getClosestIntakeDetect() {
-        return intakeDetect;
-    }
-
-    public static Detect getClosestGripperDetect() {
-        return gripperDetect;
-    }
-
-    public static String getIntake() {
-        return subIntake.get();
     }
 
 }

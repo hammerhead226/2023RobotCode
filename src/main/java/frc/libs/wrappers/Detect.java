@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 @JsonNaming(UpperCamelCaseStrategy.class)
 public class Detect {
     public String classID;
+    public String className;
     public String instanceID;
     public double area;
     public double bottom;

@@ -5,7 +5,7 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.libs.wrappers.Jetson;
+import frc.libs.wrappers.SharkSight;
 
 public class Vision extends SubsystemBase {
 
@@ -16,16 +16,16 @@ public class Vision extends SubsystemBase {
 
   public static void toggle() {
     if (toggleEnabled) {
-      Jetson.disable();
+      SharkSight.disable();
       toggleEnabled = false;
     } else {
-      Jetson.enable();
+      SharkSight.enable();
       toggleEnabled = true;
     }
   }
 
   public static void shutdown() {
-    Jetson.shutdown();
+    SharkSight.shutdown();
   }
 
   @Override
