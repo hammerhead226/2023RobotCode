@@ -6,6 +6,8 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkMaxRelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.PIDController;
@@ -22,13 +24,19 @@ public class Gripper extends SubsystemBase {
    * 1 NEO motor as the joint
    * 1 NEO motor to open/close the gripper
    * 1 servo to rotate hand
+   * up and down position (toggle) --> A button
+   * pincing (toggle) --> B button
+   * wrist rotation (180 or 0 degrees; also toggle) --> X button
    */
   private Servo wrist;
-  private GenericMotor joint;
-  private GenericMotor claw; 
+  private CANSparkMax joint;
+  private CANSparkMax claw; 
 
   private PIDController jointPID;
   private PIDController clawPID;
+
+  private RelativeEncoder jointEncoder;
+  private RelativeEncoder clawEncoder;
 
   private boolean isGripped = false;
   private boolean jointToggle = false;
@@ -36,11 +44,11 @@ public class Gripper extends SubsystemBase {
 
   public Gripper() {
     wrist = new Servo(RobotMap.GRIPPER_HITEC);
-    joint = new GenericMotor(new CANSparkMax(RobotMap.JOINT, MotorType.kBrushless));
-    claw = new GenericMotor(new CANSparkMax(RobotMap.CLAW, MotorType.kBrushless));
+    joint = new CANSparkMax(RobotMap.GRIPPER_MOTORS[0], MotorType.kBrushless);
+    claw = new CANSparkMax(RobotMap.GRIPPER_MOTORS[1], MotorType.kBrushless);
 
-    joint.setSensorPose(0);
-    claw.setSensorPose(0);
+    jointEncoder = joint.getEncoder();
+    clawEncoder = claw.getEncoder();
 
     jointPID = new PIDController(Constants.JOINT_GAINS[0], Constants.JOINT_GAINS[1], Constants.JOINT_GAINS[2]);
     clawPID = new PIDController(Constants.CLAW_GAINS[0], Constants.CLAW_GAINS[1], Constants.CLAW_GAINS[2]);
@@ -50,15 +58,15 @@ public class Gripper extends SubsystemBase {
 
   public void run() {
     if(clawToggle) {
-      control(clawPID.calculate(claw.getSensorPose(), Constants.CLAW_CLOSE), Constants.CLAW_SETTING);
+      control(clawPID.calculate(claw.get(), Constants.CLAW_CLOSE), Constants.CLAW_SETTING);
     } else {
-      control(clawPID.calculate(claw.getSensorPose(), Constants.CLAW_OPEN), Constants.CLAW_SETTING);
+      control(clawPID.calculate(claw.get(), Constants.CLAW_OPEN), Constants.CLAW_SETTING);
     }
 
     if(jointToggle) {
-      control(jointPID.calculate(joint.getSensorPose(), Constants.JOINT_POS_1), Constants.JOINT_SETTING);
+      control(jointPID.calculate(joint.get(), Constants.JOINT_POS_1), Constants.JOINT_SETTING);
     } else {
-      control(jointPID.calculate(joint.getSensorPose(), Constants.JOINT_POS_2), Constants.JOINT_SETTING);
+      control(jointPID.calculate(joint.get(), Constants.JOINT_POS_2), Constants.JOINT_SETTING);
     }
 
     if(isGripped) {
