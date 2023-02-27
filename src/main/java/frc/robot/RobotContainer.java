@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import frc.libs.wrappers.Controller;
 import frc.robot.subsystems.Gripper;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -22,6 +23,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  */
 public class RobotContainer {
 
+  private static final Controller manip = new Controller(0, Constants.CONTROLLER_DEADBAND);
   private final Gripper gripper = new Gripper();
 
   /**
@@ -49,7 +51,9 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-
+    manip.getAButton().whileTrue(new InstantCommand(gripper::toggleArm, gripper));
+    manip.getBButton().whileTrue(new InstantCommand(gripper::toggleClaw, gripper));
+    manip.getXButton().whileTrue(new InstantCommand(gripper::toggleWrist, gripper));
   }
 
   /**

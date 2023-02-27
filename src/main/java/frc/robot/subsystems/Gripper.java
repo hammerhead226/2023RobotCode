@@ -24,7 +24,7 @@ public class Gripper extends SubsystemBase {
    * 1 NEO motor as the joint
    * 1 NEO motor to open/close the gripper
    * 1 servo to rotate hand
-   * up and down position (toggle) --> A button
+   * up and down position for arm (toggle) --> A button
    * pincing (toggle) --> B button
    * wrist rotation (180 or 0 degrees; also toggle) --> X button
    */
