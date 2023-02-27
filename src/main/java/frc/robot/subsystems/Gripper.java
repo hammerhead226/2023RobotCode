@@ -29,44 +29,47 @@ public class Gripper extends SubsystemBase {
    * wrist rotation (180 or 0 degrees; also toggle) --> X button
    */
   private Servo wrist;
-  private CANSparkMax joint;
+  private CANSparkMax arm;
   private CANSparkMax claw; 
 
-  private PIDController jointPID;
+  private PIDController armPID;
   private PIDController clawPID;
 
-  private RelativeEncoder jointEncoder;
+  private RelativeEncoder armEncoder;
   private RelativeEncoder clawEncoder;
 
   private boolean isGripped = false;
-  private boolean jointToggle = false;
+  private boolean armToggle = false;
   private boolean clawToggle = false;
 
   public Gripper() {
     wrist = new Servo(RobotMap.GRIPPER_HITEC);
-    joint = new CANSparkMax(RobotMap.GRIPPER_MOTORS[0], MotorType.kBrushless);
+    arm = new CANSparkMax(RobotMap.GRIPPER_MOTORS[0], MotorType.kBrushless);
     claw = new CANSparkMax(RobotMap.GRIPPER_MOTORS[1], MotorType.kBrushless);
 
-    jointEncoder = joint.getEncoder();
+    armEncoder = arm.getEncoder();
     clawEncoder = claw.getEncoder();
 
-    jointPID = new PIDController(Constants.JOINT_GAINS[0], Constants.JOINT_GAINS[1], Constants.JOINT_GAINS[2]);
+    armEncoder.setPosition(0.0);
+    clawEncoder.setPosition(0.0);
+
+    armPID = new PIDController(Constants.ARM_GAINS[0], Constants.ARM_GAINS[1], Constants.ARM_GAINS[2]);
     clawPID = new PIDController(Constants.CLAW_GAINS[0], Constants.CLAW_GAINS[1], Constants.CLAW_GAINS[2]);
 
-    wrist.setAngle(Constants.ARM_PIVOT_ANGLE);
+    wrist.setAngle(Constants.WRIST_POS_2);
   }
 
   public void run() {
     if(clawToggle) {
-      control(clawPID.calculate(claw.get(), Constants.CLAW_CLOSE), Constants.CLAW_SETTING);
+      control(clawPID.calculate(clawEncoder.getPosition(), Constants.CLAW_CLOSE), Constants.CLAW_SETTING);
     } else {
-      control(clawPID.calculate(claw.get(), Constants.CLAW_OPEN), Constants.CLAW_SETTING);
+      control(clawPID.calculate(clawEncoder.getPosition(), Constants.CLAW_OPEN), Constants.CLAW_SETTING);
     }
 
-    if(jointToggle) {
-      control(jointPID.calculate(joint.get(), Constants.JOINT_POS_1), Constants.JOINT_SETTING);
+    if(armToggle) {
+      control(armPID.calculate(armEncoder.getPosition(), Constants.ARM_POS_1), Constants.ARM_SETTING);
     } else {
-      control(jointPID.calculate(joint.get(), Constants.JOINT_POS_2), Constants.JOINT_SETTING);
+      control(armPID.calculate(armEncoder.getPosition(), Constants.ARM_POS_2), Constants.ARM_SETTING);
     }
 
     if(isGripped) {
@@ -80,8 +83,8 @@ public class Gripper extends SubsystemBase {
     isGripped = !isGripped;
   }
 
-  public void toggleJoint() {
-    jointToggle = !jointToggle;
+  public void toggleArm() {
+    armToggle = !armToggle;
   }
 
   public void toggleClaw() {
@@ -92,7 +95,7 @@ public class Gripper extends SubsystemBase {
     if(setting == 0) {
       wrist.setAngle(position);
     } else if (setting == 1) {
-      joint.set(position);
+      arm.set(position);
     } else if (setting == 2) {
       claw.set(position);
     }

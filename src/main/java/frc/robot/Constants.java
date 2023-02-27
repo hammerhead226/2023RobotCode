@@ -104,37 +104,21 @@ public final class Constants {
 
   public static final double[] LIMELIGHT_COEFS = { 0, 0, 0, 0 };
 
-  // CLAW PARAMETERS
-  public static final double LEFT_CLAW_CLOSE = 0.0;
-  public static final double RIGHT_CLAW_CLOSE = 180.0;
-
-  public static final double LEFT_CLAW_RELEASE = 180.0;
-  public static final double RIGHT_CLAW_RELEASE = 0.0;
-
-  public static final double LEFT_CLAW_CUBE = 80.0; // yea idk these yet, test out later
-  public static final double RIGHT_CLAW_CUBE = 80.0;
-
-  public static final double LEFT_CLAW_CONE = 80.0;
-  public static final double RIGHT_CLAW_CONE = 80.0;
-
-  public static final double ARM_PIVOT_ANGLE = 0.0;
-  public static final double REV_LEFT_ANGLE = 0.0;
-  public static final double REV_RIGHT_ANGLE = 180.0;
-
+  //GRIPPER PARAMETERS
   public static final double CLAW_OPEN = 0;
   public static final double CLAW_CLOSE = 0.5;
 
-  public static final double JOINT_POS_1 = 0;
-  public static final double JOINT_POS_2 = 0.5;
+  public static final double ARM_POS_1 = 0;
+  public static final double ARM_POS_2 = 0.5;
 
   public static final double WRIST_POS_1 = 0;
   public static final double WRIST_POS_2 = 0.5;
 
-  public static final double[] JOINT_GAINS = {0, 0, 0};
+  public static final double[] ARM_GAINS = {0, 0, 0};
   public static final double[] CLAW_GAINS = {0, 0, 0};
 
   //CONTROL METHOD SETTINGS FOR GRIPPER
   public static final int WRIST_SETTING = 0;
-  public static final int JOINT_SETTING = 1;
+  public static final int ARM_SETTING = 1;
   public static final int CLAW_SETTING = 2;
 }
