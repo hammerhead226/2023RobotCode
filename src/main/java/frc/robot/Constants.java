@@ -23,7 +23,7 @@ public final class Constants {
   }
 
   // speed of active floor motor
-  public static final double ACTIVE_FLOOR_CONSTANT_SPEED = 0.5;
+  public static final double ACTIVE_FLOOR_CONSTANT_SPEED = 0.50;
 
   // Controller Configuration
   public static final double CONTROLLER_DEADBAND = 0.15;
