@@ -106,7 +106,7 @@ public final class Constants {
 
   //GRIPPER PARAMETERS
   public static final double CLAW_OPEN = 0;
-  public static final double CLAW_CLOSE = 0.5;
+  public static final double CLAW_CLOSE = 3450.0;
 
   public static final double ARM_POS_1 = 0;
   public static final double ARM_POS_2 = 0.5;
@@ -115,7 +115,7 @@ public final class Constants {
   public static final double WRIST_POS_2 = 0.5;
 
   public static final double[] ARM_GAINS = {0, 0, 0};
-  public static final double[] CLAW_GAINS = {0, 0, 0};
+  public static final double[] CLAW_GAINS = {0.0005, 0, 0};
 
   //CONTROL METHOD SETTINGS FOR GRIPPER
   public static final int WRIST_SETTING = 0;

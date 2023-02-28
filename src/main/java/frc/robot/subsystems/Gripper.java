@@ -13,6 +13,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.libs.wrappers.GenericMotor;
 import frc.robot.Constants;
@@ -44,16 +45,16 @@ public class Gripper extends SubsystemBase {
 
   public Gripper() {
     wrist = new Servo(RobotMap.GRIPPER_HITEC);
-    arm = new CANSparkMax(RobotMap.GRIPPER_MOTORS[0], MotorType.kBrushless);
+    //arm = new CANSparkMax(RobotMap.GRIPPER_MOTORS[0], MotorType.kBrushless);
     claw = new CANSparkMax(RobotMap.GRIPPER_MOTORS[1], MotorType.kBrushless);
 
-    armEncoder = arm.getEncoder();
+    //armEncoder = arm.getEncoder();
     clawEncoder = claw.getEncoder();
 
-    armEncoder.setPosition(0.0);
-    clawEncoder.setPosition(0.0);
+    //armEncoder.setPosition(0.0);
+    // clawEncoder.setPosition(0.0);
 
-    armPID = new PIDController(Constants.ARM_GAINS[0], Constants.ARM_GAINS[1], Constants.ARM_GAINS[2]);
+    //armPID = new PIDController(Constants.ARM_GAINS[0], Constants.ARM_GAINS[1], Constants.ARM_GAINS[2]);
     clawPID = new PIDController(Constants.CLAW_GAINS[0], Constants.CLAW_GAINS[1], Constants.CLAW_GAINS[2]);
 
     wrist.setAngle(Constants.WRIST_POS_2);
@@ -61,16 +62,18 @@ public class Gripper extends SubsystemBase {
 
   public void run() {
     if(clawToggle) {
-      control(clawPID.calculate(clawEncoder.getPosition(), Constants.CLAW_CLOSE), Constants.CLAW_SETTING);
+      control(clawPID.calculate(clawEncoder.getPosition() * clawEncoder.getCountsPerRevolution(), Constants.CLAW_CLOSE), Constants.CLAW_SETTING);
     } else {
-      control(clawPID.calculate(clawEncoder.getPosition(), Constants.CLAW_OPEN), Constants.CLAW_SETTING);
+      control(clawPID.calculate(clawEncoder.getPosition() * clawEncoder.getCountsPerRevolution(), Constants.CLAW_OPEN), Constants.CLAW_SETTING);
     }
 
+    /*
     if(armToggle) {
       control(armPID.calculate(armEncoder.getPosition(), Constants.ARM_POS_1), Constants.ARM_SETTING);
     } else {
       control(armPID.calculate(armEncoder.getPosition(), Constants.ARM_POS_2), Constants.ARM_SETTING);
     }
+    */
 
     if(isGripped) {
       control(Constants.WRIST_POS_1, Constants.WRIST_SETTING);
@@ -80,7 +83,7 @@ public class Gripper extends SubsystemBase {
   }
 
   public void tempRun(double speed) {
-    arm.set(speed * 0.75);
+    claw.set(speed * 0.75);
   }
 
   public void toggleWrist() {
@@ -99,7 +102,7 @@ public class Gripper extends SubsystemBase {
     if(setting == 0) {
       wrist.setAngle(position);
     } else if (setting == 1) {
-      arm.set(position);
+      //arm.set(position);
     } else if (setting == 2) {
       claw.set(position);
     }
@@ -108,5 +111,7 @@ public class Gripper extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    SmartDashboard.putNumber("PID Calculation: ", clawPID.calculate(clawEncoder.getPosition() * clawEncoder.getCountsPerRevolution()));
+    SmartDashboard.putNumber("Encoder Position: ", clawEncoder.getPosition() * clawEncoder.getCountsPerRevolution());
   }
 }
