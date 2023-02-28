@@ -21,7 +21,7 @@ import frc.robot.RobotMap;
 public class Gripper extends SubsystemBase {
   /**
    * Three servos in total
-   * 1 NEO motor as the joint
+   * 1 NEO motor as the arm
    * 1 NEO motor to open/close the gripper
    * 1 servo to rotate hand
    * up and down position for arm (toggle) --> A button
@@ -77,6 +77,10 @@ public class Gripper extends SubsystemBase {
     } else {
       control(Constants.WRIST_POS_2, Constants.WRIST_SETTING);
     }
+  }
+
+  public void tempRun(double speed) {
+    arm.set(speed * 0.75);
   }
 
   public void toggleWrist() {

@@ -51,8 +51,12 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
+    /*
     manip.getAButton().whileTrue(new InstantCommand(gripper::toggleArm, gripper));
     manip.getBButton().whileTrue(new InstantCommand(gripper::toggleClaw, gripper));
+    manip.getXButton().whileTrue(new InstantCommand(gripper::toggleWrist, gripper));
+    */
+    new RunCommand(() -> gripper.tempRun(manip.getLeftJoyY()), gripper);
     manip.getXButton().whileTrue(new InstantCommand(gripper::toggleWrist, gripper));
   }
 
