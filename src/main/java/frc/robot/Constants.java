@@ -22,6 +22,11 @@ public final class Constants {
     public static final int kDriverControllerPort = 0;
   }
 
+
+  // speed of active floor motor
+  public static final double ACTIVE_FLOOR_CONSTANT_SPEED = 0.50;
+
+
   // Controller Configuration
   public static final double CONTROLLER_DEADBAND = 0.15;
 
@@ -143,5 +148,6 @@ public final class Constants {
   public static final double MAX_SPEED = 0.10;
 
   public static final boolean LS_SET_INVERTED = true;
+
 
 }
