@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
@@ -13,6 +15,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
+import edu.wpi.first.wpilibj.motorcontrol.Talon;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.libs.wrappers.GenericMotor;
@@ -30,14 +33,11 @@ public class Gripper extends SubsystemBase {
    * wrist rotation (180 or 0 degrees; also toggle) --> X button
    */
   private Servo wrist;
-  private CANSparkMax arm;
-  private CANSparkMax claw; 
+  private TalonFX arm;
+  private TalonFX claw; 
 
   private PIDController armPID;
   private PIDController clawPID;
-
-  private RelativeEncoder armEncoder;
-  private RelativeEncoder clawEncoder;
 
   private boolean isGripped = false;
   private boolean armToggle = false;
@@ -46,10 +46,10 @@ public class Gripper extends SubsystemBase {
   public Gripper() {
     wrist = new Servo(RobotMap.GRIPPER_HITEC);
     //arm = new CANSparkMax(RobotMap.GRIPPER_MOTORS[0], MotorType.kBrushless);
-    claw = new CANSparkMax(RobotMap.GRIPPER_MOTORS[1], MotorType.kBrushless);
+    claw = new TalonFX(RobotMap.GRIPPER_MOTORS[1]);
 
     //armEncoder = arm.getEncoder();
-    clawEncoder = claw.getEncoder();
+    // clawEncoder = claw.getEncoder();
 
     //armEncoder.setPosition(0.0);
     // clawEncoder.setPosition(0.0);
@@ -62,9 +62,9 @@ public class Gripper extends SubsystemBase {
 
   public void run() {
     if(clawToggle) {
-      control(clawPID.calculate(clawEncoder.getPosition() * clawEncoder.getCountsPerRevolution(), Constants.CLAW_CLOSE), Constants.CLAW_SETTING);
+      control(clawPID.calculate(claw.getSelectedSensorPosition(), Constants.CLAW_CLOSE), Constants.CLAW_SETTING);
     } else {
-      control(clawPID.calculate(clawEncoder.getPosition() * clawEncoder.getCountsPerRevolution(), Constants.CLAW_OPEN), Constants.CLAW_SETTING);
+      control(clawPID.calculate(claw.getSelectedSensorPosition(), Constants.CLAW_OPEN), Constants.CLAW_SETTING);
     }
 
     /*
@@ -83,7 +83,7 @@ public class Gripper extends SubsystemBase {
   }
 
   public void tempRun(double speed) {
-    claw.set(speed * 0.75);
+    claw.set(ControlMode.PercentOutput, speed * 0.75);
   }
 
   public void toggleWrist() {
@@ -104,14 +104,14 @@ public class Gripper extends SubsystemBase {
     } else if (setting == 1) {
       //arm.set(position);
     } else if (setting == 2) {
-      claw.set(position);
+      claw.set(ControlMode.Position, position);;
     }
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber("PID Calculation: ", clawPID.calculate(clawEncoder.getPosition() * clawEncoder.getCountsPerRevolution()));
-    SmartDashboard.putNumber("Encoder Position: ", clawEncoder.getPosition() * clawEncoder.getCountsPerRevolution());
+    SmartDashboard.putNumber("PID Calculation: ", clawPID.calculate(claw.getSelectedSensorPosition()));
+    SmartDashboard.putNumber("Encoder Position: ", claw.getSelectedSensorPosition());
   }
 }
