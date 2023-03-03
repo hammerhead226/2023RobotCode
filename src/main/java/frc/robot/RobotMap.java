@@ -9,7 +9,7 @@ public class RobotMap {
     public static final int GYRO = 7;
 
 
-    public static final int ACTIVE_FLOOR_MOTOR_PORT = 0;
+    public static final int ACTIVE_FLOOR_MOTOR_PORT = 12;
 
     // Intake Constants
     public static final int INTAKE_PORT = 10;
