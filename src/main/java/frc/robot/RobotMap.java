@@ -13,7 +13,7 @@ public class RobotMap {
 
     // Intake Constants
     public static final int INTAKE_PORT = 10;
-    public static final int INTAKE_ENCODER_PORT = 4;
+    public static final int INTAKE_ENCODER_PORT = 16;
     public static final int ROLLER_PORT = 11;
 
     public static final int ELEVATOR_MOTOR_1 = 0;
