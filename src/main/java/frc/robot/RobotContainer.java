@@ -8,11 +8,13 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.subsystems.Intake;
-import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.LinearSlide;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 
 
+import frc.libs.wrappers.Controller;
+import frc.robot.subsystems.LED;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystems.ActiveFloor;
@@ -39,6 +41,14 @@ public class RobotContainer {
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
 
+
+  private final Controller driver = new Controller(0, Constants.CONTROLLER_DEADBAND);
+
+  public LED led = new LED();
+
+  /**
+   * The container for the robot. Contains subsystems, OI devices, and commands.
+   */
   public RobotContainer() {
     // Configure the trigger bindings
     configureBindings();
@@ -63,4 +73,5 @@ public class RobotContainer {
     // An example command will be run in autonomous
     return new InstantCommand(() -> System.out.println("Auton"));
   }
+
 }

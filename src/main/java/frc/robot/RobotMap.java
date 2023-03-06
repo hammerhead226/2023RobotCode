@@ -27,4 +27,5 @@ public class RobotMap {
 
 
 
+    public static final int LED_SPARK = 1;
 }
