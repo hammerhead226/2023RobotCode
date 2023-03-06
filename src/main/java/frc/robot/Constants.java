@@ -105,7 +105,9 @@ public final class Constants {
 
 
     //LED COLOR CONSTANTS
-    public static final double LED_ALLIANCE = 0.87; //blue
+    public static final double LED_ALLIANCE_BLUE = 0.87; //blue
+    public static final double LED_ALLIANCE_RED = 0.61;
+
     public static final double LED_YELLOW = 0.66;
     public static final double LED_VIOLET = 0.91;
 

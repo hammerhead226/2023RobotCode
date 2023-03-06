@@ -8,5 +8,5 @@ public class RobotMap {
 
     public static final int GYRO = 7;
 
-    public static final int SPARK_MOTOR = 0;
+    public static final int LED_SPARK = 1;
 }

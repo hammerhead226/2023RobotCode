@@ -4,22 +4,29 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.RobotMap;
 
 public class LED extends SubsystemBase {
-  double sparkSpeed = Constants.LED_ALLIANCE;
-  Spark spark;
+  double sparkSpeed;
+  Spark ledSpark;
 
   /** Creates a new LED. */
   public LED() {
-    spark = new Spark(RobotMap.SPARK_MOTOR);
+    ledSpark = new Spark(RobotMap.LED_SPARK);
+    noBumpersPressed();
   }
 
   public void noBumpersPressed() {
-    sparkSpeed = Constants.LED_ALLIANCE;
+    if(DriverStation.getAlliance() == Alliance.Blue){
+      sparkSpeed = Constants.LED_ALLIANCE_BLUE;
+    }else{
+      sparkSpeed = Constants.LED_ALLIANCE_RED;
+    }
   }
 
   public void rightBumperPressed() {
@@ -43,6 +50,6 @@ public class LED extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    spark.set(sparkSpeed);
+    ledSpark.set(sparkSpeed);
   }
 }
