@@ -23,7 +23,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  */
 public class RobotContainer {
 
-  private static final Controller manip = new Controller(0, Constants.CONTROLLER_DEADBAND);
+  public static final Controller manip = new Controller(0, Constants.CONTROLLER_DEADBAND);
   private final Gripper gripper = new Gripper();
 
   /**

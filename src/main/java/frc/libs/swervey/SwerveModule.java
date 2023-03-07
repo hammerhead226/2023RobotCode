@@ -96,7 +96,7 @@ public class SwerveModule {
         
         return err;
     }
-
+                            
     public double getModuleRotationalPose() {
         return steercoder.getModuleOffset();
     }
