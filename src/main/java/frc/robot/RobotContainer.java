@@ -4,19 +4,13 @@
 
 package frc.robot;
 
-
-
+import frc.robot.subsystems.Gripper;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.LinearSlide;
 import edu.wpi.first.wpilibj2.command.RunCommand;
-
-
-import frc.libs.wrappers.Controller;
 import frc.robot.subsystems.LED;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystems.ActiveFloor;
 
 /**
@@ -29,39 +23,26 @@ import frc.robot.subsystems.ActiveFloor;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
-
+  public static final Controller manip = new Controller(0, Constants.CONTROLLER_DEADBAND);
+  
+  private final Gripper gripper = new Gripper();
   private final ActiveFloor activeFloor = new ActiveFloor();
-
-
-  // The robot's subsystems and commands are defined here...
   private final Intake intake = new Intake();
   private final LinearSlide linearSlide = new LinearSlide();
-
-  /**
-   * The container for the robot. Contains subsystems, OI devices, and commands.
-   */
-
-
-  private final Controller driver = new Controller(0, Constants.CONTROLLER_DEADBAND);
-
   public LED led = new LED();
 
-  /**
-   * The container for the robot. Contains subsystems, OI devices, and commands.
-   */
   public RobotContainer() {
     // Configure the trigger bindings
     configureBindings();
-
+    gripper.setDefaultCommand(new RunCommand(gripper::run, gripper));
     intake.setDefaultCommand(new RunCommand(intake::run, intake));
     linearSlide.setDefaultCommand(new RunCommand(linearSlide::run, linearSlide));
   }
-
   
   private void configureBindings() {
-
-
-
+    manip.getAButton().onTrue(new InstantCommand(gripper::toggleClaw, gripper));
+    manip.getXButton().onTrue(new InstantCommand(gripper::toggleWrist, gripper));
+    manip.getYButton().onTrue(new InstantCommand(gripper::toggleArm, gripper));
   }
 
   /**

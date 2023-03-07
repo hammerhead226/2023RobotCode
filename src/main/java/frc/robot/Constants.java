@@ -17,16 +17,6 @@ package frc.robot;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
-
-  public static class OperatorConstants {
-    public static final int kDriverControllerPort = 0;
-  }
-
-
-  // speed of active floor motor
-  public static final double ACTIVE_FLOOR_CONSTANT_SPEED = 0.50;
-
-
   // Controller Configuration
   public static final double CONTROLLER_DEADBAND = 0.15;
 
@@ -109,6 +99,24 @@ public final class Constants {
 
   public static final double[] LIMELIGHT_COEFS = { 0, 0, 0, 0 };
 
+  //GRIPPER PARAMETERS
+  public static final double CLAW_OPEN = -3000;
+  public static final double CLAW_CLOSE = 24000;
+
+  public static final double ARM_POS_1 = 0;
+  public static final double ARM_POS_2 = -135000;
+
+  public static final double WRIST_POS_1 = 180;
+  public static final double WRIST_POS_2 = 0;
+
+  public static final double[] ARM_GAINS = {0.00008, 0, 0};
+  public static final double[] CLAW_GAINS = {0.00003, 0, 0};
+
+  // speed of active floor motor
+  public static final double ACTIVE_FLOOR_CONSTANT_SPEED = 0.50;
+
+
+
   // Intake Constants
   public static final double ROLLER_RUN_SPEED = 0.5;
   public static final double[] INTAKE_GAINS = { 0.0006, 0, 0 };
@@ -148,6 +156,4 @@ public final class Constants {
   public static final double MAX_SPEED = 0.10;
 
   public static final boolean LS_SET_INVERTED = true;
-
-
 }

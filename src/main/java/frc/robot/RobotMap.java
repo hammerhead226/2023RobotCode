@@ -8,6 +8,10 @@ public class RobotMap {
 
     public static final int GYRO = 7;
 
+    public static final int GRIPPER_HITEC = 0;
+
+    public static final int ARM_MOTOR = 14;
+    public static final int CLAW_MOTOR = 15;
 
     public static final int ACTIVE_FLOOR_MOTOR_PORT = 12;
 
@@ -23,9 +27,5 @@ public class RobotMap {
 
     // Linear Slider Constants 
     public static final int SLIDER_SPARK_MAX_PORT = 20;
-
-
-
-
     public static final int LED_SPARK = 1;
 }
