@@ -105,20 +105,15 @@ public final class Constants {
   public static final double[] LIMELIGHT_COEFS = { 0, 0, 0, 0 };
 
   //GRIPPER PARAMETERS
-  public static final double CLAW_OPEN = 0;
-  public static final double CLAW_CLOSE = 3450.0;
+  public static final double CLAW_OPEN = -1500;
+  public static final double CLAW_CLOSE = 24000;
 
   public static final double ARM_POS_1 = 0;
-  public static final double ARM_POS_2 = 0.5;
+  public static final double ARM_POS_2 = -5000;
 
-  public static final double WRIST_POS_1 = 0;
-  public static final double WRIST_POS_2 = 0.5;
+  public static final double WRIST_POS_1 = 180;
+  public static final double WRIST_POS_2 = 0;
 
-  public static final double[] ARM_GAINS = {0, 0, 0};
-  public static final double[] CLAW_GAINS = {0.0005, 0, 0};
-
-  //CONTROL METHOD SETTINGS FOR GRIPPER
-  public static final int WRIST_SETTING = 0;
-  public static final int ARM_SETTING = 1;
-  public static final int CLAW_SETTING = 2;
+  public static final double[] ARM_GAINS = {0.00009, 0, 0};
+  public static final double[] CLAW_GAINS = {0.00002128, 0, 0};
 }

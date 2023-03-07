@@ -10,5 +10,6 @@ public class RobotMap {
 
     public static final int GRIPPER_HITEC = 0;
 
-    public static final int[] GRIPPER_MOTORS = {21, 22};
+    public static final int ARM_MOTOR = 14;
+    public static final int CLAW_MOTOR = 15;
 }

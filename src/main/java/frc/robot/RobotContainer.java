@@ -57,8 +57,9 @@ public class RobotContainer {
     manip.getXButton().whileTrue(new InstantCommand(gripper::toggleWrist, gripper));
     */
     //new RunCommand(() -> gripper.tempRun(manip.getLeftJoyY()), gripper);
-    manip.getAButton().whileTrue(new InstantCommand(gripper::toggleClaw, gripper));
-    manip.getXButton().whileTrue(new InstantCommand(gripper::toggleWrist, gripper));
+    manip.getAButton().onTrue(new InstantCommand(gripper::toggleClaw, gripper));
+    manip.getXButton().onTrue(new InstantCommand(gripper::toggleWrist, gripper));
+    manip.getYButton().onTrue(new InstantCommand(gripper::toggleArm, gripper));
   }
 
   /**
