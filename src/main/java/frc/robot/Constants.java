@@ -114,6 +114,6 @@ public final class Constants {
   public static final double WRIST_POS_1 = 180;
   public static final double WRIST_POS_2 = 0;
 
-  public static final double[] ARM_GAINS = {0.00009, 0, 0};
+  public static final double[] ARM_GAINS = {0.00000, 0, 0};
   public static final double[] CLAW_GAINS = {0.00002128, 0, 0};
 }

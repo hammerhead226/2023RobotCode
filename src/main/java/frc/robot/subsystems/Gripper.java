@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.revrobotics.CANSparkMax;
@@ -47,6 +48,8 @@ public class Gripper extends SubsystemBase {
     wrist = new Servo(RobotMap.GRIPPER_HITEC);
     claw = new TalonFX(RobotMap.CLAW_MOTOR);
     arm = new TalonFX(RobotMap.ARM_MOTOR);
+    claw.setNeutralMode(NeutralMode.Brake);
+    arm.setNeutralMode(NeutralMode.Brake);
 
     armPID = new PIDController(Constants.ARM_GAINS[0], Constants.ARM_GAINS[1], Constants.ARM_GAINS[2]);
     clawPID = new PIDController(Constants.CLAW_GAINS[0], Constants.CLAW_GAINS[1], Constants.CLAW_GAINS[2]);
