@@ -17,11 +17,6 @@ package frc.robot;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
-
-  public static class OperatorConstants {
-    public static final int kDriverControllerPort = 0;
-  }
-
   // Controller Configuration
   public static final double CONTROLLER_DEADBAND = 0.15;
 
@@ -116,4 +111,49 @@ public final class Constants {
 
   public static final double[] ARM_GAINS = {0.00008, 0, 0};
   public static final double[] CLAW_GAINS = {0.00003, 0, 0};
+
+  // speed of active floor motor
+  public static final double ACTIVE_FLOOR_CONSTANT_SPEED = 0.50;
+
+
+
+  // Intake Constants
+  public static final double ROLLER_RUN_SPEED = 0.5;
+  public static final double[] INTAKE_GAINS = { 0.0006, 0, 0 };
+  public static final int INTAKE_OFFSET = 0;
+
+  public static final double INTAKE_EXTEND = 3600;
+  public static final double INTAKE_RETRACT = 3000;
+  
+  public static final double MAX_SPEED_UP = 0.5;
+  public static final double MAX_SPEED_DOWN = 0.25;
+  // Elevator Constants (change these values after testing)
+  public static final double ELEVATOR_COEFFICIENT = 0.7;
+  public static final double[] ELEVATOR_GAINS = { 0, 0, 0 };
+
+  public static final double LOW_SETPOINT = 0;
+  public static final double MID_SETPOINT = 0;
+  public static final double HIGH_SETPOINT = 0;
+
+  public static final double MIN_POSITION = 0;
+  public static final double MAX_POSITION = 0;
+
+  // Linear Slide Constants
+  public static final double SLIDE_MIN_POSITION = 0;
+  public static final double LINEAR_SLIDE_COEFFICIENT = 0;
+  public static final double SLIDE_MAX_POSITION = 0;
+
+  public static final double EXTEND_HIGH = 0;
+  public static final double EXTEND_MID = 0;
+  public static final double EXTEND_LOW = 0;
+
+  public static final double LS_TARGET_LOW = 0;
+  public static final double LS_TARGET_MIDDLE = 0;
+  public static final double LS_TARGET_HIGH = 0;
+
+  public static final double[] LINEAR_SLIDE_GAINS = { 0.0025, 0, 0 };
+
+  public static final double MAX_SPEED = 0.10;
+
+  public static final boolean LS_SET_INVERTED = true;
 }

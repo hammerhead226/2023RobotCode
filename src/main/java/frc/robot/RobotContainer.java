@@ -4,13 +4,14 @@
 
 package frc.robot;
 
-import frc.libs.wrappers.Controller;
 import frc.robot.subsystems.Gripper;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.LinearSlide;
 import edu.wpi.first.wpilibj2.command.RunCommand;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.subsystems.LED;
+import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.subsystems.ActiveFloor;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -22,41 +23,23 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
-
   public static final Controller manip = new Controller(0, Constants.CONTROLLER_DEADBAND);
+  
   private final Gripper gripper = new Gripper();
+  private final ActiveFloor activeFloor = new ActiveFloor();
+  private final Intake intake = new Intake();
+  private final LinearSlide linearSlide = new LinearSlide();
+  public LED led = new LED();
 
-  /**
-   * The container for the robot. Contains subsystems, OI devices, and commands.
-   */
   public RobotContainer() {
     // Configure the trigger bindings
     configureBindings();
-
     gripper.setDefaultCommand(new RunCommand(gripper::run, gripper));
+    intake.setDefaultCommand(new RunCommand(intake::run, intake));
+    linearSlide.setDefaultCommand(new RunCommand(linearSlide::run, linearSlide));
   }
-
-  /**
-   * Use this method to define your trigger->command mappings. Triggers can be
-   * created via the
-   * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with
-   * an arbitrary
-   * predicate, or via the named factories in {@link
-   * edu.wpi.first.wpilibj2.command.button.CommandGenericHID}'s subclasses for
-   * {@link
-   * CommandXboxController
-   * Xbox}/{@link edu.wpi.first.wpilibj2.command.button.CommandPS4Controller
-   * PS4} controllers or
-   * {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
-   * joysticks}.
-   */
+  
   private void configureBindings() {
-    /*
-    manip.getAButton().whileTrue(new InstantCommand(gripper::toggleArm, gripper));
-    manip.getBButton().whileTrue(new InstantCommand(gripper::toggleClaw, gripper));
-    manip.getXButton().whileTrue(new InstantCommand(gripper::toggleWrist, gripper));
-    */
-    //new RunCommand(() -> gripper.tempRun(manip.getLeftJoyY()), gripper);
     manip.getAButton().onTrue(new InstantCommand(gripper::toggleClaw, gripper));
     manip.getXButton().onTrue(new InstantCommand(gripper::toggleWrist, gripper));
     manip.getYButton().onTrue(new InstantCommand(gripper::toggleArm, gripper));
@@ -71,4 +54,5 @@ public class RobotContainer {
     // An example command will be run in autonomous
     return new InstantCommand(() -> System.out.println("Auton"));
   }
+
 }
