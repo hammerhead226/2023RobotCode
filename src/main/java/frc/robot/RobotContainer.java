@@ -11,6 +11,7 @@ import frc.robot.subsystems.LinearSlide;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.subsystems.LED;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.libs.wrappers.Controller;
 import frc.robot.subsystems.ActiveFloor;
 
 /**
@@ -34,15 +35,19 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the trigger bindings
     configureBindings();
-    gripper.setDefaultCommand(new RunCommand(gripper::run, gripper));
-    intake.setDefaultCommand(new RunCommand(intake::run, intake));
+    // gripper.setDefaultCommand(new RunCommand(gripper::run, gripper));
+    // intake.setDefaultCommand(new RunCommand(intake::run, intake));
     linearSlide.setDefaultCommand(new RunCommand(linearSlide::run, linearSlide));
   }
   
   private void configureBindings() {
-    manip.getAButton().onTrue(new InstantCommand(gripper::toggleClaw, gripper));
-    manip.getXButton().onTrue(new InstantCommand(gripper::toggleWrist, gripper));
-    manip.getYButton().onTrue(new InstantCommand(gripper::toggleArm, gripper));
+    // manip.getAButton().onTrue(new InstantCommand(gripper::toggleClaw, gripper));
+    // manip.getXButton().onTrue(new InstantCommand(gripper::toggleWrist, gripper));
+    // manip.getYButton().onTrue(new InstantCommand(gripper::toggleArm, gripper));
+
+    manip.getAButton().onTrue(new InstantCommand(() -> linearSlide.setTarget(50), linearSlide));
+    manip.getBButton().onTrue(new InstantCommand(() -> linearSlide.setTarget(1000), linearSlide));
+    manip.getYButton().onTrue(new InstantCommand(() -> linearSlide.setTarget(2000), linearSlide));
   }
 
   /**

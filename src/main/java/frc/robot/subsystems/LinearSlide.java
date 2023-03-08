@@ -9,6 +9,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import frc.libs.wrappers.GenericMotor;
 import frc.robot.Constants;
+import frc.robot.Robot;
 import frc.robot.RobotMap;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -16,7 +17,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class LinearSlide extends SubsystemBase {
   /** Creates a new LinearSlide. */
-  private GenericMotor slider;
+  private CANSparkMax slider;
 
   private double target;
   private double speedLimit;
@@ -24,10 +25,12 @@ public class LinearSlide extends SubsystemBase {
   private PIDController pid;
 
   public LinearSlide() {
-    slider = new GenericMotor(new CANSparkMax(RobotMap.SLIDER_SPARK_MAX_PORT, MotorType.kBrushless));
-    slider.inverted(Constants.LS_SET_INVERTED);
+    // slider = new GenericMotor(new CANSparkMax(RobotMap.SLIDER_SPARK_MAX_PORT, MotorType.kBrushless));
+    slider = new CANSparkMax(RobotMap.SLIDER_SPARK_MAX_PORT, MotorType.kBrushless);
+    slider.setInverted(Constants.LS_SET_INVERTED);
     pid = new PIDController(Constants.LINEAR_SLIDE_GAINS[0], Constants.LINEAR_SLIDE_GAINS[1],
         Constants.LINEAR_SLIDE_GAINS[2]);
+    speedLimit = 0.5;
   }
 
   public void toggleManual() {
@@ -36,13 +39,17 @@ public class LinearSlide extends SubsystemBase {
 
   public void run() {
     if (!manual) {
-      double motorSpeed = pid.calculate(slider.getSensorPose(), target);
+      double motorSpeed = pid.calculate(slider.getEncoder().getPosition(), target);
       if (motorSpeed > speedLimit) {
         motorSpeed = speedLimit;
       } else if (motorSpeed < -speedLimit) {
         motorSpeed = -speedLimit;
       }
-      control(motorSpeed);
+      // control(motorSpeed);
+      control(Robot.m_robotContainer.manip.getLeftJoyY());
+      
+      SmartDashboard.putNumber("motorspeed", motorSpeed);
+
     }
   }
 
@@ -59,13 +66,5 @@ public class LinearSlide extends SubsystemBase {
   }
 
   @Override
-  public void periodic() {
-    SmartDashboard.putNumber("Motor Position", slider.getSensorPose());
-    if (manual) {
-      if (!(slider.getSensorPose() <= Constants.SLIDE_MIN_POSITION
-          || slider.getSensorPose() >= Constants.SLIDE_MAX_POSITION))
-        control(1 * Constants.LINEAR_SLIDE_COEFFICIENT);
-    }
-    // This method will be called once per scheduler run
-  }
+  public void periodic() {}
 }

@@ -131,29 +131,16 @@ public final class Constants {
   public static final double ELEVATOR_COEFFICIENT = 0.7;
   public static final double[] ELEVATOR_GAINS = { 0, 0, 0 };
 
-  public static final double LOW_SETPOINT = 0;
-  public static final double MID_SETPOINT = 0;
-  public static final double HIGH_SETPOINT = 0;
-
-  public static final double MIN_POSITION = 0;
-  public static final double MAX_POSITION = 0;
-
   // Linear Slide Constants
-  public static final double SLIDE_MIN_POSITION = 0;
-  public static final double LINEAR_SLIDE_COEFFICIENT = 0;
-  public static final double SLIDE_MAX_POSITION = 0;
 
-  public static final double EXTEND_HIGH = 0;
-  public static final double EXTEND_MID = 0;
-  public static final double EXTEND_LOW = 0;
-
-  public static final double LS_TARGET_LOW = 0;
-  public static final double LS_TARGET_MIDDLE = 0;
-  public static final double LS_TARGET_HIGH = 0;
-
-  public static final double[] LINEAR_SLIDE_GAINS = { 0.0025, 0, 0 };
-
-  public static final double MAX_SPEED = 0.10;
+  public static final double[] LINEAR_SLIDE_GAINS = { 0.0005, 0, 0 };
 
   public static final boolean LS_SET_INVERTED = true;
+
+  public static final double LED_ALLIANCE = 0.87; //blue
+  public static final double LED_ALLIANCE_BLUE = 0.87; //blue
+  public static final double LED_ALLIANCE_RED = 0.61;
+
+  public static final double LED_YELLOW = 0.66;
+  public static final double LED_VIOLET = 0.91;
 }
