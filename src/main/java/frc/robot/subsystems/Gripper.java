@@ -64,6 +64,7 @@ public class Gripper extends SubsystemBase {
     } else {
       claw.set(ControlMode.PercentOutput, clawPID.calculate(claw.getSelectedSensorPosition(), Constants.CLAW_OPEN));
     }
+    // claw.set(ControlMode.PercentOutput, Robot.m_robotContainer.manip.getLeftJoyY());
 
 
     if(armToggle) {
@@ -72,6 +73,7 @@ public class Gripper extends SubsystemBase {
       arm.set(ControlMode.PercentOutput, armPID.calculate(arm.getSelectedSensorPosition(), Constants.ARM_POS_2));
     }
 
+    // arm.set(ControlMode.PercentOutput, Robot.m_robotContainer.manip.getRightJoyY());
     if(isGripped) {
       wrist.setAngle(Constants.WRIST_POS_1);
     } else {
