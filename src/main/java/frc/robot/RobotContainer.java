@@ -4,18 +4,21 @@
 
 package frc.robot;
 
-import frc.robot.subsystems.Gripper;
+
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.LinearSlide;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.subsystems.LED;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.ActiveFloor;
-import frc.libs.wrappers.Controller;
-import frc.robot.subsystems.Elevator;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+
+import frc.robot.subsystems.Gripper;
+import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.LinearSlide;
+import frc.robot.subsystems.Elevator;
+import frc.libs.wrappers.Controller;
+import frc.robot.subsystems.ActiveFloor;
+import frc.robot.subsystems.Vision;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -35,6 +38,8 @@ public class RobotContainer {
   private final LinearSlide linearSlide = new LinearSlide();
   public LED led = new LED();
 
+  private final Controller controller = new Controller(0, Constants.CONTROLLER_DEADBAND);
+  private final Vision vision = new Vision();
   public RobotContainer() {
     // Configure the trigger bindings
     configureBindings();
