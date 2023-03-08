@@ -19,18 +19,4 @@ public class LimeLight {
     public static double getHorizontalOffset() {
         return limelight.getEntry("tx").getDouble(0.0);
     }
-
-    public static double getVerticalOffset() {
-        return limelight.getEntry("ty").getDouble(0.0);
-    }
-
-    public static double getTargetArea() {
-        return limelight.getEntry("ta").getDouble(0.0);
-    }
-
-    public static int isValidTarget() {
-        long x = 0;
-        return (int) (limelight.getEntry("tv").getInteger(x));
-    }
-
 }

@@ -62,10 +62,6 @@ public class Robot extends TimedRobot {
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
   public void disabledInit() {
-    // Need to Test Later to Shutdown after match end
-    // if (state == Phase.TELEOP) {
-    //   SharkSight.shutdown();
-    // }
     state = Phase.DISABLED;
   }
 

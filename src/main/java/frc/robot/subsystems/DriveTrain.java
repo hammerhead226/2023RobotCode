@@ -15,7 +15,6 @@ import frc.libs.swervey.SwerveBuilder;
 import frc.libs.wrappers.GenericEncoder;
 import frc.libs.wrappers.GenericMotor;
 import frc.libs.wrappers.Gyro;
-import frc.libs.wrappers.LimeLight;
 import frc.libs.wrappers.SharkSight;
 import frc.robot.Constants;
 import frc.robot.RobotMap;
@@ -72,24 +71,6 @@ public class DriveTrain extends SubsystemBase {
 
   public void control(double x, double y, double rotate) {
     swerve.control(x, y, rotate);
-  }
-
-  public void jetsonLineUp(double angle) {
-    if (SharkSight.isEnabled() && SharkSight.getClosestIntakeDetect() != null) {
-      control(0, 0,
-          Math.abs(SharkSight.getClosestIntakeDetect().targetX) >= Constants.SHARKSIGHT_ERROR_MARGIN
-              ? jetsonController.calculate(SharkSight.getClosestIntakeDetect().targetX, angle)
-              : 0);
-    }
-  }
-
-  public void limelightLineUp(boolean isMove, double offset) {
-    if (!isMove) {
-      control(Math.abs(SharkSight.getClosestIntakeDetect().targetX) >= Constants.SHARKSIGHT_ERROR_MARGIN
-          ? limelightController.calculate(SharkSight.getClosestIntakeDetect().targetX, offset)
-          : 0,
-          0, 0);
-    }
   }
 
   public void toggleSpeed() {
