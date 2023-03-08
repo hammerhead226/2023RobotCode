@@ -35,8 +35,7 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    controller.getAButton().onTrue(new InstantCommand(Vision::toggle, vision));
-    controller.getBButton().onTrue(new InstantCommand(Vision::shutdown, vision));
+   
   }
 
   /**

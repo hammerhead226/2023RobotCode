@@ -75,9 +75,6 @@ public final class Constants {
 
     public static double[] LIMELIGHT_GAINS = {0.065, 0.0, 0.0};
 
-    public static double[] SHARKSIGHT_INTAKE_GAINS = {0.0, 0.0, 0.0};
-    public static final int SHARKSIGHT_ERROR_MARGIN = 20;
-
     public static final double STEER_GAINS_THRESHOLD = 2146.5; // 9%
     public static final double ROTATE_GAINS_THRESHOLD = 0.15; //TODO: Convert to velocity
     public static final double ROTATE_VELOCITY_THRESHOLD = 0.2;
