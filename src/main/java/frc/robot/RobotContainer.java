@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import frc.libs.wrappers.Controller;
 import frc.robot.subsystems.Elevator;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -23,6 +24,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final Elevator elevator = new Elevator();
+  public final static Controller con = new Controller(0, 0.05);
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -49,6 +51,8 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
+    con.getAButton().onTrue(new InstantCommand(() -> elevator.setTarget(0), elevator));
+    con.getBButton().onTrue(new InstantCommand(() -> elevator.setTarget(1000), elevator));
 
   }
 

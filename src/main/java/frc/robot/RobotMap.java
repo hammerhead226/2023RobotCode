@@ -8,7 +8,7 @@ public class RobotMap {
 
     public static final int GYRO = 7;
 
-    public static final int ELEVATOR_MOTOR_LEFT = 0;
-    public static final int ELEVATOR_MOTOR_RIGHT = 0;
-    public static final int ELEVATOR_ENCODER = 0; 
+    public static final int ELEVATOR_MOTOR_LEFT = 8;
+    public static final int ELEVATOR_MOTOR_RIGHT = 9;
+    public static final int ELEVATOR_ENCODER = 17; 
 }

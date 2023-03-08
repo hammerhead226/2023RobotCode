@@ -106,12 +106,11 @@ public final class Constants {
 
   // Elevator Constants (change these values after testing)
   public static final double ELEVATOR_COEFFICIENT = 0.7;
-  public static final double[] ELEVATOR_GAINS = { 0, 0, 0 };
+  public static final double[] ELEVATOR_GAINS = { 0.00125, 0, 0 };
 
   public static final boolean ELEVATOR_MOTOR_1_INVERT = false;
   public static final boolean ELEVATOR_MOTOR_2_INVERT = true;
 
-  public static final double[] ELEVATOR_FEED_FORWARD_CONSTANTS = { 0, 0 };
 
   public static final double LOW_SETPOINT = 0;
   public static final double MID_SETPOINT = 0;
@@ -123,4 +122,7 @@ public final class Constants {
   public static final double E_TARGET_LOW = 0;
   public static final double E_TARGET_MIDDLE = 0;
   public static final double E_TARGET_HIGH = 0;
+
+  public static final double ELEVATOR_INTERVAL_MARKER = 3100;
+  public static final double SRX_ENCODER_TICKS = 4096;
 }

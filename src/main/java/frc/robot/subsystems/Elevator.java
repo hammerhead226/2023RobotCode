@@ -6,12 +6,15 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Robot;
 import frc.robot.RobotMap;
 
 public class Elevator extends SubsystemBase {
@@ -23,20 +26,30 @@ public class Elevator extends SubsystemBase {
   private boolean isManual;
   private double target;
 
+  private double encoderOffset;
+
   public Elevator() {
     elevatorLeft = new TalonFX(RobotMap.ELEVATOR_MOTOR_LEFT);
     elevatorRight = new TalonFX(RobotMap.ELEVATOR_MOTOR_RIGHT);
     elevatorEncoder = new TalonSRX(RobotMap.ELEVATOR_ENCODER);
 
-    elevatorLeft.setSelectedSensorPosition(0);
-    elevatorRight.setSelectedSensorPosition(0);
-    elevatorEncoder.setSelectedSensorPosition(0);
+    elevatorLeft.setNeutralMode(NeutralMode.Brake);
+    elevatorRight.setNeutralMode(NeutralMode.Brake);
+
+    elevatorLeft.setInverted(true);
+    elevatorRight.setInverted(true);
+
 
     elevatorEncoder.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute);
 
     elevatorPID = new PIDController(Constants.ELEVATOR_GAINS[0], Constants.ELEVATOR_GAINS[1],
         Constants.ELEVATOR_GAINS[2]);
     elevatorRight.follow(elevatorLeft);
+
+    if(elevatorEncoder.getSelectedSensorPosition() > Constants.ELEVATOR_INTERVAL_MARKER) encoderOffset = Constants.SRX_ENCODER_TICKS;
+    else encoderOffset = 0;
+
+    target = 0;
   }
 
   public void toggleManual() {
@@ -44,13 +57,11 @@ public class Elevator extends SubsystemBase {
   }
 
   public double get() {
-    return elevatorEncoder.getSelectedSensorPosition();
+    return elevatorEncoder.getSelectedSensorPosition() - encoderOffset;
   }
 
   public void run() {
-    if (!isManual) {
-      control(elevatorPID.calculate(elevatorEncoder.getSelectedSensorPosition(), target));
-    } 
+    control(elevatorPID.calculate(get(), target));
   }
 
   public void setTarget(double t) {
@@ -62,12 +73,5 @@ public class Elevator extends SubsystemBase {
   }
 
   @Override
-  public void periodic() {
-    if (isManual) {
-      if (!(elevatorEncoder.getSelectedSensorPosition() <= Constants.MIN_POSITION
-          || elevatorEncoder.getSelectedSensorPosition() >= Constants.MAX_POSITION))
-        control(1 * Constants.ELEVATOR_COEFFICIENT);
-    }
-    // This method will be called once per scheduler run
-  }
+  public void periodic() {}
 }
