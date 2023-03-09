@@ -13,7 +13,6 @@ import frc.robot.Robot;
 import frc.robot.RobotContainer;
 import frc.robot.RobotMap;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class LinearSlide extends SubsystemBase {
@@ -26,12 +25,14 @@ public class LinearSlide extends SubsystemBase {
   private PIDController pid;
 
   public LinearSlide() {
-    // slider = new GenericMotor(new CANSparkMax(RobotMap.SLIDER_SPARK_MAX_PORT, MotorType.kBrushless));
     slider = new CANSparkMax(RobotMap.SLIDER_SPARK_MAX_PORT, MotorType.kBrushless);
     slider.setInverted(Constants.LS_SET_INVERTED);
+
     pid = new PIDController(Constants.LINEAR_SLIDE_GAINS[0], Constants.LINEAR_SLIDE_GAINS[1],
         Constants.LINEAR_SLIDE_GAINS[2]);
+
     speedLimit = 0.5;
+    manual = false;
   }
 
   public void toggleManual() {
@@ -41,16 +42,14 @@ public class LinearSlide extends SubsystemBase {
   public void run() {
     if (!manual && !(RobotContainer.elevator.get() >= Constants.SLIDE_DISABLE_POSE)) {
       double motorSpeed = pid.calculate(slider.getEncoder().getPosition(), target);
+
       if (motorSpeed > speedLimit) {
         motorSpeed = speedLimit;
       } else if (motorSpeed < -speedLimit) {
         motorSpeed = -speedLimit;
       }
-      // control(motorSpeed);
-      control(Robot.m_robotContainer.manip.getLeftJoyY());
-      
-      SmartDashboard.putNumber("motorspeed", motorSpeed);
 
+      control(motorSpeed);
     }
   }
 

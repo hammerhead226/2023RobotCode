@@ -28,6 +28,7 @@ public class Intake extends SubsystemBase {
     intake = new TalonFX(RobotMap.INTAKE_PORT, Constants.CANBUS);
     roller = new TalonFX(RobotMap.ROLLER_PORT, Constants.CANBUS);
     intakeEncoder = new TalonSRX(RobotMap.INTAKE_ENCODER_PORT);
+
     intake.setNeutralMode(NeutralMode.Brake);
     roller.setNeutralMode(NeutralMode.Coast);
 
@@ -60,18 +61,14 @@ public class Intake extends SubsystemBase {
 
   // Roller Methods
   public void runIn() {
-    if (!intakeOn) {
+    if (intakeOn) {
       roller.set(ControlMode.PercentOutput, Constants.ROLLER_RUN_SPEED);
-    } else {
-      stop();
     }
   }
 
   public void runOut() {
-    if (!intakeOn) {
+    if (intakeOn) {
       roller.set(ControlMode.PercentOutput, -Constants.ROLLER_RUN_SPEED);
-    } else {
-      stop();
     }
   }
 
@@ -92,7 +89,5 @@ public class Intake extends SubsystemBase {
   }
 
   @Override
-  public void periodic() {
-    // SmartDashboard.putNumber("Intake Encoder", intakeEncoder.getSelectedSensorPosition());
-  }
+  public void periodic() {}
 }

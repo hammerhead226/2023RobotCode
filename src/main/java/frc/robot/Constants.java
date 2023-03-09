@@ -18,11 +18,7 @@ package frc.robot;
  */
 public final class Constants {
   // Controller Configuration
-  public static final double CONTROLLER_DEADBAND = 0.15;
-
-  public static class OperatorConstants {
-    public static final int kDriverControllerPort = 0;
-  }
+  public static final double CONTROLLER_DEADBAND = 0.05;
 
   public static final String CANBUS = "CAN Bus 2";
 
@@ -77,8 +73,8 @@ public final class Constants {
 
   public static double[] LIMELIGHT_GAINS = { 0.065, 0.0, 0.0 };
 
-  public static final double STEER_GAINS_THRESHOLD = 2146.5; // 9%
-  public static final double ROTATE_GAINS_THRESHOLD = 0.15; // TODO: Convert to velocity
+  public static final double STEER_GAINS_THRESHOLD = 2146.5;
+  public static final double ROTATE_GAINS_THRESHOLD = 0.15;
   public static final double ROTATE_VELOCITY_THRESHOLD = 0.2;
 
   // REFORMATTED SWERVE PARAMETERS
@@ -105,19 +101,23 @@ public final class Constants {
 
   public static final double[] LIMELIGHT_COEFS = { 0, 0, 0, 0 };
 
-  // Elevator Constants (change these values after testing)
+  // Elevator Constants
   public static final double[] ELEVATOR_GAINS = { 0.00125, 0, 0 };
 
   public static final int SLIDE_DISABLE_POSE = 1500;
   public static final int ELEVATOR_MIN = -300;
-  public static final int ELEVAOTR_MAX = 2000;
+  public static final int ELEVATOR_MAX = 2000;
+
+  public static final double ELEVATOR_INTERVAL_MARKER = 3100;
+  public static final double SRX_ENCODER_TICKS = 4096;
+
 
   // Linear Slide Constants
-
   public static final double[] LINEAR_SLIDE_GAINS = { 0.0005, 0, 0 };
-
   public static final boolean LS_SET_INVERTED = true;
 
+
+  // LED Constants
   public static final double LED_ALLIANCE = 0.87; //blue
   public static final double LED_ALLIANCE_BLUE = 0.87; //blue
   public static final double LED_ALLIANCE_RED = 0.61;
@@ -125,43 +125,34 @@ public final class Constants {
   public static final double LED_YELLOW = 0.66;
   public static final double LED_VIOLET = 0.91;
 
-  public static final double LOW_SETPOINT = 0;
-  public static final double MID_SETPOINT = 0;
-  public static final double HIGH_SETPOINT = 0;
 
-  public static final double MIN_POSITION = 0;
-  public static final double MAX_POSITION = 0;
-
-  public static final double ELEVATOR_INTERVAL_MARKER = 3100;
-  public static final double SRX_ENCODER_TICKS = 4096;
-
+  // Intake Constants
   public static final double ROLLER_RUN_SPEED = 0.5;
   public static final double[] INTAKE_GAINS = { 0.0006, 0, 0 };
   public static final int INTAKE_OFFSET = 0;
 
-  public static final double INTAKE_EXTEND = 3600;
+  public static final double INTAKE_EXTEND = 3625;
   public static final double INTAKE_RETRACT = 3000;
   
   public static final double MAX_SPEED_UP = 0.5;
   public static final double MAX_SPEED_DOWN = 0.25;
 
+
+  // Gripper Constants
   public static final double CLAW_OPEN = -1000;
   public static final double CLAW_CLOSE = 22000;
 
   public static final double ARM_POS_1 = 0;
   public static final double ARM_POS_2 = -135000;
 
-  public static final double WRIST_POS_1 = 180;
+  public static final double WRIST_POS_1 = 0;
   public static final double WRIST_POS_2 = 0;
+
 
   public static final double[] ARM_GAINS = {0.00008, 0, 0};
   public static final double[] CLAW_GAINS = {0.00003, 0, 0};
-
-  public static final double ACTIVE_FLOOR_CONSTANT_SPEED = 0.3;
-
-
-  // Gripper Constants
   public static final double[] WRIST_GAINS = { 0, 0, 0 };
 
-
+  // Active Floor
+  public static final double ACTIVE_FLOOR_CONSTANT_SPEED = 0.3;
 }

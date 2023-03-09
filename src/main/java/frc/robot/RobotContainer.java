@@ -30,8 +30,8 @@ import frc.robot.subsystems.Vision;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
-  public final Controller driver = new Controller(0, Constants.CONTROLLER_DEADBAND);
-  public static final Controller manip = new Controller(1, Constants.CONTROLLER_DEADBAND);
+  // public final Controller driver = new Controller(0, Constants.CONTROLLER_DEADBAND);
+  public static final Controller manip = new Controller(0, Constants.CONTROLLER_DEADBAND);
   
   public static final Elevator elevator = new Elevator();
   public static final Gripper gripper = new Gripper();
@@ -42,7 +42,6 @@ public class RobotContainer {
   public static final Vision vision = new Vision();
   
   public RobotContainer() {
-    // Configure the trigger bindings
     configureBindings();
     // gripper.setDefaultCommand(new RunCommand(gripper::run, gripper));
     // intake.setDefaultCommand(new RunCommand(intake::run, intake));

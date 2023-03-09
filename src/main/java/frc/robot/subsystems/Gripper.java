@@ -11,6 +11,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxRelativeEncoder;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.PIDController;
@@ -49,55 +50,39 @@ public class Gripper extends SubsystemBase {
   private boolean clawToggle = false;
 
   public Gripper() {
-    // wrist = new CANSparkMax(RobotMap.GRIPPER_WRIST, MotorType.kBrushless);
-    // wrist = new TalonFX(RobotMAp.Gripper_WRIST, Constants.CANBUS);
+    wrist = new CANSparkMax(RobotMap.GRIPPER_WRIST, MotorType.kBrushless);
     claw = new TalonFX(RobotMap.CLAW_MOTOR);
     arm = new TalonFX(RobotMap.ARM_MOTOR);
+
+    wrist.setIdleMode(IdleMode.kBrake);
     claw.setNeutralMode(NeutralMode.Brake);
     arm.setNeutralMode(NeutralMode.Brake);
 
     armPID = new PIDController(Constants.ARM_GAINS[0], Constants.ARM_GAINS[1], Constants.ARM_GAINS[2]);
     clawPID = new PIDController(Constants.CLAW_GAINS[0], Constants.CLAW_GAINS[1], Constants.CLAW_GAINS[2]);
     wristPID = new PIDController(Constants.WRIST_GAINS[0], Constants.WRIST_GAINS[1], Constants.WRIST_GAINS[2]);
-
-    // wrist.setAngle(Constants.WRIST_POS_2);
   }
 
   public void run() {
-    // TALONFX
-    // if (wristToggle) {
-      //   wrist.set(ControlMode.PercentOutput, wristPID.calculate(wrist.getEncoder().getPosition(), Constants.WRIST_POS_1));
-      // } else {
-      //   wrist.set(ControlMode.PercentOutput, wristPID.calculate(wrist.getEncoder().getPosition(), Constants.WRIST_POS_2));
-      // }
-
-
-      // CANSPARK
-    // if (wristToggle) {
-    //   wrist.set(wristPID.calculate(wrist.getEncoder().getPosition(), Constants.WRIST_POS_1));
-    // } else {
-    //   wrist.set(wristPID.calculate(wrist.getEncoder().getPosition(), Constants.WRIST_POS_2));
-    // }
+    // CANSPARK
+    if (wristToggle) {
+      wrist.set(wristPID.calculate(wrist.getEncoder().getPosition(), Constants.WRIST_POS_1));
+    } else {
+      wrist.set(wristPID.calculate(wrist.getEncoder().getPosition(), Constants.WRIST_POS_2));
+    }
 
     if(clawToggle) {
       claw.set(ControlMode.PercentOutput, clawPID.calculate(claw.getSelectedSensorPosition(), Constants.CLAW_CLOSE));
     } else {
       claw.set(ControlMode.PercentOutput, clawPID.calculate(claw.getSelectedSensorPosition(), Constants.CLAW_OPEN));
     }
-    // claw.set(ControlMode.PercentOutput, Robot.m_robotContainer.manip.getLeftJoyY());
-
 
     if(armToggle) {
       arm.set(ControlMode.PercentOutput, armPID.calculate(arm.getSelectedSensorPosition(), Constants.ARM_POS_1));
     } else {
       arm.set(ControlMode.PercentOutput, armPID.calculate(arm.getSelectedSensorPosition(), Constants.ARM_POS_2));
     }
-
-  
     // SmartDashboard.putNumber("wrist pose", wrist.getEncoder().getPosition());
-    SmartDashboard.putNumber("claw Position: ", claw.getSelectedSensorPosition());
-    SmartDashboard.putNumber("arm pose", arm.getSelectedSensorPosition());
-    
     }
 
   public void toggleWrist() {
