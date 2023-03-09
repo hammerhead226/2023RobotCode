@@ -142,8 +142,8 @@ public final class Constants {
   public static final double MAX_SPEED_UP = 0.5;
   public static final double MAX_SPEED_DOWN = 0.25;
 
-  public static final double CLAW_OPEN = -3000;
-  public static final double CLAW_CLOSE = 24000;
+  public static final double CLAW_OPEN = -1000;
+  public static final double CLAW_CLOSE = 22000;
 
   public static final double ARM_POS_1 = 0;
   public static final double ARM_POS_2 = -135000;

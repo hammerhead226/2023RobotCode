@@ -34,6 +34,7 @@ public class RobotContainer {
   private final ActiveFloor activeFloor = new ActiveFloor();
   private final Intake intake = new Intake();
   private final LinearSlide linearSlide = new LinearSlide();
+  private final Elevator elevator = new Elevator();
   public LED led = new LED();
 
   public RobotContainer() {
@@ -42,6 +43,7 @@ public class RobotContainer {
     // gripper.setDefaultCommand(new RunCommand(gripper::run, gripper));
     // intake.setDefaultCommand(new RunCommand(intake::run, intake));
     linearSlide.setDefaultCommand(new RunCommand(linearSlide::run, linearSlide));
+    // elevator.setDefaultCommand(new RunCommand(elevator::run, elevator));
   }
   
   private void configureBindings() {
@@ -49,9 +51,9 @@ public class RobotContainer {
     // manip.getXButton().onTrue(new InstantCommand(gripper::toggleWrist, gripper));
     // manip.getYButton().onTrue(new InstantCommand(gripper::toggleArm, gripper));
 
-    manip.getAButton().onTrue(new InstantCommand(() -> linearSlide.setTarget(50), linearSlide));
-    manip.getBButton().onTrue(new InstantCommand(() -> linearSlide.setTarget(1000), linearSlide));
-    manip.getYButton().onTrue(new InstantCommand(() -> linearSlide.setTarget(2000), linearSlide));
+    manip.getAButton().onTrue(new InstantCommand(() -> linearSlide.setTarget(50), linearSlide).andThen(() -> elevator.setTarget(1250), elevator));
+    manip.getBButton().onTrue(new InstantCommand(() -> linearSlide.setTarget(1000), linearSlide).andThen(() -> elevator.setTarget(1000), elevator));
+    manip.getYButton().onTrue(new InstantCommand(() -> linearSlide.setTarget(2000), linearSlide).andThen(() -> elevator.setTarget(0), elevator));
   }
 
   /**
