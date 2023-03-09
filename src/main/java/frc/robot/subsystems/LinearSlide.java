@@ -10,6 +10,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import frc.libs.wrappers.GenericMotor;
 import frc.robot.Constants;
 import frc.robot.Robot;
+import frc.robot.RobotContainer;
 import frc.robot.RobotMap;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -38,7 +39,7 @@ public class LinearSlide extends SubsystemBase {
   }
 
   public void run() {
-    if (!manual) {
+    if (!manual && !(RobotContainer.elevator.get() >= Constants.SLIDE_DISABLE_POSE)) {
       double motorSpeed = pid.calculate(slider.getEncoder().getPosition(), target);
       if (motorSpeed > speedLimit) {
         motorSpeed = speedLimit;

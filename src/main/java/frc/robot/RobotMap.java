@@ -6,9 +6,9 @@ public class RobotMap {
 
     public static final int[] ENCODERS = { 0, 1, 2, 3 };
 
-    public static final int GYRO = 7;
+    public static final int GYRO = 0;
 
-    public static final int GRIPPER_HITEC = 0;
+    public static final int GRIPPER_WRIST = 18;
 
     public static final int ARM_MOTOR = 14;
     public static final int CLAW_MOTOR = 15;

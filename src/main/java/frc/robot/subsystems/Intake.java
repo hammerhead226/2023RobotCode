@@ -25,8 +25,8 @@ public class Intake extends SubsystemBase {
   private PIDController intakePID;
 
   public Intake() {
-    intake = new TalonFX(RobotMap.INTAKE_PORT);
-    roller = new TalonFX(RobotMap.ROLLER_PORT);
+    intake = new TalonFX(RobotMap.INTAKE_PORT, Constants.CANBUS);
+    roller = new TalonFX(RobotMap.ROLLER_PORT, Constants.CANBUS);
     intakeEncoder = new TalonSRX(RobotMap.INTAKE_ENCODER_PORT);
     intake.setNeutralMode(NeutralMode.Brake);
     roller.setNeutralMode(NeutralMode.Coast);
@@ -60,11 +60,19 @@ public class Intake extends SubsystemBase {
 
   // Roller Methods
   public void runIn() {
-    roller.set(ControlMode.PercentOutput, Constants.ROLLER_RUN_SPEED);
+    if (!intakeOn) {
+      roller.set(ControlMode.PercentOutput, Constants.ROLLER_RUN_SPEED);
+    } else {
+      stop();
+    }
   }
 
   public void runOut() {
-    roller.set(ControlMode.PercentOutput, -Constants.ROLLER_RUN_SPEED);
+    if (!intakeOn) {
+      roller.set(ControlMode.PercentOutput, -Constants.ROLLER_RUN_SPEED);
+    } else {
+      stop();
+    }
   }
 
   public void stop() {

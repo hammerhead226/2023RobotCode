@@ -34,19 +34,23 @@ public class Gripper extends SubsystemBase {
    * pincing (toggle) --> B button
    * wrist rotation (180 or 0 degrees; also toggle) --> X button
    */
-  private Servo wrist;
+
+  // private TalonFX wrist;
+  private CANSparkMax wrist;
   private TalonFX arm;
   private TalonFX claw; 
 
   private PIDController armPID;
   private PIDController clawPID;
+  private PIDController wristPID;
 
-  private boolean isGripped = false;
+  private boolean wristToggle = false;
   private boolean armToggle = false;
   private boolean clawToggle = false;
 
   public Gripper() {
-    wrist = new Servo(RobotMap.GRIPPER_HITEC);
+    // wrist = new CANSparkMax(RobotMap.GRIPPER_WRIST, MotorType.kBrushless);
+    // wrist = new TalonFX(RobotMAp.Gripper_WRIST, Constants.CANBUS);
     claw = new TalonFX(RobotMap.CLAW_MOTOR);
     arm = new TalonFX(RobotMap.ARM_MOTOR);
     claw.setNeutralMode(NeutralMode.Brake);
@@ -54,11 +58,27 @@ public class Gripper extends SubsystemBase {
 
     armPID = new PIDController(Constants.ARM_GAINS[0], Constants.ARM_GAINS[1], Constants.ARM_GAINS[2]);
     clawPID = new PIDController(Constants.CLAW_GAINS[0], Constants.CLAW_GAINS[1], Constants.CLAW_GAINS[2]);
+    wristPID = new PIDController(Constants.WRIST_GAINS[0], Constants.WRIST_GAINS[1], Constants.WRIST_GAINS[2]);
 
-    wrist.setAngle(Constants.WRIST_POS_2);
+    // wrist.setAngle(Constants.WRIST_POS_2);
   }
 
   public void run() {
+    // TALONFX
+    // if (wristToggle) {
+      //   wrist.set(ControlMode.PercentOutput, wristPID.calculate(wrist.getEncoder().getPosition(), Constants.WRIST_POS_1));
+      // } else {
+      //   wrist.set(ControlMode.PercentOutput, wristPID.calculate(wrist.getEncoder().getPosition(), Constants.WRIST_POS_2));
+      // }
+
+
+      // CANSPARK
+    // if (wristToggle) {
+    //   wrist.set(wristPID.calculate(wrist.getEncoder().getPosition(), Constants.WRIST_POS_1));
+    // } else {
+    //   wrist.set(wristPID.calculate(wrist.getEncoder().getPosition(), Constants.WRIST_POS_2));
+    // }
+
     if(clawToggle) {
       claw.set(ControlMode.PercentOutput, clawPID.calculate(claw.getSelectedSensorPosition(), Constants.CLAW_CLOSE));
     } else {
@@ -73,19 +93,15 @@ public class Gripper extends SubsystemBase {
       arm.set(ControlMode.PercentOutput, armPID.calculate(arm.getSelectedSensorPosition(), Constants.ARM_POS_2));
     }
 
-    // arm.set(ControlMode.PercentOutput, Robot.m_robotContainer.manip.getRightJoyY());
-    if(isGripped) {
-      wrist.setAngle(Constants.WRIST_POS_1);
-    } else {
-      wrist.setAngle(Constants.WRIST_POS_2);
-    }
-
+  
+    // SmartDashboard.putNumber("wrist pose", wrist.getEncoder().getPosition());
     SmartDashboard.putNumber("claw Position: ", claw.getSelectedSensorPosition());
     SmartDashboard.putNumber("arm pose", arm.getSelectedSensorPosition());
-  }
+    
+    }
 
   public void toggleWrist() {
-    isGripped = !isGripped;
+    wristToggle = !wristToggle;
   }
 
   public void toggleArm() {

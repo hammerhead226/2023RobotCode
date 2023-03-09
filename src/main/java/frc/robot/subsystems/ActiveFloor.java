@@ -17,7 +17,7 @@ public class ActiveFloor extends SubsystemBase {
   TalonFX activeMotor;
 
   public ActiveFloor() {
-    activeMotor = new TalonFX(RobotMap.ACTIVE_FLOOR_MOTOR_PORT);
+    activeMotor = new TalonFX(RobotMap.ACTIVE_FLOOR_MOTOR_PORT, Constants.CANBUS);
   }
 
   public void runConstantSpeed() {
