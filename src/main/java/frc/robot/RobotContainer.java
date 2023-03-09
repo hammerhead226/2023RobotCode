@@ -4,19 +4,21 @@
 
 package frc.robot;
 
-import frc.robot.subsystems.Gripper;
+
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.LinearSlide;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.subsystems.LED;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.libs.wrappers.Controller;
-import frc.robot.subsystems.ActiveFloor;
-import frc.libs.wrappers.Controller;
-import frc.robot.subsystems.Elevator;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+
+import frc.robot.subsystems.Gripper;
+import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.LinearSlide;
+import frc.robot.subsystems.Elevator;
+import frc.libs.wrappers.Controller;
+import frc.robot.subsystems.ActiveFloor;
+import frc.robot.subsystems.Vision;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -28,15 +30,17 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
-  public static final Controller manip = new Controller(0, Constants.CONTROLLER_DEADBAND);
+  public final Controller driver = new Controller(0, Constants.CONTROLLER_DEADBAND);
+  public static final Controller manip = new Controller(1, Constants.CONTROLLER_DEADBAND);
   
-  private final Gripper gripper = new Gripper();
-  private final ActiveFloor activeFloor = new ActiveFloor();
-  private final Intake intake = new Intake();
-  private final LinearSlide linearSlide = new LinearSlide();
-  private final Elevator elevator = new Elevator();
-  public LED led = new LED();
-
+  public static final Elevator elevator = new Elevator();
+  public static final Gripper gripper = new Gripper();
+  public static final ActiveFloor activeFloor = new ActiveFloor();
+  public static final Intake intake = new Intake();
+  public static final LinearSlide linearSlide = new LinearSlide();
+  public static final LED led = new LED();
+  public static final Vision vision = new Vision();
+  
   public RobotContainer() {
     // Configure the trigger bindings
     configureBindings();

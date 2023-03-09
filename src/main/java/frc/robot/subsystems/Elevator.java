@@ -29,8 +29,8 @@ public class Elevator extends SubsystemBase {
   private double encoderOffset;
 
   public Elevator() {
-    elevatorLeft = new TalonFX(RobotMap.ELEVATOR_MOTOR_LEFT);
-    elevatorRight = new TalonFX(RobotMap.ELEVATOR_MOTOR_RIGHT);
+    elevatorLeft = new TalonFX(RobotMap.ELEVATOR_MOTOR_LEFT, Constants.CANBUS);
+    elevatorRight = new TalonFX(RobotMap.ELEVATOR_MOTOR_RIGHT, Constants.CANBUS);
     elevatorEncoder = new TalonSRX(RobotMap.ELEVATOR_ENCODER);
 
     elevatorLeft.setNeutralMode(NeutralMode.Brake);
@@ -59,9 +59,15 @@ public class Elevator extends SubsystemBase {
   public double get() {
     return elevatorEncoder.getSelectedSensorPosition() - encoderOffset;
   }
-
+ 
   public void run() {
-    control(elevatorPID.calculate(get(), target));
+    double elevatorTarget = target;
+    if (elevatorTarget <= -300) {
+      elevatorTarget = -300;
+    } else if (elevatorTarget >= 2000) {
+      elevatorTarget = 2000;
+    }
+    control(elevatorPID.calculate(get(), elevatorTarget));
   }
 
   public void setTarget(double t) {

@@ -24,6 +24,8 @@ public final class Constants {
     public static final int kDriverControllerPort = 0;
   }
 
+  public static final String CANBUS = "CAN Bus 2";
+
   // Swervey Configuration Parameters
 
   // Encoder Parameters
@@ -105,6 +107,11 @@ public final class Constants {
 
   // Elevator Constants (change these values after testing)
   public static final double[] ELEVATOR_GAINS = { 0.00125, 0, 0 };
+
+  public static final int SLIDE_DISABLE_POSE = 1500;
+  public static final int ELEVATOR_MIN = -300;
+  public static final int ELEVAOTR_MAX = 2000;
+
   // Linear Slide Constants
 
   public static final double[] LINEAR_SLIDE_GAINS = { 0.0005, 0, 0 };
@@ -124,10 +131,6 @@ public final class Constants {
 
   public static final double MIN_POSITION = 0;
   public static final double MAX_POSITION = 0;
-
-  public static final double E_TARGET_LOW = 0;
-  public static final double E_TARGET_MIDDLE = 0;
-  public static final double E_TARGET_HIGH = 0;
 
   public static final double ELEVATOR_INTERVAL_MARKER = 3100;
   public static final double SRX_ENCODER_TICKS = 4096;
@@ -154,5 +157,11 @@ public final class Constants {
   public static final double[] ARM_GAINS = {0.00008, 0, 0};
   public static final double[] CLAW_GAINS = {0.00003, 0, 0};
 
-public static final double ACTIVE_FLOOR_CONSTANT_SPEED = 0.3;
+  public static final double ACTIVE_FLOOR_CONSTANT_SPEED = 0.3;
+
+
+  // Gripper Constants
+  public static final double[] WRIST_GAINS = { 0, 0, 0 };
+
+
 }

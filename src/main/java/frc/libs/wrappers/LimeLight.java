@@ -6,10 +6,12 @@ package frc.libs.wrappers;
 
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.networktables.NetworkTableEntry;
 
-/** 
+/**
  * @author Anish Chandra
- * Simplifies Data Collection from LimeLight
+ *         Simplifies Data Collection from LimeLight
  */
 public class LimeLight {
     private static NetworkTable limelight = NetworkTableInstance.getDefault().getTable("limelight");
