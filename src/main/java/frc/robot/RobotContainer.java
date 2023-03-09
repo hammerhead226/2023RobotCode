@@ -16,6 +16,7 @@ import frc.robot.subsystems.LinearSlide;
 import frc.robot.subsystems.Elevator;
 import frc.libs.wrappers.Controller;
 import frc.robot.subsystems.ActiveFloor;
+import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Vision;
 
 /**
@@ -28,8 +29,10 @@ import frc.robot.subsystems.Vision;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
-  // public final Controller driver = new Controller(0, Constants.CONTROLLER_DEADBAND);
-  public static final Controller manip = new Controller(0, Constants.CONTROLLER_DEADBAND);
+  public final Controller driver = new Controller(0, Constants.CONTROLLER_DEADBAND);
+  public static final Controller manip = new Controller(1, Constants.CONTROLLER_DEADBAND);
+
+  public static final DriveTrain dt = DriveTrain.getInstance();
   
   public static final Elevator elevator = new Elevator();
   public static final Gripper gripper = new Gripper();
@@ -41,6 +44,13 @@ public class RobotContainer {
   
   public RobotContainer() {
     configureBindings();
+
+    dt.setDefaultCommand(
+      new RunCommand(
+        () -> dt.control(driver.getLeftJoyX(), driver.getLeftJoyY(), driver.getRightJoyX()),
+        dt
+        ));
+
     // gripper.setDefaultCommand(new RunCommand(gripper::run, gripper));
     // intake.setDefaultCommand(new RunCommand(intake::run, intake));
     linearSlide.setDefaultCommand(new RunCommand(linearSlide::run, linearSlide));
