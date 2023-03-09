@@ -1,13 +1,9 @@
 package frc.libs.wrappers;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
 public class PIDController {
     double kP, kI, kD;
 
     double setpoint;
-
-    double currentTime, prevTime;
 
     double lastErr;
 
@@ -19,7 +15,6 @@ public class PIDController {
         this.kI = ki;
         this.kD = kd;
 
-        prevTime = System.currentTimeMillis();
         lastErr = 0;
         totalErr = 0;
     }
@@ -29,7 +24,6 @@ public class PIDController {
         kI = gains[1];
         kD = gains[2];
 
-        prevTime = System.currentTimeMillis();
         lastErr = 0;
         totalErr = 0;
     }
@@ -39,7 +33,6 @@ public class PIDController {
         kI = 0;
         kD = 0;
 
-        prevTime = System.currentTimeMillis();
         lastErr = 0;
         totalErr = 0;
     }
@@ -54,25 +47,11 @@ public class PIDController {
 
         if(kI != 0)
             totalErr = clamp(totalErr + err * elapsed, -1.0/kI, 1.0/kI);
-            // totalErr += err * elapsed;
 
         double derivedErr = (err - lastErr)/elapsed;
-
-        SmartDashboard.putNumber("err", err);
-        SmartDashboard.putNumber("totalErr", totalErr);
-        SmartDashboard.putNumber("derivedErr", derivedErr);
-
-        SmartDashboard.putNumber("P Contribution", kP * err);
-        SmartDashboard.putNumber("I Contribution", kI * totalErr);
-        SmartDashboard.putNumber("D Contribution", kD * derivedErr);
-
         double output = kP * err + kI * totalErr + kD * derivedErr;
 
         lastErr = err;
-        // prevTime = System.currentTimeMillis();
-
-        SmartDashboard.putNumber("elapsed", elapsed);
-
         return output;
     }
 

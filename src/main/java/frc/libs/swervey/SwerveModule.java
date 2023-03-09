@@ -4,11 +4,8 @@
 
 package frc.libs.swervey;
 
-import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.libs.wrappers.GenericEncoder;
 import frc.libs.wrappers.GenericMotor;
-import frc.robot.Constants;
 import frc.libs.wrappers.PIDController;
 
 /** 
@@ -38,7 +35,7 @@ public class SwerveModule {
         this.defaultModulePosition = modulePosition;
         this.x = modulePosition[0];
         this.y = modulePosition[1];
-        this.lastSensorPose = 0;
+        this.lastSensorPose = drive.getSensorPose();
     }
 
     public void configureSteerPIDGains(double[] highGains, double[] lowGains) {
@@ -50,9 +47,6 @@ public class SwerveModule {
     public void configureSteerThreshold(double sThresh) {
         this.threshold = sThresh;
     }
-
-    double totalErr = 0;
-    frc.libs.wrappers.PIDController con = new frc.libs.wrappers.PIDController(Constants.STEER_GAINS_HIGH);
 
     public void set(double velocity, double targetAngle, double gyroAngle) {
 
@@ -79,10 +73,10 @@ public class SwerveModule {
         if(Math.abs(drive.getVelocity()) < threshold) steerController.setPID(steerHighGains);
         else steerController.setPID(steerLowGains);
 
-        if(Math.abs(drive.getVelocity()) < threshold) con.setPID(steerHighGains);
-        else con.setPID(steerLowGains);
+        if(Math.abs(drive.getVelocity()) < threshold) steerController.setPID(steerHighGains);
+        else steerController.setPID(steerLowGains);
 
-        double rotateSpeed = con.calculate(err);
+        double rotateSpeed = steerController.calculate(err);
 
         drive.set(velocity);
         steer.set(rotateSpeed);    
@@ -96,13 +90,23 @@ public class SwerveModule {
         
         return err;
     }
-                            
+
     public double getModuleRotationalPose() {
         return steercoder.getModuleOffset();
     }
 
     public double getDrivePose() {
         return drive.getSensorPose();
+    }
+
+    public double getDrivePoseDelta() {
+        double out = drive.getSensorPose() - lastSensorPose;
+        lastSensorPose = drive.getSensorPose();
+        return out;
+    }
+
+    public double getSteerAngleDelta() {
+        return steercoder.getContinuousPosition() % (2 * Math.PI);
     }
 
     public double getDriveVelocity() {

@@ -26,9 +26,11 @@ public class SwerveBuilder {
 
     double ticksPerFeet;
     double[] allowedErrors;
+    private double velocityFeedForward;
 
     boolean[] verfiedParts;
     int numberOfParameters = 5;
+    
 
     public SwerveBuilder(GenericMotor[] drives, GenericMotor[] steers, GenericEncoder[] encoders, Gyro gyro) {
         this.drives = drives;
@@ -54,7 +56,7 @@ public class SwerveBuilder {
 
         swerve.configureThresholds(thresholds[0], thresholds[1], thresholds[2]);
 
-        swerve.configureAutonomousParameters(ticksPerFeet, allowedErrors[0], allowedErrors[1]);
+        swerve.configureAutonomousParameters(ticksPerFeet, allowedErrors[0], allowedErrors[1], velocityFeedForward);
 
         swerve.configureSpeeds(speedBounds[0], speedBounds[1]);
         swerve.configureAccelerationParameters(accelerationParameters[0], accelerationParameters[1]);
@@ -88,9 +90,10 @@ public class SwerveBuilder {
         return this;
     }
 
-    public SwerveBuilder autonomousParameters(double ticksPerFeet, double[] allowedErrors) {
+    public SwerveBuilder autonomousParameters(double ticksPerFeet, double[] allowedErrors, double velocityFeedForwardGain) {
         this.ticksPerFeet = ticksPerFeet;
         this.allowedErrors = allowedErrors;
+        this.velocityFeedForward = velocityFeedForwardGain;
         verfiedParts[4] = true;
         return this;
     }    
