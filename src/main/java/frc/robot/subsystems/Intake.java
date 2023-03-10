@@ -7,46 +7,54 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.math.controller.PIDController;
 // import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.libs.wrappers.GenericMotor;
 import frc.robot.Constants;
 import frc.robot.RobotMap;
 
 public class Intake extends SubsystemBase {
 
-  private TalonFX roller;
-  private TalonFX intake;
-  private TalonSRX intakeEncoder;
+  private GenericMotor roller;
+  private GenericMotor intake;
+  private GenericMotor intakeEncoder;
   private boolean intakeOn;
   private PIDController intakePID;
 
   public Intake() {
-    intake = new TalonFX(RobotMap.INTAKE_PORT, Constants.CANBUS);
-    roller = new TalonFX(RobotMap.ROLLER_PORT, Constants.CANBUS);
-    intakeEncoder = new TalonSRX(RobotMap.INTAKE_ENCODER_PORT);
+    TalonFX iFalcon = new TalonFX(RobotMap.INTAKE_PORT, Constants.CANBUS);
+    TalonFX roll = new TalonFX(RobotMap.ROLLER_PORT, Constants.CANBUS);
+    TalonSRX encoder = new TalonSRX(RobotMap.INTAKE_ENCODER_PORT);
 
-    intake.setNeutralMode(NeutralMode.Brake);
-    roller.setNeutralMode(NeutralMode.Coast);
+    roll.setStatusFramePeriod(StatusFrameEnhanced.Status_8_PulseWidth, 100);
 
-    roller.setInverted(true);
+    iFalcon.setNeutralMode(NeutralMode.Brake);
+    roll.setNeutralMode(NeutralMode.Coast);
+
+    roll.setInverted(true);
     
-    intakeEncoder.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute);
+    encoder.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute);
+
+    intake = new GenericMotor(iFalcon);
+    roller = new GenericMotor(roll);
+    intakeEncoder = new GenericMotor(encoder);
     intakePID = new PIDController(Constants.INTAKE_GAINS[0], Constants.INTAKE_GAINS[1], Constants.INTAKE_GAINS[2]);
   }
 
   public void run() {
     if (intakeOn) {
-      double extendSpeed = intakePID.calculate(intakeEncoder.getSelectedSensorPosition(), Constants.INTAKE_EXTEND);
+      double extendSpeed = intakePID.calculate(intakeEncoder.getSensorPose(), Constants.INTAKE_EXTEND);
       if (extendSpeed > Constants.MAX_SPEED_UP) {
         extendSpeed = Constants.MAX_SPEED_UP;
       }
       control(extendSpeed);
     } else {
-      double retractSpeed = intakePID.calculate(intakeEncoder.getSelectedSensorPosition(), Constants.INTAKE_RETRACT);
+      double retractSpeed = intakePID.calculate(intakeEncoder.getSensorPose(), Constants.INTAKE_RETRACT);
       if (retractSpeed > Constants.MAX_SPEED_DOWN){
         retractSpeed = Constants.MAX_SPEED_DOWN;
       }
@@ -62,30 +70,26 @@ public class Intake extends SubsystemBase {
   // Roller Methods
   public void runIn() {
     if (intakeOn) {
-      roller.set(ControlMode.PercentOutput, Constants.ROLLER_RUN_SPEED);
+      roller.set(Constants.ROLLER_RUN_SPEED);
     }
   }
 
   public void runOut() {
     if (intakeOn) {
-      roller.set(ControlMode.PercentOutput, -Constants.ROLLER_RUN_SPEED);
+      roller.set(-Constants.ROLLER_RUN_SPEED);
     }
   }
 
   public void stop() {
-    roller.set(ControlMode.PercentOutput, 0);
+    roller.set(0);
   }
 
   public void control(double speed) {
-    intake.set(ControlMode.PercentOutput, speed);
+    intake.set(speed);
   }
 
   public double getIntake() {
-    return intakeEncoder.getSelectedSensorPosition();
-  }
-
-  public double getRoller() {
-    return roller.getMotorOutputPercent();
+    return intakeEncoder.getSensorPose();
   }
 
   @Override

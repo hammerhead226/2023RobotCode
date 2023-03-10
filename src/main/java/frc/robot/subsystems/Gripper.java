@@ -12,8 +12,12 @@ import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.libs.wrappers.GenericMotor;
+import frc.libs.wrappers.GenericMotor.PassiveMode;
 import frc.robot.Constants;
+import frc.robot.Robot;
 import frc.robot.RobotMap;
 
 public class Gripper extends SubsystemBase {
@@ -29,29 +33,34 @@ public class Gripper extends SubsystemBase {
 
   // private TalonFX wrist;
   private CANSparkMax wrist;
-  private TalonFX arm;
-  private TalonFX claw; 
+  private GenericMotor arm;
+  private GenericMotor claw; 
 
   private PIDController armPID;
   private PIDController clawPID;
   private PIDController wristPID;
 
   private boolean wristToggle = false;
-  private boolean armToggle = false;
-  private boolean clawToggle = false;
+  private boolean armToggle = true;
+  private boolean clawToggleCone = false;
+  private boolean clawToggleCube = false;
+
+  private double armSpeedLimit;
 
   public Gripper() {
     wrist = new CANSparkMax(RobotMap.GRIPPER_WRIST, MotorType.kBrushless);
-    claw = new TalonFX(RobotMap.CLAW_MOTOR);
-    arm = new TalonFX(RobotMap.ARM_MOTOR);
+    claw = new GenericMotor(new TalonFX(RobotMap.CLAW_MOTOR));
+    arm = new GenericMotor(new TalonFX(RobotMap.ARM_MOTOR));
 
     wrist.setIdleMode(IdleMode.kBrake);
-    claw.setNeutralMode(NeutralMode.Brake);
-    arm.setNeutralMode(NeutralMode.Brake);
+    claw.setNeutralMode(PassiveMode.BRAKE);
+    arm.setNeutralMode(PassiveMode.BRAKE);
 
     armPID = new PIDController(Constants.ARM_GAINS[0], Constants.ARM_GAINS[1], Constants.ARM_GAINS[2]);
     clawPID = new PIDController(Constants.CLAW_GAINS[0], Constants.CLAW_GAINS[1], Constants.CLAW_GAINS[2]);
     wristPID = new PIDController(Constants.WRIST_GAINS[0], Constants.WRIST_GAINS[1], Constants.WRIST_GAINS[2]);
+    
+    armSpeedLimit = 0.25;
   }
 
   public void run() {
@@ -62,18 +71,36 @@ public class Gripper extends SubsystemBase {
       wrist.set(wristPID.calculate(wrist.getEncoder().getPosition(), Constants.WRIST_POS_2));
     }
 
-    if(clawToggle) {
-      claw.set(ControlMode.PercentOutput, clawPID.calculate(claw.getSelectedSensorPosition(), Constants.CLAW_CLOSE));
+    if(clawToggleCone) {
+      claw.set( clawPID.calculate(claw.getSensorPose(), Constants.CLAW_CLOSE_CONE));
     } else {
-      claw.set(ControlMode.PercentOutput, clawPID.calculate(claw.getSelectedSensorPosition(), Constants.CLAW_OPEN));
+      claw.set( clawPID.calculate(claw.getSensorPose(), Constants.CLAW_OPEN_CONE));
     }
 
-    if(armToggle) {
-      arm.set(ControlMode.PercentOutput, armPID.calculate(arm.getSelectedSensorPosition(), Constants.ARM_POS_1));
+    if(clawToggleCube) {
+      claw.set( clawPID.calculate(claw.getSensorPose(), Constants.CLAW_CLOSE_CUBE));
     } else {
-      arm.set(ControlMode.PercentOutput, armPID.calculate(arm.getSelectedSensorPosition(), Constants.ARM_POS_2));
+      claw.set( clawPID.calculate(claw.getSensorPose(), Constants.CLAW_OPEN_CUBE));
     }
-    // SmartDashboard.putNumber("wrist pose", wrist.getEncoder().getPosition());
+
+    double armSpeed;
+
+    if(armToggle) {
+      armSpeed = armPID.calculate(arm.getSensorPose(), Constants.ARM_POS_1);
+    } else {
+      armSpeed = armPID.calculate(arm.getSensorPose(), Constants.ARM_POS_2);
+    }
+
+    if(armSpeed > armSpeedLimit) armSpeed = armSpeedLimit;
+    else if(armSpeed < -armSpeedLimit) armSpeed = -armSpeedLimit;
+
+    arm.set(armSpeed);
+
+    // arm.set(Robot.m_robotContainer.test.getLeftJoyY());
+    SmartDashboard.putNumber("wrist pose", wrist.getEncoder().getPosition());
+    SmartDashboard.putNumber("claw pose", claw.getSensorPose());
+
+    
     }
 
   public void toggleWrist() {
@@ -84,13 +111,25 @@ public class Gripper extends SubsystemBase {
     armToggle = !armToggle;
   }
 
-  public void toggleClaw() {
-    clawToggle = !clawToggle;
+  public void extendArm() {
+    armToggle = false;
+  }
+
+  public void retractArm() {
+    armToggle = true;
+  }
+
+  public void toggleClawCone() {
+    clawToggleCone = !clawToggleCone;
+  }
+
+  public void toggleClawCube() {
+    clawToggleCube = !clawToggleCube;
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    
+    SmartDashboard.putNumber("periodic wrist", wrist.getEncoder().getPosition());
   }
 }

@@ -36,7 +36,7 @@ public class DriveTrain extends SubsystemBase {
             TalonFX drive = new TalonFX(RobotMap.DRIVE_MOTORS[i]);
             TalonFX steer = new TalonFX(RobotMap.STEER_MOTORS[i]);
 
-            CANCoder encoder = new CANCoder(RobotMap.ENCODERS[i]);
+            CANCoder encoder = new CANCoder(RobotMap.ENCODERS[i], Constants.CANBUS);
 
             drive.setNeutralMode(NeutralMode.Brake);
 
@@ -46,7 +46,7 @@ public class DriveTrain extends SubsystemBase {
             encoders[i] = new GenericEncoder(encoder, Constants.OVERFLOW_THRESHOLD, Constants.MODULE_OFFSETS[i]);
         }
 
-        Gyro gyro = new Gyro(RobotMap.GYRO);
+        Gyro gyro = new Gyro(RobotMap.GYRO, "CAN Bus 2");
 
         swerve = new SwerveBuilder(drives, steers, encoders, gyro)
                 .PIDGains(Constants.MODULE_GAINS, Constants.SCHEDULED_GAINS, Constants.STEER_AND_ROTATE_THRESHOLDS)

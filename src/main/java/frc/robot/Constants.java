@@ -18,7 +18,7 @@ package frc.robot;
  */
 public final class Constants {
   // Controller Configuration
-  public static final double CONTROLLER_DEADBAND = 0.05;
+  public static final double CONTROLLER_DEADBAND = 0.15;
 
   public static final String CANBUS = "CAN Bus 2";
 
@@ -115,7 +115,7 @@ public final class Constants {
 
 
   // Linear Slide Constants
-  public static final double[] LINEAR_SLIDE_GAINS = { 0.0005, 0, 0 };
+  public static final double[] LINEAR_SLIDE_GAINS = { 0.027, 0, 0 };
   public static final boolean LS_SET_INVERTED = true;
 
 
@@ -141,19 +141,21 @@ public final class Constants {
 
 
   // Gripper Constants
-  public static final double CLAW_OPEN = -1000;
-  public static final double CLAW_CLOSE = 22000;
+  public static final double CLAW_CLOSE_CONE = -1000;
+  public static final double CLAW_CLOSE_CUBE = 10000;
+  public static final double CLAW_OPEN_CUBE = 22000;
+  public static final double CLAW_OPEN_CONE = 22000;
 
   public static final double ARM_POS_1 = 0;
   public static final double ARM_POS_2 = -135000;
 
   public static final double WRIST_POS_1 = 0;
-  public static final double WRIST_POS_2 = 0;
+  public static final double WRIST_POS_2 = -2.5;
 
 
   public static final double[] ARM_GAINS = {0.00008, 0, 0};
   public static final double[] CLAW_GAINS = {0.00003, 0, 0};
-  public static final double[] WRIST_GAINS = { 0, 0, 0 };
+  public static final double[] WRIST_GAINS = { 0.1, 0, 0 };
 
   // Active Floor
   public static final double ACTIVE_FLOOR_CONSTANT_SPEED = 0.3;

@@ -29,8 +29,9 @@ import frc.robot.subsystems.Vision;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
-  public final Controller driver = new Controller(0, Constants.CONTROLLER_DEADBAND);
+  public static final Controller driver = new Controller(0, Constants.CONTROLLER_DEADBAND);
   public static final Controller manip = new Controller(1, Constants.CONTROLLER_DEADBAND);
+  public static final Controller test = new Controller(2, Constants.CONTROLLER_DEADBAND);
 
   public static final DriveTrain dt = DriveTrain.getInstance();
   
@@ -51,20 +52,57 @@ public class RobotContainer {
         dt
         ));
 
-    // gripper.setDefaultCommand(new RunCommand(gripper::run, gripper));
+    gripper.setDefaultCommand(new RunCommand(gripper::run, gripper));
     // intake.setDefaultCommand(new RunCommand(intake::run, intake));
     linearSlide.setDefaultCommand(new RunCommand(linearSlide::run, linearSlide));
-    // elevator.setDefaultCommand(new RunCommand(elevator::run, elevator));
+    elevator.setDefaultCommand(new RunCommand(elevator::run, elevator));
   }
   
   private void configureBindings() {
-    // manip.getAButton().onTrue(new InstantCommand(gripper::toggleClaw, gripper));
+
+    driver.getLBButton().onTrue(new InstantCommand(led::leftBumperPressed, led));
+    driver.getLBButton().onFalse(new InstantCommand(led::noBumpersPressed, led));
+
+    driver.getRBButton().onTrue(new InstantCommand(led::rightBumperPressed, led));
+    driver.getRBButton().onFalse(new InstantCommand(led::noBumpersPressed, led));
+
+    driver.getMENUButton().onTrue(new InstantCommand(dt::reset, dt));
+
+
+    // manip.getLBButton().onTrue(new InstantCommand(intake::toggleIntake, intake));
+    // manip.getRBButton().whileTrue(new InstantCommand(intake::runIn, intake).andThen(activeFloor::runConstantSpeedInward, activeFloor));
+    // manip.getMENUButton().whileTrue(new InstantCommand(intake::runOut, intake).andThen(activeFloor::runConstantSpeedOutward, activeFloor));
+
+
+    // manip.getAButton().onTrue(new InstantCommand(gripper::toggleClawCone, gripper));
+    // manip.getBButton().onTrue(new InstantCommand(gripper::toggleClawCube, gripper));
     // manip.getXButton().onTrue(new InstantCommand(gripper::toggleWrist, gripper));
     // manip.getYButton().onTrue(new InstantCommand(gripper::toggleArm, gripper));
 
-    manip.getAButton().onTrue(new InstantCommand(() -> linearSlide.setTarget(50), linearSlide).andThen(() -> elevator.setTarget(1250), elevator));
-    manip.getBButton().onTrue(new InstantCommand(() -> linearSlide.setTarget(1000), linearSlide).andThen(() -> elevator.setTarget(1000), elevator));
-    manip.getYButton().onTrue(new InstantCommand(() -> linearSlide.setTarget(2000), linearSlide).andThen(() -> elevator.setTarget(0), elevator));
+
+    // manip.getAButton().onTrue(new InstantCommand(activeFloor::runConstantSpeedInward, activeFloor));
+    // manip.getAButton().onFalse(new InstantCommand(activeFloor::stop, activeFloor));
+    // manip.getBButton().onTrue(new InstantCommand(() -> elevator.setTarget(1000)));
+
+   
+    // manip.getXButton().onTrue(new InstantCommand(activeFloor::runConstantSpeedInward, activeFloor));
+    // manip.getXButton().onFalse(new InstantCommand(activeFloor::stop, activeFloor));
+    manip.getXButton().onTrue(new InstantCommand(gripper::toggleClawCube, gripper));
+    manip.getRBButton().onTrue(new InstantCommand(gripper::toggleWrist, gripper));
+    manip.getAButton().onTrue(new InstantCommand(() -> linearSlide.setTarget(0), linearSlide)
+    .andThen(() -> elevator.setTarget(1250), elevator)
+    .andThen(gripper::retractArm, gripper));
+    manip.getBButton().onTrue(new InstantCommand(() -> linearSlide.setTarget(25), linearSlide)
+    .andThen(() -> elevator.setTarget(1000), elevator)
+    .andThen(gripper::extendArm, gripper));
+    manip.getYButton().onTrue(new InstantCommand(() -> linearSlide.setTarget(45), linearSlide)
+    .andThen(() -> elevator.setTarget(0), elevator)
+    .andThen(gripper::extendArm, gripper));
+
+    // manip.getYButton().onTrue(new InstantCommand(() -> linearSlide.setTarget(0), linearSlide));
+    // manip.getXButton().onTrue(new InstantCommand(() -> linearSlide.setTarget(15), linearSlide));
+    // manip.getAButton().onTrue(new InstantCommand(() -> linearSlide.setTarget(45), linearSlide));
+
   }
 
   /**

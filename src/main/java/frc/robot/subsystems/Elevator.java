@@ -7,47 +7,57 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.libs.wrappers.GenericMotor;
 import frc.robot.Constants;
 import frc.robot.RobotMap;
 
 public class Elevator extends SubsystemBase {
   /** Creates a new Elevator. */
-  private TalonFX elevatorLeft;
-  private TalonFX elevatorRight;
-  private TalonSRX elevatorEncoder; 
+  private GenericMotor elevatorLeft;
+  private GenericMotor elevatorRight;
+  private GenericMotor elevatorEncoder; 
   private PIDController elevatorPID;
   private boolean isManual;
   private double target;
 
+  private double speedLimit;
+
   private double encoderOffset;
 
   public Elevator() {
-    elevatorLeft = new TalonFX(RobotMap.ELEVATOR_MOTOR_LEFT, Constants.CANBUS);
-    elevatorRight = new TalonFX(RobotMap.ELEVATOR_MOTOR_RIGHT, Constants.CANBUS);
-    elevatorEncoder = new TalonSRX(RobotMap.ELEVATOR_ENCODER);
+    TalonFX left = new TalonFX(RobotMap.ELEVATOR_MOTOR_LEFT, Constants.CANBUS);
+    TalonFX right = new TalonFX(RobotMap.ELEVATOR_MOTOR_RIGHT, Constants.CANBUS);
+    TalonSRX encoder = new TalonSRX(RobotMap.ELEVATOR_ENCODER);
 
-    elevatorLeft.setNeutralMode(NeutralMode.Brake);
-    elevatorRight.setNeutralMode(NeutralMode.Brake);
+    left.setNeutralMode(NeutralMode.Brake);
+    right.setNeutralMode(NeutralMode.Brake);
 
-    elevatorLeft.setInverted(true);
-    elevatorRight.setInverted(true);
+    left.setInverted(true);
+    right.setInverted(true);
+
+    right.setStatusFramePeriod(StatusFrameEnhanced.Status_8_PulseWidth, 100);
 
 
-    elevatorEncoder.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute);
+    encoder.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute);
 
     elevatorPID = new PIDController(Constants.ELEVATOR_GAINS[0], Constants.ELEVATOR_GAINS[1],
         Constants.ELEVATOR_GAINS[2]);
-    elevatorRight.follow(elevatorLeft);
+    right.follow(left);
 
-    if(elevatorEncoder.getSelectedSensorPosition() > Constants.ELEVATOR_INTERVAL_MARKER) encoderOffset = Constants.SRX_ENCODER_TICKS;
+    elevatorLeft = new GenericMotor(left);
+    elevatorEncoder = new GenericMotor(encoder);
+
+    if(elevatorEncoder.getSensorPose() > Constants.ELEVATOR_INTERVAL_MARKER) encoderOffset = Constants.SRX_ENCODER_TICKS;
     else encoderOffset = 0;
 
     target = 0;
+    speedLimit = .25;
   }
 
   public void toggleManual() {
@@ -55,7 +65,7 @@ public class Elevator extends SubsystemBase {
   }
 
   public double get() {
-    return elevatorEncoder.getSelectedSensorPosition() - encoderOffset;
+    return elevatorEncoder.getSensorPose() - encoderOffset;
   }
  
   public void run() {
@@ -65,7 +75,11 @@ public class Elevator extends SubsystemBase {
     } else if (elevatorTarget >= 2000) {
       elevatorTarget = 2000;
     }
-    control(elevatorPID.calculate(get(), elevatorTarget));
+    double motorSpeed = elevatorPID.calculate(get(), elevatorTarget);
+
+    if(motorSpeed > speedLimit) motorSpeed = speedLimit;
+    else if(motorSpeed < -speedLimit) motorSpeed = -speedLimit;
+    control(motorSpeed);
   }
 
   public void setTarget(double t) {
@@ -73,7 +87,7 @@ public class Elevator extends SubsystemBase {
   }
 
   public void control(double speed) {
-    elevatorLeft.set(ControlMode.PercentOutput, speed);
+    elevatorLeft.set(speed);
   }
 
   @Override
