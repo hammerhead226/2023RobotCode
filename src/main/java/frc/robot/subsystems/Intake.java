@@ -67,6 +67,14 @@ public class Intake extends SubsystemBase {
     intakeOn = !intakeOn;
   }
 
+  public void extendIntake() {
+    intakeOn = true;
+  }
+
+  public void retractIntake() {
+    intakeOn = true;
+  }
+
   // Roller Methods
   public void runIn() {
     if (intakeOn) {

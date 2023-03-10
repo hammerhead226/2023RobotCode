@@ -45,6 +45,10 @@ public class Gripper extends SubsystemBase {
   private boolean clawToggleCone = false;
   private boolean clawToggleCube = false;
 
+  private boolean clawToggle = false;
+
+  private boolean cubeMode = false;
+
   private double armSpeedLimit;
 
   public Gripper() {
@@ -60,7 +64,7 @@ public class Gripper extends SubsystemBase {
     clawPID = new PIDController(Constants.CLAW_GAINS[0], Constants.CLAW_GAINS[1], Constants.CLAW_GAINS[2]);
     wristPID = new PIDController(Constants.WRIST_GAINS[0], Constants.WRIST_GAINS[1], Constants.WRIST_GAINS[2]);
     
-    armSpeedLimit = 0.25;
+    armSpeedLimit = 0.5;
   }
 
   public void run() {
@@ -71,16 +75,16 @@ public class Gripper extends SubsystemBase {
       wrist.set(wristPID.calculate(wrist.getEncoder().getPosition(), Constants.WRIST_POS_2));
     }
 
-    if(clawToggleCone) {
-      claw.set( clawPID.calculate(claw.getSensorPose(), Constants.CLAW_CLOSE_CONE));
-    } else {
-      claw.set( clawPID.calculate(claw.getSensorPose(), Constants.CLAW_OPEN_CONE));
+    if(clawToggle) {
+      if(cubeMode) {
+        claw.set( clawPID.calculate(claw.getSensorPose(), Constants.CLAW_CLOSE_CUBE));
+      }
+      else {
+        claw.set( clawPID.calculate(claw.getSensorPose(), Constants.CLAW_CLOSE_CONE));
+      }
     }
-
-    if(clawToggleCube) {
-      claw.set( clawPID.calculate(claw.getSensorPose(), Constants.CLAW_CLOSE_CUBE));
-    } else {
-      claw.set( clawPID.calculate(claw.getSensorPose(), Constants.CLAW_OPEN_CUBE));
+    else {
+      claw.set( clawPID.calculate(claw.getSensorPose(), Constants.CLAW_OPEN_CONE));
     }
 
     double armSpeed;
@@ -119,12 +123,12 @@ public class Gripper extends SubsystemBase {
     armToggle = true;
   }
 
-  public void toggleClawCone() {
-    clawToggleCone = !clawToggleCone;
+  public void toggleCubeMode() {
+    cubeMode = !cubeMode;
   }
 
-  public void toggleClawCube() {
-    clawToggleCube = !clawToggleCube;
+  public void toggleClaw() {
+    clawToggle = !clawToggle;
   }
 
   @Override

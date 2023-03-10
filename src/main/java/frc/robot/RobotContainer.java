@@ -68,41 +68,53 @@ public class RobotContainer {
 
     driver.getMENUButton().onTrue(new InstantCommand(dt::reset, dt));
 
+    manip.getSTARTButton().onTrue(new InstantCommand(gripper::toggleCubeMode, gripper));
 
-    // manip.getLBButton().onTrue(new InstantCommand(intake::toggleIntake, intake));
-    // manip.getRBButton().whileTrue(new InstantCommand(intake::runIn, intake).andThen(activeFloor::runConstantSpeedInward, activeFloor));
-    // manip.getMENUButton().whileTrue(new InstantCommand(intake::runOut, intake).andThen(activeFloor::runConstantSpeedOutward, activeFloor));
-
-
-    // manip.getAButton().onTrue(new InstantCommand(gripper::toggleClawCone, gripper));
-    // manip.getBButton().onTrue(new InstantCommand(gripper::toggleClawCube, gripper));
-    // manip.getXButton().onTrue(new InstantCommand(gripper::toggleWrist, gripper));
-    // manip.getYButton().onTrue(new InstantCommand(gripper::toggleArm, gripper));
+    manip.getRBButton().onTrue(new InstantCommand(gripper::toggleClaw, gripper));
 
 
-    // manip.getAButton().onTrue(new InstantCommand(activeFloor::runConstantSpeedInward, activeFloor));
-    // manip.getAButton().onFalse(new InstantCommand(activeFloor::stop, activeFloor));
-    // manip.getBButton().onTrue(new InstantCommand(() -> elevator.setTarget(1000)));
+    manip.getLBButton().onTrue(
+      new InstantCommand(
+        intake::extendIntake, intake
+      )
+      .andThen(intake::runIn, intake)
+      .andThen(activeFloor::runConstantSpeedInward, activeFloor)
+    );
 
-   
-    // manip.getXButton().onTrue(new InstantCommand(activeFloor::runConstantSpeedInward, activeFloor));
-    // manip.getXButton().onFalse(new InstantCommand(activeFloor::stop, activeFloor));
-    manip.getXButton().onTrue(new InstantCommand(gripper::toggleClawCube, gripper));
-    manip.getRBButton().onTrue(new InstantCommand(gripper::toggleWrist, gripper));
+    manip.getLBButton().onFalse(
+      new InstantCommand(
+        intake::retractIntake, intake
+      )
+      .andThen(intake::stop, intake)
+      .andThen(activeFloor::stop, activeFloor)
+    );
+
+    manip.getMENUButton().onTrue(
+      new InstantCommand(
+        intake::extendIntake, intake
+      )
+      .andThen(intake::runOut, intake)
+      .andThen(activeFloor::runConstantSpeedOutward, activeFloor)
+    );
+
+    manip.getMENUButton().onFalse(
+      new InstantCommand(
+        intake::retractIntake, intake
+      )
+      .andThen(intake::stop, intake)
+      .andThen(activeFloor::stop, activeFloor)
+    );
+    manip.getXButton().onTrue(new InstantCommand(gripper::toggleArm, gripper));
+
+
+    manip.getLeftStickPress().onTrue(new InstantCommand(gripper::toggleWrist, gripper));
     manip.getAButton().onTrue(new InstantCommand(() -> linearSlide.setTarget(0), linearSlide)
-    .andThen(() -> elevator.setTarget(1250), elevator)
-    .andThen(gripper::retractArm, gripper));
-    manip.getBButton().onTrue(new InstantCommand(() -> linearSlide.setTarget(25), linearSlide)
-    .andThen(() -> elevator.setTarget(1000), elevator)
-    .andThen(gripper::extendArm, gripper));
-    manip.getYButton().onTrue(new InstantCommand(() -> linearSlide.setTarget(45), linearSlide)
-    .andThen(() -> elevator.setTarget(0), elevator)
-    .andThen(gripper::extendArm, gripper));
+    .andThen(() -> elevator.setTarget(1300), elevator));
 
-    // manip.getYButton().onTrue(new InstantCommand(() -> linearSlide.setTarget(0), linearSlide));
-    // manip.getXButton().onTrue(new InstantCommand(() -> linearSlide.setTarget(15), linearSlide));
-    // manip.getAButton().onTrue(new InstantCommand(() -> linearSlide.setTarget(45), linearSlide));
-
+    manip.getBButton().onTrue(new InstantCommand(() -> linearSlide.setTarget(30), linearSlide)
+    .andThen(() -> elevator.setTarget(1000), elevator));
+    manip.getYButton().onTrue(new InstantCommand(() -> linearSlide.setTarget(47), linearSlide)
+    .andThen(() -> elevator.setTarget(0), elevator));
   }
 
   /**
