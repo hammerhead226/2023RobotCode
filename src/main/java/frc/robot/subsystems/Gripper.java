@@ -68,11 +68,18 @@ public class Gripper extends SubsystemBase {
   }
 
   public void run() {
+
     // CANSPARK
     if (wristToggle) {
-      wrist.set(wristPID.calculate(wrist.getEncoder().getPosition(), Constants.WRIST_POS_1));
+      double wristPose;
+      if(armToggle) wristPose = Constants.PERFECT_WRIST_POS_1;
+      else wristPose = Constants.ADJUSTED_WRIST_POS_1;
+      wrist.set(wristPID.calculate(wrist.getEncoder().getPosition(), wristPose));
     } else {
-      wrist.set(wristPID.calculate(wrist.getEncoder().getPosition(), Constants.WRIST_POS_2));
+      double wristPose;
+      if(armToggle) wristPose = Constants.PERFECT_WRIST_POS_2;
+      else wristPose = Constants.ADJUSTED_WRIST_POS_2;
+      wrist.set(wristPID.calculate(wrist.getEncoder().getPosition(), wristPose));
     }
 
     if(clawToggle) {

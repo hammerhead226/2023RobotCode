@@ -134,7 +134,7 @@ public final class Constants {
   public static final int INTAKE_OFFSET = 0;
 
   public static final double INTAKE_EXTEND = 3625;
-  public static final double INTAKE_RETRACT = 3000;
+  public static final double INTAKE_RETRACT = 3400;// 3000 to be fully retracted
   
   public static final double MAX_SPEED_UP = 0.5;
   public static final double MAX_SPEED_DOWN = 0.25;
@@ -149,8 +149,11 @@ public final class Constants {
   public static final double ARM_POS_1 = 0;
   public static final double ARM_POS_2 = -135000;
 
-  public static final double WRIST_POS_1 = 0;
-  public static final double WRIST_POS_2 = -2.5;
+  public static final double ADJUSTED_WRIST_POS_1 = -0.2;
+  public static final double ADJUSTED_WRIST_POS_2 = -2.2;
+
+  public static final double PERFECT_WRIST_POS_1 = 0;
+  public static final double PERFECT_WRIST_POS_2 = -2.5;
 
 
   public static final double[] ARM_GAINS = {0.00008, 0, 0};
