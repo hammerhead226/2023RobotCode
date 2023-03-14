@@ -4,6 +4,7 @@
 
 package frc.libs.swervey;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.libs.wrappers.GenericEncoder;
 import frc.libs.wrappers.GenericMotor;
 import frc.libs.wrappers.Gyro;
@@ -288,11 +289,9 @@ public class Swerve {
     double deltaX = x - lastX;
     double deltaY = y - lastY;
 
-    double velocity = Math.hypot(deltaX, deltaY)/0.02;
-
     lastX = x;
     lastY = y;
-    return new double[]{x/ticksPerFeet, y/ticksPerFeet, gyro.getYaw(), velocity/ticksPerFeet};
+    return new double[]{x/ticksPerFeet, y/ticksPerFeet, gyro.getYaw()};
   }
 
   public double getHeading() {
@@ -328,6 +327,7 @@ public class Swerve {
         correctPoints++;
       }
     }
+    SmartDashboard.putNumber("correct points", correctPoints);
     return correctPoints == currentPose.length;
   }
 

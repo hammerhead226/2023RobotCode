@@ -4,6 +4,7 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.sensors.CANCoder;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.libs.swervey.Swerve;
 import frc.libs.swervey.SwerveBuilder;
@@ -11,6 +12,7 @@ import frc.libs.wrappers.GenericEncoder;
 import frc.libs.wrappers.GenericMotor;
 import frc.libs.wrappers.Gyro;
 import frc.robot.Constants;
+import frc.robot.Robot;
 import frc.robot.RobotMap;
 
 
@@ -59,6 +61,7 @@ public class DriveTrain extends SubsystemBase {
 
     public void control(double x, double y, double rotate) {
         swerve.control(x, y, -rotate);
+        
     }
 
     public void reset() {
@@ -70,11 +73,27 @@ public class DriveTrain extends SubsystemBase {
         swerve.toPose(target);
     }
 
+    public boolean atSetpoint() {
+        return swerve.atSetpoint();
+    }
+
+    public void toggleSpeed() {
+        swerve.toggleSpeed();
+    }
+
     @Override
     public void periodic() {
       // for(int i=0; i < Constants.NUMBER_OF_MODULES; i++) {
       //     SmartDashboard.putNumber("module offset " + i, swerve.getModuleRotationalPose(i));
-      // }
+        if(Robot.state == Robot.Phase.AUTON) {
+      double[] pose = swerve.getPose();
+        // SmartDashboard.putNumber("x", pose[0]);
+        // SmartDashboard.putNumber("y", pose[1]);
+        // SmartDashboard.putNumber("rotate", pose[2]);
+
+        // SmartDashboard.putBoolean("atSetpoint", swerve.atSetpoint());
+      }
+
     }
 }
 

@@ -40,12 +40,10 @@ public class Gripper extends SubsystemBase {
   private PIDController clawPID;
   private PIDController wristPID;
 
-  private boolean wristToggle = false;
+  private boolean wristToggle = true;
   private boolean armToggle = true;
-  private boolean clawToggleCone = false;
-  private boolean clawToggleCube = false;
 
-  private boolean clawToggle = false;
+  private boolean clawToggle = true;
 
   private boolean cubeMode = false;
 
@@ -53,8 +51,8 @@ public class Gripper extends SubsystemBase {
 
   public Gripper() {
     wrist = new CANSparkMax(RobotMap.GRIPPER_WRIST, MotorType.kBrushless);
-    claw = new GenericMotor(new TalonFX(RobotMap.CLAW_MOTOR));
-    arm = new GenericMotor(new TalonFX(RobotMap.ARM_MOTOR));
+    claw = new GenericMotor(new TalonFX(RobotMap.CLAW_MOTOR, Constants.CANBUS));
+    arm = new GenericMotor(new TalonFX(RobotMap.ARM_MOTOR, Constants.CANBUS));
 
     wrist.setIdleMode(IdleMode.kBrake);
     claw.setNeutralMode(PassiveMode.BRAKE);
@@ -64,10 +62,12 @@ public class Gripper extends SubsystemBase {
     clawPID = new PIDController(Constants.CLAW_GAINS[0], Constants.CLAW_GAINS[1], Constants.CLAW_GAINS[2]);
     wristPID = new PIDController(Constants.WRIST_GAINS[0], Constants.WRIST_GAINS[1], Constants.WRIST_GAINS[2]);
     
-    armSpeedLimit = 0.5;
+    armSpeedLimit = 0.6;
   }
 
   public void run() {
+
+    // if(armToggle) wristToggle = false;
 
     // CANSPARK
     if (wristToggle) {
@@ -107,9 +107,9 @@ public class Gripper extends SubsystemBase {
 
     arm.set(armSpeed);
 
-    // arm.set(Robot.m_robotContainer.test.getLeftJoyY());
-    SmartDashboard.putNumber("wrist pose", wrist.getEncoder().getPosition());
-    SmartDashboard.putNumber("claw pose", claw.getSensorPose());
+    // arm.set(Robot.m_robotContainer.manip.getLeftJoyY());
+    SmartDashboard.putBoolean("claw toggle", clawToggle);
+    SmartDashboard.putBoolean("cube mode", cubeMode);
 
     
     }
@@ -138,9 +138,17 @@ public class Gripper extends SubsystemBase {
     clawToggle = !clawToggle;
   }
 
+  public void openClaw() {
+    clawToggle = false;
+  }
+  
+  public void closeClaw() {
+    clawToggle = true;
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber("periodic wrist", wrist.getEncoder().getPosition());
+    // SmartDashboard.putNumber("periodic wrist", wrist.getEncoder().getPosition());
   }
 }

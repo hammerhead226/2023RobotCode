@@ -73,7 +73,7 @@ public class Robot extends TimedRobot {
   public void autonomousInit() {
     state = Phase.AUTON;
 
-    new OneConeMobile().schedule();
+    m_robotContainer.getAutonomousCommand().schedule();
   }
 
   /** This function is called periodically during autonomous. */

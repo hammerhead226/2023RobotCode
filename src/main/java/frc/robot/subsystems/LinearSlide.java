@@ -31,7 +31,7 @@ public class LinearSlide extends SubsystemBase {
     pid = new PIDController(Constants.LINEAR_SLIDE_GAINS[0], Constants.LINEAR_SLIDE_GAINS[1],
         Constants.LINEAR_SLIDE_GAINS[2]);
 
-    speedLimit = 0.25;
+    speedLimit = 0.15;
     manual = false;
   }
 
@@ -39,19 +39,20 @@ public class LinearSlide extends SubsystemBase {
     manual = !manual;
   }
 
+  int sustain = 0;
   public void run() {
-    if (!manual && !(RobotContainer.elevator.get() >= Constants.SLIDE_DISABLE_POSE)) {
+    if (!manual) {
       double motorSpeed = pid.calculate(slider.getEncoder().getPosition(), target);
       if (motorSpeed > speedLimit) {
         motorSpeed = speedLimit;
       } else if (motorSpeed < -speedLimit) {
         motorSpeed = -speedLimit;
       }
-      SmartDashboard.putNumber("motor speed", motorSpeed);
+      // SmartDashboard.putNumber("motor speed", motorSpeed);
       // control(Robot.m_robotContainer.manip.getLeftJoyY());
       control(motorSpeed);
     }
-    SmartDashboard.putNumber("neo pose", slider.getEncoder().getPosition());
+    // SmartDashboard.putNumber("neo pose", slider.getEncoder().getPosition());
   }
 
   public void setTarget(double t) {

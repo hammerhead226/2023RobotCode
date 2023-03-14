@@ -7,7 +7,11 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.subsystems.LED;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 
 import frc.robot.subsystems.Gripper;
@@ -15,9 +19,14 @@ import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.LinearSlide;
 import frc.robot.subsystems.Elevator;
 import frc.libs.wrappers.Controller;
+import frc.robot.commands.Extend;
+import frc.robot.commands.OneConeEngage;
+import frc.robot.commands.OneConeMobile;
+import frc.robot.commands.Retract;
 import frc.robot.subsystems.ActiveFloor;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Vision;
+import frc.robot.subsystems.balls;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -42,6 +51,10 @@ public class RobotContainer {
   public static final LinearSlide linearSlide = new LinearSlide();
   public static final LED led = new LED();
   public static final Vision vision = new Vision();
+
+  public static final balls lock = new balls();
+
+  SendableChooser<Command> selecter = new SendableChooser<>();
   
   public RobotContainer() {
     configureBindings();
@@ -53,9 +66,17 @@ public class RobotContainer {
         ));
 
     gripper.setDefaultCommand(new RunCommand(gripper::run, gripper));
-    // intake.setDefaultCommand(new RunCommand(intake::run, intake));
+    intake.setDefaultCommand(new RunCommand(intake::run, intake));
     linearSlide.setDefaultCommand(new RunCommand(linearSlide::run, linearSlide));
     elevator.setDefaultCommand(new RunCommand(elevator::run, elevator));
+
+    
+
+    selecter.setDefaultOption("one and engage", new OneConeEngage());
+    selecter.addOption("one cone mobile", new OneConeMobile());
+
+    SmartDashboard.putData("auton", selecter);
+
   }
   
   private void configureBindings() {
@@ -66,7 +87,9 @@ public class RobotContainer {
     driver.getRBButton().onTrue(new InstantCommand(led::rightBumperPressed, led));
     driver.getRBButton().onFalse(new InstantCommand(led::noBumpersPressed, led));
 
-    driver.getMENUButton().onTrue(new InstantCommand(dt::reset, dt));
+    driver.getAButton().onTrue(new InstantCommand(intake::toggleIntake, intake));
+
+    driver.getSTARTButton().onTrue(new InstantCommand(dt::reset, dt));
 
     manip.getSTARTButton().onTrue(new InstantCommand(gripper::toggleCubeMode, gripper));
 
@@ -74,47 +97,61 @@ public class RobotContainer {
 
 
     manip.getLBButton().onTrue(
-      new InstantCommand(
-        intake::extendIntake, intake
-      )
-      .andThen(intake::runIn, intake)
+      new InstantCommand(intake::runIn, lock)
       .andThen(activeFloor::runConstantSpeedInward, activeFloor)
     );
 
     manip.getLBButton().onFalse(
-      new InstantCommand(
-        intake::retractIntake, intake
-      )
-      .andThen(intake::stop, intake)
+      new InstantCommand(intake::stop, lock)
       .andThen(activeFloor::stop, activeFloor)
     );
 
     manip.getMENUButton().onTrue(
-      new InstantCommand(
-        intake::extendIntake, intake
-      )
-      .andThen(intake::runOut, intake)
+      new InstantCommand(intake::runOut, lock)
       .andThen(activeFloor::runConstantSpeedOutward, activeFloor)
     );
 
     manip.getMENUButton().onFalse(
-      new InstantCommand(
-        intake::retractIntake, intake
-      )
-      .andThen(intake::stop, intake)
+      new InstantCommand(intake::stop, lock)
       .andThen(activeFloor::stop, activeFloor)
     );
-    manip.getXButton().onTrue(new InstantCommand(gripper::toggleArm, gripper));
+    manip.getXButton().onTrue(
+      new InstantCommand(() -> linearSlide.setTarget(0), lock)
+      .andThen(new WaitCommand(0.25))
+      .andThen(() -> elevator.setTarget(500), lock)
+      .andThen(new WaitCommand(0.25))
+      .andThen(gripper::retractArm, lock)
+    );
 
 
     manip.getLeftStickPress().onTrue(new InstantCommand(gripper::toggleWrist, gripper));
-    manip.getAButton().onTrue(new InstantCommand(() -> linearSlide.setTarget(0), linearSlide)
-    .andThen(() -> elevator.setTarget(1300), elevator));
 
-    manip.getBButton().onTrue(new InstantCommand(() -> linearSlide.setTarget(30), linearSlide)
-    .andThen(() -> elevator.setTarget(1000), elevator));
-    manip.getYButton().onTrue(new InstantCommand(() -> linearSlide.setTarget(47), linearSlide)
-    .andThen(() -> elevator.setTarget(0), elevator));
+    manip.getAButton().onTrue(
+      new InstantCommand(() -> linearSlide.setTarget(0), lock)
+      .andThen(gripper::openClaw, lock)
+      .andThen(new WaitCommand(0.5))
+      .andThen(() -> elevator.setTarget(1650), lock)
+      .andThen(new WaitCommand(0.25))
+      .andThen(gripper::retractArm, lock));
+
+    manip.getBButton().onTrue(
+      new InstantCommand(() -> elevator.setTarget(500), lock)
+      .andThen(gripper::extendArm, lock)
+      .andThen(new WaitCommand(0.5))
+      .andThen(() -> linearSlide.setTarget(23), lock)
+      );
+    // manip.getYButton().onTrue(
+    //   new InstantCommand(() -> elevator.setTarget(-600), lock)
+    //   .andThen(new WaitCommand(0.75))
+    //   .andThen(() -> linearSlide.setTarget(47), lock)
+    //   .andThen(gripper::extendArm, lock)
+    // );
+    manip.getYButton().onTrue(
+      new InstantCommand(() -> elevator.setTarget(550), lock)
+      .andThen(new WaitCommand(0.5))
+      .andThen(() -> linearSlide.setTarget(16), lock)
+      .andThen(gripper::extendArm, lock)
+      .andThen(gripper::openClaw, lock));
   }
 
   /**
@@ -124,7 +161,7 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return new InstantCommand(() -> System.out.println("Auton"));
+    return (Command) selecter.getSelected();
   }
 
 }

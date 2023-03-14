@@ -56,8 +56,8 @@ public class Elevator extends SubsystemBase {
     if(elevatorEncoder.getSensorPose() > Constants.ELEVATOR_INTERVAL_MARKER) encoderOffset = Constants.SRX_ENCODER_TICKS;
     else encoderOffset = 0;
 
-    target = 0;
-    speedLimit = .25;
+    target = -600;
+    speedLimit = .5;
   }
 
   public void toggleManual() {
@@ -70,8 +70,8 @@ public class Elevator extends SubsystemBase {
  
   public void run() {
     double elevatorTarget = target;
-    if (elevatorTarget <= -300) {
-      elevatorTarget = -300;
+    if (elevatorTarget <= -1000) {
+      elevatorTarget = -1000;
     } else if (elevatorTarget >= 2000) {
       elevatorTarget = 2000;
     }

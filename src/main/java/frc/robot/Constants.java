@@ -36,8 +36,8 @@ public final class Constants {
      public static final double WIDTH = 22.8125;
  
  
-     public static final double TRANSLATIONAL_ERROR = 0;
-     public static final double ROTATE_ERROR = 0;
+     public static final double TRANSLATIONAL_ERROR = 12;
+     public static final double ROTATE_ERROR = Math.PI/8;
      public static final double LIMELIGHT_OFFSET = 0;
  
      public static final double TICKS_PER_INCHES = 1170.58602;//44.228775
@@ -45,11 +45,11 @@ public final class Constants {
      public static String AUTONOMOUS_PATH_FILENAME = "/paths/recording.csv";
  
      // Teleoperated Parameters
-     public static final double LOW_BOUND_SPEED = 0.75;
-     public static final double HIGH_BOUND_SPEED = 0.85;
+     public static final double LOW_BOUND_SPEED = 0.5;
+     public static final double HIGH_BOUND_SPEED = 0.3;
  
      public static final double ACCELERATION_RATE = 0.01;
-     public static final double INITIAL_SPEED = 0.3;
+     public static final double INITIAL_SPEED = 0.2;
  
      // Drivetrain Current Parameters
      public static final boolean DRIVETRAIN_CURRENT_ENABLE = false;
@@ -115,7 +115,7 @@ public final class Constants {
 
 
   // Linear Slide Constants
-  public static final double[] LINEAR_SLIDE_GAINS = { 0.027, 0, 0 };
+  public static final double[] LINEAR_SLIDE_GAINS = { 0.035, 0, 0 };
   public static final boolean LS_SET_INVERTED = true;
 
 
@@ -129,11 +129,11 @@ public final class Constants {
 
 
   // Intake Constants
-  public static final double ROLLER_RUN_SPEED = 0.5;
+  public static final double ROLLER_RUN_SPEED = 0.85;
   public static final double[] INTAKE_GAINS = { 0.0006, 0, 0 };
   public static final int INTAKE_OFFSET = 0;
 
-  public static final double INTAKE_EXTEND = 3625;
+  public static final double INTAKE_EXTEND = 3675;
   public static final double INTAKE_RETRACT = 3400;// 3000 to be fully retracted
   
   public static final double MAX_SPEED_UP = 0.5;
@@ -143,14 +143,13 @@ public final class Constants {
   // Gripper Constants
   public static final double CLAW_CLOSE_CONE = -1000;
   public static final double CLAW_CLOSE_CUBE = 10000;
-  public static final double CLAW_OPEN_CUBE = 22000;
-  public static final double CLAW_OPEN_CONE = 22000;
+  public static final double CLAW_OPEN_CONE = 22100;
 
   public static final double ARM_POS_1 = 0;
   public static final double ARM_POS_2 = -135000;
 
-  public static final double ADJUSTED_WRIST_POS_1 = -0.2;
-  public static final double ADJUSTED_WRIST_POS_2 = -2.2;
+  public static final double ADJUSTED_WRIST_POS_1 = -0.7;
+  public static final double ADJUSTED_WRIST_POS_2 = -1.8;
 
   public static final double PERFECT_WRIST_POS_1 = 0;
   public static final double PERFECT_WRIST_POS_2 = -2.5;
@@ -161,5 +160,5 @@ public final class Constants {
   public static final double[] WRIST_GAINS = { 0.1, 0, 0 };
 
   // Active Floor
-  public static final double ACTIVE_FLOOR_CONSTANT_SPEED = 0.3;
+  public static final double ACTIVE_FLOOR_CONSTANT_SPEED = 0.25;
 }

@@ -14,9 +14,9 @@ import frc.robot.subsystems.DriveTrain;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class OneConeMobile extends SequentialCommandGroup {
+public class OneConeEngage extends SequentialCommandGroup {
   /** Creates a new OneConeMobile. */
-  public OneConeMobile() {
+  public OneConeEngage() {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     
@@ -36,7 +36,7 @@ public class OneConeMobile extends SequentialCommandGroup {
       .andThen(new WaitCommand(0.25))
       .andThen(Robot.m_robotContainer.gripper::retractArm, Robot.m_robotContainer.lock),
       new InstantCommand(DriveTrain.getInstance()::reset, DriveTrain.getInstance()),
-      new RunCommand(() -> DriveTrain.getInstance().toPose(new double[]{0, -150, 0}), DriveTrain.getInstance()).withTimeout(4.5)
+      new RunCommand(() -> DriveTrain.getInstance().toPose(new double[]{0, -113, 0}), DriveTrain.getInstance()).raceWith(new WaitCommand(4))
 
 
 

@@ -26,6 +26,8 @@ public class Intake extends SubsystemBase {
   private boolean intakeOn;
   private PIDController intakePID;
 
+  private boolean intakeTucked;
+
   public Intake() {
     TalonFX iFalcon = new TalonFX(RobotMap.INTAKE_PORT, Constants.CANBUS);
     TalonFX roll = new TalonFX(RobotMap.ROLLER_PORT, Constants.CANBUS);
@@ -36,7 +38,7 @@ public class Intake extends SubsystemBase {
     iFalcon.setNeutralMode(NeutralMode.Brake);
     roll.setNeutralMode(NeutralMode.Coast);
 
-    roll.setInverted(true);
+    roll.setInverted(false);
     
     encoder.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute);
 
@@ -44,9 +46,15 @@ public class Intake extends SubsystemBase {
     roller = new GenericMotor(roll);
     intakeEncoder = new GenericMotor(encoder);
     intakePID = new PIDController(Constants.INTAKE_GAINS[0], Constants.INTAKE_GAINS[1], Constants.INTAKE_GAINS[2]);
+    intakeOn = false;
+    intakeTucked = false;
   }
 
   public void run() {
+    double intakeRetract;
+    if(intakeTucked) {
+      
+    }
     if (intakeOn) {
       double extendSpeed = intakePID.calculate(intakeEncoder.getSensorPose(), Constants.INTAKE_EXTEND);
       if (extendSpeed > Constants.MAX_SPEED_UP) {
@@ -60,7 +68,6 @@ public class Intake extends SubsystemBase {
       }
       control(retractSpeed);
     }
-
   }
 
   public void toggleIntake() {
@@ -72,20 +79,20 @@ public class Intake extends SubsystemBase {
   }
 
   public void retractIntake() {
-    intakeOn = true;
+    intakeOn = false;
   }
 
   // Roller Methods
   public void runIn() {
-    if (intakeOn) {
+    // if (intakeOn) {
       roller.set(Constants.ROLLER_RUN_SPEED);
-    }
+    // }
   }
 
   public void runOut() {
-    if (intakeOn) {
+    // if (intakeOn) {
       roller.set(-Constants.ROLLER_RUN_SPEED);
-    }
+    // }
   }
 
   public void stop() {
