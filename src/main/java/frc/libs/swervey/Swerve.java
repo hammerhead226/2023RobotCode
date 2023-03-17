@@ -321,14 +321,16 @@ public class Swerve {
 
   public boolean atSetpoint() {
     double[] currentPose = getPose();
-    int correctPoints = 0;
-    for(int i = 0; i < currentPose.length; i++) {
-      if(currentPose[i] < (target[i] + (i != 2 ? allowedTranslationalError : allowedRotationalError)) && currentPose[i] > target[i] - (i != 2 ? allowedTranslationalError : allowedRotationalError)) {
-        correctPoints++;
-      }
-    }
-    SmartDashboard.putNumber("correct points", correctPoints);
-    return correctPoints == currentPose.length;
+    // for(int i = 0; i < currentPose.length; i++) {
+    //   if(currentPose[i] < (target[i] + (i != 2 ? allowedTranslationalError : allowedRotationalError)) && currentPose[i] > target[i] - (i != 2 ? allowedTranslationalError : allowedRotationalError)) {
+    //     correctPoints++;
+    //   }
+    // }
+    double xErr = target[0] - currentPose[0];
+    double yErr = target[1] - currentPose[1];
+    double thetaErr = target[2] - currentPose[2];
+
+    return (Math.abs(xErr) < allowedTranslationalError) && (Math.abs(yErr) < allowedTranslationalError) && (Math.abs(thetaErr) < allowedRotationalError);
   }
 
   public void zeroGyro() {

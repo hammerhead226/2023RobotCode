@@ -86,8 +86,10 @@ public class RobotContainer {
 
     driver.getRBButton().onTrue(new InstantCommand(led::rightBumperPressed, led));
     driver.getRBButton().onFalse(new InstantCommand(led::noBumpersPressed, led));
+    driver.getYButton().onTrue(new InstantCommand(intake::toggleIntake, intake));
 
-    driver.getAButton().onTrue(new InstantCommand(intake::toggleIntake, intake));
+    // driver.getAButton().onTrue(new InstantCommand(intake::toggleIntake, intake));
+    driver.getAButton().whileTrue(new RunCommand(() -> dt.toPose(new double[]{0, 20, Math.PI}), dt).until(dt::atSetpoint));
 
     driver.getSTARTButton().onTrue(new InstantCommand(dt::reset, dt));
 
@@ -147,11 +149,10 @@ public class RobotContainer {
     //   .andThen(gripper::extendArm, lock)
     // );
     manip.getYButton().onTrue(
-      new InstantCommand(() -> elevator.setTarget(550), lock)
+      new InstantCommand(() -> elevator.setTarget(-600), lock)
       .andThen(new WaitCommand(0.5))
-      .andThen(() -> linearSlide.setTarget(16), lock)
-      .andThen(gripper::extendArm, lock)
-      .andThen(gripper::openClaw, lock));
+      .andThen(() -> linearSlide.setTarget(49), lock)
+      .andThen(gripper::extendArm, lock));
   }
 
   /**

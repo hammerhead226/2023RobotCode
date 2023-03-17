@@ -36,7 +36,7 @@ public final class Constants {
      public static final double WIDTH = 22.8125;
  
  
-     public static final double TRANSLATIONAL_ERROR = 12;
+     public static final double TRANSLATIONAL_ERROR = 16;
      public static final double ROTATE_ERROR = Math.PI/8;
      public static final double LIMELIGHT_OFFSET = 0;
  
@@ -63,13 +63,13 @@ public final class Constants {
  
  
      // PID Configurations
-     public static final double[] DRIVE_GAINS = {0.7115, 0.0, 0.0};
+     public static final double[] DRIVE_GAINS = {0.6, 0.0, 0.0}; //0.7115,
  
      public static final double[] STEER_GAINS_LOW = {0.62, 0, 0.0};
      public static final double[] STEER_GAINS_HIGH = {.68, 0, 0.0};
  
      public static final double[] ROTATE_GAINS_LOW = {0.669, 0.0, 0.0};
-     public static final double[] ROTATE_GAINS_HIGH = {0.9, 0.0, 0.0};
+     public static final double[] ROTATE_GAINS_HIGH = {0.7, 0.0, 0.0};//.9
  
      public static double[] LIMELIGHT_GAINS = {0.065, 0.0, 0.0};
  
@@ -115,7 +115,7 @@ public final class Constants {
 
 
   // Linear Slide Constants
-  public static final double[] LINEAR_SLIDE_GAINS = { 0.035, 0, 0 };
+  public static final double[] LINEAR_SLIDE_GAINS = { 0.05, 0, 0 };
   public static final boolean LS_SET_INVERTED = true;
 
 
@@ -141,7 +141,7 @@ public final class Constants {
 
 
   // Gripper Constants
-  public static final double CLAW_CLOSE_CONE = -1000;
+  public static final double CLAW_CLOSE_CONE = -1500;
   public static final double CLAW_CLOSE_CUBE = 10000;
   public static final double CLAW_OPEN_CONE = 22100;
 
@@ -160,5 +160,5 @@ public final class Constants {
   public static final double[] WRIST_GAINS = { 0.1, 0, 0 };
 
   // Active Floor
-  public static final double ACTIVE_FLOOR_CONSTANT_SPEED = 0.25;
+  public static final double ACTIVE_FLOOR_CONSTANT_SPEED = 0.3;
 }

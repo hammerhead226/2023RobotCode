@@ -61,6 +61,12 @@ public class DriveTrain extends SubsystemBase {
 
     public void control(double x, double y, double rotate) {
         swerve.control(x, y, -rotate);
+        double[] pose = swerve.getPose();
+        SmartDashboard.putNumber("x", pose[0]);
+        SmartDashboard.putNumber("y", pose[1]);
+        SmartDashboard.putNumber("rotate", pose[2]);
+
+        SmartDashboard.putBoolean("atSetpoint", swerve.atSetpoint());
         
     }
 
@@ -87,11 +93,11 @@ public class DriveTrain extends SubsystemBase {
       //     SmartDashboard.putNumber("module offset " + i, swerve.getModuleRotationalPose(i));
         if(Robot.state == Robot.Phase.AUTON) {
       double[] pose = swerve.getPose();
-        // SmartDashboard.putNumber("x", pose[0]);
-        // SmartDashboard.putNumber("y", pose[1]);
-        // SmartDashboard.putNumber("rotate", pose[2]);
+        SmartDashboard.putNumber("x", pose[0]);
+        SmartDashboard.putNumber("y", pose[1]);
+        SmartDashboard.putNumber("rotate", pose[2]);
 
-        // SmartDashboard.putBoolean("atSetpoint", swerve.atSetpoint());
+        SmartDashboard.putBoolean("atSetpoint", swerve.atSetpoint());
       }
 
     }
