@@ -151,7 +151,7 @@ public class RobotContainer {
     manip.getYButton().onTrue(
       new InstantCommand(() -> elevator.setTarget(-600), lock)
       .andThen(new WaitCommand(0.5))
-      .andThen(() -> linearSlide.setTarget(49), lock)
+      .andThen(() -> linearSlide.setTarget(44), lock)
       .andThen(gripper::extendArm, lock));
   }
 

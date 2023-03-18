@@ -143,7 +143,7 @@ public final class Constants {
   // Gripper Constants
   public static final double CLAW_CLOSE_CONE = -1500;
   public static final double CLAW_CLOSE_CUBE = 10000;
-  public static final double CLAW_OPEN_CONE = 22100;
+  public static final double CLAW_OPEN_CONE = 23000;
 
   public static final double ARM_POS_1 = 0;
   public static final double ARM_POS_2 = -135000;
