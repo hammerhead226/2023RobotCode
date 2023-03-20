@@ -311,26 +311,33 @@ public class Swerve {
     double yErr = driveController.calculate(currentPose[1], target[1]);
     double speed = Math.hypot(xErr, yErr);
 
+    if(Math.abs(target[0] - currentPose[0]) < allowedTranslationalError) xErr = 0;
+    if(Math.abs(target[1] - currentPose[1]) < allowedTranslationalError) yErr = 0;
+
     if(Math.abs(speed) < rotateGainsThreshold) rotateController.setPID(rotateHighGains);
     else rotateController.setPID(rotateLowGains);
 
     double rotateErr = rotateController.calculate(currentPose[2], target[2]);
+    if(Math.abs(target[2] - currentPose[2]) < allowedRotationalError) rotateErr = 0;
+
+    SmartDashboard.putNumber("xErr", xErr);
+    SmartDashboard.putNumber("yErr", yErr);
+    SmartDashboard.putNumber("rotateErr", rotateErr);
+
+    SmartDashboard.putNumber("target[0]", target[0]);
+    SmartDashboard.putNumber("target[1]", target[1]);
+    SmartDashboard.putNumber("target[2]", target[2]);
 
     control(xErr, yErr, rotateErr);
   }
 
   public boolean atSetpoint() {
     double[] currentPose = getPose();
-    // for(int i = 0; i < currentPose.length; i++) {
-    //   if(currentPose[i] < (target[i] + (i != 2 ? allowedTranslationalError : allowedRotationalError)) && currentPose[i] > target[i] - (i != 2 ? allowedTranslationalError : allowedRotationalError)) {
-    //     correctPoints++;
-    //   }
-    // }
     double xErr = target[0] - currentPose[0];
     double yErr = target[1] - currentPose[1];
     double thetaErr = target[2] - currentPose[2];
 
-    return (Math.abs(xErr) < allowedTranslationalError) && (Math.abs(yErr) < allowedTranslationalError) && (Math.abs(thetaErr) < allowedRotationalError);
+    return (Math.abs(xErr) <= allowedTranslationalError) && (Math.abs(yErr) <= allowedTranslationalError) && (Math.abs(thetaErr) <= allowedRotationalError);
   }
 
   public void zeroGyro() {

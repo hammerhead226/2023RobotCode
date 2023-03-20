@@ -36,18 +36,15 @@ public class OneConeEngage extends SequentialCommandGroup {
       // .andThen(() -> Robot.m_robotContainer.elevator.setTarget(500), Robot.m_robotContainer.lock)
       // .andThen(new WaitCommand(0.25))
       // .andThen(Robot.m_robotContainer.gripper::retractArm, Robot.m_robotContainer.lock),
-      // new InstantCommand(DriveTrain.getInstance()::reset, DriveTrain.getInstance()),
+      new InstantCommand(DriveTrain.getInstance()::reset, DriveTrain.getInstance()),
       // new RunCommand(() -> DriveTrain.getInstance().toPose(new double[]{0, -20, 0}), DriveTrain.getInstance()).until(DriveTrain.getInstance()::atSetpoint),
       // To test after rotation patch:
       // new RunCommand(() -> DriveTrain.getInstance().toPose(new double[]{0, -20, Math.PI / 4}), DriveTrain.getInstance()).until(DriveTrain.getInstance()::atSetpoint),
       // Original -113
-      new RunCommand(() -> DriveTrain.getInstance().toPose(new double[]{0, -130, 0}), DriveTrain.getInstance()).until(DriveTrain.getInstance()::atSetpoint)
-      
-
-
-
-
-      
+      new InstantCommand(() -> DriveTrain.getInstance().toPose(new double[]{0, 0, -Math.PI/4}), DriveTrain.getInstance()),
+      new RunCommand(() -> DriveTrain.getInstance().toPose(new double[]{0, 0, -Math.PI/4}), DriveTrain.getInstance()).until(DriveTrain.getInstance()::atSetpoint),
+      new InstantCommand(() -> DriveTrain.getInstance().toPose(new double[]{0, 0, -Math.PI/4}), DriveTrain.getInstance()),
+      new RunCommand(() -> DriveTrain.getInstance().toPose(new double[]{0, -70, -Math.PI/4}), DriveTrain.getInstance()).until(DriveTrain.getInstance()::atSetpoint)      
     );
   }
 }

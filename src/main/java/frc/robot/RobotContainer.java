@@ -7,7 +7,6 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.subsystems.LED;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -19,10 +18,8 @@ import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.LinearSlide;
 import frc.robot.subsystems.Elevator;
 import frc.libs.wrappers.Controller;
-import frc.robot.commands.Extend;
 import frc.robot.commands.OneConeEngage;
 import frc.robot.commands.OneConeMobile;
-import frc.robot.commands.Retract;
 import frc.robot.subsystems.ActiveFloor;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Vision;
@@ -89,7 +86,8 @@ public class RobotContainer {
     driver.getYButton().onTrue(new InstantCommand(intake::toggleIntake, intake));
 
     // driver.getAButton().onTrue(new InstantCommand(intake::toggleIntake, intake));
-    driver.getAButton().whileTrue(new RunCommand(() -> dt.toPose(new double[]{0, 20, Math.PI}), dt).until(dt::atSetpoint));
+    driver.getAButton().whileTrue(new RunCommand(() -> dt.toPose(new double[]{0, 20, Math.PI}), dt).until(dt::atSetpoint)
+    .andThen(new RunCommand(() -> dt.toPose(new double[]{0, 100, 0}), dt).until(dt::atSetpoint)));
 
     driver.getSTARTButton().onTrue(new InstantCommand(dt::reset, dt));
 
@@ -142,12 +140,7 @@ public class RobotContainer {
       .andThen(new WaitCommand(0.5))
       .andThen(() -> linearSlide.setTarget(23), lock)
       );
-    // manip.getYButton().onTrue(
-    //   new InstantCommand(() -> elevator.setTarget(-600), lock)
-    //   .andThen(new WaitCommand(0.75))
-    //   .andThen(() -> linearSlide.setTarget(47), lock)
-    //   .andThen(gripper::extendArm, lock)
-    // );
+      
     manip.getYButton().onTrue(
       new InstantCommand(() -> elevator.setTarget(-600), lock)
       .andThen(new WaitCommand(0.5))

@@ -22,6 +22,8 @@ public final class Constants {
 
   public static final String CANBUS = "CAN Bus 2";
 
+  public static final double DRIVETRAIN_TILT_THRESHOLD = .2;
+
   //Swervey Configuration Parameters
  
      // Encoder Parameters
@@ -36,8 +38,8 @@ public final class Constants {
      public static final double WIDTH = 22.8125;
  
  
-     public static final double TRANSLATIONAL_ERROR = 16;
-     public static final double ROTATE_ERROR = Math.PI/8;
+     public static final double TRANSLATIONAL_ERROR = 3;
+     public static final double ROTATE_ERROR = Math.PI/24;
      public static final double LIMELIGHT_OFFSET = 0;
  
      public static final double TICKS_PER_INCHES = 1170.58602;//44.228775
@@ -68,8 +70,8 @@ public final class Constants {
      public static final double[] STEER_GAINS_LOW = {0.62, 0, 0.0};
      public static final double[] STEER_GAINS_HIGH = {.68, 0, 0.0};
  
-     public static final double[] ROTATE_GAINS_LOW = {0.669, 0.0, 0.0};
-     public static final double[] ROTATE_GAINS_HIGH = {0.7, 0.0, 0.0};//.9
+     public static final double[] ROTATE_GAINS_LOW = {1.9, 0.0, 0.0};//.669
+     public static final double[] ROTATE_GAINS_HIGH = {0.9, 0.0, 0.0};//.9
  
      public static double[] LIMELIGHT_GAINS = {0.065, 0.0, 0.0};
  

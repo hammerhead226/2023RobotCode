@@ -47,6 +47,11 @@ public class Gyro {
         return Math.toRadians(ypr[0]);
     }
 
+    public double getTilt() {
+        double[] ypr = new double[3];
+        return pigeon2.getPitch();
+    }
+
     public void zeroGyro() {
         // pigeon.setFusedHeading(0);
         pigeon2.setYaw(0);

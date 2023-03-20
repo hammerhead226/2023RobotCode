@@ -4,6 +4,7 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.sensors.CANCoder;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.libs.swervey.Swerve;
@@ -21,11 +22,15 @@ public class DriveTrain extends SubsystemBase {
 
     private final static DriveTrain INSTANCE = new DriveTrain();
 
+    private final PIDController balanceController;
+
     public static DriveTrain getInstance() {
         return INSTANCE;
     }
 
     private Swerve swerve;
+
+    private Gyro gyro;
 
 
     private DriveTrain() {
@@ -48,7 +53,7 @@ public class DriveTrain extends SubsystemBase {
             encoders[i] = new GenericEncoder(encoder, Constants.OVERFLOW_THRESHOLD, Constants.MODULE_OFFSETS[i]);
         }
 
-        Gyro gyro = new Gyro(RobotMap.GYRO, "CAN Bus 2");
+        gyro = new Gyro(RobotMap.GYRO, "CAN Bus 2");
 
         swerve = new SwerveBuilder(drives, steers, encoders, gyro)
                 .PIDGains(Constants.MODULE_GAINS, Constants.SCHEDULED_GAINS, Constants.STEER_AND_ROTATE_THRESHOLDS)
@@ -57,6 +62,8 @@ public class DriveTrain extends SubsystemBase {
                 .accelerationParameters(Constants.ACCELERATION_PARAMETERS)
                 .autonomousParameters(Constants.TICKS_PER_INCHES, Constants.ALLOWED_ERRORS, Constants.VELOCITY_FEED_FORWARD)
                 .buildSwerve();
+
+        this.balanceController = new PIDController(0, 0, 0);
     }
 
     public void control(double x, double y, double rotate) {
@@ -85,6 +92,18 @@ public class DriveTrain extends SubsystemBase {
 
     public void toggleSpeed() {
         swerve.toggleSpeed();
+    }
+
+    public PIDController getBalanceController() {
+        return balanceController;
+    }
+
+    public boolean isChassisUnstable() {
+        return Math.abs(gyro.getTilt()) > Constants.DRIVETRAIN_TILT_THRESHOLD;
+    }
+
+    public double getGyroTilt() {
+        return gyro.getTilt();
     }
 
     @Override
