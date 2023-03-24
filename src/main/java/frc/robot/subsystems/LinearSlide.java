@@ -31,7 +31,7 @@ public class LinearSlide extends SubsystemBase {
     pid = new PIDController(Constants.LINEAR_SLIDE_GAINS[0], Constants.LINEAR_SLIDE_GAINS[1],
         Constants.LINEAR_SLIDE_GAINS[2]);
 
-    speedLimit = 0.3;
+    speedLimit = 0.45;
     manual = false;
   }
 

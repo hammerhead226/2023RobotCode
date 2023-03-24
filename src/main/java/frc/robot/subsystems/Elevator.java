@@ -12,6 +12,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.libs.wrappers.GenericMotor;
 import frc.robot.Constants;
@@ -56,7 +57,7 @@ public class Elevator extends SubsystemBase {
     if(elevatorEncoder.getSensorPose() > Constants.ELEVATOR_INTERVAL_MARKER) encoderOffset = Constants.SRX_ENCODER_TICKS;
     else encoderOffset = 0;
 
-    target = -600;
+    target = -1100;
     speedLimit = .5;
   }
 
@@ -69,17 +70,13 @@ public class Elevator extends SubsystemBase {
   }
  
   public void run() {
-    double elevatorTarget = target;
-    if (elevatorTarget <= -1000) {
-      elevatorTarget = -1000;
-    } else if (elevatorTarget >= 2000) {
-      elevatorTarget = 2000;
-    }
-    double motorSpeed = elevatorPID.calculate(get(), elevatorTarget);
+
+    double motorSpeed = elevatorPID.calculate(get(), target);
 
     if(motorSpeed > speedLimit) motorSpeed = speedLimit;
     else if(motorSpeed < -speedLimit) motorSpeed = -speedLimit;
     control(motorSpeed);
+    SmartDashboard.putNumber("motor sped", motorSpeed);
   }
 
   public void setTarget(double t) {
@@ -91,5 +88,9 @@ public class Elevator extends SubsystemBase {
   }
 
   @Override
-  public void periodic() {}
+  public void periodic() {
+    SmartDashboard.putNumber("elevator encoder offset", get());
+    SmartDashboard.putNumber("elevator encoder raw", elevatorEncoder.getSensorPose());
+
+  }
 }

@@ -22,21 +22,24 @@ public class OneConeMobile extends SequentialCommandGroup {
     
     addCommands(
       new WaitCommand(0.5),
-      new InstantCommand(() -> Robot.m_robotContainer.elevator.setTarget(500), Robot.m_robotContainer.lock)
+      new InstantCommand(() -> Robot.m_robotContainer.elevator.setTarget(-1100), Robot.m_robotContainer.lock)
       .andThen(new WaitCommand(0.25))
       .andThen(Robot.m_robotContainer.gripper::extendArm, Robot.m_robotContainer.lock)
       .andThen(new WaitCommand(0.75))
-      .andThen(() -> Robot.m_robotContainer.linearSlide.setTarget(22), Robot.m_robotContainer.lock),
+      .andThen(() -> Robot.m_robotContainer.linearSlide.setTarget(44), Robot.m_robotContainer.lock),
       new WaitCommand(3),
       new InstantCommand(() -> Robot.m_robotContainer.gripper.toggleClaw(), Robot.m_robotContainer.lock),
       new WaitCommand(.5),
       new InstantCommand(() -> Robot.m_robotContainer.linearSlide.setTarget(0), Robot.m_robotContainer.lock)
       .andThen(new WaitCommand(1))
-      .andThen(() -> Robot.m_robotContainer.elevator.setTarget(500), Robot.m_robotContainer.lock)
+      .andThen(() -> Robot.m_robotContainer.elevator.setTarget(0), Robot.m_robotContainer.lock)
       .andThen(new WaitCommand(0.25))
       .andThen(Robot.m_robotContainer.gripper::retractArm, Robot.m_robotContainer.lock),
       new InstantCommand(DriveTrain.getInstance()::reset, DriveTrain.getInstance()),
-      new RunCommand(() -> DriveTrain.getInstance().toPose(new double[]{0, -150, 0}), DriveTrain.getInstance()).withTimeout(4.5)
+      new InstantCommand(() -> DriveTrain.getInstance().toPose(new double[] {0, -150, 0}), DriveTrain.getInstance()),
+      new RunCommand(() -> DriveTrain.getInstance().toPose(new double[]{0, -150, 0}), DriveTrain.getInstance()).until(DriveTrain.getInstance()::atSetpoint),
+      new InstantCommand(() -> DriveTrain.getInstance().toPose(new double[]{0, -150, Math.PI}), DriveTrain.getInstance()),
+      new RunCommand(() -> DriveTrain.getInstance().toPose(new double[]{0, -150, Math.PI}), DriveTrain.getInstance()).until(DriveTrain.getInstance()::atSetpoint)
 
 
 

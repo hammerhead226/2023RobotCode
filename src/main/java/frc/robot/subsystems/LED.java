@@ -4,11 +4,13 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.math.spline.CubicHermiteSpline;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Robot;
 import frc.robot.RobotMap;
 
 public class LED extends SubsystemBase {
@@ -18,7 +20,6 @@ public class LED extends SubsystemBase {
   /** Creates a new LED. */
   public LED() {
     ledSpark = new Spark(RobotMap.LED_SPARK);
-    noBumpersPressed();
   }
 
   public void noBumpersPressed() {
@@ -29,12 +30,12 @@ public class LED extends SubsystemBase {
     }
   }
 
-  public void rightBumperPressed() {
+  public void setConeColor() {
     sparkSpeed = Constants.LED_YELLOW;
 
   }
 
-  public void leftBumperPressed() {
+  public void setCubeColor() {
     sparkSpeed = Constants.LED_VIOLET;
 
   }
@@ -51,5 +52,9 @@ public class LED extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     ledSpark.set(sparkSpeed);
+
+    if(Robot.m_robotContainer.gripper.getCubeMode()) setCubeColor();
+    else setConeColor();
+
   }
 }

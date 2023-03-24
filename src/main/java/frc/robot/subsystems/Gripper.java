@@ -43,6 +43,8 @@ public class Gripper extends SubsystemBase {
   private boolean wristToggle = true;
   private boolean armToggle = true;
 
+  private double armTarget = 0;
+
   private boolean clawToggle = true;
 
   private boolean cubeMode = false;
@@ -50,11 +52,11 @@ public class Gripper extends SubsystemBase {
   private double armSpeedLimit;
 
   public Gripper() {
-    wrist = new CANSparkMax(RobotMap.GRIPPER_WRIST, MotorType.kBrushless);
+    // wrist = new CANSparkMax(RobotMap.GRIPPER_WRIST, MotorType.kBrushless);
     claw = new GenericMotor(new TalonFX(RobotMap.CLAW_MOTOR, Constants.CANBUS));
     arm = new GenericMotor(new TalonFX(RobotMap.ARM_MOTOR, Constants.CANBUS));
 
-    wrist.setIdleMode(IdleMode.kBrake);
+    // wrist.setIdleMode(IdleMode.kBrake);
     claw.setNeutralMode(PassiveMode.BRAKE);
     arm.setNeutralMode(PassiveMode.BRAKE);
 
@@ -69,18 +71,25 @@ public class Gripper extends SubsystemBase {
 
     // if(armToggle) wristToggle = false;
 
-    // CANSPARK
-    if (wristToggle) {
-      double wristPose;
-      if(armToggle) wristPose = Constants.PERFECT_WRIST_POS_1;
-      else wristPose = Constants.ADJUSTED_WRIST_POS_1;
-      wrist.set(wristPID.calculate(wrist.getEncoder().getPosition(), wristPose));
-    } else {
-      double wristPose;
-      if(armToggle) wristPose = Constants.PERFECT_WRIST_POS_2;
-      else wristPose = Constants.ADJUSTED_WRIST_POS_2;
-      wrist.set(wristPID.calculate(wrist.getEncoder().getPosition(), wristPose));
-    }
+    // if(armTarget != 0)
+    //   wristPID.setP(0.23);
+    // else 
+    //   wristPID.setP(Constants.WRIST_GAINS[0]);
+
+    // SmartDashboard.putNumber("wrist p", wristPID.getP());
+    // SmartDashboard.putNumber("wrist pose", wrist.getEncoder().getPosition());
+    // // CANSPARK
+    // if (wristToggle) {
+    //   double wristPose;
+    //   if(armToggle) wristPose = Constants.PERFECT_WRIST_POS_1;
+    //   else wristPose = Constants.ADJUSTED_WRIST_POS_1;
+    //   wrist.set(wristPID.calculate(wrist.getEncoder().getPosition(), wristPose));
+    // } else {
+    //   double wristPose;
+    //   if(armToggle) wristPose = Constants.PERFECT_WRIST_POS_2;
+    //   else wristPose = Constants.ADJUSTED_WRIST_POS_2;
+    //   wrist.set(wristPID.calculate(wrist.getEncoder().getPosition(), wristPose));
+    // }
 
     if(clawToggle) {
       if(cubeMode) {
@@ -94,13 +103,7 @@ public class Gripper extends SubsystemBase {
       claw.set( clawPID.calculate(claw.getSensorPose(), Constants.CLAW_OPEN_CONE));
     }
 
-    double armSpeed;
-
-    if(armToggle) {
-      armSpeed = armPID.calculate(arm.getSensorPose(), Constants.ARM_POS_1);
-    } else {
-      armSpeed = armPID.calculate(arm.getSensorPose(), Constants.ARM_POS_2);
-    }
+    double armSpeed = armPID.calculate(arm.getSensorPose(), armTarget);
 
     if(armSpeed > armSpeedLimit) armSpeed = armSpeedLimit;
     else if(armSpeed < -armSpeedLimit) armSpeed = -armSpeedLimit;
@@ -123,11 +126,15 @@ public class Gripper extends SubsystemBase {
   }
 
   public void extendArm() {
-    armToggle = false;
+    armTarget = Constants.ARM_POS_2;
   }
 
   public void retractArm() {
-    armToggle = true;
+    armTarget = Constants.ARM_POS_1;
+  }
+
+  public void setArmTarget(double target) {
+    armTarget = target;
   }
 
   public void toggleCubeMode() {
@@ -146,9 +153,23 @@ public class Gripper extends SubsystemBase {
     clawToggle = true;
   }
 
+  public void wristFalconUp() {
+    wristToggle = false;
+  }
+
+  public void wristFalconDown() {
+    wristToggle = true;
+  }
+
+  public boolean getCubeMode() {
+    return cubeMode;
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
     // SmartDashboard.putNumber("periodic wrist", wrist.getEncoder().getPosition());
+    // SmartDashboard.putNumber("wrist pose", wrist.getEncoder().getPosition());
+    
   }
 }

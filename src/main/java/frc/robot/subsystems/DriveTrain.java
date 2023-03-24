@@ -63,7 +63,7 @@ public class DriveTrain extends SubsystemBase {
                 .autonomousParameters(Constants.TICKS_PER_INCHES, Constants.ALLOWED_ERRORS, Constants.VELOCITY_FEED_FORWARD)
                 .buildSwerve();
 
-        this.balanceController = new PIDController(0, 0, 0);
+        this.balanceController = new PIDController(0.015, 0, 0);
     }
 
     public void control(double x, double y, double rotate) {
@@ -74,6 +74,7 @@ public class DriveTrain extends SubsystemBase {
         SmartDashboard.putNumber("rotate", pose[2]);
 
         SmartDashboard.putBoolean("atSetpoint", swerve.atSetpoint());
+        
         
     }
 
@@ -108,17 +109,9 @@ public class DriveTrain extends SubsystemBase {
 
     @Override
     public void periodic() {
-      // for(int i=0; i < Constants.NUMBER_OF_MODULES; i++) {
-      //     SmartDashboard.putNumber("module offset " + i, swerve.getModuleRotationalPose(i));
-        if(Robot.state == Robot.Phase.AUTON) {
-      double[] pose = swerve.getPose();
-        SmartDashboard.putNumber("x", pose[0]);
-        SmartDashboard.putNumber("y", pose[1]);
-        SmartDashboard.putNumber("rotate", pose[2]);
-
-        SmartDashboard.putBoolean("atSetpoint", swerve.atSetpoint());
-      }
-
+      for(int i=0; i < Constants.NUMBER_OF_MODULES; i++)
+          SmartDashboard.putNumber("module offset " + i, swerve.getModuleRotationalPose(i));
+      SmartDashboard.putNumber("gyro tilt", getGyroTilt());
     }
 }
 

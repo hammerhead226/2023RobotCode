@@ -22,14 +22,14 @@ public final class Constants {
 
   public static final String CANBUS = "CAN Bus 2";
 
-  public static final double DRIVETRAIN_TILT_THRESHOLD = .2;
+  public static final double DRIVETRAIN_TILT_THRESHOLD = 15;
 
   //Swervey Configuration Parameters
  
      // Encoder Parameters
      public static final double OVERFLOW_THRESHOLD = Math.PI;
  
-     public static final double[] MODULE_OFFSETS = {27.94921875, 316.845703125, 25.83984375, 122.51953125};
+     public static final double[] MODULE_OFFSETS = {22.5, 313.857421875, 21.26953125, 123.92578125};
  
  
      // Physical Configuration 
@@ -47,8 +47,8 @@ public final class Constants {
      public static String AUTONOMOUS_PATH_FILENAME = "/paths/recording.csv";
  
      // Teleoperated Parameters
-     public static final double LOW_BOUND_SPEED = 0.5;
-     public static final double HIGH_BOUND_SPEED = 0.3;
+     public static final double LOW_BOUND_SPEED = 0.6;
+     public static final double HIGH_BOUND_SPEED = 0.4;
  
      public static final double ACCELERATION_RATE = 0.01;
      public static final double INITIAL_SPEED = 0.2;
@@ -112,7 +112,7 @@ public final class Constants {
   public static final int ELEVATOR_MIN = -300;
   public static final int ELEVATOR_MAX = 2000;
 
-  public static final double ELEVATOR_INTERVAL_MARKER = 3100;
+  public static final double ELEVATOR_INTERVAL_MARKER = 2200;
   public static final double SRX_ENCODER_TICKS = 4096;
 
 
@@ -136,7 +136,7 @@ public final class Constants {
   public static final int INTAKE_OFFSET = 0;
 
   public static final double INTAKE_EXTEND = 3675;
-  public static final double INTAKE_RETRACT = 3400;// 3000 to be fully retracted
+  public static final double INTAKE_RETRACT = 3200;// 3000 to be fully retracted
   
   public static final double MAX_SPEED_UP = 0.5;
   public static final double MAX_SPEED_DOWN = 0.25;
@@ -145,7 +145,7 @@ public final class Constants {
   // Gripper Constants
   public static final double CLAW_CLOSE_CONE = -1500;
   public static final double CLAW_CLOSE_CUBE = 10000;
-  public static final double CLAW_OPEN_CONE = 23000;
+  public static final double CLAW_OPEN_CONE = 26000;
 
   public static final double ARM_POS_1 = 0;
   public static final double ARM_POS_2 = -135000;
@@ -159,7 +159,7 @@ public final class Constants {
 
   public static final double[] ARM_GAINS = {0.00008, 0, 0};
   public static final double[] CLAW_GAINS = {0.00003, 0, 0};
-  public static final double[] WRIST_GAINS = { 0.1, 0, 0 };
+  public static final double[] WRIST_GAINS = { 0.15, 0, 0 };
 
   // Active Floor
   public static final double ACTIVE_FLOOR_CONSTANT_SPEED = 0.3;

@@ -4,6 +4,7 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.DriveTrain;
@@ -17,7 +18,8 @@ public class OneConeMobilityEngage extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new RunCommand(() -> DriveTrain.getInstance().control(0, -.4, 0), DriveTrain.getInstance()).until(DriveTrain.getInstance()::isChassisUnstable),
+      // new InstantCommand(() -> DriveTrain.getInstance().reset(), DriveTrain.getInstance()),
+      new RunCommand(() -> DriveTrain.getInstance().control(0, -2.25, 0), DriveTrain.getInstance()).until(DriveTrain.getInstance()::isChassisUnstable),
       new AutoBalance()
     );
   }
