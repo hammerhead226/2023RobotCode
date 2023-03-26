@@ -20,8 +20,10 @@ import frc.robot.subsystems.Elevator;
 import frc.libs.wrappers.Controller;
 import frc.robot.commands.AutoBalance;
 import frc.robot.commands.OneConeEngage;
-import frc.robot.commands.OneConeMobile;
 import frc.robot.commands.OneConeMobilityEngage;
+import frc.robot.commands.RedOneConeMobile;
+import frc.robot.commands.BlueOneConeMobile;
+import frc.robot.commands.OneConeEngage;
 import frc.robot.subsystems.ActiveFloor;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Vision;
@@ -72,7 +74,9 @@ public class RobotContainer {
     
 
     selecter.setDefaultOption("one and engage", new OneConeEngage());
-    selecter.addOption("one cone mobile", new OneConeMobile());
+    selecter.addOption("blue one cone mobile", new BlueOneConeMobile());
+    selecter.addOption("red one cone mobile", new RedOneConeMobile());
+    selecter.addOption("one cone mobile and engage", new OneConeMobilityEngage());
 
     SmartDashboard.putData("auton", selecter);
 
@@ -120,10 +124,10 @@ public class RobotContainer {
     );
     manip.getXButton().onTrue(
       new InstantCommand(() -> linearSlide.setTarget(0), lock)
+      .andThen(new WaitCommand(0.5))
+      .andThen(gripper::armHoldPosition, lock)
       .andThen(new WaitCommand(0.25))
       .andThen(() -> elevator.setTarget(0), lock)
-      .andThen(new WaitCommand(0.25))
-      .andThen(gripper::retractArm, lock)
     );
 
 
@@ -131,9 +135,10 @@ public class RobotContainer {
 
     manip.getAButton().onTrue(
       new InstantCommand(() -> linearSlide.setTarget(0), lock)
-      .andThen(() -> gripper.setArmTarget(-10000), lock)
+      .andThen(new WaitCommand(0.5))
+      .andThen(gripper::armHoldPosition, lock)
       .andThen(new WaitCommand(0.25))
-      .andThen(() -> elevator.setTarget(1125), lock)
+      .andThen(() -> elevator.setTarget(1075), lock)
       );
 
       manip.getBButton().onTrue(
@@ -141,22 +146,22 @@ public class RobotContainer {
         .andThen(new WaitCommand(0.2))
         .andThen(gripper::extendArm, lock)
         .andThen(new WaitCommand(0.75))
-        .andThen(() -> linearSlide.setTarget(23), lock));
+        .andThen(() -> linearSlide.setTarget(30), lock));
       
     manip.getYButton().onTrue(
       new InstantCommand(() -> elevator.setTarget(-1100), lock)
       .andThen(new WaitCommand(0.2))
-      .andThen(() -> gripper.setArmTarget(-137000), lock)
+      .andThen(() -> gripper.setArmTarget(-135000), lock)
       .andThen(new WaitCommand(0.75))
-      .andThen(() -> linearSlide.setTarget(44), lock));
+      .andThen(() -> linearSlide.setTarget(51), lock));
     
       manip.getRightStickPress().onTrue(
         new InstantCommand(() -> elevator.setTarget(-450), lock)
         .andThen(new WaitCommand(0.25))
-        .andThen(() -> gripper.setArmTarget(-115000), lock)
+        .andThen(() -> gripper.setArmTarget(-110000), lock)
         .andThen(gripper::wristFalconUp, lock)
         .andThen(new WaitCommand(0.5))
-        .andThen(() -> linearSlide.setTarget(15), lock)
+        .andThen(() -> linearSlide.setTarget(20), lock)
         );
   }
 
@@ -165,7 +170,8 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    */
-  public Command getAutonomousCommand() {
+  public Command 
+  getAutonomousCommand() {
     // An example command will be run in autonomous
     return (Command) selecter.getSelected();
   }

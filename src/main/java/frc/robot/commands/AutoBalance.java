@@ -5,6 +5,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.DriveTrain;
@@ -12,14 +13,18 @@ import frc.robot.subsystems.DriveTrain;
 public class AutoBalance extends CommandBase {
   /** Creates a new AutoBalance. */
   PIDController con = DriveTrain.getInstance().getBalanceController();
-  public AutoBalance() {
+  double gyroThresh;
+  public AutoBalance(double gyroThreshold) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(DriveTrain.getInstance());
+    gyroThresh = gyroThreshold;
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    SmartDashboard.putBoolean("auto balance running", true);
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
@@ -34,8 +39,12 @@ public class AutoBalance extends CommandBase {
   }
 
   // Returns true when the command should end.
+  int sustain = 0;
   @Override
   public boolean isFinished() {
-    return DriveTrain.getInstance().getGyroTilt() < 4.5;
+    // if(Math.abs(DriveTrain.getInstance().getGyroTilt()) < 4.5) sustain++;
+    // else sustain = 0;
+    // return sustain >= 50;
+    return Math.abs(DriveTrain.getInstance().getGyroTilt()) < gyroThresh;
   }
 }

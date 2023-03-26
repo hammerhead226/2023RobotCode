@@ -133,6 +133,11 @@ public class Gripper extends SubsystemBase {
     armTarget = Constants.ARM_POS_1;
   }
 
+  public void armHoldPosition() {
+    if(cubeMode) armTarget = 0;
+    else armTarget = 0;
+  }
+
   public void setArmTarget(double target) {
     armTarget = target;
   }

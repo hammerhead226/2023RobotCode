@@ -12,6 +12,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 // import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.libs.wrappers.GenericMotor;
@@ -67,6 +68,8 @@ public class Intake extends SubsystemBase {
         retractSpeed = Constants.MAX_SPEED_DOWN;
       }
       control(retractSpeed);
+      // SmartDashboard.putNumber("intake speed", retractSpeed);
+      // SmartDashboard.putNumber("intake pose", intakeEncoder.getSensorPose());
     }
   }
 

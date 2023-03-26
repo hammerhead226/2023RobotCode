@@ -4,6 +4,8 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -14,11 +16,12 @@ import frc.robot.subsystems.DriveTrain;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class OneConeEngage extends SequentialCommandGroup {
-  /** Creates a new OneConeMobilityEngage. */
-  public OneConeEngage() {
+public class BlueOneConeMobile extends SequentialCommandGroup {
+  /** Creates a new OneConeMobile. */
+  public BlueOneConeMobile() {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
+
     addCommands(
       new WaitCommand(0.5),
       new InstantCommand(() -> Robot.m_robotContainer.elevator.setTarget(-1100), Robot.m_robotContainer.lock)
@@ -31,13 +34,19 @@ public class OneConeEngage extends SequentialCommandGroup {
       new WaitCommand(.5),
       new InstantCommand(() -> Robot.m_robotContainer.linearSlide.setTarget(0), Robot.m_robotContainer.lock)
       .andThen(new WaitCommand(1))
-      .andThen(() -> Robot.m_robotContainer.elevator.setTarget(800), Robot.m_robotContainer.lock)
+      .andThen(() -> Robot.m_robotContainer.elevator.setTarget(0), Robot.m_robotContainer.lock)
       .andThen(new WaitCommand(0.25))
       .andThen(Robot.m_robotContainer.gripper::retractArm, Robot.m_robotContainer.lock),
-      new InstantCommand(() -> DriveTrain.getInstance().reset(), DriveTrain.getInstance()),
-      new WaitCommand(1),
-      new RunCommand(() -> DriveTrain.getInstance().control(0, -2.25, 0), DriveTrain.getInstance()).until(DriveTrain.getInstance()::isChassisUnstable),
-      new AutoBalance(15)
+      new InstantCommand(DriveTrain.getInstance()::reset, DriveTrain.getInstance()),
+      new InstantCommand(() -> DriveTrain.getInstance().toPose(new double[] {0, -150, 0}), DriveTrain.getInstance()),
+      new RunCommand(() -> DriveTrain.getInstance().toPose(new double[]{0, -150, 0}), DriveTrain.getInstance()).until(DriveTrain.getInstance()::atSetpoint),
+      new InstantCommand(() -> DriveTrain.getInstance().toPose(new double[]{0, -150, -Math.PI}), DriveTrain.getInstance()),
+      new RunCommand(() -> DriveTrain.getInstance().toPose(new double[]{0, -150, -Math.PI}), DriveTrain.getInstance()).until(DriveTrain.getInstance()::atSetpoint)
+
+
+
+
+      
     );
   }
 }

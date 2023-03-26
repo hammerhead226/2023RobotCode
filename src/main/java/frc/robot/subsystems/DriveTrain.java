@@ -63,7 +63,7 @@ public class DriveTrain extends SubsystemBase {
                 .autonomousParameters(Constants.TICKS_PER_INCHES, Constants.ALLOWED_ERRORS, Constants.VELOCITY_FEED_FORWARD)
                 .buildSwerve();
 
-        this.balanceController = new PIDController(0.015, 0, 0);
+        this.balanceController = new PIDController(0.012, 0, 0);
     }
 
     public void control(double x, double y, double rotate) {
@@ -101,6 +101,10 @@ public class DriveTrain extends SubsystemBase {
 
     public boolean isChassisUnstable() {
         return Math.abs(gyro.getTilt()) > Constants.DRIVETRAIN_TILT_THRESHOLD;
+    }
+
+    public boolean isChassisStable() {
+        return Math.abs(gyro.getTilt()) < Constants.DRIVETRAIN_TILT_THRESHOLD;
     }
 
     public double getGyroTilt() {
