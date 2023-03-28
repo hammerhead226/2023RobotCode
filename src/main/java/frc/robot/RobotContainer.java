@@ -28,6 +28,7 @@ import frc.robot.subsystems.ActiveFloor;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Vision;
 import frc.robot.subsystems.balls;
+import frc.robot.subsystems.ballsTwo;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -54,6 +55,7 @@ public class RobotContainer {
   public static final Vision vision = new Vision();
 
   public static final balls lock = new balls();
+  public static final ballsTwo lockTwo = new ballsTwo();
 
   SendableChooser<Command> selecter = new SendableChooser<>();
   
@@ -104,64 +106,64 @@ public class RobotContainer {
 
 
     manip.getLBButton().onTrue(
-      new InstantCommand(intake::runIn, lock)
+      new InstantCommand(intake::runIn, intake)
       .andThen(activeFloor::runConstantSpeedInward, activeFloor)
     );
 
     manip.getLBButton().onFalse(
-      new InstantCommand(intake::stop, lock)
+      new InstantCommand(intake::stop, intake)
       .andThen(activeFloor::stop, activeFloor)
     );
 
     manip.getMENUButton().onTrue(
-      new InstantCommand(intake::runOut, lock)
+      new InstantCommand(intake::runOut, intake)
       .andThen(activeFloor::runConstantSpeedOutward, activeFloor)
     );
 
     manip.getMENUButton().onFalse(
-      new InstantCommand(intake::stop, lock)
+      new InstantCommand(intake::stop, intake)
       .andThen(activeFloor::stop, activeFloor)
     );
     manip.getXButton().onTrue(
-      new InstantCommand(() -> linearSlide.setTarget(0), lock)
+      new InstantCommand(() -> linearSlide.setTarget(0), lockTwo)
       .andThen(new WaitCommand(0.5))
-      .andThen(gripper::armHoldPosition, lock)
+      .andThen(gripper::armHoldPosition, lockTwo)
       .andThen(new WaitCommand(0.25))
-      .andThen(() -> elevator.setTarget(0), lock)
+      .andThen(() -> elevator.setTarget(0), lockTwo)
     );
 
 
     manip.getLeftStickPress().onTrue(new InstantCommand(gripper::toggleWrist, gripper));
 
     manip.getAButton().onTrue(
-      new InstantCommand(() -> linearSlide.setTarget(0), lock)
+      new InstantCommand(() -> linearSlide.setTarget(0), lockTwo)
       .andThen(new WaitCommand(0.5))
-      .andThen(gripper::armHoldPosition, lock)
+      .andThen(gripper::armHoldPosition, lockTwo)
       .andThen(new WaitCommand(0.25))
-      .andThen(() -> elevator.setTarget(1075), lock)
+      .andThen(() -> elevator.setTarget(1075), lockTwo)
       );
 
       manip.getBButton().onTrue(
-        new InstantCommand(() -> elevator.setTarget(0), lock)
+        new InstantCommand(() -> elevator.setTarget(0), lockTwo)
         .andThen(new WaitCommand(0.2))
-        .andThen(gripper::extendArm, lock)
+        .andThen(() -> gripper.setArmTarget(-130000), lockTwo)
         .andThen(new WaitCommand(0.75))
-        .andThen(() -> linearSlide.setTarget(30), lock));
+        .andThen(() -> linearSlide.setTarget(21), lockTwo));
       
     manip.getYButton().onTrue(
-      new InstantCommand(() -> elevator.setTarget(-1100), lock)
+      new InstantCommand(() -> elevator.setTarget(-1100), lockTwo)
       .andThen(new WaitCommand(0.2))
-      .andThen(() -> gripper.setArmTarget(-135000), lock)
+      .andThen(() -> gripper.setArmTarget(-130000), lockTwo)
       .andThen(new WaitCommand(0.75))
-      .andThen(() -> linearSlide.setTarget(51), lock));
+      .andThen(() -> linearSlide.setTarget(42), lockTwo));
     
       manip.getRightStickPress().onTrue(
-        new InstantCommand(() -> elevator.setTarget(-450), lock)
+        new InstantCommand(() -> elevator.setTarget(-550), lockTwo)
         .andThen(new WaitCommand(0.25))
-        .andThen(() -> gripper.setArmTarget(-110000), lock)
-        .andThen(gripper::wristFalconUp, lock)
+        .andThen(() -> gripper.setArmTarget(-107500), lockTwo)
+        .andThen(gripper::wristFalconUp, lockTwo)
         .andThen(new WaitCommand(0.5))
-        .andThen(() -> linearSlide.setTarget(20), lock)
+        .andThen(() -> linearSlide.setTarget(15), lockTwo)
         );
   }
 

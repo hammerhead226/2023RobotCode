@@ -58,7 +58,7 @@ public class Elevator extends SubsystemBase {
     else encoderOffset = 0;
 
     target = -1100;
-    speedLimit = .5;
+    speedLimit = .76;
   }
 
   public void toggleManual() {

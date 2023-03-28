@@ -20,7 +20,8 @@ public class LinearSlide extends SubsystemBase {
   private CANSparkMax slider;
 
   private double target;
-  private double speedLimit;
+  private double extendSpeedLimit;
+  private double retractSpeedLimit;
   private boolean manual;
   private PIDController pid;
 
@@ -31,7 +32,8 @@ public class LinearSlide extends SubsystemBase {
     pid = new PIDController(Constants.LINEAR_SLIDE_GAINS[0], Constants.LINEAR_SLIDE_GAINS[1],
         Constants.LINEAR_SLIDE_GAINS[2]);
 
-    speedLimit = 0.45;
+    extendSpeedLimit = 0.6;
+    retractSpeedLimit = 0.45;
     manual = false;
   }
 
@@ -43,11 +45,21 @@ public class LinearSlide extends SubsystemBase {
   public void run() {
     if (!manual) {
       double motorSpeed = pid.calculate(slider.getEncoder().getPosition(), target);
-      if (motorSpeed > speedLimit) {
-        motorSpeed = speedLimit;
-      } else if (motorSpeed < -speedLimit) {
-        motorSpeed = -speedLimit;
+      if(target == 0) {
+        if (motorSpeed > retractSpeedLimit) {
+          motorSpeed = retractSpeedLimit;
+        } else if (motorSpeed < -retractSpeedLimit) {
+          motorSpeed = -retractSpeedLimit;
+        }
       }
+      else {
+        if (motorSpeed > extendSpeedLimit) {
+          motorSpeed = extendSpeedLimit;
+        } else if (motorSpeed < -extendSpeedLimit) {
+          motorSpeed = -extendSpeedLimit;
+        }
+      }
+      
       // SmartDashboard.putNumber("motor speed", motorSpeed);
       // control(Robot.m_robotContainer.manip.getLeftJoyY());
       control(motorSpeed);
@@ -57,10 +69,6 @@ public class LinearSlide extends SubsystemBase {
 
   public void setTarget(double t) {
     target = t;
-  }
-
-  public void setSpeedLimit(double s) {
-    speedLimit = s;
   }
 
   public void control(double speed) {

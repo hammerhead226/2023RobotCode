@@ -20,6 +20,12 @@ public class AutoBalance extends CommandBase {
     gyroThresh = gyroThreshold;
   }
 
+  public AutoBalance(double gyroThreshold, double p) {
+    addRequirements(DriveTrain.getInstance());
+    gyroThresh = gyroThreshold;
+    con.setP(p);
+  }
+
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {

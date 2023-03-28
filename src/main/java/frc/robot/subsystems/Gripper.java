@@ -64,7 +64,7 @@ public class Gripper extends SubsystemBase {
     clawPID = new PIDController(Constants.CLAW_GAINS[0], Constants.CLAW_GAINS[1], Constants.CLAW_GAINS[2]);
     wristPID = new PIDController(Constants.WRIST_GAINS[0], Constants.WRIST_GAINS[1], Constants.WRIST_GAINS[2]);
     
-    armSpeedLimit = 0.6;
+    armSpeedLimit = 0.8;
   }
 
   public void run() {
@@ -135,7 +135,7 @@ public class Gripper extends SubsystemBase {
 
   public void armHoldPosition() {
     if(cubeMode) armTarget = 0;
-    else armTarget = 0;
+    else armTarget = 3000;
   }
 
   public void setArmTarget(double target) {

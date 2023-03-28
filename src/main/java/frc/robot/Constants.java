@@ -51,7 +51,7 @@ public final class Constants {
      public static final double HIGH_BOUND_SPEED = 0.5;
  
      public static final double ACCELERATION_RATE = 0.01;
-     public static final double INITIAL_SPEED = 0.2;
+     public static final double INITIAL_SPEED = 0.35;
  
      // Drivetrain Current Parameters
      public static final boolean DRIVETRAIN_CURRENT_ENABLE = false;
@@ -148,7 +148,7 @@ public final class Constants {
   public static final double CLAW_OPEN_CONE = 27000;
 
   public static final double ARM_POS_1 = 0;
-  public static final double ARM_POS_2 = -135000;
+  public static final double ARM_POS_2 = -130000;
 
   public static final double ADJUSTED_WRIST_POS_1 = -0.7;
   public static final double ADJUSTED_WRIST_POS_2 = -1.8;

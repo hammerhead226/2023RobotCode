@@ -104,7 +104,7 @@ public class DriveTrain extends SubsystemBase {
     }
 
     public boolean isChassisStable() {
-        return Math.abs(gyro.getTilt()) < Constants.DRIVETRAIN_TILT_THRESHOLD;
+        return Math.abs(gyro.getTilt()) < 4.5;
     }
 
     public double getGyroTilt() {
