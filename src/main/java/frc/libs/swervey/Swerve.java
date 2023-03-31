@@ -317,6 +317,9 @@ public class Swerve {
     if(Math.abs(speed) < rotateGainsThreshold) rotateController.setPID(rotateHighGains);
     else rotateController.setPID(rotateLowGains);
 
+    SmartDashboard.putBoolean("rotate high", Math.abs(speed) < rotateGainsThreshold);
+
+
     double rotateErr = rotateController.calculate(currentPose[2], target[2]);
     if(Math.abs(target[2] - currentPose[2]) < allowedRotationalError) rotateErr = 0;
 

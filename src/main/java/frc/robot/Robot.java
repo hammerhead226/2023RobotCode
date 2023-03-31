@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.libs.swervey.MotionOfTheOcean;
 import frc.robot.commands.BlueOneConeMobile;
 import frc.robot.subsystems.DriveTrain;
 
@@ -71,6 +72,8 @@ public class Robot extends TimedRobot {
   public void disabledInit() {
     state = Phase.DISABLED;
     SmartDashboard.putBoolean("auto balance running", false);
+    DriveTrain.getInstance().stopPlayback();
+    MotionOfTheOcean.Executor.resetExecutor(DriveTrain.getInstance()::reset);
   }
 
   @Override

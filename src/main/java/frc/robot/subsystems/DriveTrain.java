@@ -7,6 +7,7 @@ import com.ctre.phoenix.sensors.CANCoder;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.libs.swervey.MotionOfTheOcean;
 import frc.libs.swervey.Swerve;
 import frc.libs.swervey.SwerveBuilder;
 import frc.libs.wrappers.GenericEncoder;
@@ -31,6 +32,8 @@ public class DriveTrain extends SubsystemBase {
     private Swerve swerve;
 
     private Gyro gyro;
+
+    private boolean isPlaying;
 
 
     private DriveTrain() {
@@ -64,18 +67,22 @@ public class DriveTrain extends SubsystemBase {
                 .buildSwerve();
 
         this.balanceController = new PIDController(0.012, 0, 0);
+
+
     }
 
     public void control(double x, double y, double rotate) {
-        swerve.control(x, y, -rotate);
+
+        if(isPlaying) {
+            MotionOfTheOcean.Executor.executeRecording(() -> DriveTrain.getInstance().toPose(MotionOfTheOcean.Executor.getState().getPose()));
+        }
+        else swerve.control(x, y, -rotate);
         double[] pose = swerve.getPose();
         SmartDashboard.putNumber("x", pose[0]);
         SmartDashboard.putNumber("y", pose[1]);
         SmartDashboard.putNumber("rotate", pose[2]);
 
         SmartDashboard.putBoolean("atSetpoint", swerve.atSetpoint());
-        
-        
     }
 
     public void reset() {
@@ -95,12 +102,21 @@ public class DriveTrain extends SubsystemBase {
         swerve.toggleSpeed();
     }
 
+    public void togglePlayback() {
+        isPlaying = !isPlaying;
+    }
+
+    public void stopPlayback() {
+        isPlaying = false;
+    }
+
     public PIDController getBalanceController() {
         return balanceController;
     }
 
     public boolean isChassisUnstable() {
-        return Math.abs(gyro.getTilt()) > Constants.DRIVETRAIN_TILT_THRESHOLD;
+        // return Math.abs(gyro.getTilt()) > Constants.DRIVETRAIN_TILT_THRESHOLD;
+        return gyro.getTilt() > Constants.DRIVETRAIN_TILT_THRESHOLD || gyro.getTilt() < -9;
     }
 
     public boolean isChassisStable() {

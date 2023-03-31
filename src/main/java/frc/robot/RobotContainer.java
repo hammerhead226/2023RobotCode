@@ -22,6 +22,7 @@ import frc.robot.commands.AutoBalance;
 import frc.robot.commands.OneConeEngage;
 import frc.robot.commands.OneConeMobilityEngage;
 import frc.robot.commands.RedOneConeMobile;
+import frc.robot.commands.TestAuto;
 import frc.robot.commands.BlueOneConeMobile;
 import frc.robot.commands.OneConeEngage;
 import frc.robot.subsystems.ActiveFloor;
@@ -69,8 +70,8 @@ public class RobotContainer {
         ));
 
     gripper.setDefaultCommand(new RunCommand(gripper::run, gripper));
-    intake.setDefaultCommand(new RunCommand(intake::run, intake));
-    linearSlide.setDefaultCommand(new RunCommand(linearSlide::run, linearSlide));
+    // intake.setDefaultCommand(new RunCommand(intake::run, intake));
+    // linearSlide.setDefaultCommand(new RunCommand(linearSlide::run, linearSlide));
     elevator.setDefaultCommand(new RunCommand(elevator::run, elevator));
 
     
@@ -96,7 +97,7 @@ public class RobotContainer {
     // driver.getAButton().onTrue(new InstantCommand(intake::toggleIntake, intake));
     // driver.getAButton().whileTrue(new RunCommand(() -> dt.toPose(new double[]{0, 20, Math.PI}), dt).until(dt::atSetpoint)
     // .andThen(new RunCommand(() -> dt.toPose(new double[]{0, 100, 0}), dt).until(dt::atSetpoint)));
-    // driver.getAButton().whileTrue(new OneConeMobilityEngage());
+    driver.getAButton().whileTrue(new TestAuto().handleInterrupt(DriveTrain.getInstance()::togglePlayback));
 
     driver.getSTARTButton().onTrue(new InstantCommand(dt::reset, dt));
     driver.getLBButton().onTrue(new InstantCommand(() -> dt.toggleSpeed(), dt));
@@ -124,13 +125,26 @@ public class RobotContainer {
       new InstantCommand(intake::stop, intake)
       .andThen(activeFloor::stop, activeFloor)
     );
+    // manip.getXButton().onTrue(
+    //   new InstantCommand(() -> linearSlide.setTarget(0), lockTwo)
+    //   .andThen(new WaitCommand(0.5))
+    //   .andThen(gripper::armHoldPosition, lockTwo)
+    //   .andThen(new WaitCommand(0.25))
+    //   .andThen(() -> elevator.setTarget(0), lockTwo)
+    // );
+
     manip.getXButton().onTrue(
       new InstantCommand(() -> linearSlide.setTarget(0), lockTwo)
       .andThen(new WaitCommand(0.5))
       .andThen(gripper::armHoldPosition, lockTwo)
       .andThen(new WaitCommand(0.25))
-      .andThen(() -> elevator.setTarget(0), lockTwo)
-    );
+      .andThen(() -> elevator.setTarget(1275), lockTwo)
+      .andThen(gripper::openClaw, lockTwo)
+      .andThen(new WaitCommand(0.5))
+      .andThen(() -> gripper.setArmTarget(-40000), lockTwo)
+      );
+
+
 
 
     manip.getLeftStickPress().onTrue(new InstantCommand(gripper::toggleWrist, gripper));
@@ -140,7 +154,7 @@ public class RobotContainer {
       .andThen(new WaitCommand(0.5))
       .andThen(gripper::armHoldPosition, lockTwo)
       .andThen(new WaitCommand(0.25))
-      .andThen(() -> elevator.setTarget(1075), lockTwo)
+      .andThen(() -> elevator.setTarget(1225), lockTwo)
       );
 
       manip.getBButton().onTrue(

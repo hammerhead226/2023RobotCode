@@ -57,8 +57,8 @@ public class Gripper extends SubsystemBase {
     arm = new GenericMotor(new TalonFX(RobotMap.ARM_MOTOR, Constants.CANBUS));
 
     // wrist.setIdleMode(IdleMode.kBrake);
-    claw.setNeutralMode(PassiveMode.BRAKE);
-    arm.setNeutralMode(PassiveMode.BRAKE);
+    claw.setNeutralMode(PassiveMode.COAST);
+    arm.setNeutralMode(PassiveMode.COAST);
 
     armPID = new PIDController(Constants.ARM_GAINS[0], Constants.ARM_GAINS[1], Constants.ARM_GAINS[2]);
     clawPID = new PIDController(Constants.CLAW_GAINS[0], Constants.CLAW_GAINS[1], Constants.CLAW_GAINS[2]);
@@ -175,6 +175,8 @@ public class Gripper extends SubsystemBase {
     // This method will be called once per scheduler run
     // SmartDashboard.putNumber("periodic wrist", wrist.getEncoder().getPosition());
     // SmartDashboard.putNumber("wrist pose", wrist.getEncoder().getPosition());
+    SmartDashboard.putNumber("arm enc", arm.getSensorPose());
+    SmartDashboard.putNumber("claw enc", claw.getSensorPose());
     
   }
 }

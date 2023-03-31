@@ -14,15 +14,16 @@ public class AutoBalance extends CommandBase {
   /** Creates a new AutoBalance. */
   PIDController con = DriveTrain.getInstance().getBalanceController();
   double gyroThresh;
-  public AutoBalance(double gyroThreshold) {
+  boolean direction;
+  public AutoBalance(boolean direction) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(DriveTrain.getInstance());
-    gyroThresh = gyroThreshold;
+    this.direction = direction;
   }
 
-  public AutoBalance(double gyroThreshold, double p) {
+  public AutoBalance(boolean direction, double p) {
     addRequirements(DriveTrain.getInstance());
-    gyroThresh = gyroThreshold;
+    this.direction = direction;
     con.setP(p);
   }
 
@@ -51,6 +52,9 @@ public class AutoBalance extends CommandBase {
     // if(Math.abs(DriveTrain.getInstance().getGyroTilt()) < 4.5) sustain++;
     // else sustain = 0;
     // return sustain >= 50;
-    return Math.abs(DriveTrain.getInstance().getGyroTilt()) < gyroThresh;
+    // return Math.abs(DriveTrain.getInstance().getGyroTilt()) < gyroThresh;
+    // return DriveTrain.getInstance().getGyroTilt() < 15 || DriveTrain.getInstance().getGyroTilt() > -2;
+    if(direction) return DriveTrain.getInstance().getGyroTilt() < 15;
+    else return DriveTrain.getInstance().getGyroTilt() > -3;
   }
 }

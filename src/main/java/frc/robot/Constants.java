@@ -70,7 +70,7 @@ public final class Constants {
      public static final double[] STEER_GAINS_LOW = {0.62, 0, 0.0};
      public static final double[] STEER_GAINS_HIGH = {.68, 0, 0.0};
  
-     public static final double[] ROTATE_GAINS_LOW = {1.3, 0.0, 0.0};//.669
+     public static final double[] ROTATE_GAINS_LOW = {2.5, 0.0, 0.0};//.669
      public static final double[] ROTATE_GAINS_HIGH = {0.9, 0.0, 0.0};//.9
  
      public static double[] LIMELIGHT_GAINS = {0.065, 0.0, 0.0};
@@ -131,7 +131,7 @@ public final class Constants {
 
 
   // Intake Constants
-  public static final double ROLLER_RUN_SPEED = 0.85;
+  public static final double ROLLER_RUN_SPEED = 0.65;
   public static final double[] INTAKE_GAINS = { 0.0006, 0, 0 };
   public static final int INTAKE_OFFSET = 0;
 
@@ -143,9 +143,10 @@ public final class Constants {
 
 
   // Gripper Constants
-  public static final double CLAW_CLOSE_CONE = -1500;
-  public static final double CLAW_CLOSE_CUBE = 10000;
-  public static final double CLAW_OPEN_CONE = 27000;
+  public static final double CLAW_CLOSE_CONE = 10000;
+  public static final double CLAW_CLOSE_CUBE = -5000
+  ;
+  public static final double CLAW_OPEN_CONE = -19000;
 
   public static final double ARM_POS_1 = 0;
   public static final double ARM_POS_2 = -130000;
