@@ -8,8 +8,12 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.Rev2mDistanceSensor;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.Rev2mDistanceSensor.Port;
+import com.revrobotics.Rev2mDistanceSensor.RangeProfile;
+import com.revrobotics.Rev2mDistanceSensor.Unit;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -40,6 +44,8 @@ public class Gripper extends SubsystemBase {
   private PIDController clawPID;
   private PIDController wristPID;
 
+  private Rev2mDistanceSensor distanceSensor;
+
   private boolean wristToggle = true;
   private boolean armToggle = true;
 
@@ -64,6 +70,8 @@ public class Gripper extends SubsystemBase {
     clawPID = new PIDController(Constants.CLAW_GAINS[0], Constants.CLAW_GAINS[1], Constants.CLAW_GAINS[2]);
     wristPID = new PIDController(Constants.WRIST_GAINS[0], Constants.WRIST_GAINS[1], Constants.WRIST_GAINS[2]);
     
+
+    distanceSensor = new Rev2mDistanceSensor(Port.kOnboard, Unit.kInches, RangeProfile.kHighAccuracy);
     armSpeedLimit = 0.8;
   }
 
@@ -177,6 +185,6 @@ public class Gripper extends SubsystemBase {
     // SmartDashboard.putNumber("wrist pose", wrist.getEncoder().getPosition());
     SmartDashboard.putNumber("arm enc", arm.getSensorPose());
     SmartDashboard.putNumber("claw enc", claw.getSensorPose());
-    
+    SmartDashboard.putNumber("distance sens", distanceSensor.getRange());
   }
 }

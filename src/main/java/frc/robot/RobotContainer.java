@@ -69,10 +69,10 @@ public class RobotContainer {
         dt
         ));
 
-    gripper.setDefaultCommand(new RunCommand(gripper::run, gripper));
+    // gripper.setDefaultCommand(new RunCommand(gripper::run, gripper));
     // intake.setDefaultCommand(new RunCommand(intake::run, intake));
     // linearSlide.setDefaultCommand(new RunCommand(linearSlide::run, linearSlide));
-    elevator.setDefaultCommand(new RunCommand(elevator::run, elevator));
+    // elevator.setDefaultCommand(new RunCommand(elevator::run, elevator));
 
     
 
