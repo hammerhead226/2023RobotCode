@@ -8,8 +8,11 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.Rev2mDistanceSensor;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.Rev2mDistanceSensor.Port;
+import com.revrobotics.Rev2mDistanceSensor.Unit;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -40,6 +43,8 @@ public class Gripper extends SubsystemBase {
   private PIDController clawPID;
   private PIDController wristPID;
 
+  private Rev2mDistanceSensor distanceSensor;
+
   private boolean wristToggle = true;
   private boolean armToggle = true;
 
@@ -55,6 +60,8 @@ public class Gripper extends SubsystemBase {
     // wrist = new CANSparkMax(RobotMap.GRIPPER_WRIST, MotorType.kBrushless);
     claw = new GenericMotor(new TalonFX(RobotMap.CLAW_MOTOR, Constants.CANBUS));
     arm = new GenericMotor(new TalonFX(RobotMap.ARM_MOTOR, Constants.CANBUS));
+
+    distanceSensor = new Rev2mDistanceSensor(Port.kOnboard);
 
     // wrist.setIdleMode(IdleMode.kBrake);
     claw.setNeutralMode(PassiveMode.COAST);
@@ -169,6 +176,21 @@ public class Gripper extends SubsystemBase {
   public boolean getCubeMode() {
     return cubeMode;
   }
+
+  public void automaticModeOn() {
+    distanceSensor.setAutomaticMode(true);
+  }
+
+  public void automaticModeOff() {
+    distanceSensor.setAutomaticMode(false);
+  }
+
+  public void closeClawWhenSeen() {
+    if (distanceSensor.getRange(Unit.kInches) <= Constants.CLOSING_DISTANCE){
+      closeClaw();
+    }
+  }
+
 
   @Override
   public void periodic() {

@@ -162,6 +162,8 @@ public final class Constants {
   public static final double[] CLAW_GAINS = {0.00003, 0, 0};
   public static final double[] WRIST_GAINS = { 0.15, 0, 0 };
 
+  public static final double CLOSING_DISTANCE = 8;
+
   // Active Floor
   public static final double ACTIVE_FLOOR_CONSTANT_SPEED = 0.3;
 }
