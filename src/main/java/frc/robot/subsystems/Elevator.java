@@ -12,6 +12,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.libs.wrappers.GenericMotor;
@@ -23,6 +24,10 @@ public class Elevator extends SubsystemBase {
   private GenericMotor elevatorLeft;
   private GenericMotor elevatorRight;
   private GenericMotor elevatorEncoder; 
+
+  private DigitalInput upperLimitSwitch;
+
+
   private PIDController elevatorPID;
   private boolean isManual;
   private double target;
@@ -54,10 +59,12 @@ public class Elevator extends SubsystemBase {
     elevatorLeft = new GenericMotor(left);
     elevatorEncoder = new GenericMotor(encoder);
 
+    upperLimitSwitch = new DigitalInput(0);
+
     if(elevatorEncoder.getSensorPose() > Constants.ELEVATOR_INTERVAL_MARKER) encoderOffset = Constants.SRX_ENCODER_TICKS;
     else encoderOffset = 0;
 
-    target = -1100;
+    target = Constants.ELEVATOR_HIGH;
     speedLimit = .76;
   }
 
@@ -70,11 +77,17 @@ public class Elevator extends SubsystemBase {
   }
  
   public void run() {
+    
 
     double motorSpeed = elevatorPID.calculate(get(), target);
 
     if(motorSpeed > speedLimit) motorSpeed = speedLimit;
     else if(motorSpeed < -speedLimit) motorSpeed = -speedLimit;
+
+    if(!upperLimitSwitch.get()) {
+      motorSpeed = 0;
+    }
+
     control(motorSpeed);
     SmartDashboard.putNumber("motor sped", motorSpeed);
   }

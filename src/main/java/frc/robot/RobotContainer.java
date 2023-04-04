@@ -69,10 +69,10 @@ public class RobotContainer {
         dt
         ));
 
-    // gripper.setDefaultCommand(new RunCommand(gripper::run, gripper));
-    // intake.setDefaultCommand(new RunCommand(intake::run, intake));
-    // linearSlide.setDefaultCommand(new RunCommand(linearSlide::run, linearSlide));
-    // elevator.setDefaultCommand(new RunCommand(elevator::run, elevator));
+    gripper.setDefaultCommand(new RunCommand(gripper::run, gripper));
+    intake.setDefaultCommand(new RunCommand(intake::run, intake));
+    linearSlide.setDefaultCommand(new RunCommand(linearSlide::run, linearSlide));
+    elevator.setDefaultCommand(new RunCommand(elevator::run, elevator));
 
     
 
@@ -135,51 +135,56 @@ public class RobotContainer {
     // );
 
     manip.getXButton().onTrue(
-      new InstantCommand(() -> linearSlide.setTarget(0), lockTwo)
+      new InstantCommand(() -> linearSlide.setTarget(Constants.LS_RETRACTED), lockTwo)
+      .andThen(gripper::setCubeMode, lockTwo)
       .andThen(new WaitCommand(0.5))
       .andThen(gripper::armHoldPosition, lockTwo)
       .andThen(new WaitCommand(0.25))
-      .andThen(() -> elevator.setTarget(1275), lockTwo)
+      .andThen(() -> elevator.setTarget(Constants.ELEVATOR_INTAKE - 200), lockTwo)
       .andThen(gripper::openClaw, lockTwo)
       .andThen(new WaitCommand(0.5))
-      .andThen(() -> gripper.setArmTarget(-40000), lockTwo)
+      .andThen(() -> elevator.setTarget(Constants.ELEVATOR_INTAKE), lockTwo)
+      .andThen(() -> gripper.setArmTarget(Constants.ARM_INTAKE), lockTwo)
       );
-
-
 
 
     manip.getLeftStickPress().onTrue(new InstantCommand(gripper::toggleWrist, gripper));
 
     manip.getAButton().onTrue(
-      new InstantCommand(() -> linearSlide.setTarget(0), lockTwo)
+      new InstantCommand(() -> linearSlide.setTarget(Constants.LS_RETRACTED), lockTwo)
       .andThen(new WaitCommand(0.5))
+      .andThen(() -> elevator.setTarget(Constants.ELEVATOR_HOLD - 100), lockTwo)
       .andThen(gripper::armHoldPosition, lockTwo)
       .andThen(new WaitCommand(0.25))
-      .andThen(() -> elevator.setTarget(1225), lockTwo)
+      .andThen(() -> elevator.setTarget(Constants.ELEVATOR_HOLD), lockTwo)
       );
 
       manip.getBButton().onTrue(
-        new InstantCommand(() -> elevator.setTarget(0), lockTwo)
-        .andThen(new WaitCommand(0.2))
-        .andThen(() -> gripper.setArmTarget(-130000), lockTwo)
+        new InstantCommand(() -> elevator.setTarget(Constants.ELEVATOR_MID), lockTwo)
+        .andThen(new WaitCommand(0.1))
+        .andThen(() -> gripper.armHoldPosition(), lockTwo)
+        .andThen(new WaitCommand(0.25))
+        .andThen(() -> gripper.setArmTarget(Constants.ARM_SCORE), lockTwo)
         .andThen(new WaitCommand(0.75))
-        .andThen(() -> linearSlide.setTarget(21), lockTwo));
+        .andThen(() -> linearSlide.setTarget(Constants.LS_MID), lockTwo));
       
-    manip.getYButton().onTrue(
-      new InstantCommand(() -> elevator.setTarget(-1100), lockTwo)
-      .andThen(new WaitCommand(0.2))
-      .andThen(() -> gripper.setArmTarget(-130000), lockTwo)
-      .andThen(new WaitCommand(0.75))
-      .andThen(() -> linearSlide.setTarget(42), lockTwo));
+        manip.getYButton().onTrue(
+          new InstantCommand(() -> elevator.setTarget(Constants.ELEVATOR_HIGH), lockTwo)
+          .andThen(new WaitCommand(0.1))
+          .andThen(() -> gripper.armHoldPosition(), lockTwo)
+          .andThen(new WaitCommand(0.25))
+          .andThen(() -> gripper.setArmTarget(Constants.ARM_SCORE), lockTwo)
+          .andThen(new WaitCommand(0.75))
+          .andThen(() -> linearSlide.setTarget(Constants.LS_HIGH), lockTwo));
     
       manip.getRightStickPress().onTrue(
-        new InstantCommand(() -> elevator.setTarget(-550), lockTwo)
-        .andThen(new WaitCommand(0.25))
-        .andThen(() -> gripper.setArmTarget(-107500), lockTwo)
-        .andThen(gripper::wristFalconUp, lockTwo)
-        .andThen(new WaitCommand(0.5))
-        .andThen(() -> linearSlide.setTarget(15), lockTwo)
-        );
+        new InstantCommand(() -> elevator.setTarget(Constants.ELEVATOR_SUBSTATION), lockTwo)
+          .andThen(new WaitCommand(0.1))
+          .andThen(() -> gripper.armHoldPosition(), lockTwo)
+          .andThen(new WaitCommand(0.25))
+          .andThen(() -> gripper.setDoubleSubstation(), lockTwo)
+          .andThen(new WaitCommand(0.75))
+          .andThen(() -> linearSlide.setTarget(Constants.LS_SUBSTATION), lockTwo));
   }
 
   /**

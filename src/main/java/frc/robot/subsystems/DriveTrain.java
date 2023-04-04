@@ -68,11 +68,12 @@ public class DriveTrain extends SubsystemBase {
 
         this.balanceController = new PIDController(0.012, 0, 0);
 
+        isPlaying = false;
+
 
     }
 
     public void control(double x, double y, double rotate) {
-
         if(isPlaying) {
             MotionOfTheOcean.Executor.executeRecording(() -> DriveTrain.getInstance().toPose(MotionOfTheOcean.Executor.getState().getPose()));
         }

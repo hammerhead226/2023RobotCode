@@ -49,6 +49,7 @@ public class Robot extends TimedRobot {
 
     PortForwarder.add(1181, "hammerheads-jetson.local", 1181);
     PortForwarder.add(1182, "hammerheads-jetson.local", 1182);
+    m_robotContainer.vision.shutdown();
   }
 
   /**
@@ -70,7 +71,6 @@ public class Robot extends TimedRobot {
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
   public void disabledInit() {
-    m_robotContainer.gripper.automaticModeOff();
     state = Phase.DISABLED;
     SmartDashboard.putBoolean("auto balance running", false);
     DriveTrain.getInstance().stopPlayback();
@@ -94,7 +94,6 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-    m_robotContainer.gripper.automaticModeOn();
     // This makes sure that the autonomous stops running when
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove

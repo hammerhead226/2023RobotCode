@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.libs.wrappers.GenericMotor;
 import frc.robot.Constants;
+import frc.robot.Robot;
 import frc.robot.RobotMap;
 
 public class Intake extends SubsystemBase {
@@ -52,10 +53,11 @@ public class Intake extends SubsystemBase {
   }
 
   public void run() {
-    double intakeRetract;
-    if(intakeTucked) {
-      
+    
+    if(Robot.m_robotContainer.gripper.getCubeMode()) {
+      intakeOn = true;
     }
+
     if (intakeOn) {
       double extendSpeed = intakePID.calculate(intakeEncoder.getSensorPose(), Constants.INTAKE_EXTEND);
       if (extendSpeed > Constants.MAX_SPEED_UP) {

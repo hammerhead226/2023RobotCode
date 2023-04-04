@@ -65,13 +65,13 @@ public final class Constants {
  
  
      // PID Configurations
-     public static final double[] DRIVE_GAINS = {0.6, 0.0, 0.0}; //0.7115,
+     public static final double[] DRIVE_GAINS = {0.18, 0.0, 0.0}; //0.7115, 0.6
  
      public static final double[] STEER_GAINS_LOW = {0.62, 0, 0.0};
      public static final double[] STEER_GAINS_HIGH = {.68, 0, 0.0};
  
-     public static final double[] ROTATE_GAINS_LOW = {2.5, 0.0, 0.0};//.669
-     public static final double[] ROTATE_GAINS_HIGH = {0.9, 0.0, 0.0};//.9
+     public static final double[] ROTATE_GAINS_LOW = {1.5, 0.0, 0.0};//.669, 2.5
+     public static final double[] ROTATE_GAINS_HIGH = {0.8, 0.0, 0.0};//.9
  
      public static double[] LIMELIGHT_GAINS = {0.065, 0.0, 0.0};
  
@@ -143,10 +143,9 @@ public final class Constants {
 
 
   // Gripper Constants
-  public static final double CLAW_CLOSE_CONE = 10000;
-  public static final double CLAW_CLOSE_CUBE = -5000
-  ;
-  public static final double CLAW_OPEN_CONE = -19000;
+  public static final double CLAW_CLOSE_CONE = 1500;
+  public static final double CLAW_CLOSE_CUBE = 11000;
+  public static final double CLAW_OPEN_CONE = 23000;
 
   public static final double ARM_POS_1 = 0;
   public static final double ARM_POS_2 = -130000;
@@ -166,4 +165,26 @@ public final class Constants {
 
   // Active Floor
   public static final double ACTIVE_FLOOR_CONSTANT_SPEED = 0.3;
+
+
+  //Scoring Setpoints
+
+  public static final double ELEVATOR_HIGH = -1400;
+  public static final double ELEVATOR_MID = -400;
+  public static final double ELEVATOR_HOLD = 1000;
+  public static final double ELEVATOR_INTAKE = 1100;
+  public static final double ELEVATOR_SUBSTATION = -750;
+
+  public static final double LS_HIGH = 42;
+  public static final double LS_MID = 21;
+  public static final double LS_RETRACTED = 0;
+  public static final double LS_SUBSTATION = 15;
+
+  public static final double ARM_SCORE = -130000;
+  public static final double ARM_SUBSTATION = -107500;
+  public static final double ARM_INTAKE = -40000;
+  public static final double ARM_CONE_HOLD = 3000;
+  public static final double ARM_CUBE_HOLD = 0;
+
+
 }

@@ -25,10 +25,6 @@ public class RobotMap {
     public static final int INTAKE_ENCODER_PORT = 16;
     public static final int ROLLER_PORT = 11;
 
-    // Elevator Ports
-    public static final int ELEVATOR_MOTOR_1 = 0;
-    public static final int ELEVATOR_MOTOR_2 = 0;
-
     // Linear Slider Ports 
     public static final int SLIDER_SPARK_MAX_PORT = 13;
     public static final int LED_SPARK = 1;
