@@ -4,6 +4,8 @@
 
 package frc.robot.commands;
 
+import javax.xml.namespace.QName;
+
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -22,7 +24,7 @@ public class TestAuto extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      // new WaitCommand(0.25),
+      new WaitCommand(0.25),
       // new InstantCommand(() -> Robot.m_robotContainer.elevator.setTarget(-1100), Robot.m_robotContainer.lock)
       // .andThen(new WaitCommand(0.25))
       // .andThen(Robot.m_robotContainer.gripper::extendArm, Robot.m_robotContainer.lock)
@@ -37,6 +39,9 @@ public class TestAuto extends SequentialCommandGroup {
       // .andThen(new WaitCommand(0.25))
       // .andThen(Robot.m_robotContainer.gripper::retractArm, Robot.m_robotContainer.lock),
       new InstantCommand(() -> Robot.m_robotContainer.elevator.setTarget(500), Robot.m_robotContainer.lock),
+      new InstantCommand(() -> Robot.m_robotContainer.intake.runOut(), Robot.m_robotContainer.lock),
+      new WaitCommand(0.5),
+      new InstantCommand(() -> Robot.m_robotContainer.intake.stop(), Robot.m_robotContainer.lock),
       new InstantCommand(() -> DriveTrain.getInstance().reset()),
       new InstantCommand(() -> MotionOfTheOcean.Executor.resetExecutor(DriveTrain.getInstance()::reset)),
       new InstantCommand(()-> MotionOfTheOcean.Executor.loadRecordings("/paths/red_export_path.csv")),
@@ -58,7 +63,15 @@ public class TestAuto extends SequentialCommandGroup {
       new InstantCommand(Robot.m_robotContainer.intake::runIn, Robot.m_robotContainer.lock),
       new WaitCommand(2.5),
       new InstantCommand(Robot.m_robotContainer.intake::stop, Robot.m_robotContainer.lock),
-      new WaitCommand(1.75),
+      new WaitCommand(0.25),
+      new InstantCommand(Robot.m_robotContainer.intake::runOut, Robot.m_robotContainer.lock),
+      new WaitCommand(2.5),
+      new InstantCommand(Robot.m_robotContainer.intake::stop, Robot.m_robotContainer.lock),
+      new WaitCommand(0.25),
+      new InstantCommand(Robot.m_robotContainer.intake::runIn, Robot.m_robotContainer.lock),
+      new WaitCommand(1.9),
+      new InstantCommand(Robot.m_robotContainer.intake::stop, Robot.m_robotContainer.lock),
+      new WaitCommand(2),
       new InstantCommand(Robot.m_robotContainer.intake::runOut, Robot.m_robotContainer.lock),
       new WaitCommand(2.5),
       new InstantCommand(Robot.m_robotContainer.intake::stop, Robot.m_robotContainer.lock)

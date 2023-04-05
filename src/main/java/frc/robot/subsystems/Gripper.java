@@ -71,8 +71,8 @@ public class Gripper extends SubsystemBase {
     // distanceSensor = new Rev2mDistanceSensor(Port.kOnboard);
 
     // wrist.setIdleMode(IdleMode.kBrake);
-    claw.setNeutralMode(PassiveMode.COAST);
-    arm.setNeutralMode(PassiveMode.COAST);
+    claw.setNeutralMode(PassiveMode.BRAKE);
+    arm.setNeutralMode(PassiveMode.BRAKE);
 
     armPID = new PIDController(Constants.ARM_GAINS[0], Constants.ARM_GAINS[1], Constants.ARM_GAINS[2]);
     clawPID = new PIDController(Constants.CLAW_GAINS[0], Constants.CLAW_GAINS[1], Constants.CLAW_GAINS[2]);

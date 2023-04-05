@@ -96,7 +96,7 @@ public class Intake extends SubsystemBase {
 
   public void runOut() {
     // if (intakeOn) {
-      roller.set(-Constants.ROLLER_RUN_SPEED);
+      roller.set(-0.7);
     // }
   }
 

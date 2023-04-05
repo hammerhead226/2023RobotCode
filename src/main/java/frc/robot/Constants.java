@@ -65,7 +65,7 @@ public final class Constants {
  
  
      // PID Configurations
-     public static final double[] DRIVE_GAINS = {0.18, 0.0, 0.0}; //0.7115, 0.6
+     public static final double[] DRIVE_GAINS = {0.16, 0.0, 0.0}; //0.7115, 0.6, .18
  
      public static final double[] STEER_GAINS_LOW = {0.62, 0, 0.0};
      public static final double[] STEER_GAINS_HIGH = {.68, 0, 0.0};
