@@ -23,6 +23,7 @@ public class Swerve {
   private PIDController driveController;
   private PIDController steerController;
   private PIDController rotateController;
+  private PIDController correctionController;
 
   private double[] speeds;
   private double[] thetas;
@@ -58,6 +59,7 @@ public class Swerve {
     this.driveController = new PIDController(0, 0, 0);
     this.steerController = new PIDController(0, 0, 0);
     this.rotateController = new PIDController(0, 0, 0);
+    // this.correctionController = new PIDController()
     this.highSpeedMode = false;
     this.isFieldCentric = true;
 
@@ -145,21 +147,21 @@ public class Swerve {
       }
     }
     
-    if(rotate == 0 && isFieldCentric) {
-      if(!isGyroAngleSet) {
-        gyroHold = gyro.getYaw();
-        isGyroAngleSet = true;
-      }
+    // if(rotate == 0 && isFieldCentric) {
+    //   if(!isGyroAngleSet) {
+    //     gyroHold = gyro.getYaw();
+    //     isGyroAngleSet = true;
+    //   }
 
-      if(Math.hypot(x, y) < rotateGainsThreshold) rotateController.setPID(rotateHighGains);
-      else rotateController.setPID(rotateLowGains);
+    //   if(Math.hypot(x, y) < rotateGainsThreshold) rotateController.setPID(rotateHighGains);
+    //   else rotateController.setPID(rotateLowGains);
 
-      rotate = rotateController.calculate(gyro.getYaw(), gyroHold);
-      if(Math.abs(rotate) < rotateVelocityThreshold) rotate = 0;
-    }
-    else {
-      isGyroAngleSet = false;
-    }
+    //   rotate = rotateController.calculate(gyro.getYaw(), gyroHold);
+    //   if(Math.abs(rotate) < rotateVelocityThreshold) rotate = 0;
+    // }
+    // else {
+    //   isGyroAngleSet = false;
+    // }
 
     double gyroYaw = isFieldCentric ? gyro.getYaw() : 0;
 

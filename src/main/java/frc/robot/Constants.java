@@ -48,7 +48,7 @@ public final class Constants {
  
      // Teleoperated Parameters
      public static final double LOW_BOUND_SPEED = 0.7;
-     public static final double HIGH_BOUND_SPEED = 0.5;
+     public static final double HIGH_BOUND_SPEED = 0.75;
  
      public static final double ACCELERATION_RATE = 0.01;
      public static final double INITIAL_SPEED = 0.35;
@@ -173,7 +173,7 @@ public final class Constants {
   public static final double ELEVATOR_MID = -400;
   public static final double ELEVATOR_HOLD = 1000;
   public static final double ELEVATOR_INTAKE = 1100;
-  public static final double ELEVATOR_SUBSTATION = -750;
+  public static final double ELEVATOR_SUBSTATION = -650;
 
   public static final double LS_HIGH = 42;
   public static final double LS_MID = 21;

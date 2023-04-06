@@ -25,6 +25,8 @@ import frc.robot.commands.RedOneConeMobile;
 import frc.robot.commands.RedTwoPieceNoBump;
 import frc.robot.commands.TestAuto;
 import frc.robot.commands.BlueOneConeMobile;
+import frc.robot.commands.BlueThreePieceNoBump;
+import frc.robot.commands.BlueTwoPieceNoBump;
 import frc.robot.commands.OneConeEngage;
 import frc.robot.subsystems.ActiveFloor;
 import frc.robot.subsystems.DriveTrain;
@@ -82,6 +84,8 @@ public class RobotContainer {
     selecter.addOption("red one cone mobile", new RedOneConeMobile());
     selecter.addOption("one cone mobile and engage", new OneConeMobilityEngage());
     selecter.addOption("red two piece", new RedTwoPieceNoBump());
+    selecter.addOption("blue two piece", new BlueTwoPieceNoBump());
+    selecter.addOption("blue three piece", new BlueThreePieceNoBump());
     selecter.addOption("test auto", new TestAuto());
 
     SmartDashboard.putData("auton", selecter);
