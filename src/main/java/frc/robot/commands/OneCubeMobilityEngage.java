@@ -16,13 +16,14 @@ import frc.robot.subsystems.Elevator;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class OneConeMobilityEngage extends SequentialCommandGroup {
+public class OneCubeMobilityEngage extends SequentialCommandGroup {
   /** Creates a new OneConeMobilityEngage. */
-  public OneConeMobilityEngage() {
+  public OneCubeMobilityEngage() {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new WaitCommand(0.25),
+      new InstantCommand(Robot.m_robotContainer.gripper::setCubeMode, Robot.m_robotContainer.lock),
       new InstantCommand(() -> Robot.m_robotContainer.elevator.setTarget(Constants.ELEVATOR_HIGH), Robot.m_robotContainer.lock)
           .andThen(new WaitCommand(0.1))
           .andThen(() -> Robot.m_robotContainer.gripper.armHoldPosition(), Robot.m_robotContainer.lock)
@@ -42,15 +43,13 @@ public class OneConeMobilityEngage extends SequentialCommandGroup {
       new InstantCommand(() -> DriveTrain.getInstance().reset(), DriveTrain.getInstance()),
       new RunCommand(() -> DriveTrain.getInstance().control(0, -2.25, 0), DriveTrain.getInstance()).until(DriveTrain.getInstance()::isChassisUnstable),
       new RunCommand(() -> DriveTrain.getInstance().control(0, -0.5, 0), DriveTrain.getInstance()).until(DriveTrain.getInstance()::isChassisStable),
-      new RunCommand(() -> DriveTrain.getInstance().control(0.1, -0.25, 0), DriveTrain.getInstance()).withTimeout(1.5),
+      new RunCommand(() -> DriveTrain.getInstance().control(0, -0.25, 0), DriveTrain.getInstance()).withTimeout(1.5),
       new InstantCommand(() -> DriveTrain.getInstance().control(0, 0, 0), DriveTrain.getInstance()),
       new WaitCommand(1),
       new RunCommand(() -> DriveTrain.getInstance().control(0, 2.25, 0), DriveTrain.getInstance()).until(DriveTrain.getInstance()::isChassisUnstable),
       new WaitCommand(0.1),
       new InstantCommand(() -> DriveTrain.getInstance().control(0, 0, 0), DriveTrain.getInstance()),
-      new AutoBalance(false, 0.018)
-      // new RunCommand(() -> DriveTrain.getInstance().control(0, 0.12, 0), DriveTrain.getInstance()).withTimeout(1),
-      // new InstantCommand(() -> DriveTrain.getInstance().control(0, 0, 0), DriveTrain.getInstance())
+      new AutoBalance(false, 0.0175)
     );
   }
 }

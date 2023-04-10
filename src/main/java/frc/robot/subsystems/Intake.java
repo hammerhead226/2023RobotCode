@@ -54,9 +54,12 @@ public class Intake extends SubsystemBase {
 
   public void run() {
     
-    if(Robot.m_robotContainer.gripper.getCubeMode()) {
+    if(Robot.m_robotContainer.gripper.getCubeMode()
+     || Robot.m_robotContainer.gripper.getArmTarget() == Constants.ARM_SCORE
+     || Robot.m_robotContainer.elevator.getTarget() != Constants.ELEVATOR_HOLD) {
       intakeOn = true;
     }
+    SmartDashboard.putBoolean("intake on?", intakeOn);
 
     if (intakeOn) {
       double extendSpeed = intakePID.calculate(intakeEncoder.getSensorPose(), Constants.INTAKE_EXTEND);
@@ -70,9 +73,11 @@ public class Intake extends SubsystemBase {
         retractSpeed = Constants.MAX_SPEED_DOWN;
       }
       control(retractSpeed);
-      // SmartDashboard.putNumber("intake speed", retractSpeed);
+      SmartDashboard.putNumber("intake speed", retractSpeed);
       // SmartDashboard.putNumber("intake pose", intakeEncoder.getSensorPose());
     }
+    SmartDashboard.putNumber("intake stator", intake.getFalcon().getStatorCurrent());
+    SmartDashboard.putNumber("intake supply", intake.getFalcon().getSupplyCurrent());
   }
 
   public void toggleIntake() {

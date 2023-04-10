@@ -24,27 +24,27 @@ public class TestAuto extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new WaitCommand(0.25),
-      new InstantCommand(() -> Robot.m_robotContainer.elevator.setTarget(Constants.ELEVATOR_HIGH), Robot.m_robotContainer.lock)
-          .andThen(new WaitCommand(0.1))
-          .andThen(() -> Robot.m_robotContainer.gripper.armHoldPosition(), Robot.m_robotContainer.lock)
-          .andThen(new WaitCommand(0.25))
-          .andThen(() -> Robot.m_robotContainer.gripper.setArmTarget(Constants.ARM_SCORE), Robot.m_robotContainer.lock)
-          .andThen(new WaitCommand(0.75))
-          .andThen(() -> Robot.m_robotContainer.linearSlide.setTarget(Constants.LS_HIGH), Robot.m_robotContainer.lock),
-      new WaitCommand(1.5),
-      new InstantCommand(Robot.m_robotContainer.gripper::openClaw, Robot.m_robotContainer.lock),
-      new WaitCommand(0.5),
-      new InstantCommand(() -> Robot.m_robotContainer.linearSlide.setTarget(Constants.LS_RETRACTED), Robot.m_robotContainer.lock)
-      .andThen(new WaitCommand(0.5))
-      .andThen(Robot.m_robotContainer.gripper::armHoldPosition, Robot.m_robotContainer.lock)
-      .andThen(Robot.m_robotContainer.gripper::closeClaw, Robot.m_robotContainer.lock)
-      .andThen(new WaitCommand(0.25)),
+      // new WaitCommand(0.25),
+      // new InstantCommand(() -> Robot.m_robotContainer.elevator.setTarget(Constants.ELEVATOR_HIGH), Robot.m_robotContainer.lock)
+      //     .andThen(new WaitCommand(0.1))
+      //     .andThen(() -> Robot.m_robotContainer.gripper.armHoldPosition(), Robot.m_robotContainer.lock)
+      //     .andThen(new WaitCommand(0.25))
+      //     .andThen(() -> Robot.m_robotContainer.gripper.setArmTarget(Constants.ARM_SCORE), Robot.m_robotContainer.lock)
+      //     .andThen(new WaitCommand(0.75))
+      //     .andThen(() -> Robot.m_robotContainer.linearSlide.setTarget(Constants.LS_HIGH), Robot.m_robotContainer.lock),
+      // new WaitCommand(1.5),
+      // new InstantCommand(Robot.m_robotContainer.gripper::openClaw, Robot.m_robotContainer.lock),
+      // new WaitCommand(0.5),
+      // new InstantCommand(() -> Robot.m_robotContainer.linearSlide.setTarget(Constants.LS_RETRACTED), Robot.m_robotContainer.lock)
+      // .andThen(new WaitCommand(0.5))
+      // .andThen(Robot.m_robotContainer.gripper::armHoldPosition, Robot.m_robotContainer.lock)
+      // .andThen(Robot.m_robotContainer.gripper::closeClaw, Robot.m_robotContainer.lock)
+      // .andThen(new WaitCommand(0.25)),
       new InstantCommand(() -> Robot.m_robotContainer.elevator.setTarget(500), Robot.m_robotContainer.lock),
       new InstantCommand(() -> DriveTrain.getInstance().reset()),
       new InstantCommand(() -> MotionOfTheOcean.Executor.resetExecutor(DriveTrain.getInstance()::reset)),
-      new InstantCommand(()-> MotionOfTheOcean.Executor.loadRecordings("/paths/blue_export_path.csv")),
-      new InstantCommand(() -> MotionOfTheOcean.Executor.selectRecording("/paths/blue_export_path.csv")),
+      new InstantCommand(()-> MotionOfTheOcean.Executor.loadRecordings("/paths/red_export_path.csv")),
+      new InstantCommand(() -> MotionOfTheOcean.Executor.selectRecording("/paths/red_export_path.csv")),
       new InstantCommand(() -> DriveTrain.getInstance().reset()),
       new InstantCommand(()-> DriveTrain.getInstance().togglePlayback()),
       new WaitCommand(0.5),
@@ -57,7 +57,7 @@ public class TestAuto extends SequentialCommandGroup {
       .andThen(Robot.m_robotContainer.gripper::openClaw, Robot.m_robotContainer.lock)
       .andThen(new WaitCommand(0.5))
       .andThen(() -> Robot.m_robotContainer.gripper.setArmTarget(Constants.ARM_INTAKE), Robot.m_robotContainer.lock),
-      new WaitCommand(0.75),
+      new WaitCommand(0.25),
       new InstantCommand(Robot.m_robotContainer.intake::extendIntake, Robot.m_robotContainer.lock),
       new InstantCommand(Robot.m_robotContainer.intake::runIn, Robot.m_robotContainer.lock),
       new WaitCommand(1.5),
@@ -65,16 +65,7 @@ public class TestAuto extends SequentialCommandGroup {
       new WaitCommand(1.5),
       new InstantCommand(Robot.m_robotContainer.intake::runOut, Robot.m_robotContainer.lock),
       new WaitCommand(2.5),
-      new InstantCommand(Robot.m_robotContainer.intake::stop, Robot.m_robotContainer.lock),
-      new WaitCommand(0.25),
-      new InstantCommand(Robot.m_robotContainer.intake::runIn, Robot.m_robotContainer.lock),
-      new WaitCommand(1.9),
-      new InstantCommand(Robot.m_robotContainer.intake::stop, Robot.m_robotContainer.lock),
-      new WaitCommand(2),
-      new InstantCommand(Robot.m_robotContainer.intake::runOut, Robot.m_robotContainer.lock),
-      new WaitCommand(2.5),
       new InstantCommand(Robot.m_robotContainer.intake::stop, Robot.m_robotContainer.lock)
-
     );
   }
 }

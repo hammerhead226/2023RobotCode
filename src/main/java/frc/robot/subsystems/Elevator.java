@@ -96,6 +96,10 @@ public class Elevator extends SubsystemBase {
     target = t;
   }
 
+  public double getTarget() {
+    return target;
+  }
+
   public void control(double speed) {
     elevatorLeft.set(speed);
   }

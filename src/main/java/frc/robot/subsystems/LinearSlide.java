@@ -29,11 +29,14 @@ public class LinearSlide extends SubsystemBase {
     slider = new CANSparkMax(RobotMap.SLIDER_SPARK_MAX_PORT, MotorType.kBrushless);
     slider.setInverted(Constants.LS_SET_INVERTED);
 
+    
+    slider.setInverted(true);
+
     pid = new PIDController(Constants.LINEAR_SLIDE_GAINS[0], Constants.LINEAR_SLIDE_GAINS[1],
         Constants.LINEAR_SLIDE_GAINS[2]);
 
     extendSpeedLimit = 0.6;
-    retractSpeedLimit = 0.45;
+    retractSpeedLimit = 0.2;
     manual = false;
   }
 
@@ -64,7 +67,7 @@ public class LinearSlide extends SubsystemBase {
       // control(Robot.m_robotContainer.manip.getLeftJoyY());
       control(motorSpeed);
     }
-    // SmartDashboard.putNumber("neo pose", slider.getEncoder().getPosition());
+    SmartDashboard.putNumber("neo pose", slider.getEncoder().getPosition());
   }
 
   public void setTarget(double t) {

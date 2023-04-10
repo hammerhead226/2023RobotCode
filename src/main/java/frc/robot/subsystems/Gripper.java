@@ -148,6 +148,10 @@ public class Gripper extends SubsystemBase {
     substationMode = false;
   }
 
+  public double getArmTarget() {
+    return armTarget;
+  }
+
   public void toggleCubeMode() {
     cubeMode = !cubeMode;
   }
@@ -182,7 +186,7 @@ public class Gripper extends SubsystemBase {
 
   int sustain = 0;
   public void closeClawWhenSeen() {
-    if (proximitySensor.getValue() > 1300 && proximitySensor.getValue() < 2500) {
+    if (proximitySensor.getValue() > 1100 && proximitySensor.getValue() < 2500) {
       sustain++;
     }
     else {

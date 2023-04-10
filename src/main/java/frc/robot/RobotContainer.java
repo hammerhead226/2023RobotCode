@@ -21,11 +21,15 @@ import frc.libs.wrappers.Controller;
 import frc.robot.commands.AutoBalance;
 import frc.robot.commands.OneConeEngage;
 import frc.robot.commands.OneConeMobilityEngage;
+import frc.robot.commands.OneCubeMobilityEngage;
 import frc.robot.commands.RedOneConeMobile;
+import frc.robot.commands.RedThreePieceNoBump;
+import frc.robot.commands.RedTwoPieceBump;
 import frc.robot.commands.RedTwoPieceNoBump;
 import frc.robot.commands.TestAuto;
 import frc.robot.commands.BlueOneConeMobile;
 import frc.robot.commands.BlueThreePieceNoBump;
+import frc.robot.commands.BlueTwoPieceBump;
 import frc.robot.commands.BlueTwoPieceNoBump;
 import frc.robot.commands.OneConeEngage;
 import frc.robot.subsystems.ActiveFloor;
@@ -79,14 +83,18 @@ public class RobotContainer {
 
     
 
-    selecter.setDefaultOption("one and engage", new OneConeEngage());
-    selecter.addOption("blue one cone mobile", new BlueOneConeMobile());
-    selecter.addOption("red one cone mobile", new RedOneConeMobile());
+    // selecter.setDefaultOption("one and engage", new OneConeEngage());
+    // selecter.addOption("blue one cone mobile", new BlueOneConeMobile());
+    // selecter.addOption("red one cone mobile", new RedOneConeMobile());
     selecter.addOption("one cone mobile and engage", new OneConeMobilityEngage());
-    selecter.addOption("red two piece", new RedTwoPieceNoBump());
-    selecter.addOption("blue two piece", new BlueTwoPieceNoBump());
+    selecter.addOption("one cube mobility engage", new OneCubeMobilityEngage());
+    selecter.addOption("red two piece no bump", new RedTwoPieceNoBump());
+    selecter.addOption("blue two piece no bump", new BlueTwoPieceNoBump());
+    selecter.addOption("red two piece bump", new RedTwoPieceBump());
+    selecter.addOption("blue two piece bump", new BlueTwoPieceBump());
     selecter.addOption("blue three piece", new BlueThreePieceNoBump());
-    selecter.addOption("test auto", new TestAuto());
+    selecter.addOption("red three piece", new RedThreePieceNoBump());
+    // selecter.addOption("test auto", new TestAuto());
 
     SmartDashboard.putData("auton", selecter);
 
@@ -104,7 +112,7 @@ public class RobotContainer {
     // driver.getAButton().onTrue(new InstantCommand(intake::toggleIntake, intake));
     // driver.getAButton().whileTrue(new RunCommand(() -> dt.toPose(new double[]{0, 20, Math.PI}), dt).until(dt::atSetpoint)
     // .andThen(new RunCommand(() -> dt.toPose(new double[]{0, 100, 0}), dt).until(dt::atSetpoint)));
-    driver.getAButton().whileTrue(new TestAuto().handleInterrupt(DriveTrain.getInstance()::togglePlayback));
+    // driver.getAButton().whileTrue(new TestAuto().handleInterrupt(DriveTrain.getInstance()::togglePlayback));
 
     driver.getSTARTButton().onTrue(new InstantCommand(dt::reset, dt));
     driver.getLBButton().onTrue(new InstantCommand(() -> dt.toggleSpeed(), dt));
@@ -133,13 +141,13 @@ public class RobotContainer {
       new InstantCommand(intake::stop, intake)
       .andThen(activeFloor::stop, activeFloor)
     );
-    // manip.getXButton().onTrue(
-    //   new InstantCommand(() -> linearSlide.setTarget(0), lockTwo)
-    //   .andThen(new WaitCommand(0.5))
-    //   .andThen(gripper::armHoldPosition, lockTwo)
-    //   .andThen(new WaitCommand(0.25))
-    //   .andThen(() -> elevator.setTarget(0), lockTwo)
-    // );
+    manip.getLeftStickPress().onTrue(
+      new InstantCommand(() -> linearSlide.setTarget(0), lockTwo)
+      .andThen(new WaitCommand(0.5))
+      .andThen(gripper::armHoldPosition, lockTwo)
+      .andThen(new WaitCommand(0.25))
+      .andThen(() -> elevator.setTarget(0), lockTwo)
+    );
 
     manip.getXButton().onTrue(
       new InstantCommand(() -> linearSlide.setTarget(Constants.LS_RETRACTED), lockTwo)
@@ -147,7 +155,6 @@ public class RobotContainer {
       .andThen(new WaitCommand(0.5))
       .andThen(gripper::armHoldPosition, lockTwo)
       .andThen(new WaitCommand(0.25))
-      .andThen(() -> elevator.setTarget(Constants.ELEVATOR_INTAKE - 200), lockTwo)
       .andThen(gripper::openClaw, lockTwo)
       .andThen(new WaitCommand(0.5))
       .andThen(() -> elevator.setTarget(Constants.ELEVATOR_INTAKE), lockTwo)
@@ -155,12 +162,11 @@ public class RobotContainer {
       );
 
 
-    manip.getLeftStickPress().onTrue(new InstantCommand(gripper::toggleWrist, gripper));
+    // manip.getLeftStickPress().onTrue(new InstantCommand(gripper::toggleWrist, gripper));
 
     manip.getAButton().onTrue(
       new InstantCommand(() -> linearSlide.setTarget(Constants.LS_RETRACTED), lockTwo)
-      .andThen(new WaitCommand(0.5))
-      .andThen(() -> elevator.setTarget(Constants.ELEVATOR_HOLD - 100), lockTwo)
+      .andThen(new WaitCommand(0.65))
       .andThen(gripper::armHoldPosition, lockTwo)
       .andThen(new WaitCommand(0.25))
       .andThen(() -> elevator.setTarget(Constants.ELEVATOR_HOLD), lockTwo)
