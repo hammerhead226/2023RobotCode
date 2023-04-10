@@ -241,4 +241,13 @@ public class GenericMotor {
     public void configVictor(VictorSPXConfiguration config) {
         victor.configAllSettings(config);
     }
+
+    public TalonFX getFalcon() {
+        switch(motorType) {
+            case FALCON:
+                return falcon;
+            default:
+                return null;
+        }
+    }
 }

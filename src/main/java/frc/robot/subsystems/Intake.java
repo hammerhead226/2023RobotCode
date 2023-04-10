@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.libs.wrappers.GenericMotor;
 import frc.robot.Constants;
+import frc.robot.Robot;
 import frc.robot.RobotMap;
 
 public class Intake extends SubsystemBase {
@@ -52,10 +53,14 @@ public class Intake extends SubsystemBase {
   }
 
   public void run() {
-    double intakeRetract;
-    if(intakeTucked) {
-      
+    
+    if(Robot.m_robotContainer.gripper.getCubeMode()
+     || Robot.m_robotContainer.gripper.getArmTarget() == Constants.ARM_SCORE
+     || Robot.m_robotContainer.elevator.getTarget() != Constants.ELEVATOR_HOLD) {
+      intakeOn = true;
     }
+    SmartDashboard.putBoolean("intake on?", intakeOn);
+
     if (intakeOn) {
       double extendSpeed = intakePID.calculate(intakeEncoder.getSensorPose(), Constants.INTAKE_EXTEND);
       if (extendSpeed > Constants.MAX_SPEED_UP) {
@@ -68,9 +73,11 @@ public class Intake extends SubsystemBase {
         retractSpeed = Constants.MAX_SPEED_DOWN;
       }
       control(retractSpeed);
-      // SmartDashboard.putNumber("intake speed", retractSpeed);
+      SmartDashboard.putNumber("intake speed", retractSpeed);
       // SmartDashboard.putNumber("intake pose", intakeEncoder.getSensorPose());
     }
+    SmartDashboard.putNumber("intake stator", intake.getFalcon().getStatorCurrent());
+    SmartDashboard.putNumber("intake supply", intake.getFalcon().getSupplyCurrent());
   }
 
   public void toggleIntake() {
@@ -94,7 +101,7 @@ public class Intake extends SubsystemBase {
 
   public void runOut() {
     // if (intakeOn) {
-      roller.set(-Constants.ROLLER_RUN_SPEED);
+      roller.set(-0.7);
     // }
   }
 
@@ -111,5 +118,7 @@ public class Intake extends SubsystemBase {
   }
 
   @Override
-  public void periodic() {}
+  public void periodic() {
+    SmartDashboard.putNumber("intake enc", getIntake());
+  }
 }

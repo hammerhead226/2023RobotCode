@@ -48,7 +48,7 @@ public final class Constants {
  
      // Teleoperated Parameters
      public static final double LOW_BOUND_SPEED = 0.7;
-     public static final double HIGH_BOUND_SPEED = 0.5;
+     public static final double HIGH_BOUND_SPEED = 0.75;
  
      public static final double ACCELERATION_RATE = 0.01;
      public static final double INITIAL_SPEED = 0.35;
@@ -65,13 +65,13 @@ public final class Constants {
  
  
      // PID Configurations
-     public static final double[] DRIVE_GAINS = {0.6, 0.0, 0.0}; //0.7115,
+     public static final double[] DRIVE_GAINS = {0.16, 0.0, 0.0}; //0.7115, 0.6, .18
  
      public static final double[] STEER_GAINS_LOW = {0.62, 0, 0.0};
      public static final double[] STEER_GAINS_HIGH = {.68, 0, 0.0};
  
-     public static final double[] ROTATE_GAINS_LOW = {1.3, 0.0, 0.0};//.669
-     public static final double[] ROTATE_GAINS_HIGH = {0.9, 0.0, 0.0};//.9
+     public static final double[] ROTATE_GAINS_LOW = {1.5, 0.0, 0.0};//.669, 2.5
+     public static final double[] ROTATE_GAINS_HIGH = {0.65, 0.0, 0.0};//.9
  
      public static double[] LIMELIGHT_GAINS = {0.065, 0.0, 0.0};
  
@@ -117,7 +117,7 @@ public final class Constants {
 
 
   // Linear Slide Constants
-  public static final double[] LINEAR_SLIDE_GAINS = { 0.075, 0, 0 };
+  public static final double[] LINEAR_SLIDE_GAINS = { 0.09, 0, 0 };
   public static final boolean LS_SET_INVERTED = true;
 
 
@@ -131,21 +131,23 @@ public final class Constants {
 
 
   // Intake Constants
-  public static final double ROLLER_RUN_SPEED = 0.85;
-  public static final double[] INTAKE_GAINS = { 0.0006, 0, 0 };
+  public static final double ROLLER_RUN_SPEED = 0.65;
+  public static final double[] INTAKE_GAINS = { 0.0008, 0, 0 };
   public static final int INTAKE_OFFSET = 0;
 
   public static final double INTAKE_EXTEND = 3675;
-  public static final double INTAKE_RETRACT = 3200;// 3000 to be fully retracted
+  public static final double INTAKE_RETRACT = 2800;
+      
+    // 3000 to be fully retracted
   
-  public static final double MAX_SPEED_UP = 0.5;
-  public static final double MAX_SPEED_DOWN = 0.25;
+  public static final double MAX_SPEED_UP = 0.25; //extend
+  public static final double MAX_SPEED_DOWN = 0.55; //retract
 
 
   // Gripper Constants
-  public static final double CLAW_CLOSE_CONE = -1500;
-  public static final double CLAW_CLOSE_CUBE = 10000;
-  public static final double CLAW_OPEN_CONE = 27000;
+  public static final double CLAW_CLOSE_CONE = 1500;
+  public static final double CLAW_CLOSE_CUBE = 4000;
+  public static final double CLAW_OPEN_CONE = 23000;
 
   public static final double ARM_POS_1 = 0;
   public static final double ARM_POS_2 = -130000;
@@ -161,6 +163,30 @@ public final class Constants {
   public static final double[] CLAW_GAINS = {0.00003, 0, 0};
   public static final double[] WRIST_GAINS = { 0.15, 0, 0 };
 
+  public static final double CLOSING_DISTANCE = 8;
+
   // Active Floor
   public static final double ACTIVE_FLOOR_CONSTANT_SPEED = 0.3;
+
+
+  //Scoring Setpoints
+
+  public static final double ELEVATOR_HIGH = -1300;
+  public static final double ELEVATOR_MID = -300;
+  public static final double ELEVATOR_HOLD = 1100;
+  public static final double ELEVATOR_INTAKE = 1100;
+  public static final double ELEVATOR_SUBSTATION = -550;
+
+  public static final double LS_HIGH = 40;
+  public static final double LS_MID = 19;
+  public static final double LS_RETRACTED = 0;
+  public static final double LS_SUBSTATION = 17;
+
+  public static final double ARM_SCORE = -130000;
+  public static final double ARM_SUBSTATION = -107500;
+  public static final double ARM_INTAKE = -43000;
+  public static final double ARM_CONE_HOLD = 3000;
+  public static final double ARM_CUBE_HOLD = 0;
+
+
 }

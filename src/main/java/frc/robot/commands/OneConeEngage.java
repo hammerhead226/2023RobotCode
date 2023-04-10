@@ -38,7 +38,7 @@ public class OneConeEngage extends SequentialCommandGroup {
       new InstantCommand(() -> DriveTrain.getInstance().reset(), DriveTrain.getInstance()),
       new WaitCommand(1),
       new RunCommand(() -> DriveTrain.getInstance().control(0, -2.25, 0), DriveTrain.getInstance()).until(DriveTrain.getInstance()::isChassisUnstable),
-      new AutoBalance(15),
+      new AutoBalance(true),
       new RunCommand(() -> DriveTrain.getInstance().control(0, 0.12, 0), DriveTrain.getInstance()).withTimeout(1),
       new InstantCommand(() -> DriveTrain.getInstance().control(0, 0, 0), DriveTrain.getInstance())
     );
