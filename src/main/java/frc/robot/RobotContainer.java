@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.subsystems.LED;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -23,14 +24,18 @@ import frc.robot.commands.OneConeEngage;
 import frc.robot.commands.OneConeMobilityEngage;
 import frc.robot.commands.OneCubeMobilityEngage;
 import frc.robot.commands.RedOneConeMobile;
+import frc.robot.commands.RedThreePieceBump;
 import frc.robot.commands.RedThreePieceNoBump;
 import frc.robot.commands.RedTwoPieceBump;
 import frc.robot.commands.RedTwoPieceNoBump;
+import frc.robot.commands.SetColorMode;
 import frc.robot.commands.TestAuto;
 import frc.robot.commands.BlueOneConeMobile;
+import frc.robot.commands.BlueThreePieceBump;
 import frc.robot.commands.BlueThreePieceNoBump;
 import frc.robot.commands.BlueTwoPieceBump;
 import frc.robot.commands.BlueTwoPieceNoBump;
+import frc.robot.commands.FlashGreen;
 import frc.robot.commands.OneConeEngage;
 import frc.robot.subsystems.ActiveFloor;
 import frc.robot.subsystems.DriveTrain;
@@ -65,6 +70,11 @@ public class RobotContainer {
   public static final balls lock = new balls();
   public static final ballsTwo lockTwo = new ballsTwo();
 
+  public static final Command animation = new FlashGreen(0.1, 10, led)
+                                          .alongWith(new InstantCommand(() -> RobotContainer.driver.getJoystick().setRumble(RumbleType.kBothRumble, 1)))
+                                          .andThen(new WaitCommand(2))
+                                          .andThen(new InstantCommand(() -> RobotContainer.driver.getJoystick().setRumble(RumbleType.kBothRumble, 0)));
+
   SendableChooser<Command> selecter = new SendableChooser<>();
   
   public RobotContainer() {
@@ -80,6 +90,7 @@ public class RobotContainer {
     intake.setDefaultCommand(new RunCommand(intake::run, intake));
     linearSlide.setDefaultCommand(new RunCommand(linearSlide::run, linearSlide));
     elevator.setDefaultCommand(new RunCommand(elevator::run, elevator));
+    led.setDefaultCommand(new SetColorMode());
 
     
 
@@ -92,8 +103,11 @@ public class RobotContainer {
     selecter.addOption("blue two piece no bump", new BlueTwoPieceNoBump());
     selecter.addOption("red two piece bump", new RedTwoPieceBump());
     selecter.addOption("blue two piece bump", new BlueTwoPieceBump());
-    selecter.addOption("blue three piece", new BlueThreePieceNoBump());
-    selecter.addOption("red three piece", new RedThreePieceNoBump());
+    selecter.addOption("blue three piece no bump", new BlueThreePieceNoBump());
+    selecter.addOption("red three piece no bump", new RedThreePieceNoBump());
+    selecter.addOption("blue three piece bump", new BlueThreePieceBump());
+    selecter.addOption("red three piece bump", new RedThreePieceBump());
+    // selecter.addOption("led test", new FlashGreen());
     // selecter.addOption("test auto", new TestAuto());
 
     SmartDashboard.putData("auton", selecter);

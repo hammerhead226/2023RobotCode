@@ -30,7 +30,7 @@ public class BlueTwoPieceBump extends SequentialCommandGroup {
           .andThen(() -> Robot.m_robotContainer.gripper.setArmTarget(Constants.ARM_SCORE), Robot.m_robotContainer.lock)
           .andThen(new WaitCommand(0.75))
           .andThen(() -> Robot.m_robotContainer.linearSlide.setTarget(Constants.LS_HIGH), Robot.m_robotContainer.lock),
-      new WaitCommand(1.5),
+      new WaitCommand(0.75),
       new InstantCommand(Robot.m_robotContainer.gripper::openClaw, Robot.m_robotContainer.lock),
       new WaitCommand(0.5),
       new InstantCommand(() -> Robot.m_robotContainer.linearSlide.setTarget(Constants.LS_RETRACTED), Robot.m_robotContainer.lock)
@@ -45,7 +45,7 @@ public class BlueTwoPieceBump extends SequentialCommandGroup {
       new InstantCommand(() -> MotionOfTheOcean.Executor.selectRecording("/paths/blue_two_piece_bump.csv")),
       new InstantCommand(() -> DriveTrain.getInstance().reset()),
       new InstantCommand(()-> DriveTrain.getInstance().togglePlayback()),
-      new WaitCommand(0.5),
+      new WaitCommand(0.35),
       new InstantCommand(() -> Robot.m_robotContainer.linearSlide.setTarget(Constants.LS_RETRACTED), Robot.m_robotContainer.lock)
       .andThen(Robot.m_robotContainer.gripper::setCubeMode, Robot.m_robotContainer.lock)
       .andThen(new WaitCommand(0.5))
@@ -55,10 +55,9 @@ public class BlueTwoPieceBump extends SequentialCommandGroup {
       .andThen(Robot.m_robotContainer.gripper::openClaw, Robot.m_robotContainer.lock)
       .andThen(new WaitCommand(0.5))
       .andThen(() -> Robot.m_robotContainer.gripper.setArmTarget(Constants.ARM_INTAKE), Robot.m_robotContainer.lock),
-      new WaitCommand(0.1),
       new InstantCommand(Robot.m_robotContainer.intake::extendIntake, Robot.m_robotContainer.lock),
       new InstantCommand(Robot.m_robotContainer.intake::runIn, Robot.m_robotContainer.lock),
-      new WaitCommand(3),
+      new WaitCommand(2.5),
       new InstantCommand(Robot.m_robotContainer.intake::stop, Robot.m_robotContainer.lock),
       new WaitCommand(1.5),
       new InstantCommand(Robot.m_robotContainer.intake::runOut, Robot.m_robotContainer.lock),

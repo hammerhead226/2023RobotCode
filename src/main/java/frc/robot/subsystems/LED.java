@@ -40,6 +40,10 @@ public class LED extends SubsystemBase {
 
   }
 
+  public void setColor(double color) {
+    sparkSpeed = color;
+  }
+
   public void incrementLED() {
     sparkSpeed += 0.01;
   }
@@ -52,9 +56,5 @@ public class LED extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     ledSpark.set(sparkSpeed);
-
-    if(Robot.m_robotContainer.gripper.getCubeMode()) setCubeColor();
-    else setConeColor();
-
   }
 }

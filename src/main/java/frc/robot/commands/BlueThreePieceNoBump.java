@@ -24,10 +24,10 @@ public class BlueThreePieceNoBump extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new WaitCommand(0.25),
+      new WaitCommand(0.35),
       new InstantCommand(() -> Robot.m_robotContainer.elevator.setTarget(500), Robot.m_robotContainer.lock),
       new InstantCommand(() -> Robot.m_robotContainer.intake.runOut(), Robot.m_robotContainer.lock),
-      new WaitCommand(0.5),
+      new WaitCommand(0.2),
       new InstantCommand(() -> Robot.m_robotContainer.intake.stop(), Robot.m_robotContainer.lock),
       new InstantCommand(() -> DriveTrain.getInstance().reset()),
       new InstantCommand(() -> MotionOfTheOcean.Executor.resetExecutor(DriveTrain.getInstance()::reset)),
