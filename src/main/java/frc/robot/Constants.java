@@ -48,10 +48,10 @@ public final class Constants {
  
      // Teleoperated Parameters
      public static final double LOW_BOUND_SPEED = 0.7;
-     public static final double HIGH_BOUND_SPEED = 0.75;
+     public static final double HIGH_BOUND_SPEED = 0.85;
  
      public static final double ACCELERATION_RATE = 0.01;
-     public static final double INITIAL_SPEED = 0.35;
+     public static final double INITIAL_SPEED = 0.5;
  
      // Drivetrain Current Parameters
      public static final boolean DRIVETRAIN_CURRENT_ENABLE = false;
@@ -65,13 +65,13 @@ public final class Constants {
  
  
      // PID Configurations
-     public static final double[] DRIVE_GAINS = {0.16, 0.0, 0.0}; //0.7115, 0.6, .18
+     public static final double[] DRIVE_GAINS = {0.04, 0.0, 0.0}; //0.7115, 0.6, .18
  
      public static final double[] STEER_GAINS_LOW = {0.62, 0, 0.0};
      public static final double[] STEER_GAINS_HIGH = {.68, 0, 0.0};
  
      public static final double[] ROTATE_GAINS_LOW = {1.5, 0.0, 0.0};//.669, 2.5
-     public static final double[] ROTATE_GAINS_HIGH = {0.65, 0.0, 0.0};//.9
+     public static final double[] ROTATE_GAINS_HIGH = {0.4, 0.0, 0.0};//.9
  
      public static double[] LIMELIGHT_GAINS = {0.065, 0.0, 0.0};
  
@@ -117,7 +117,7 @@ public final class Constants {
 
 
   // Linear Slide Constants
-  public static final double[] LINEAR_SLIDE_GAINS = { 0.09, 0, 0 };
+  public static final double[] LINEAR_SLIDE_GAINS = { 0.075, 0, 0 };
   public static final boolean LS_SET_INVERTED = true;
 
 
@@ -140,14 +140,14 @@ public final class Constants {
       
     // 3000 to be fully retracted
   
-  public static final double MAX_SPEED_UP = 0.25; //extend
-  public static final double MAX_SPEED_DOWN = 0.55; //retract
+  public static final double MAX_SPEED_UP = 0.1; //extend
+  public static final double MAX_SPEED_DOWN = 0.30; //retract
 
 
   // Gripper Constants
   public static final double CLAW_CLOSE_CONE = 1500;
   public static final double CLAW_CLOSE_CUBE = 4000;
-  public static final double CLAW_OPEN_CONE = 23000;
+  public static final double CLAW_OPEN_CONE = 22000;
 
   public static final double ARM_POS_1 = 0;
   public static final double ARM_POS_2 = -130000;

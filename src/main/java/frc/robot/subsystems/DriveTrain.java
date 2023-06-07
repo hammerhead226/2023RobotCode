@@ -77,7 +77,7 @@ public class DriveTrain extends SubsystemBase {
         if(isPlaying) {
             MotionOfTheOcean.Executor.executeRecording(() -> DriveTrain.getInstance().toPose(MotionOfTheOcean.Executor.getState().getPose()));
         }
-        else swerve.control(x, y, -rotate);
+        else swerve.control(x, y, -rotate * 0.75);
         double[] pose = swerve.getPose();
         SmartDashboard.putNumber("x", pose[0]);
         SmartDashboard.putNumber("y", pose[1]);

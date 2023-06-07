@@ -28,6 +28,10 @@ public class Controller {
         return new JoystickButton(joy, btnNum);
     }
 
+    public Joystick getJoystick() {
+        return joy;
+    }
+
     public double getLeftJoyX() {
         double joyVal = joy.getX();;
         if(joyVal < deadband && joyVal > -deadband) joyVal = 0;

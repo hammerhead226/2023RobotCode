@@ -25,6 +25,7 @@ import frc.libs.wrappers.GenericMotor.PassiveMode;
 import frc.robot.Constants;
 import frc.robot.Robot;
 import frc.robot.RobotMap;
+import frc.robot.commands.FlashGreen;
 
 public class Gripper extends SubsystemBase {
   /**
@@ -63,6 +64,7 @@ public class Gripper extends SubsystemBase {
 
   private boolean substationMode = false;
 
+
   public Gripper() {
     // wrist = new CANSparkMax(RobotMap.GRIPPER_WRIST, MotorType.kBrushless);
     claw = new GenericMotor(new TalonFX(RobotMap.CLAW_MOTOR, Constants.CANBUS));
@@ -82,6 +84,7 @@ public class Gripper extends SubsystemBase {
     // distanceSensor = new Rev2mDistanceSensor(Port.kOnboard, Unit.kInches, RangeProfile.kHighAccuracy);
     armSpeedLimit = 0.8;
     this.proximitySensor = new AnalogInput(0);
+
   }
 
   public void run() {
@@ -193,7 +196,11 @@ public class Gripper extends SubsystemBase {
       sustain = 0;
     }
 
-    if(sustain >= 5) closeClaw();
+    if(sustain >= 5) {
+      closeClaw();
+      if(!Robot.m_robotContainer.animation.isScheduled())
+      Robot.m_robotContainer.animation.schedule();
+    }
   }
 
 
