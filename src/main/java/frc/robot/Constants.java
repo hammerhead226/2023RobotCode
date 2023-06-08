@@ -115,10 +115,13 @@ public final class Constants {
   public static final double ELEVATOR_INTERVAL_MARKER = 2200;
   public static final double SRX_ENCODER_TICKS = 4096;
 
+  public static final double ELEVATOR_THRESHOLD = 0;
+
 
   // Linear Slide Constants
   public static final double[] LINEAR_SLIDE_GAINS = { 0.075, 0, 0 };
   public static final boolean LS_SET_INVERTED = true;
+  public static final double LS_THRESHOLD = 0;
 
 
   // LED Constants
@@ -138,39 +141,25 @@ public final class Constants {
   public static final double INTAKE_EXTEND = 3675;
   public static final double INTAKE_RETRACT = 2800;
       
-    // 3000 to be fully retracted
+  // 3000 to be fully retracted
   
   public static final double MAX_SPEED_UP = 0.1; //extend
   public static final double MAX_SPEED_DOWN = 0.30; //retract
 
 
   // Gripper Constants
-  public static final double CLAW_CLOSE_CONE = 1500;
-  public static final double CLAW_CLOSE_CUBE = 4000;
-  public static final double CLAW_OPEN_CONE = 22000;
-
   public static final double ARM_POS_1 = 0;
   public static final double ARM_POS_2 = -130000;
 
-  public static final double ADJUSTED_WRIST_POS_1 = -0.7;
-  public static final double ADJUSTED_WRIST_POS_2 = -1.8;
-
-  public static final double PERFECT_WRIST_POS_1 = 0;
-  public static final double PERFECT_WRIST_POS_2 = -2.5;
-
-
   public static final double[] ARM_GAINS = {0.00008, 0, 0};
   public static final double[] CLAW_GAINS = {0.00003, 0, 0};
-  public static final double[] WRIST_GAINS = { 0.15, 0, 0 };
+
+  public static final double ARM_THRESHOLD = 0;
 
   public static final double CLOSING_DISTANCE = 8;
 
-  // Active Floor
-  public static final double ACTIVE_FLOOR_CONSTANT_SPEED = 0.3;
-
 
   //Scoring Setpoints
-
   public static final double ELEVATOR_HIGH = -1300;
   public static final double ELEVATOR_MID = -300;
   public static final double ELEVATOR_HOLD = 1100;

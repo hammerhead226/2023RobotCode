@@ -17,27 +17,27 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Gripper;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.LinearSlide;
+import frc.robot.subsystems.ScoringStateManager;
 import frc.robot.subsystems.Elevator;
 import frc.libs.wrappers.Controller;
 import frc.robot.commands.AutoBalance;
-import frc.robot.commands.OneConeEngage;
-import frc.robot.commands.OneConeMobilityEngage;
-import frc.robot.commands.OneCubeMobilityEngage;
-import frc.robot.commands.RedOneConeMobile;
-import frc.robot.commands.RedThreePieceBump;
-import frc.robot.commands.RedThreePieceNoBump;
-import frc.robot.commands.RedTwoPieceBump;
-import frc.robot.commands.RedTwoPieceNoBump;
+// import frc.robot.commands.OneConeEngage;
+// import frc.robot.commands.OneConeMobilityEngage;
+// import frc.robot.commands.OneCubeMobilityEngage;
+// import frc.robot.commands.RedOneConeMobile;
+// import frc.robot.commands.RedThreePieceBump;
+// import frc.robot.commands.RedThreePieceNoBump;
+// import frc.robot.commands.RedTwoPieceBump;
+// import frc.robot.commands.RedTwoPieceNoBump;
 import frc.robot.commands.SetColorMode;
-import frc.robot.commands.TestAuto;
-import frc.robot.commands.BlueOneConeMobile;
-import frc.robot.commands.BlueThreePieceBump;
-import frc.robot.commands.BlueThreePieceNoBump;
-import frc.robot.commands.BlueTwoPieceBump;
-import frc.robot.commands.BlueTwoPieceNoBump;
+// import frc.robot.commands.TestAuto;
+// import frc.robot.commands.BlueOneConeMobile;
+// import frc.robot.commands.BlueThreePieceBump;
+// import frc.robot.commands.BlueThreePieceNoBump;
+// import frc.robot.commands.BlueTwoPieceBump;
+// import frc.robot.commands.BlueTwoPieceNoBump;
 import frc.robot.commands.FlashGreen;
-import frc.robot.commands.OneConeEngage;
-import frc.robot.subsystems.ActiveFloor;
+// import frc.robot.commands.OneConeEngage;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Vision;
 import frc.robot.subsystems.balls;
@@ -61,11 +61,12 @@ public class RobotContainer {
   
   public static final Elevator elevator = new Elevator();
   public static final Gripper gripper = new Gripper();
-  public static final ActiveFloor activeFloor = new ActiveFloor();
   public static final Intake intake = new Intake();
   public static final LinearSlide linearSlide = new LinearSlide();
   public static final LED led = new LED();
   public static final Vision vision = new Vision();
+
+  public static final ScoringStateManager manager = new ScoringStateManager();
 
   public static final balls lock = new balls();
   public static final ballsTwo lockTwo = new ballsTwo();
@@ -97,16 +98,16 @@ public class RobotContainer {
     // selecter.setDefaultOption("one and engage", new OneConeEngage());
     // selecter.addOption("blue one cone mobile", new BlueOneConeMobile());
     // selecter.addOption("red one cone mobile", new RedOneConeMobile());
-    selecter.addOption("one cone mobile and engage", new OneConeMobilityEngage());
-    selecter.addOption("one cube mobility engage", new OneCubeMobilityEngage());
-    selecter.addOption("red two piece no bump", new RedTwoPieceNoBump());
-    selecter.addOption("blue two piece no bump", new BlueTwoPieceNoBump());
-    selecter.addOption("red two piece bump", new RedTwoPieceBump());
-    selecter.addOption("blue two piece bump", new BlueTwoPieceBump());
-    selecter.addOption("blue three piece no bump", new BlueThreePieceNoBump());
-    selecter.addOption("red three piece no bump", new RedThreePieceNoBump());
-    selecter.addOption("blue three piece bump", new BlueThreePieceBump());
-    selecter.addOption("red three piece bump", new RedThreePieceBump());
+    // selecter.addOption("one cone mobile and engage", new OneConeMobilityEngage());
+    // selecter.addOption("one cube mobility engage", new OneCubeMobilityEngage());
+    // selecter.addOption("red two piece no bump", new RedTwoPieceNoBump());
+    // selecter.addOption("blue two piece no bump", new BlueTwoPieceNoBump());
+    // selecter.addOption("red two piece bump", new RedTwoPieceBump());
+    // selecter.addOption("blue two piece bump", new BlueTwoPieceBump());
+    // selecter.addOption("blue three piece no bump", new BlueThreePieceNoBump());
+    // selecter.addOption("red three piece no bump", new RedThreePieceNoBump());
+    // selecter.addOption("blue three piece bump", new BlueThreePieceBump());
+    // selecter.addOption("red three piece bump", new RedThreePieceBump());
     // selecter.addOption("led test", new FlashGreen());
     // selecter.addOption("test auto", new TestAuto());
 
@@ -133,27 +134,23 @@ public class RobotContainer {
     manip.getSTARTButton().onTrue(new InstantCommand(gripper::toggleCubeMode, gripper));
 
 
-    manip.getRBButton().onTrue(new InstantCommand(gripper::toggleClaw, gripper));
+    // manip.getRBButton().onTrue(new InstantCommand(gripper::toggleClaw, gripper));
 
 
     manip.getLBButton().onTrue(
       new InstantCommand(intake::runIn, intake)
-      .andThen(activeFloor::runConstantSpeedInward, activeFloor)
     );
 
     manip.getLBButton().onFalse(
       new InstantCommand(intake::stop, intake)
-      .andThen(activeFloor::stop, activeFloor)
     );
 
     manip.getMENUButton().onTrue(
       new InstantCommand(intake::runOut, intake)
-      .andThen(activeFloor::runConstantSpeedOutward, activeFloor)
     );
 
     manip.getMENUButton().onFalse(
       new InstantCommand(intake::stop, intake)
-      .andThen(activeFloor::stop, activeFloor)
     );
     manip.getLeftStickPress().onTrue(
       new InstantCommand(() -> linearSlide.setTarget(0), lockTwo)
@@ -165,11 +162,11 @@ public class RobotContainer {
 
     manip.getXButton().onTrue(
       new InstantCommand(() -> linearSlide.setTarget(Constants.LS_RETRACTED), lockTwo)
-      .andThen(gripper::setCubeMode, lockTwo)
+      .andThen(gripper::cubeModeOn, lockTwo)
       .andThen(new WaitCommand(0.5))
       .andThen(gripper::armHoldPosition, lockTwo)
       .andThen(new WaitCommand(0.25))
-      .andThen(gripper::openClaw, lockTwo)
+      // .andThen(gripper::openClaw, lockTwo) // i think we can keep the wait command for the outtake claw part
       .andThen(new WaitCommand(0.5))
       .andThen(() -> elevator.setTarget(Constants.ELEVATOR_INTAKE), lockTwo)
       .andThen(() -> gripper.setArmTarget(Constants.ARM_INTAKE), lockTwo)

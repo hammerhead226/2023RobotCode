@@ -37,12 +37,12 @@ public class BlueThreePieceBump extends SequentialCommandGroup {
       new InstantCommand(()-> DriveTrain.getInstance().togglePlayback()),
       new WaitCommand(0.5),
       new InstantCommand(() -> Robot.m_robotContainer.linearSlide.setTarget(Constants.LS_RETRACTED), Robot.m_robotContainer.lock)
-      .andThen(Robot.m_robotContainer.gripper::setCubeMode, Robot.m_robotContainer.lock)
+      .andThen(Robot.m_robotContainer.gripper::cubeModeOn, Robot.m_robotContainer.lock)
       .andThen(new WaitCommand(0.5))
       .andThen(Robot.m_robotContainer.gripper::armHoldPosition, Robot.m_robotContainer.lock)
       .andThen(new WaitCommand(0.25))
       .andThen(() -> Robot.m_robotContainer.elevator.setTarget(Constants.ELEVATOR_INTAKE), Robot.m_robotContainer.lock)
-      .andThen(Robot.m_robotContainer.gripper::openClaw, Robot.m_robotContainer.lock)
+      // .andThen(Robot.m_robotContainer.gripper::openClaw, Robot.m_robotContainer.lock)
       .andThen(new WaitCommand(0.5))
       .andThen(() -> Robot.m_robotContainer.gripper.setArmTarget(Constants.ARM_INTAKE), Robot.m_robotContainer.lock),
       new WaitCommand(0.25),

@@ -30,7 +30,7 @@ public class BlueOneConeMobile extends SequentialCommandGroup {
       .andThen(new WaitCommand(0.75))
       .andThen(() -> Robot.m_robotContainer.linearSlide.setTarget(42), Robot.m_robotContainer.lock),
       new WaitCommand(2),
-      new InstantCommand(() -> Robot.m_robotContainer.gripper.toggleClaw(), Robot.m_robotContainer.lock),
+      // new InstantCommand(() -> Robot.m_robotContainer.gripper.toggleClaw(), Robot.m_robotContainer.lock),
       new WaitCommand(.5),
       new InstantCommand(() -> Robot.m_robotContainer.linearSlide.setTarget(0), Robot.m_robotContainer.lock)
       .andThen(new WaitCommand(1))

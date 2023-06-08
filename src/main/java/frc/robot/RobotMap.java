@@ -15,7 +15,7 @@ public class RobotMap {
     public static final int GRIPPER_WRIST = 18;
 
     public static final int ARM_MOTOR = 14;
-    public static final int CLAW_MOTOR = 15;
+    public static final int WHEELED_CLAW_MOTOR = 15;
 
     // Active Floor Ports
     public static final int ACTIVE_FLOOR_MOTOR_PORT = 12;
@@ -26,7 +26,7 @@ public class RobotMap {
     public static final int ROLLER_PORT = 11;
 
     // Linear Slider Ports 
-    public static final int SLIDER_SPARK_MAX_PORT = 13;
+    public static final int SLIDER_PORT = 13;
     public static final int LED_SPARK = 1;
     public static final int ELEVATOR_MOTOR_LEFT = 8;
     public static final int ELEVATOR_MOTOR_RIGHT = 9;

@@ -39,24 +39,24 @@ public class Gripper extends SubsystemBase {
    */
 
   // private TalonFX wrist;
-  private CANSparkMax wrist;
+  // private CANSparkMax wrist;
   private GenericMotor arm;
-  private GenericMotor claw; 
+  private GenericMotor wheeledClaw; 
 
   private PIDController armPID;
-  private PIDController clawPID;
-  private PIDController wristPID;
+  private PIDController wheeledClawPID;
+  // private PIDController wristPID;
 
   // private Rev2mDistanceSensor distanceSensor;
 
   private AnalogInput proximitySensor;
 
-  private boolean wristToggle = true;
+  // private boolean wristToggle = true;
   private boolean armToggle = true;
 
   private double armTarget = 0;
 
-  private boolean clawToggle = true;
+  // private boolean clawToggle = true;
 
   private boolean cubeMode = false;
 
@@ -67,18 +67,20 @@ public class Gripper extends SubsystemBase {
 
   public Gripper() {
     // wrist = new CANSparkMax(RobotMap.GRIPPER_WRIST, MotorType.kBrushless);
-    claw = new GenericMotor(new TalonFX(RobotMap.CLAW_MOTOR, Constants.CANBUS));
+    wheeledClaw = new GenericMotor(new TalonFX(RobotMap.WHEELED_CLAW_MOTOR, Constants.CANBUS));
     arm = new GenericMotor(new TalonFX(RobotMap.ARM_MOTOR, Constants.CANBUS));
+
+    wheeledClaw.inverted(true);
 
     // distanceSensor = new Rev2mDistanceSensor(Port.kOnboard);
 
     // wrist.setIdleMode(IdleMode.kBrake);
-    claw.setNeutralMode(PassiveMode.BRAKE);
+    wheeledClaw.setNeutralMode(PassiveMode.BRAKE);
     arm.setNeutralMode(PassiveMode.BRAKE);
 
     armPID = new PIDController(Constants.ARM_GAINS[0], Constants.ARM_GAINS[1], Constants.ARM_GAINS[2]);
-    clawPID = new PIDController(Constants.CLAW_GAINS[0], Constants.CLAW_GAINS[1], Constants.CLAW_GAINS[2]);
-    wristPID = new PIDController(Constants.WRIST_GAINS[0], Constants.WRIST_GAINS[1], Constants.WRIST_GAINS[2]);
+    wheeledClawPID = new PIDController(Constants.CLAW_GAINS[0], Constants.CLAW_GAINS[1], Constants.CLAW_GAINS[2]);
+    // wristPID = new PIDController(Constants.WRIST_GAINS[0], Constants.WRIST_GAINS[1], Constants.WRIST_GAINS[2]);
     
 
     // distanceSensor = new Rev2mDistanceSensor(Port.kOnboard, Unit.kInches, RangeProfile.kHighAccuracy);
@@ -89,20 +91,17 @@ public class Gripper extends SubsystemBase {
 
   public void run() {
     if(substationMode)
-      closeClawWhenSeen();
+      stopClawWhenSeen();
 
-    if(clawToggle) {
-      if(cubeMode) {
-        claw.set( clawPID.calculate(claw.getSensorPose(), Constants.CLAW_CLOSE_CUBE));
-      }
-      else {
-        claw.set( clawPID.calculate(claw.getSensorPose(), Constants.CLAW_CLOSE_CONE));
-      }
-    }
-    else {
-      claw.set( clawPID.calculate(claw.getSensorPose(), Constants.CLAW_OPEN_CONE));
-    }
-
+    wheeledClaw.set(0.3);
+    // if(cubeMode) {
+    //   wheeledClaw.set(wheeledClawPID.calculate(wheeledClaw.getSensorPose(), Constants.CLAW_CLOSE_CUBE));
+    // }
+    // else {
+    //   wheeledClaw.set(wheeledClawPID.calculate(wheeledClaw.getSensorPose(), Constants.CLAW_CLOSE_CONE));
+    // }
+    
+    
     double armSpeed = armPID.calculate(arm.getSensorPose(), armTarget);
 
     if(armSpeed > armSpeedLimit) armSpeed = armSpeedLimit;
@@ -111,8 +110,8 @@ public class Gripper extends SubsystemBase {
     arm.set(armSpeed);
 
     // arm.set(Robot.m_robotContainer.manip.getLeftJoyY());
-    SmartDashboard.putBoolean("claw toggle", clawToggle);
-    SmartDashboard.putBoolean("cube mode", cubeMode);
+    // SmartDashboard.putBoolean("claw toggle", clawToggle);
+    // SmartDashboard.putBoolean("cube mode", cubeMode);
     
     }
 
@@ -121,10 +120,21 @@ public class Gripper extends SubsystemBase {
     substationMode = true;
   }
 
-
-  public void toggleWrist() {
-    wristToggle = !wristToggle;
+  public void setSubstationMode(boolean substationMode) {
+    this.substationMode = substationMode;
   }
+
+  public void wheeledClawIntake() {
+    wheeledClaw.set(0.3);
+  }
+
+  public void wheeledClawOuttake() {
+    wheeledClaw.set(-0.3);
+  }
+
+  // public void toggleWrist() {
+  //   wristToggle = !wristToggle;
+  // }
 
   public void toggleArm() {
     armToggle = !armToggle;
@@ -159,36 +169,40 @@ public class Gripper extends SubsystemBase {
     cubeMode = !cubeMode;
   }
 
-  public void toggleClaw() {
-    clawToggle = !clawToggle;
-  }
+  // public void toggleClaw() {
+  //   clawToggle = !clawToggle;
+  // }
 
-  public void openClaw() {
-    clawToggle = false;
-  }
+  // public void openClaw() {
+  //   clawToggle = false;
+  // }
   
-  public void closeClaw() {
-    clawToggle = true;
-  }
+  // public void closeClaw() {
+  //   clawToggle = true;
+  // }
 
-  public void wristFalconUp() {
-    wristToggle = false;
-  }
+  // public void wristFalconUp() {
+  //   wristToggle = false;
+  // }
 
-  public void wristFalconDown() {
-    wristToggle = true;
-  }
+  // public void wristFalconDown() {
+  //   wristToggle = true;
+  // }
 
   public boolean getCubeMode() {
     return cubeMode;
   }
 
-  public void setCubeMode() {
+  public void cubeModeOn() {
     cubeMode = true;
   }
 
+  public void cubeModeOff() {
+    cubeMode = false;
+  }
+
   int sustain = 0;
-  public void closeClawWhenSeen() {
+  public void stopClawWhenSeen() {
     if (proximitySensor.getValue() > 1100 && proximitySensor.getValue() < 2500) {
       sustain++;
     }
@@ -197,7 +211,7 @@ public class Gripper extends SubsystemBase {
     }
 
     if(sustain >= 5) {
-      closeClaw();
+      wheeledClaw.set(0); // if speed is too high sensor might not have enough time to react
       if(!Robot.m_robotContainer.animation.isScheduled())
       Robot.m_robotContainer.animation.schedule();
     }
@@ -210,7 +224,7 @@ public class Gripper extends SubsystemBase {
     // SmartDashboard.putNumber("periodic wrist", wrist.getEncoder().getPosition());
     // SmartDashboard.putNumber("wrist pose", wrist.getEncoder().getPosition());
     SmartDashboard.putNumber("arm enc", arm.getSensorPose());
-    SmartDashboard.putNumber("claw enc", claw.getSensorPose());
+    SmartDashboard.putNumber("claw enc", wheeledClaw.getSensorPose());
     // SmartDashboard.putNumber("distance sens", distanceSensor.getRange());
 
     SmartDashboard.putNumber("sensor deez", proximitySensor.getValue());

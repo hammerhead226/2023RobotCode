@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
@@ -17,7 +19,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class LinearSlide extends SubsystemBase {
   /** Creates a new LinearSlide. */
-  private CANSparkMax slider;
+  private TalonFX slider;
 
   private double target;
   private double extendSpeedLimit;
@@ -26,7 +28,7 @@ public class LinearSlide extends SubsystemBase {
   private PIDController pid;
 
   public LinearSlide() {
-    slider = new CANSparkMax(RobotMap.SLIDER_SPARK_MAX_PORT, MotorType.kBrushless);
+    slider = new TalonFX(RobotMap.SLIDER_PORT);
     slider.setInverted(Constants.LS_SET_INVERTED);
 
     
@@ -47,7 +49,7 @@ public class LinearSlide extends SubsystemBase {
   int sustain = 0;
   public void run() {
     if (!manual) {
-      double motorSpeed = pid.calculate(slider.getEncoder().getPosition(), target);
+      double motorSpeed = pid.calculate(slider.getSelectedSensorPosition(), target);
       if(target == 0) {
         if (motorSpeed > retractSpeedLimit) {
           motorSpeed = retractSpeedLimit;
@@ -67,15 +69,23 @@ public class LinearSlide extends SubsystemBase {
       // control(Robot.m_robotContainer.manip.getLeftJoyY());
       control(motorSpeed);
     }
-    SmartDashboard.putNumber("neo pose", slider.getEncoder().getPosition());
+    SmartDashboard.putNumber("neo pose", slider.getSelectedSensorPosition());
   }
 
   public void setTarget(double t) {
     target = t;
   }
 
+  public double getTarget() {
+    return target;
+  }
+
   public void control(double speed) {
-    slider.set(speed);
+    slider.set(ControlMode.PercentOutput, speed);
+  }
+
+  public double getPosition() {
+    return slider.getSelectedSensorPosition();
   }
 
   @Override
