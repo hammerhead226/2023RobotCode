@@ -158,6 +158,9 @@ public final class Constants {
 
   public static final double CLOSING_DISTANCE = 8;
 
+  public static final double CUBE_VALUE = 1350;
+  public static final double CONE_VALUE = 2100;
+
 
   //Scoring Setpoints
   public static final double ELEVATOR_HIGH = -1300;

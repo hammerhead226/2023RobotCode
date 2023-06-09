@@ -25,7 +25,7 @@ import frc.libs.wrappers.GenericMotor.PassiveMode;
 import frc.robot.Constants;
 import frc.robot.Robot;
 import frc.robot.RobotMap;
-import frc.robot.commands.FlashGreen;
+// import frc.robot.commands.FlashGreen;
 
 public class Gripper extends SubsystemBase {
   /**
@@ -64,6 +64,8 @@ public class Gripper extends SubsystemBase {
 
   private boolean substationMode = false;
 
+  int sustain = 0;
+
 
   public Gripper() {
     // wrist = new CANSparkMax(RobotMap.GRIPPER_WRIST, MotorType.kBrushless);
@@ -90,10 +92,12 @@ public class Gripper extends SubsystemBase {
   }
 
   public void run() {
-    if(substationMode)
+    if(cubeMode) {
       stopClawWhenSeen();
+    }
+    
 
-    wheeledClaw.set(0.3);
+    // wheeledClaw.set(0.3);
     // if(cubeMode) {
     //   wheeledClaw.set(wheeledClawPID.calculate(wheeledClaw.getSensorPose(), Constants.CLAW_CLOSE_CUBE));
     // }
@@ -102,12 +106,12 @@ public class Gripper extends SubsystemBase {
     // }
     
     
-    double armSpeed = armPID.calculate(arm.getSensorPose(), armTarget);
+    // double armSpeed = armPID.calculate(arm.getSensorPose(), armTarget);
 
-    if(armSpeed > armSpeedLimit) armSpeed = armSpeedLimit;
-    else if(armSpeed < -armSpeedLimit) armSpeed = -armSpeedLimit;
+    // if(armSpeed > armSpeedLimit) armSpeed = armSpeedLimit;
+    // else if(armSpeed < -armSpeedLimit) armSpeed = -armSpeedLimit;
 
-    arm.set(armSpeed);
+    // arm.set(armSpeed);
 
     // arm.set(Robot.m_robotContainer.manip.getLeftJoyY());
     // SmartDashboard.putBoolean("claw toggle", clawToggle);
@@ -125,11 +129,15 @@ public class Gripper extends SubsystemBase {
   }
 
   public void wheeledClawIntake() {
-    wheeledClaw.set(0.3);
+    wheeledClaw.set(0.75);
   }
 
   public void wheeledClawOuttake() {
-    wheeledClaw.set(-0.3);
+    wheeledClaw.set(-1);
+  }
+
+  public void wheeledClawStop() {
+    wheeledClaw.set(0);
   }
 
   // public void toggleWrist() {
@@ -201,9 +209,9 @@ public class Gripper extends SubsystemBase {
     cubeMode = false;
   }
 
-  int sustain = 0;
+  
   public void stopClawWhenSeen() {
-    if (proximitySensor.getValue() > 1100 && proximitySensor.getValue() < 2500) {
+    if (proximitySensor.getValue() > Constants.CONE_VALUE   && proximitySensor.getValue() < 2600) {
       sustain++;
     }
     else {
@@ -212,22 +220,24 @@ public class Gripper extends SubsystemBase {
 
     if(sustain >= 5) {
       wheeledClaw.set(0); // if speed is too high sensor might not have enough time to react
-      if(!Robot.m_robotContainer.animation.isScheduled())
-      Robot.m_robotContainer.animation.schedule();
+      // if(!Robot.m_robotContainer.animation.isScheduled())
+      // Robot.m_robotContainer.animation.schedule();
     }
   }
 
 
   @Override
   public void periodic() {
+    SmartDashboard.putNumber("sustain", sustain);
     // This method will be called once per scheduler run
     // SmartDashboard.putNumber("periodic wrist", wrist.getEncoder().getPosition());
     // SmartDashboard.putNumber("wrist pose", wrist.getEncoder().getPosition());
     SmartDashboard.putNumber("arm enc", arm.getSensorPose());
     SmartDashboard.putNumber("claw enc", wheeledClaw.getSensorPose());
+    SmartDashboard.putBoolean("ur mom", cubeMode);
     // SmartDashboard.putNumber("distance sens", distanceSensor.getRange());
 
     SmartDashboard.putNumber("sensor deez", proximitySensor.getValue());
-    SmartDashboard.putBoolean("does it work", proximitySensor.getValue() > 600 && proximitySensor.getValue() < 2000);
+    SmartDashboard.putBoolean("does it work", proximitySensor.getValue() > 1200 && proximitySensor.getValue() < 3000);
   }
 }

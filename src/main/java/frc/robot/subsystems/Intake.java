@@ -56,7 +56,8 @@ public class Intake extends SubsystemBase {
     
     if(Robot.m_robotContainer.gripper.getCubeMode()
      || Robot.m_robotContainer.gripper.getArmTarget() == Constants.ARM_SCORE
-     || Robot.m_robotContainer.elevator.getTarget() != Constants.ELEVATOR_HOLD) {
+    //  || Robot.m_robotContainer.elevator.getTarget() != Constants.ELEVATOR_HOLD
+     ) {
       intakeOn = true;
     }
     SmartDashboard.putBoolean("intake on?", intakeOn);
