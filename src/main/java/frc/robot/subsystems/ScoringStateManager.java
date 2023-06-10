@@ -4,8 +4,6 @@
 
 package frc.robot.subsystems;
 
-import java.util.function.BooleanSupplier;
-
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -13,8 +11,13 @@ public class ScoringStateManager extends SubsystemBase {
   public LinearSlide linearSlide = new LinearSlide();
   public Gripper gripper = new Gripper();
   public Elevator elevator = new Elevator();
+  public Intake intake = new Intake();
 
   public ScoringStateManager() {}
+
+  public double getIntakeState() {
+    return intake.getIntake();
+  }
 
   public double getLinearSlideState() {
     return linearSlide.getPosition();
@@ -43,6 +46,18 @@ public class ScoringStateManager extends SubsystemBase {
     gripper.wheeledClawOuttake();
   }
 
+  public void stopClawWhenSeen() {
+    gripper.stopClawWhenSeen();
+  }
+
+  public void setIntakeHigh(boolean b) {
+    if (b) {
+      intake.retractIntake();
+    } else {
+      intake.extendIntake();
+    }
+  }
+
   public void setLinearSlideTarget(double t) {
     linearSlide.setTarget(t);
   }
@@ -59,6 +74,14 @@ public class ScoringStateManager extends SubsystemBase {
     }
   }
 
+  // public boolean intakeTargetReached() {
+  //   return (0.8 * Math.abs(getIntakeState() - intake.get))
+  // }
+
+  public boolean gripperPieceDetected() {
+    return gripper.pieceDetected();
+  }
+
   public boolean linearSlideTargetReached() { // make threshold a constant later
     return (0.5 * (Math.abs(getLinearSlideState() - linearSlide.getTarget())) <= Constants.LS_THRESHOLD);
   }  
@@ -69,6 +92,10 @@ public class ScoringStateManager extends SubsystemBase {
 
   public boolean armTargetReached() {
     return (0.5 * (Math.abs(getArmState() - gripper.getArmTarget())) <= Constants.ARM_THRESHOLD);
+  }
+
+  public boolean armAndElevatorReached() {
+    return armTargetReached() && elevatorTargetReached();
   }
 
   @Override

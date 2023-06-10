@@ -47,6 +47,8 @@ public class Gripper extends SubsystemBase {
   private PIDController wheeledClawPID;
   // private PIDController wristPID;
 
+  private CANSparkMax armEncoder;
+
   // private Rev2mDistanceSensor distanceSensor;
 
   private AnalogInput proximitySensor;
@@ -84,6 +86,7 @@ public class Gripper extends SubsystemBase {
     wheeledClawPID = new PIDController(Constants.CLAW_GAINS[0], Constants.CLAW_GAINS[1], Constants.CLAW_GAINS[2]);
     // wristPID = new PIDController(Constants.WRIST_GAINS[0], Constants.WRIST_GAINS[1], Constants.WRIST_GAINS[2]);
     
+    armEncoder = new CANSparkMax(0, MotorType.kBrushed);
 
     // distanceSensor = new Rev2mDistanceSensor(Port.kOnboard, Unit.kInches, RangeProfile.kHighAccuracy);
     armSpeedLimit = 0.8;
@@ -92,7 +95,7 @@ public class Gripper extends SubsystemBase {
   }
 
   public void run() {
-    if(cubeMode) {
+    if(substationMode) {
       stopClawWhenSeen();
     }
     
@@ -209,21 +212,29 @@ public class Gripper extends SubsystemBase {
     cubeMode = false;
   }
 
+  public boolean pieceDetected() {
+    double distanceSensorVal = cubeMode ? Constants.CUBE_VALUE : Constants.CONE_VALUE;
+
+    return proximitySensor.getValue() > distanceSensorVal && proximitySensor.getValue() < 2600;
+  }
+ 
   
   public void stopClawWhenSeen() {
-    if (proximitySensor.getValue() > Constants.CONE_VALUE   && proximitySensor.getValue() < 2600) {
+    double distanceSensorVal = cubeMode ? Constants.CUBE_VALUE : Constants.CONE_VALUE;
+
+    if (proximitySensor.getValue() > distanceSensorVal && proximitySensor.getValue() < 2600) {
       sustain++;
-    }
-    else {
+    } else {
       sustain = 0;
     }
-
+   
     if(sustain >= 5) {
       wheeledClaw.set(0); // if speed is too high sensor might not have enough time to react
       // if(!Robot.m_robotContainer.animation.isScheduled())
       // Robot.m_robotContainer.animation.schedule();
     }
   }
+
 
 
   @Override
@@ -238,6 +249,8 @@ public class Gripper extends SubsystemBase {
     // SmartDashboard.putNumber("distance sens", distanceSensor.getRange());
 
     SmartDashboard.putNumber("sensor deez", proximitySensor.getValue());
-    SmartDashboard.putBoolean("does it work", proximitySensor.getValue() > 1200 && proximitySensor.getValue() < 3000);
+    SmartDashboard.putBoolean("does it work", proximitySensor.getValue() > Constants.CONE_VALUE && proximitySensor.getValue() < 2600);
+
+    SmartDashboard.putNumber("balls in ur jaws", armEncoder.getEncoder().getPosition());
   }
 }

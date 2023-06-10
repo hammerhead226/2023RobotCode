@@ -117,6 +117,8 @@ public final class Constants {
 
   public static final double ELEVATOR_THRESHOLD = 0;
 
+  public static final double ELEVATOR_STOW = 0;
+
 
   // Linear Slide Constants
   public static final double[] LINEAR_SLIDE_GAINS = { 0.075, 0, 0 };
@@ -140,6 +142,8 @@ public final class Constants {
 
   public static final double INTAKE_EXTEND = 3675;
   public static final double INTAKE_RETRACT = 2800;
+
+  public static final double INTAKE_THRESHOLD = 0;
       
   // 3000 to be fully retracted
   
@@ -150,6 +154,9 @@ public final class Constants {
   // Gripper Constants
   public static final double ARM_POS_1 = 0;
   public static final double ARM_POS_2 = -130000;
+
+  public static final double ARM_STOW = 0;
+  public static final double ARM_HOLD = 0;
 
   public static final double[] ARM_GAINS = {0.00008, 0, 0};
   public static final double[] CLAW_GAINS = {0.00003, 0, 0};
