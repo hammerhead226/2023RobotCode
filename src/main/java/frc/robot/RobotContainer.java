@@ -7,6 +7,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.subsystems.LED;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
@@ -21,6 +22,10 @@ import frc.robot.subsystems.ScoringStateManager;
 import frc.robot.subsystems.Elevator;
 import frc.libs.wrappers.Controller;
 import frc.robot.commands.AutoBalance;
+import frc.robot.commands.Level2;
+import frc.robot.commands.Level3;
+import frc.robot.commands.Scoring;
+import frc.robot.commands.Stow;
 // import frc.robot.commands.OneConeEngage;
 // import frc.robot.commands.OneConeMobilityEngage;
 // import frc.robot.commands.OneCubeMobilityEngage;
@@ -59,17 +64,17 @@ public class RobotContainer {
 
   public static final DriveTrain dt = DriveTrain.getInstance();
   
-  // public static final Elevator elevator = new Elevator();
+  public static final Elevator elevator = new Elevator();
   public static final Gripper gripper = new Gripper();
-  // public static final Intake intake = new Intake();
-  // public static final LinearSlide linearSlide = new LinearSlide();
+  public static final Intake intake = new Intake();
+  public static final LinearSlide linearSlide = new LinearSlide();
   // public static final LED led = new LED();
-  public static final Vision vision = new Vision();
+  // public static final Vision vision = new Vision();
 
-  // public static final ScoringStateManager manager = new ScoringStateManager();
+  public static final ScoringStateManager manager = new ScoringStateManager();
 
   public static final balls lock = new balls();
-  public static final ballsTwo lockTwo = new ballsTwo();
+  // public static final ballsTwo lockTwo = new ballsTwo();
 
   // public static final Command animation = new FlashGreen(0.1, 10, led)
   //                                         .alongWith(new InstantCommand(() -> RobotContainer.driver.getJoystick().setRumble(RumbleType.kBothRumble, 1)))
@@ -87,10 +92,22 @@ public class RobotContainer {
         dt
         ));
 
+    // linearSlide.setDefaultCommand(
+    //   new RunCommand(
+    //     () -> linearSlide.control(manip.getRightJoyY()),
+    //      linearSlide
+    //     ));
+
+    // elevator.setDefaultCommand(
+    //   new RunCommand(
+    //     () -> elevator.control(manip.getRightJoyY()),
+    //      elevator
+    //     ));
+
     gripper.setDefaultCommand(new RunCommand(gripper::run, gripper));
-    // intake.setDefaultCommand(new RunCommand(intake::run, intake));
-    // linearSlide.setDefaultCommand(new RunCommand(linearSlide::run, linearSlide));
-    // elevator.setDefaultCommand(new RunCommand(elevator::run, elevator));
+    intake.setDefaultCommand(new RunCommand(intake::run, intake));
+    linearSlide.setDefaultCommand(new RunCommand(linearSlide::run, linearSlide));
+    elevator.setDefaultCommand(new RunCommand(elevator::run, elevator));
     // led.setDefaultCommand(new SetColorMode());
 
     
@@ -142,13 +159,25 @@ public class RobotContainer {
     driver.getSTARTButton().onTrue(new InstantCommand(dt::reset, dt));
     driver.getLBButton().onTrue(new InstantCommand(() -> dt.toggleSpeed(), dt));
 
-    manip.getSTARTButton().onTrue(new InstantCommand(gripper::toggleCubeMode, gripper));
 
-    manip.getAButton().onTrue(new InstantCommand(gripper::wheeledClawIntake, gripper));
-    manip.getAButton().onFalse(new InstantCommand(gripper::wheeledClawStop, gripper));
+    manip.getAButton().onTrue(new Level3());
+    manip.getBButton().onTrue(new Level2());
+    manip.getXButton().onTrue(new Stow());
+    manip.getYButton().onTrue(new Scoring());
+    // manip.getAButton().onTrue(new InstantCommand(() -> elevator.setTarget(Constants.ELEVATOR_HIGH), elevator));
+    // manip.getBButton().onTrue(new InstantCommand(() -> elevator.setTarget(Constants.ELEVATOR_MID), elevator));
+    // manip.getXButton().onTrue(new InstantCommand(() -> elevator.setTarget(1600), elevator));
+    // manip.getAButton().onTrue(new InstantCommand(() -> linearSlide.setTarget(Constants.LS_HIGH), linearSlide));
+    // manip.getBButton().onTrue(new InstantCommand(() -> linearSlide.setTarget(Constants.LS_MID), linearSlide));
+    // manip.getXButton().onTrue(new InstantCommand(() -> linearSlide.setTarget(800), linearSlide));
 
-    manip.getBButton().onTrue(new InstantCommand(gripper::wheeledClawOuttake, gripper));
-    manip.getBButton().onFalse(new InstantCommand(gripper::wheeledClawStop, gripper));
+    // manip.getSTARTButton().onTrue(new InstantCommand(gripper::toggleCubeMode, gripper));
+
+    // manip.getAButton().onTrue(new InstantCommand(gripper::wheeledClawIntake, gripper));
+    // manip.getAButton().onFalse(new InstantCommand(gripper::wheeledClawStop, gripper));
+
+    // manip.getBButton().onTrue(new InstantCommand(gripper::wheeledClawOuttake, gripper));
+    // manip.getBButton().onFalse(new InstantCommand(gripper::wheeledClawStop, gripper));
     // manip.getRBButton().onTrue(new InstantCommand(gripper::toggleClaw, gripper));
 
 
@@ -235,6 +264,22 @@ public class RobotContainer {
   getAutonomousCommand() {
     // An example command will be run in autonomous
     return (Command) selecter.getSelected();
+  }
+
+  public static LinearSlide getLinearSlide() {
+    return linearSlide;
+  }
+
+  public static Elevator getElevator() {
+    return elevator;
+  }
+
+  public static Gripper getGripper() {
+    return gripper;
+  }
+
+  public static Intake getIntake() {
+    return intake;
   }
 
 }

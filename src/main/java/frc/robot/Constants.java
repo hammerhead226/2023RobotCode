@@ -112,18 +112,19 @@ public final class Constants {
   public static final int ELEVATOR_MIN = -300;
   public static final int ELEVATOR_MAX = 2000;
 
-  public static final double ELEVATOR_INTERVAL_MARKER = 2200;
+  public static final double ELEVATOR_INTERVAL_MARKER = 2800;
   public static final double SRX_ENCODER_TICKS = 4096;
 
-  public static final double ELEVATOR_THRESHOLD = 0;
+  public static final double ELEVATOR_THRESHOLD = 100;
 
   public static final double ELEVATOR_STOW = 0;
 
 
   // Linear Slide Constants
-  public static final double[] LINEAR_SLIDE_GAINS = { 0.075, 0, 0 };
+  public static final double[] LINEAR_SLIDE_GAINS_HIGH = { 0.0000125, 0.00001, 0 };
+  public static final double[] LINEAR_SLIDE_GAINS_LOW = { 0.000025, 0.00001, 0 };
   public static final boolean LS_SET_INVERTED = true;
-  public static final double LS_THRESHOLD = 0;
+  public static final double LS_THRESHOLD = 2000;
 
 
   // LED Constants
@@ -137,31 +138,31 @@ public final class Constants {
 
   // Intake Constants
   public static final double ROLLER_RUN_SPEED = 0.65;
-  public static final double[] INTAKE_GAINS = { 0.0008, 0, 0 };
+  public static final double[] INTAKE_GAINS = { 0.0009, 0, 0 };
   public static final int INTAKE_OFFSET = 0;
 
-  public static final double INTAKE_EXTEND = 3675;
-  public static final double INTAKE_RETRACT = 2800;
+  public static final double INTAKE_EXTEND = 3560;
+  public static final double INTAKE_RETRACT = 2600;
 
-  public static final double INTAKE_THRESHOLD = 0;
+  public static final double INTAKE_THRESHOLD = 100;
       
   // 3000 to be fully retracted
   
-  public static final double MAX_SPEED_UP = 0.1; //extend
-  public static final double MAX_SPEED_DOWN = 0.30; //retract
+  public static final double MAX_SPEED_UP = 0.5; //extend
+  public static final double MAX_SPEED_DOWN = 0.8; //retract
 
 
   // Gripper Constants
   public static final double ARM_POS_1 = 0;
   public static final double ARM_POS_2 = -130000;
 
-  public static final double ARM_STOW = 0;
-  public static final double ARM_HOLD = 0;
+  // public static final double ARM_STOW = 0;
+  // public static final double ARM_HOLD = 0;
 
-  public static final double[] ARM_GAINS = {0.00008, 0, 0};
+  public static final double[] ARM_GAINS = {0.000015, 0, 0};
   public static final double[] CLAW_GAINS = {0.00003, 0, 0};
 
-  public static final double ARM_THRESHOLD = 0;
+  public static final double ARM_THRESHOLD = 2000;
 
   public static final double CLOSING_DISTANCE = 8;
 
@@ -170,18 +171,22 @@ public final class Constants {
 
 
   //Scoring Setpoints
-  public static final double ELEVATOR_HIGH = -1300;
-  public static final double ELEVATOR_MID = -300;
-  public static final double ELEVATOR_HOLD = 1100;
+  public static final double ELEVATOR_HIGH = -1200;
+  public static final double ELEVATOR_MID = -200;
+  public static final double ELEVATOR_HOLD = 1900;
   public static final double ELEVATOR_INTAKE = 1100;
   public static final double ELEVATOR_SUBSTATION = -550;
 
-  public static final double LS_HIGH = 40;
-  public static final double LS_MID = 19;
+  public static final double LS_HIGH = 50000;
+  public static final double LS_MID = 18000;
   public static final double LS_RETRACTED = 0;
   public static final double LS_SUBSTATION = 17;
 
-  public static final double ARM_SCORE = -130000;
+  public static final double ARM_HOLD = 80900;
+  public static final double ARM_SCORE = 104000;
+
+  public static final double ARM_STOW = -850;
+
   public static final double ARM_SUBSTATION = -107500;
   public static final double ARM_INTAKE = -43000;
   public static final double ARM_CONE_HOLD = 3000;

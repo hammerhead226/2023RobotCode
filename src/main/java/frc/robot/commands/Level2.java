@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.Constants;
-import frc.robot.subsystems.ScoringStateManager;
+import frc.robot.Robot;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -16,14 +16,15 @@ import frc.robot.subsystems.ScoringStateManager;
 public class Level2 extends SequentialCommandGroup {
   /** Creates a new Level3. */
   public Level2() {
-    ScoringStateManager manager = new ScoringStateManager();
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new InstantCommand(() -> manager.setArmTarget(Constants.ARM_HOLD)),
-      new InstantCommand(() -> manager.setElevatorTarget(Constants.ELEVATOR_MID)),
-      new WaitUntilCommand(manager::armAndElevatorReached),
-      new InstantCommand(() -> manager.setLinearSlideTarget(Constants.LS_MID))
+      new InstantCommand(() -> Robot.m_robotContainer.manager.setIntakeHigh(false), Robot.m_robotContainer.lock),
+      new WaitUntilCommand(Robot.m_robotContainer.manager::intakeTargetReached),
+      new InstantCommand(() -> Robot.m_robotContainer.manager.setArmTarget(Constants.ARM_HOLD), Robot.m_robotContainer.lock),
+      new InstantCommand(() -> Robot.m_robotContainer.manager.setElevatorTarget(Constants.ELEVATOR_MID), Robot.m_robotContainer.lock),
+      new WaitUntilCommand(Robot.m_robotContainer.manager::armAndElevatorReached),
+      new InstantCommand(() -> Robot.m_robotContainer.manager.setLinearSlideTarget(Constants.LS_MID), Robot.m_robotContainer.lock)
     );
   }
 }

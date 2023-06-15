@@ -4,12 +4,14 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.IdleMode;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -31,20 +33,20 @@ public class Intake extends SubsystemBase {
   private boolean intakeTucked;
 
   public Intake() {
-    TalonFX iFalcon = new TalonFX(RobotMap.INTAKE_PORT, Constants.CANBUS);
+    CANSparkMax intakeNeo = new CANSparkMax(RobotMap.INTAKE_PORT, MotorType.kBrushless);
     TalonFX roll = new TalonFX(RobotMap.ROLLER_PORT, Constants.CANBUS);
     TalonSRX encoder = new TalonSRX(RobotMap.INTAKE_ENCODER_PORT);
 
     roll.setStatusFramePeriod(StatusFrameEnhanced.Status_8_PulseWidth, 100);
 
-    iFalcon.setNeutralMode(NeutralMode.Brake);
+    intakeNeo.setIdleMode(IdleMode.kBrake);
     roll.setNeutralMode(NeutralMode.Coast);
 
     roll.setInverted(false);
     
     encoder.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute);
 
-    intake = new GenericMotor(iFalcon);
+    intake = new GenericMotor(intakeNeo);
     roller = new GenericMotor(roll);
     intakeEncoder = new GenericMotor(encoder);
     intakePID = new PIDController(Constants.INTAKE_GAINS[0], Constants.INTAKE_GAINS[1], Constants.INTAKE_GAINS[2]);
@@ -54,12 +56,12 @@ public class Intake extends SubsystemBase {
 
   public void run() {
     
-    if(Robot.m_robotContainer.gripper.getCubeMode()
-     || Robot.m_robotContainer.gripper.getArmTarget() == Constants.ARM_SCORE
-    //  || Robot.m_robotContainer.elevator.getTarget() != Constants.ELEVATOR_HOLD
-     ) {
-      intakeOn = true;
-    }
+    // if(Robot.m_robotContainer.gripper.getCubeMode()
+    //  || Robot.m_robotContainer.gripper.getArmTarget() == Constants.ARM_SCORE
+    // //  || Robot.m_robotContainer.elevator.getTarget() != Constants.ELEVATOR_HOLD
+    //  ) {
+    //   intakeOn = true;
+    // }
     SmartDashboard.putBoolean("intake on?", intakeOn);
 
     if (intakeOn) {
@@ -70,15 +72,15 @@ public class Intake extends SubsystemBase {
       control(extendSpeed);
     } else {
       double retractSpeed = intakePID.calculate(intakeEncoder.getSensorPose(), Constants.INTAKE_RETRACT);
-      if (retractSpeed > Constants.MAX_SPEED_DOWN){
-        retractSpeed = Constants.MAX_SPEED_DOWN;
+      if (Math.abs(retractSpeed) > Constants.MAX_SPEED_DOWN){
+        retractSpeed = -Constants.MAX_SPEED_DOWN;
       }
       control(retractSpeed);
       SmartDashboard.putNumber("intake speed", retractSpeed);
       // SmartDashboard.putNumber("intake pose", intakeEncoder.getSensorPose());
     }
-    SmartDashboard.putNumber("intake stator", intake.getFalcon().getStatorCurrent());
-    SmartDashboard.putNumber("intake supply", intake.getFalcon().getSupplyCurrent());
+    // SmartDashboard.putNumber("intake stator", intake.getFalcon().getStatorCurrent());
+    // SmartDashboard.putNumber("intake supply", intake.getFalcon().getSupplyCurrent());
   }
 
   public void toggleIntake() {

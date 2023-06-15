@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
+import frc.robot.Robot;
 import frc.robot.subsystems.ScoringStateManager;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
@@ -16,15 +17,16 @@ import frc.robot.subsystems.ScoringStateManager;
 public class Scoring extends SequentialCommandGroup {
   /** Creates a new Scoring. */
   public Scoring() {
-    ScoringStateManager manager = new ScoringStateManager();
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new InstantCommand(() -> manager.setArmTarget(Constants.ARM_SCORE)),
-      new InstantCommand(manager::clawOuttake),
-      new WaitCommand(1),
-      new InstantCommand(() -> manager.setArmTarget(Constants.ARM_HOLD)),
-      new Stow()
+      new InstantCommand(() -> Robot.m_robotContainer.manager.setArmTarget(Constants.ARM_SCORE)),
+      new InstantCommand(Robot.m_robotContainer.manager::clawOuttake),
+      new WaitCommand(0.5),
+      new InstantCommand(Robot.m_robotContainer.manager::stopClaw),
+      new InstantCommand(() -> Robot.m_robotContainer.manager.setArmTarget(Constants.ARM_HOLD)),
+      new Stow(),
+      new InstantCommand(() -> Robot.m_robotContainer.manager.setIntakeHigh(true), Robot.m_robotContainer.lock)
     );
   }
 }

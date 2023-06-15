@@ -5,13 +5,11 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import frc.libs.wrappers.GenericMotor.PassiveMode;
 import frc.robot.Constants;
-import frc.robot.Robot;
-import frc.robot.RobotContainer;
 import frc.robot.RobotMap;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -28,17 +26,17 @@ public class LinearSlide extends SubsystemBase {
   private PIDController pid;
 
   public LinearSlide() {
-    slider = new TalonFX(RobotMap.SLIDER_PORT);
+    slider = new TalonFX(RobotMap.SLIDER_PORT,"CAN Bus 2");
     slider.setInverted(Constants.LS_SET_INVERTED);
-
     
-    slider.setInverted(true);
+    slider.setNeutralMode(NeutralMode.Brake);
+    // slider.setInverted(true);
 
-    pid = new PIDController(Constants.LINEAR_SLIDE_GAINS[0], Constants.LINEAR_SLIDE_GAINS[1],
-        Constants.LINEAR_SLIDE_GAINS[2]);
+    pid = new PIDController(Constants.LINEAR_SLIDE_GAINS_HIGH[0], Constants.LINEAR_SLIDE_GAINS_HIGH[1],
+        Constants.LINEAR_SLIDE_GAINS_HIGH[2]);
 
     extendSpeedLimit = 0.8;
-    retractSpeedLimit = 0.2;
+    retractSpeedLimit = 0.8;
     manual = false;
   }
 
@@ -49,6 +47,12 @@ public class LinearSlide extends SubsystemBase {
   int sustain = 0;
   public void run() {
     if (!manual) {
+      if (target <= 20000 && target >= 10000) {
+        pid.setPID(Constants.LINEAR_SLIDE_GAINS_LOW[0], Constants.LINEAR_SLIDE_GAINS_LOW[1], Constants.LINEAR_SLIDE_GAINS_LOW[2]);
+      } else {
+        pid.setPID(Constants.LINEAR_SLIDE_GAINS_HIGH[0], Constants.LINEAR_SLIDE_GAINS_HIGH[1], Constants.LINEAR_SLIDE_GAINS_HIGH[2]);
+      }
+      
       double motorSpeed = pid.calculate(slider.getSelectedSensorPosition(), target);
       if(target == 0) {
         if (motorSpeed > retractSpeedLimit) {
@@ -69,7 +73,7 @@ public class LinearSlide extends SubsystemBase {
       // control(Robot.m_robotContainer.manip.getLeftJoyY());
       control(motorSpeed);
     }
-    SmartDashboard.putNumber("neo pose", slider.getSelectedSensorPosition());
+    SmartDashboard.putNumber("slide deez nuts into yo", slider.getSelectedSensorPosition());
   }
 
   public void setTarget(double t) {
@@ -89,5 +93,7 @@ public class LinearSlide extends SubsystemBase {
   }
 
   @Override
-  public void periodic() {}
+  public void periodic() {
+    SmartDashboard.putNumber("slide deez nuts into yo", getPosition());
+  }
 }

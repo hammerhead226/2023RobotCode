@@ -49,7 +49,7 @@ public class Robot extends TimedRobot {
 
     PortForwarder.add(1181, "hammerheads-jetson.local", 1181);
     PortForwarder.add(1182, "hammerheads-jetson.local", 1182);
-    m_robotContainer.vision.shutdown();
+    // m_robotContainer.vision.shutdown();
   }
 
   /**

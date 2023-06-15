@@ -4,26 +4,23 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.Rev2mDistanceSensor;
-import com.revrobotics.CANSparkMax.IdleMode;
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkMaxAbsoluteEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-import com.revrobotics.Rev2mDistanceSensor.Port;
-import com.revrobotics.Rev2mDistanceSensor.RangeProfile;
-import com.revrobotics.Rev2mDistanceSensor.Unit;
+// import com.revrobotics.SparkMaxAbsoluteEncoder.Type;
+import com.revrobotics.SparkMaxRelativeEncoder.Type;
 
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.estimator.KalmanFilter;
 import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.libs.wrappers.GenericMotor;
 import frc.libs.wrappers.GenericMotor.PassiveMode;
 import frc.robot.Constants;
-import frc.robot.Robot;
 import frc.robot.RobotMap;
 // import frc.robot.commands.FlashGreen;
 
@@ -47,7 +44,14 @@ public class Gripper extends SubsystemBase {
   private PIDController wheeledClawPID;
   // private PIDController wristPID;
 
+  // private AbsoluteEncoder armEncoder;
   private CANSparkMax armEncoder;
+
+  private DutyCycleEncoder armCoder;
+
+  private CANSparkMax armSpark;
+
+  // private CAN aCoder;
 
   // private Rev2mDistanceSensor distanceSensor;
 
@@ -73,20 +77,25 @@ public class Gripper extends SubsystemBase {
     // wrist = new CANSparkMax(RobotMap.GRIPPER_WRIST, MotorType.kBrushless);
     wheeledClaw = new GenericMotor(new TalonFX(RobotMap.WHEELED_CLAW_MOTOR, Constants.CANBUS));
     arm = new GenericMotor(new TalonFX(RobotMap.ARM_MOTOR, Constants.CANBUS));
+    // armEncoder = new CANSparkMax(18, MotorType.kBrushed);
+    // armSpark = new CANSparkMax(18, MotorType.kBrushed);
+    // aCoder = armSpark.getAbsoluteEncoder(Type.fromId(18));
+    
+    // armSpark.getEncoder(Type.kQuadrature, 8192).get
 
     wheeledClaw.inverted(true);
 
+
+    // armCoder = new DutyCycleEncoder(18);
     // distanceSensor = new Rev2mDistanceSensor(Port.kOnboard);
 
     // wrist.setIdleMode(IdleMode.kBrake);
     wheeledClaw.setNeutralMode(PassiveMode.BRAKE);
-    arm.setNeutralMode(PassiveMode.BRAKE);
+    // arm.setNeutralMode(PassiveMode.BRAKE);
 
     armPID = new PIDController(Constants.ARM_GAINS[0], Constants.ARM_GAINS[1], Constants.ARM_GAINS[2]);
     wheeledClawPID = new PIDController(Constants.CLAW_GAINS[0], Constants.CLAW_GAINS[1], Constants.CLAW_GAINS[2]);
     // wristPID = new PIDController(Constants.WRIST_GAINS[0], Constants.WRIST_GAINS[1], Constants.WRIST_GAINS[2]);
-    
-    armEncoder = new CANSparkMax(0, MotorType.kBrushed);
 
     // distanceSensor = new Rev2mDistanceSensor(Port.kOnboard, Unit.kInches, RangeProfile.kHighAccuracy);
     armSpeedLimit = 0.8;
@@ -95,9 +104,9 @@ public class Gripper extends SubsystemBase {
   }
 
   public void run() {
-    if(substationMode) {
-      stopClawWhenSeen();
-    }
+    // if(substationMode) {
+    //   stopClawWhenSeen();
+    // }
     
 
     // wheeledClaw.set(0.3);
@@ -109,12 +118,12 @@ public class Gripper extends SubsystemBase {
     // }
     
     
-    // double armSpeed = armPID.calculate(arm.getSensorPose(), armTarget);
+    double armSpeed = armPID.calculate(arm.getSensorPose(), armTarget);
 
-    // if(armSpeed > armSpeedLimit) armSpeed = armSpeedLimit;
-    // else if(armSpeed < -armSpeedLimit) armSpeed = -armSpeedLimit;
+    if(armSpeed > armSpeedLimit) armSpeed = armSpeedLimit;
+    else if(armSpeed < -armSpeedLimit) armSpeed = -armSpeedLimit;
 
-    // arm.set(armSpeed);
+    arm.set(armSpeed);
 
     // arm.set(Robot.m_robotContainer.manip.getLeftJoyY());
     // SmartDashboard.putBoolean("claw toggle", clawToggle);
@@ -136,7 +145,7 @@ public class Gripper extends SubsystemBase {
   }
 
   public void wheeledClawOuttake() {
-    wheeledClaw.set(-1);
+    wheeledClaw.set(-0.85);
   }
 
   public void wheeledClawStop() {
@@ -243,14 +252,23 @@ public class Gripper extends SubsystemBase {
     // This method will be called once per scheduler run
     // SmartDashboard.putNumber("periodic wrist", wrist.getEncoder().getPosition());
     // SmartDashboard.putNumber("wrist pose", wrist.getEncoder().getPosition());
-    SmartDashboard.putNumber("arm enc", arm.getSensorPose());
-    SmartDashboard.putNumber("claw enc", wheeledClaw.getSensorPose());
+    // SmartDashboard.putNumber("arm enc", arm.getSensorPose());
+    // SmartDashboard.putNumber("claw enc", wheeledClaw.getSensorPose());
     SmartDashboard.putBoolean("ur mom", cubeMode);
     // SmartDashboard.putNumber("distance sens", distanceSensor.getRange());
 
     SmartDashboard.putNumber("sensor deez", proximitySensor.getValue());
     SmartDashboard.putBoolean("does it work", proximitySensor.getValue() > Constants.CONE_VALUE && proximitySensor.getValue() < 2600);
 
-    SmartDashboard.putNumber("balls in ur jaws", armEncoder.getEncoder().getPosition());
+
+    SmartDashboard.putNumber("falcon encoder", arm.getSensorPose());
+    // SmartDashboard.putNumber("balls in ur jaws", armEncoder.getAbsoluteEncoder(Type.kDutyCycle).getPosition());
+    // SmartDashboard.putNumber("arm encoder please work im beggin you", armEncoder.getEncoder(, sustain));
+    // SmartDashboard.putNumber("please", aCoder.getEncoder().getPosition());
+    // SmartDashboard.putNumber("PLEASE MAN", aCoder.getAlternateEncoder(4096).getPosition());
+    // SmartDashboard.putNumber("my rreaction", armCoder.getPosition()*armCoder.getPositionConversionFactor());
+    // SmartDashboard.putNumber("armcoder", armCoder.getAbsolutePosition());
   }
 }
+
+// 2249166 ur bals

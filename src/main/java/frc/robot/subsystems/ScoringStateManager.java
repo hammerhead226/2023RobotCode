@@ -6,14 +6,20 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.RobotContainer;
 
 public class ScoringStateManager extends SubsystemBase {
-  public LinearSlide linearSlide = new LinearSlide();
-  public Gripper gripper = new Gripper();
-  public Elevator elevator = new Elevator();
-  public Intake intake = new Intake();
+  public LinearSlide linearSlide;
+  public Gripper gripper;
+  public Elevator elevator;
+  public Intake intake;
 
-  public ScoringStateManager() {}
+  public ScoringStateManager() {
+    linearSlide = RobotContainer.getLinearSlide();
+    elevator = RobotContainer.getElevator();
+    gripper = RobotContainer.getGripper();
+    intake = RobotContainer.getIntake();
+  }
 
   public double getIntakeState() {
     return intake.getIntake();
@@ -44,6 +50,10 @@ public class ScoringStateManager extends SubsystemBase {
 
   public void clawOuttake() {
     gripper.wheeledClawOuttake();
+  }
+
+  public void stopClaw() {
+    gripper.wheeledClawStop();
   }
 
   public void stopClawWhenSeen() {
@@ -80,6 +90,10 @@ public class ScoringStateManager extends SubsystemBase {
 
   public boolean gripperPieceDetected() {
     return gripper.pieceDetected();
+  }
+
+  public boolean intakeTargetReached() {
+    return (0.8 * (Math.abs(getIntakeState() - intake.getIntake())) <= Constants.INTAKE_THRESHOLD);
   }
 
   public boolean linearSlideTargetReached() { // make threshold a constant later
