@@ -47,10 +47,11 @@ public class LinearSlide extends SubsystemBase {
   int sustain = 0;
   public void run() {
     if (!manual) {
-      if (target <= 20000 && target >= 10000) {
-        pid.setPID(Constants.LINEAR_SLIDE_GAINS_LOW[0], Constants.LINEAR_SLIDE_GAINS_LOW[1], Constants.LINEAR_SLIDE_GAINS_LOW[2]);
-      } else {
+      double err = Math.abs(target - getPosition());
+      if (err <= 15000) {
         pid.setPID(Constants.LINEAR_SLIDE_GAINS_HIGH[0], Constants.LINEAR_SLIDE_GAINS_HIGH[1], Constants.LINEAR_SLIDE_GAINS_HIGH[2]);
+      } else {
+        pid.setPID(Constants.LINEAR_SLIDE_GAINS_LOW[0], Constants.LINEAR_SLIDE_GAINS_LOW[1], Constants.LINEAR_SLIDE_GAINS_LOW[2]);
       }
       
       double motorSpeed = pid.calculate(slider.getSelectedSensorPosition(), target);

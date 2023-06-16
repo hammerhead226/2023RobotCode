@@ -122,7 +122,7 @@ public final class Constants {
 
   // Linear Slide Constants
   public static final double[] LINEAR_SLIDE_GAINS_HIGH = { 0.0000125, 0.00001, 0 };
-  public static final double[] LINEAR_SLIDE_GAINS_LOW = { 0.000025, 0.00001, 0 };
+  public static final double[] LINEAR_SLIDE_GAINS_LOW = { 0.0000275, 0.00001, 0 };
   public static final boolean LS_SET_INVERTED = true;
   public static final double LS_THRESHOLD = 2000;
 
@@ -142,7 +142,8 @@ public final class Constants {
   public static final int INTAKE_OFFSET = 0;
 
   public static final double INTAKE_EXTEND = 3560;
-  public static final double INTAKE_RETRACT = 2600;
+  public static final double INTAKE_LOWERED = 3000;
+  public static final double INTAKE_RETRACT = 2700;
 
   public static final double INTAKE_THRESHOLD = 100;
       
@@ -177,17 +178,18 @@ public final class Constants {
   public static final double ELEVATOR_INTAKE = 1100;
   public static final double ELEVATOR_SUBSTATION = -550;
 
-  public static final double LS_HIGH = 50000;
-  public static final double LS_MID = 18000;
+  public static final double LS_HIGH = 52000;
+  public static final double LS_MID = 21000;
   public static final double LS_RETRACTED = 0;
-  public static final double LS_SUBSTATION = 17;
+  public static final double LS_SUBSTATION = 20000;
 
-  public static final double ARM_HOLD = 80900;
-  public static final double ARM_SCORE = 104000;
+  public static final double ARM_HOLD = 75000;
+  public static final double ARM_SCORE = 105000;
 
   public static final double ARM_STOW = -850;
 
-  public static final double ARM_SUBSTATION = -107500;
+  public static final double ARM_SUBSTATION = 80900;
+  @Deprecated
   public static final double ARM_INTAKE = -43000;
   public static final double ARM_CONE_HOLD = 3000;
   public static final double ARM_CUBE_HOLD = 0;

@@ -19,7 +19,7 @@ public class Level3 extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new InstantCommand(() -> Robot.m_robotContainer.manager.setIntakeHigh(false), Robot.m_robotContainer.lock),
+      new InstantCommand(Robot.m_robotContainer.manager::setIntakeLower, Robot.m_robotContainer.lock),
       new WaitUntilCommand(Robot.m_robotContainer.manager::intakeTargetReached),
       new InstantCommand(() -> Robot.m_robotContainer.manager.setArmTarget(Constants.ARM_HOLD), Robot.m_robotContainer.lock),
       new InstantCommand(() -> Robot.m_robotContainer.manager.setElevatorTarget(Constants.ELEVATOR_HIGH), Robot.m_robotContainer.lock),

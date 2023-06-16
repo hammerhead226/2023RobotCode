@@ -56,8 +56,8 @@ public class ScoringStateManager extends SubsystemBase {
     gripper.wheeledClawStop();
   }
 
-  public void stopClawWhenSeen() {
-    gripper.stopClawWhenSeen();
+  public boolean stopClawWhenSeen() {
+    return gripper.stopClawWhenSeen();
   }
 
   public void setIntakeHigh(boolean b) {
@@ -66,6 +66,10 @@ public class ScoringStateManager extends SubsystemBase {
     } else {
       intake.extendIntake();
     }
+  }
+
+  public void setIntakeLower() {
+    intake.lowerIntake();
   }
 
   public void setLinearSlideTarget(double t) {
@@ -93,7 +97,7 @@ public class ScoringStateManager extends SubsystemBase {
   }
 
   public boolean intakeTargetReached() {
-    return (0.8 * (Math.abs(getIntakeState() - intake.getIntake())) <= Constants.INTAKE_THRESHOLD);
+    return (0.8 * (Math.abs(getIntakeState() - intake.getTarget())) <= Constants.INTAKE_THRESHOLD);
   }
 
   public boolean linearSlideTargetReached() { // make threshold a constant later

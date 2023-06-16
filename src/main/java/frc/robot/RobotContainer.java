@@ -26,6 +26,7 @@ import frc.robot.commands.Level2;
 import frc.robot.commands.Level3;
 import frc.robot.commands.Scoring;
 import frc.robot.commands.Stow;
+import frc.robot.commands.Substation;
 // import frc.robot.commands.OneConeEngage;
 // import frc.robot.commands.OneConeMobilityEngage;
 // import frc.robot.commands.OneCubeMobilityEngage;
@@ -160,10 +161,11 @@ public class RobotContainer {
     driver.getLBButton().onTrue(new InstantCommand(() -> dt.toggleSpeed(), dt));
 
 
-    manip.getAButton().onTrue(new Level3());
+    manip.getYButton().onTrue(new Level3());
     manip.getBButton().onTrue(new Level2());
-    manip.getXButton().onTrue(new Stow());
-    manip.getYButton().onTrue(new Scoring());
+    manip.getAButton().onTrue(new Stow());
+    manip.getLBButton().onTrue(new Scoring());
+    manip.getRightStickPress().onTrue(new Substation());
     // manip.getAButton().onTrue(new InstantCommand(() -> elevator.setTarget(Constants.ELEVATOR_HIGH), elevator));
     // manip.getBButton().onTrue(new InstantCommand(() -> elevator.setTarget(Constants.ELEVATOR_MID), elevator));
     // manip.getXButton().onTrue(new InstantCommand(() -> elevator.setTarget(1600), elevator));

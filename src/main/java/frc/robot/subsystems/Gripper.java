@@ -91,7 +91,7 @@ public class Gripper extends SubsystemBase {
 
     // wrist.setIdleMode(IdleMode.kBrake);
     wheeledClaw.setNeutralMode(PassiveMode.BRAKE);
-    // arm.setNeutralMode(PassiveMode.BRAKE);
+    arm.setNeutralMode(PassiveMode.BRAKE);
 
     armPID = new PIDController(Constants.ARM_GAINS[0], Constants.ARM_GAINS[1], Constants.ARM_GAINS[2]);
     wheeledClawPID = new PIDController(Constants.CLAW_GAINS[0], Constants.CLAW_GAINS[1], Constants.CLAW_GAINS[2]);
@@ -228,7 +228,7 @@ public class Gripper extends SubsystemBase {
   }
  
   
-  public void stopClawWhenSeen() {
+  public boolean stopClawWhenSeen() {
     double distanceSensorVal = cubeMode ? Constants.CUBE_VALUE : Constants.CONE_VALUE;
 
     if (proximitySensor.getValue() > distanceSensorVal && proximitySensor.getValue() < 2600) {
@@ -241,7 +241,9 @@ public class Gripper extends SubsystemBase {
       wheeledClaw.set(0); // if speed is too high sensor might not have enough time to react
       // if(!Robot.m_robotContainer.animation.isScheduled())
       // Robot.m_robotContainer.animation.schedule();
+      return true;
     }
+    return false;
   }
 
 

@@ -22,7 +22,7 @@ public class Stow extends SequentialCommandGroup {
     addCommands(
       new InstantCommand(() -> Robot.m_robotContainer.manager.setLinearSlideTarget(Constants.LS_RETRACTED), Robot.m_robotContainer.lock),
       new WaitUntilCommand(Robot.m_robotContainer.manager::linearSlideTargetReached),
-      new InstantCommand(() -> Robot.m_robotContainer.manager.setIntakeHigh(false), Robot.m_robotContainer.lock),
+      new InstantCommand(Robot.m_robotContainer.manager::setIntakeLower, Robot.m_robotContainer.lock),
       new WaitUntilCommand(Robot.m_robotContainer.manager::intakeTargetReached),
       new InstantCommand(() -> Robot.m_robotContainer.manager.setElevatorTarget(Constants.ELEVATOR_HOLD), Robot.m_robotContainer.lock),
       new InstantCommand(() -> Robot.m_robotContainer.manager.setArmTarget(Constants.ARM_STOW), Robot.m_robotContainer.lock)
