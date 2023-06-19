@@ -35,8 +35,8 @@ public class LinearSlide extends SubsystemBase {
     pid = new PIDController(Constants.LINEAR_SLIDE_GAINS_HIGH[0], Constants.LINEAR_SLIDE_GAINS_HIGH[1],
         Constants.LINEAR_SLIDE_GAINS_HIGH[2]);
 
-    extendSpeedLimit = 0.8;
-    retractSpeedLimit = 0.8;
+    extendSpeedLimit = 0.5;
+    retractSpeedLimit = 0.5;
     manual = false;
   }
 
@@ -48,11 +48,12 @@ public class LinearSlide extends SubsystemBase {
   public void run() {
     if (!manual) {
       double err = Math.abs(target - getPosition());
-      if (err <= 15000) {
-        pid.setPID(Constants.LINEAR_SLIDE_GAINS_HIGH[0], Constants.LINEAR_SLIDE_GAINS_HIGH[1], Constants.LINEAR_SLIDE_GAINS_HIGH[2]);
-      } else {
-        pid.setPID(Constants.LINEAR_SLIDE_GAINS_LOW[0], Constants.LINEAR_SLIDE_GAINS_LOW[1], Constants.LINEAR_SLIDE_GAINS_LOW[2]);
-      }
+      pid.setPID(Constants.LINEAR_SLIDE_GAINS_HIGH[0], Constants.LINEAR_SLIDE_GAINS_HIGH[1], Constants.LINEAR_SLIDE_GAINS_HIGH[2]);
+      // if (err <= 20000) {
+      //   pid.setPID(Constants.LINEAR_SLIDE_GAINS_HIGH[0], Constants.LINEAR_SLIDE_GAINS_HIGH[1], Constants.LINEAR_SLIDE_GAINS_HIGH[2]);
+      // } else {
+      //   pid.setPID(Constants.LINEAR_SLIDE_GAINS_LOW[0], Constants.LINEAR_SLIDE_GAINS_LOW[1], Constants.LINEAR_SLIDE_GAINS_LOW[2]);
+      // }
       
       double motorSpeed = pid.calculate(slider.getSelectedSensorPosition(), target);
       if(target == 0) {

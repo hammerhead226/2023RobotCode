@@ -87,11 +87,11 @@ public class RobotContainer {
   public RobotContainer() {
     configureBindings();
 
-    dt.setDefaultCommand(
-      new RunCommand(
-        () -> dt.control(driver.getLeftJoyX(), driver.getLeftJoyY(), driver.getRightJoyX()),
-        dt
-        ));
+    // dt.setDefaultCommand(
+    //   new RunCommand(
+    //     () -> dt.control(driver.getLeftJoyX(), driver.getLeftJoyY(), driver.getRightJoyX()),
+    //     dt
+    //     ));
 
     // linearSlide.setDefaultCommand(
     //   new RunCommand(
@@ -106,9 +106,10 @@ public class RobotContainer {
     //     ));
 
     gripper.setDefaultCommand(new RunCommand(gripper::run, gripper));
-    intake.setDefaultCommand(new RunCommand(intake::run, intake));
+    // intake.setDefaultCommand(new RunCommand(intake::run, intake));
     linearSlide.setDefaultCommand(new RunCommand(linearSlide::run, linearSlide));
-    elevator.setDefaultCommand(new RunCommand(elevator::run, elevator));
+    // elevator.setDefaultCommand(new RunCommand(elevator::run, elevator));
+
     // led.setDefaultCommand(new SetColorMode());
 
     
@@ -157,15 +158,27 @@ public class RobotContainer {
     // .andThen(new RunCommand(() -> dt.toPose(new double[]{0, 100, 0}), dt).until(dt::atSetpoint)));
     // driver.getAButton().whileTrue(new TestAuto().handleInterrupt(DriveTrain.getInstance()::togglePlayback));
 
-    driver.getSTARTButton().onTrue(new InstantCommand(dt::reset, dt));
-    driver.getLBButton().onTrue(new InstantCommand(() -> dt.toggleSpeed(), dt));
+    // driver.getSTARTButton().onTrue(new InstantCommand(dt::reset, dt));
+    // driver.getLBButton().onTrue(new InstantCommand(() -> dt.toggleSpeed(), dt));
+
+    // driver.getAButton().onTrue(new InstantCommand(intake::retractIntake, intake));
+    // manip.getYButton().onTrue(new Level3());
+    // manip.getBButton().onTrue(new Level2());
+    // manip.getAButton().onTrue(new Stow());
+    // manip.getLBButton().onTrue(new Scoring());
+    // manip.getRightStickPress().onTrue(new Substation());
 
 
-    manip.getYButton().onTrue(new Level3());
-    manip.getBButton().onTrue(new Level2());
-    manip.getAButton().onTrue(new Stow());
-    manip.getLBButton().onTrue(new Scoring());
-    manip.getRightStickPress().onTrue(new Substation());
+    // manip.getAButton().onTrue(new InstantCommand(() -> gripper.setArmTarget(Constants.ARM_HOLD), lock));
+    // manip.getBButton().onTrue(new InstantCommand(() -> gripper.setArmTarget(Constants.ARM_STOW), lock));
+    // manip.getYButton().onTrue(new InstantCommand(() -> gripper.setArmTarget(Constants.ARM_SCORE), lock));
+    // manip.getXButton().onTrue(new InstantCommand(() -> gripper.setArmTarget(Constants.ARM_SUBSTATION), lock));
+
+    manip.getAButton().onTrue(new InstantCommand(() -> linearSlide.setTarget(Constants.LS_RETRACTED)));
+    manip.getBButton().onTrue(new InstantCommand(() -> linearSlide.setTarget(Constants.LS_HIGH)));
+    manip.getXButton().onTrue(new InstantCommand(() -> linearSlide.setTarget(Constants.LS_MID)));
+    manip.getYButton().onTrue(new InstantCommand(() -> linearSlide.setTarget(Constants.LS_SUBSTATION)));
+
     // manip.getAButton().onTrue(new InstantCommand(() -> elevator.setTarget(Constants.ELEVATOR_HIGH), elevator));
     // manip.getBButton().onTrue(new InstantCommand(() -> elevator.setTarget(Constants.ELEVATOR_MID), elevator));
     // manip.getXButton().onTrue(new InstantCommand(() -> elevator.setTarget(1600), elevator));

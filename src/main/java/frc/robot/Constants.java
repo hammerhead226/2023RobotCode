@@ -121,8 +121,12 @@ public final class Constants {
 
 
   // Linear Slide Constants
-  public static final double[] LINEAR_SLIDE_GAINS_HIGH = { 0.0000125, 0.00001, 0 };
-  public static final double[] LINEAR_SLIDE_GAINS_LOW = { 0.0000275, 0.00001, 0 };
+
+  // make high p gain lower than low gain (ik it sounds dumb af) but increase the i a little bit
+  public static final double[] LINEAR_SLIDE_GAINS_HIGH = { 0.0000136, 0.0, 0 };
+  public static final double[] LINEAR_SLIDE_GAINS_LOW = { 0.0, 0.0, 0 };
+  // public static final double[] LINEAR_SLIDE_GAINS_HIGH = { 0.000009, 0.000015, 0 };
+  // public static final double[] LINEAR_SLIDE_GAINS_LOW = { 0.0000065, 0.000018, 0 };
   public static final boolean LS_SET_INVERTED = true;
   public static final double LS_THRESHOLD = 2000;
 
@@ -160,7 +164,7 @@ public final class Constants {
   // public static final double ARM_STOW = 0;
   // public static final double ARM_HOLD = 0;
 
-  public static final double[] ARM_GAINS = {0.000015, 0, 0};
+  public static final double[] ARM_GAINS = {0.00047, 0, 0};
   public static final double[] CLAW_GAINS = {0.00003, 0, 0};
 
   public static final double ARM_THRESHOLD = 2000;
@@ -178,17 +182,23 @@ public final class Constants {
   public static final double ELEVATOR_INTAKE = 1100;
   public static final double ELEVATOR_SUBSTATION = -550;
 
-  public static final double LS_HIGH = 52000;
-  public static final double LS_MID = 21000;
-  public static final double LS_RETRACTED = 0;
-  public static final double LS_SUBSTATION = 20000;
+  public static final double LS_HIGH = -50633;
+  public static final double LS_MID = -21000;
+  public static final double LS_RETRACTED = -3000;
+  public static final double LS_SUBSTATION = -20000;
 
-  public static final double ARM_HOLD = 75000;
-  public static final double ARM_SCORE = 105000;
 
-  public static final double ARM_STOW = -850;
+  public static final double ARM_HOLD = 5220;
+  public static final double ARM_SCORE = 4790;
+  public static final double ARM_STOW = 7140;
+  public static final double ARM_SUBSTATION = 5420;
 
-  public static final double ARM_SUBSTATION = 80900;
+
+  // Limelight Constants
+  
+
+
+
   @Deprecated
   public static final double ARM_INTAKE = -43000;
   public static final double ARM_CONE_HOLD = 3000;

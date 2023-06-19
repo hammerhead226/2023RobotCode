@@ -4,14 +4,15 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxAbsoluteEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-// import com.revrobotics.SparkMaxAbsoluteEncoder.Type;
-import com.revrobotics.SparkMaxRelativeEncoder.Type;
+import com.revrobotics.SparkMaxAbsoluteEncoder.Type;
+// import com.revrobotics.SparkMaxRelativeEncoder.Type;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.AnalogInput;
@@ -51,7 +52,7 @@ public class Gripper extends SubsystemBase {
 
   private CANSparkMax armSpark;
 
-  // private CAN aCoder;
+  private AbsoluteEncoder aCoder;
 
   // private Rev2mDistanceSensor distanceSensor;
 
@@ -60,7 +61,7 @@ public class Gripper extends SubsystemBase {
   // private boolean wristToggle = true;
   private boolean armToggle = true;
 
-  private double armTarget = 0;
+  private double armTarget = Constants.ARM_HOLD;
 
   // private boolean clawToggle = true;
 
@@ -78,8 +79,11 @@ public class Gripper extends SubsystemBase {
     wheeledClaw = new GenericMotor(new TalonFX(RobotMap.WHEELED_CLAW_MOTOR, Constants.CANBUS));
     arm = new GenericMotor(new TalonFX(RobotMap.ARM_MOTOR, Constants.CANBUS));
     // armEncoder = new CANSparkMax(18, MotorType.kBrushed);
-    // armSpark = new CANSparkMax(18, MotorType.kBrushed);
-    // aCoder = armSpark.getAbsoluteEncoder(Type.fromId(18));
+
+    armSpark = new CANSparkMax(18, MotorType.kBrushed);
+    aCoder = armSpark.getAbsoluteEncoder(Type.kDutyCycle);
+
+    aCoder.setPositionConversionFactor(8192);
     
     // armSpark.getEncoder(Type.kQuadrature, 8192).get
 
@@ -98,7 +102,7 @@ public class Gripper extends SubsystemBase {
     // wristPID = new PIDController(Constants.WRIST_GAINS[0], Constants.WRIST_GAINS[1], Constants.WRIST_GAINS[2]);
 
     // distanceSensor = new Rev2mDistanceSensor(Port.kOnboard, Unit.kInches, RangeProfile.kHighAccuracy);
-    armSpeedLimit = 0.8;
+    armSpeedLimit = 0.65;
     this.proximitySensor = new AnalogInput(0);
 
   }
@@ -118,12 +122,12 @@ public class Gripper extends SubsystemBase {
     // }
     
     
-    double armSpeed = armPID.calculate(arm.getSensorPose(), armTarget);
+    double armSpeed = armPID.calculate(aCoder.getPosition(), armTarget);
 
     if(armSpeed > armSpeedLimit) armSpeed = armSpeedLimit;
     else if(armSpeed < -armSpeedLimit) armSpeed = -armSpeedLimit;
 
-    arm.set(armSpeed);
+    arm.set(-armSpeed);
 
     // arm.set(Robot.m_robotContainer.manip.getLeftJoyY());
     // SmartDashboard.putBoolean("claw toggle", clawToggle);
@@ -263,7 +267,11 @@ public class Gripper extends SubsystemBase {
     SmartDashboard.putBoolean("does it work", proximitySensor.getValue() > Constants.CONE_VALUE && proximitySensor.getValue() < 2600);
 
 
-    SmartDashboard.putNumber("falcon encoder", arm.getSensorPose());
+    // SmartDashboard.putNumber("falcon encoder", arm.getSensorPose());
+
+
+    // SmartDashboard.putNumber("absolute encoder", aCoder.getPosition());
+    SmartDashboard.putNumber("bro... fr?", aCoder.getPosition());
     // SmartDashboard.putNumber("balls in ur jaws", armEncoder.getAbsoluteEncoder(Type.kDutyCycle).getPosition());
     // SmartDashboard.putNumber("arm encoder please work im beggin you", armEncoder.getEncoder(, sustain));
     // SmartDashboard.putNumber("please", aCoder.getEncoder().getPosition());
