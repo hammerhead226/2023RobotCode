@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.Constants;
 import frc.robot.Robot;
 import frc.robot.subsystems.DriveTrain;
@@ -23,17 +24,19 @@ public class OneConeMobilityEngage extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new Level3(),
-      new Scoring()
-    //   new InstantCommand(() -> DriveTrain.getInstance().reset(), DriveTrain.getInstance()),
-    //   new RunCommand(() -> DriveTrain.getInstance().control(0, -2.25, 0), DriveTrain.getInstance()).until(DriveTrain.getInstance()::isChassisUnstable),
-    //   new RunCommand(() -> DriveTrain.getInstance().control(0, -0.5, 0), DriveTrain.getInstance()).until(DriveTrain.getInstance()::isChassisStable),
-    //   new RunCommand(() -> DriveTrain.getInstance().control(0.1, -0.25, 0), DriveTrain.getInstance()).withTimeout(1.5),
-    //   new InstantCommand(() -> DriveTrain.getInstance().control(0, 0, 0), DriveTrain.getInstance()),
-    //   new WaitCommand(1),
-    //   new RunCommand(() -> DriveTrain.getInstance().control(0, 2.25, 0), DriveTrain.getInstance()).until(DriveTrain.getInstance()::isChassisUnstable),
-    //   new WaitCommand(0.1),
-    //   new InstantCommand(() -> DriveTrain.getInstance().control(0, 0, 0), DriveTrain.getInstance()),
-    //   new AutoBalance(false, 0.018)
+      new WaitUntilCommand(Robot.m_robotContainer.manager::linearSlideTargetReached),
+      new WaitCommand(0.25),
+      new Scoring(),
+      new InstantCommand(() -> DriveTrain.getInstance().reset(), DriveTrain.getInstance()),
+      new RunCommand(() -> DriveTrain.getInstance().control(0, -2.25, 0), DriveTrain.getInstance()).until(DriveTrain.getInstance()::isChassisUnstable),
+      new RunCommand(() -> DriveTrain.getInstance().control(0, -0.5, 0), DriveTrain.getInstance()).until(DriveTrain.getInstance()::isChassisStable),
+      new RunCommand(() -> DriveTrain.getInstance().control(0.1, -0.25, 0), DriveTrain.getInstance()).withTimeout(1.5),
+      new InstantCommand(() -> DriveTrain.getInstance().control(0, 0, 0), DriveTrain.getInstance()),
+      new WaitCommand(1),
+      new RunCommand(() -> DriveTrain.getInstance().control(0, 2.25, 0), DriveTrain.getInstance()).until(DriveTrain.getInstance()::isChassisUnstable),
+      new WaitCommand(0.1),
+      new InstantCommand(() -> DriveTrain.getInstance().control(0, 0, 0), DriveTrain.getInstance()),
+      new AutoBalance(false, 0.018)
       // new RunCommand(() -> DriveTrain.getInstance().control(0, 0.12, 0), DriveTrain.getInstance()).withTimeout(1),
       // new InstantCommand(() -> DriveTrain.getInstance().control(0, 0, 0), DriveTrain.getInstance())
     );
