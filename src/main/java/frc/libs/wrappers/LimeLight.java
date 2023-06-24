@@ -22,27 +22,27 @@ public class LimeLight {
         return limelight.getEntry("ty").getDouble(0.0);
     }
 
-    public double getTargetArea() {
+    public static double getTargetArea() {
         return limelight.getEntry("ta").getDouble(0.0);
     }
 
-    public double getValue() {
+    public static double getValue() {
         return limelight.getEntry("tv").getDouble(0.0);
     }
 
-    public double getShortSide() {
+    public static double getShortSide() {
         return limelight.getEntry("tshort").getDouble(0.0);
     }
 
-    public double getLongSide() {
+    public static double getLongSide() {
         return limelight.getEntry("tlong").getDouble(0.0);
     }
 
-    public double getHorizontalSide() {
+    public static double getHorizontalSide() {
         return limelight.getEntry("thor").getDouble(0.0);
     }
 
-    public double getVerticalSide() {
+    public static double getVerticalSide() {
         return limelight.getEntry("tvert").getDouble(0.0);
     }
 

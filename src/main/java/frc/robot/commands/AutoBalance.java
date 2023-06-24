@@ -36,7 +36,7 @@ public class AutoBalance extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    DriveTrain.getInstance().control(0, con.calculate(DriveTrain.getInstance().getGyroTilt()), 0); 
+    DriveTrain.getInstance().control(0, con.calculate(DriveTrain.getInstance().getGyroPitch()), 0); 
   }
 
   // Called once the command ends or is interrupted.
@@ -54,7 +54,7 @@ public class AutoBalance extends CommandBase {
     // return sustain >= 50;
     // return Math.abs(DriveTrain.getInstance().getGyroTilt()) < gyroThresh;
     // return DriveTrain.getInstance().getGyroTilt() < 15 || DriveTrain.getInstance().getGyroTilt() > -2;
-    if(direction) return DriveTrain.getInstance().getGyroTilt() < 15;
-    else return DriveTrain.getInstance().getGyroTilt() > -3;
+    if(direction) return DriveTrain.getInstance().getGyroPitch() < 15;
+    else return DriveTrain.getInstance().getGyroPitch() > -3;
   }
 }

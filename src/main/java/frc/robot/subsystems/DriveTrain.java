@@ -7,9 +7,12 @@ import com.ctre.phoenix.sensors.CANCoder;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.libs.swervey.MotionOfTheOcean;
-import frc.libs.swervey.Swerve;
-import frc.libs.swervey.SwerveBuilder;
+import frc.libs.electronics.IMU.Pigeon2IMU;
+import frc.libs.electronics.encoders.ThreadedCANcoder;
+import frc.libs.electronics.motors.LazyTalonFX;
+import frc.libs.swerveyshark.MotionOfTheOcean;
+import frc.libs.swerveyshark.Swerve;
+import frc.libs.swerveyshark.SwerveConfiguration;
 import frc.libs.wrappers.GenericEncoder;
 import frc.libs.wrappers.GenericMotor;
 import frc.libs.wrappers.Gyro;
@@ -24,22 +27,28 @@ public class DriveTrain extends SubsystemBase {
 
     private final PIDController balanceController;
 
+    private final PIDController limelightController;
+
+    private final PIDController rotateController;
+
     public static DriveTrain getInstance() {
         return INSTANCE;
     }
 
     private Swerve swerve;
 
-    private Gyro gyro;
+    private Pigeon2IMU gyro;
 
     private boolean isPlaying;
+
+    private boolean driveTrainLock;
 
 
     private DriveTrain() {
 
-        GenericMotor[] drives = new GenericMotor[Constants.NUMBER_OF_MODULES];
-        GenericMotor[] steers = new GenericMotor[Constants.NUMBER_OF_MODULES];
-        GenericEncoder[] encoders = new GenericEncoder[Constants.NUMBER_OF_MODULES];
+        LazyTalonFX[] drives = new LazyTalonFX[Constants.NUMBER_OF_MODULES];
+        LazyTalonFX[] steers = new LazyTalonFX[Constants.NUMBER_OF_MODULES];
+        ThreadedCANcoder[] encoders = new ThreadedCANcoder[Constants.NUMBER_OF_MODULES];
 
         for(int i = 0; i < Constants.NUMBER_OF_MODULES; i++) {
             TalonFX drive = new TalonFX(RobotMap.DRIVE_MOTORS[i]);
@@ -47,25 +56,37 @@ public class DriveTrain extends SubsystemBase {
 
             CANCoder encoder = new CANCoder(RobotMap.ENCODERS[i], Constants.CANBUS);
 
-            drive.setNeutralMode(NeutralMode.Brake);
+            // drive.set(NeutralMode.Brake);
 
-            drives[i] = new GenericMotor(drive);
-            steers[i] = new GenericMotor(steer);
+            drives[i] = new LazyTalonFX(drive, Constants.TICKS_PER_METER);
+            steers[i] = new LazyTalonFX(steer, Constants.TICKS_PER_METER);
 
-            encoders[i] = new GenericEncoder(encoder, Constants.OVERFLOW_THRESHOLD, Constants.MODULE_OFFSETS[i]);
+            encoders[i] = new ThreadedCANcoder(i, Math.PI, Constants.MODULE_OFFSETS[i], 10, "CAN BUS 2");
         }
 
-        gyro = new Gyro(RobotMap.GYRO, "CAN Bus 2");
+        gyro = new Pigeon2IMU(RobotMap.GYRO, "CAN Bus 2");
 
-        swerve = new SwerveBuilder(drives, steers, encoders, gyro)
-                .PIDGains(Constants.MODULE_GAINS, Constants.SCHEDULED_GAINS, Constants.STEER_AND_ROTATE_THRESHOLDS)
-                .modulePositions(Constants.MODULE_POSITIONS)
-                .speedBounds(Constants.SPEED_BOUNDS)
-                .accelerationParameters(Constants.ACCELERATION_PARAMETERS)
-                .autonomousParameters(Constants.TICKS_PER_INCHES, Constants.ALLOWED_ERRORS, Constants.VELOCITY_FEED_FORWARD)
-                .buildSwerve();
+        SwerveConfiguration config = new SwerveConfiguration();
+
+        config.drives = drives;
+        config.steers = steers;
+        config.encoders = encoders;
+        config.gyro = gyro;
+        config.modulePositions = Constants.MODULE_POSITIONS;
+        config.translationalPIDGains = new double[]{0.03, 0.0, 0.0};
+        config.rotationalPIDGains = new double[]{0.65, 0.0, 0.0};
+        config.drivePIDFGains = new double[]{0.01, 0.0, 0.0, 1.0/4.96824};
+        config.steerPIDGains = new double[]{0.62, 0.0, 0.0};
+        config.MAX_MODULE_SPEED = Constants.MAX_MODULE_SPEED;
+        config.radius = Math.hypot(0.5794/2, 0.5794/2);
+        config.numberOfModules = Constants.NUMBER_OF_MODULES;
 
         this.balanceController = new PIDController(0.012, 0, 0);
+
+        this.limelightController = new PIDController(0.07, 0, 0);
+
+        // TODO:: play around with this
+        this.rotateController = new PIDController(0.334, 0, 0);
 
         isPlaying = false;
 
@@ -74,24 +95,28 @@ public class DriveTrain extends SubsystemBase {
 
     public void control(double x, double y, double rotate) {
         if(isPlaying) {
-            MotionOfTheOcean.Executor.executeRecording(() -> DriveTrain.getInstance().toPose(MotionOfTheOcean.Executor.getState().getPose()));
+            MotionOfTheOcean.Executor.executeRecording(() -> DriveTrain.getInstance().toPose(MotionOfTheOcean.Executor.getState().getPose(), 
+                                                                                            MotionOfTheOcean.Executor.getState().getLinearVelocity(), 
+                                                                                            MotionOfTheOcean.Executor.getState().getAngularVelocity(), 
+                                                                                            gyro.getYaw()));
         }
-        else swerve.control(x, y, -rotate * 0.75);
-        double[] pose = swerve.getPose();
+        else if(!driveTrainLock) swerve.controlWithPercent(x, y, rotate);
+        double[] pose = swerve.getSwerveState();
         SmartDashboard.putNumber("x", pose[0]);
         SmartDashboard.putNumber("y", pose[1]);
         SmartDashboard.putNumber("rotate", pose[2]);
+        SmartDashboard.putNumber("linear velocity", pose[3]);
+        SmartDashboard.putNumber("heading", pose[4]);
 
         SmartDashboard.putBoolean("atSetpoint", swerve.atSetpoint());
     }
 
     public void reset() {
         swerve.reset();
-        swerve.zeroGyro();
     }
 
-    public void toPose(double[] target) {
-        swerve.toPose(target);
+    public void toPose(double[] target, double linearVelocity, double angularVelocity, double heading) {
+        swerve.setSwerveState(target, linearVelocity, angularVelocity, heading);
     }
 
     public boolean atSetpoint() {
@@ -114,24 +139,44 @@ public class DriveTrain extends SubsystemBase {
         return balanceController;
     }
 
+    public PIDController getLimelightController() {
+        return this.limelightController;
+    }
+
+    public PIDController getRotateController() {
+        return this.rotateController;
+    }
+
     public boolean isChassisUnstable() {
         // return Math.abs(gyro.getTilt()) > Constants.DRIVETRAIN_TILT_THRESHOLD;
-        return gyro.getTilt() > Constants.DRIVETRAIN_TILT_THRESHOLD || gyro.getTilt() < -9;
+        return gyro.getPitch() > Constants.DRIVETRAIN_TILT_THRESHOLD || gyro.getPitch() < -9;
     }
 
     public boolean isChassisStable() {
-        return Math.abs(gyro.getTilt()) < 4.5;
+        return Math.abs(gyro.getPitch()) < 4.5;
     }
 
-    public double getGyroTilt() {
-        return gyro.getTilt();
+    public double getGyroPitch() {
+        return gyro.getPitch();
+    }
+
+    public double getGyroYaw() {
+        return gyro.getYaw();
+    }
+
+    public void lockDriveTrain() {
+        this.driveTrainLock = true;
+    }
+
+    public void unlockDriveTrain() {
+        this.driveTrainLock = false;
     }
 
     @Override
     public void periodic() {
       for(int i=0; i < Constants.NUMBER_OF_MODULES; i++)
           SmartDashboard.putNumber("module offset " + i, swerve.getModuleRotationalPose(i));
-      SmartDashboard.putNumber("gyro tilt", getGyroTilt());
+      SmartDashboard.putNumber("gyro tilt", getGyroPitch());
     }
 }
 

@@ -30,13 +30,14 @@ public class LinearSlide extends SubsystemBase {
     slider.setInverted(Constants.LS_SET_INVERTED);
     
     slider.setNeutralMode(NeutralMode.Brake);
+    slider.configNeutralDeadband(0.1);
     // slider.setInverted(true);
 
     pid = new PIDController(Constants.LINEAR_SLIDE_GAINS_HIGH[0], Constants.LINEAR_SLIDE_GAINS_HIGH[1],
         Constants.LINEAR_SLIDE_GAINS_HIGH[2]);
 
-    extendSpeedLimit = 0.5;
-    retractSpeedLimit = 0.5;
+    extendSpeedLimit = 0.80;
+    retractSpeedLimit = 0.65;
     manual = false;
   }
 
@@ -49,19 +50,23 @@ public class LinearSlide extends SubsystemBase {
     if (!manual) {
       double err = Math.abs(target - getPosition());
       pid.setPID(Constants.LINEAR_SLIDE_GAINS_HIGH[0], Constants.LINEAR_SLIDE_GAINS_HIGH[1], Constants.LINEAR_SLIDE_GAINS_HIGH[2]);
-      // if (err <= 20000) {
-      //   pid.setPID(Constants.LINEAR_SLIDE_GAINS_HIGH[0], Constants.LINEAR_SLIDE_GAINS_HIGH[1], Constants.LINEAR_SLIDE_GAINS_HIGH[2]);
-      // } else {
-      //   pid.setPID(Constants.LINEAR_SLIDE_GAINS_LOW[0], Constants.LINEAR_SLIDE_GAINS_LOW[1], Constants.LINEAR_SLIDE_GAINS_LOW[2]);
-      // }
+      if (err <= 20000) {
+        pid.setPID(Constants.LINEAR_SLIDE_GAINS_HIGH[0], Constants.LINEAR_SLIDE_GAINS_HIGH[1], Constants.LINEAR_SLIDE_GAINS_HIGH[2]);
+      } else {
+        pid.setPID(Constants.LINEAR_SLIDE_GAINS_LOW[0], Constants.LINEAR_SLIDE_GAINS_LOW[1], Constants.LINEAR_SLIDE_GAINS_LOW[2]);
+      }
       
       double motorSpeed = pid.calculate(slider.getSelectedSensorPosition(), target);
-      if(target == 0) {
+      if(target == Constants.LS_RETRACTED) {
         if (motorSpeed > retractSpeedLimit) {
           motorSpeed = retractSpeedLimit;
         } else if (motorSpeed < -retractSpeedLimit) {
           motorSpeed = -retractSpeedLimit;
         }
+
+        // if (Math.abs(slider.getSelectedSensorPosition()) <= 0.8 * Math.abs(target)) {
+        //   motorSpeed = 0;
+        // }
       }
       else {
         if (motorSpeed > extendSpeedLimit) {
@@ -69,10 +74,15 @@ public class LinearSlide extends SubsystemBase {
         } else if (motorSpeed < -extendSpeedLimit) {
           motorSpeed = -extendSpeedLimit;
         }
+
+        // if (Math.abs(slider.getSelectedSensorPosition()) <= 0.8 * Math.abs(target)) {
+        //   motorSpeed = 0;
+        // }
       }
       
       // SmartDashboard.putNumber("motor speed", motorSpeed);
       // control(Robot.m_robotContainer.manip.getLeftJoyY());
+      // motorSpeed = Math.abs(motorSpeed) < 0.09 ? 0 : motorSpeed;
       control(motorSpeed);
     }
     SmartDashboard.putNumber("slide deez nuts into yo", slider.getSelectedSensorPosition());

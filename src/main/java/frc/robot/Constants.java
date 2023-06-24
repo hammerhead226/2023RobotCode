@@ -43,6 +43,9 @@ public final class Constants {
      public static final double LIMELIGHT_OFFSET = 0;
  
      public static final double TICKS_PER_INCHES = 1170.58602;//44.228775
+     public static final double TICKS_PER_METER = 46260;
+
+     public static final double MAX_MODULE_SPEED = 5;
  
      public static String AUTONOMOUS_PATH_FILENAME = "/paths/recording.csv";
  
@@ -73,7 +76,7 @@ public final class Constants {
      public static final double[] ROTATE_GAINS_LOW = {1.5, 0.0, 0.0};//.669, 2.5
      public static final double[] ROTATE_GAINS_HIGH = {0.4, 0.0, 0.0};//.9
  
-     public static double[] LIMELIGHT_GAINS = {0.065, 0.0, 0.0};
+    //  public static double[] LIMELIGHT_GAINS = {0.065, 0.0, 0.0};
  
      public static final double STEER_GAINS_THRESHOLD = 2146.5; // 9%
      public static final double ROTATE_GAINS_THRESHOLD = 0.15; //TODO: Convert to velocity
@@ -117,16 +120,14 @@ public final class Constants {
 
   public static final double ELEVATOR_THRESHOLD = 100;
 
-  public static final double ELEVATOR_STOW = 0;
 
 
   // Linear Slide Constants
+  // public static final double[] LINEAR_SLIDE_GAINS_HIGH = { 0.0000475, 0.0000015, 0 };
+  // public static final double[] LINEAR_SLIDE_GAINS_LOW = { 0.0000325, 0.000001, 0 };
 
-  // make high p gain lower than low gain (ik it sounds dumb af) but increase the i a little bit
-  public static final double[] LINEAR_SLIDE_GAINS_HIGH = { 0.0000136, 0.0, 0 };
-  public static final double[] LINEAR_SLIDE_GAINS_LOW = { 0.0, 0.0, 0 };
-  // public static final double[] LINEAR_SLIDE_GAINS_HIGH = { 0.000009, 0.000015, 0 };
-  // public static final double[] LINEAR_SLIDE_GAINS_LOW = { 0.0000065, 0.000018, 0 };
+  public static final double[] LINEAR_SLIDE_GAINS_HIGH = { 0.000049, 0.0000015, 0 };
+  public static final double[] LINEAR_SLIDE_GAINS_LOW = { 0.000042, 0.00000125, 0 };
   public static final boolean LS_SET_INVERTED = true;
   public static final double LS_THRESHOLD = 2000;
 
@@ -161,9 +162,6 @@ public final class Constants {
   public static final double ARM_POS_1 = 0;
   public static final double ARM_POS_2 = -130000;
 
-  // public static final double ARM_STOW = 0;
-  // public static final double ARM_HOLD = 0;
-
   public static final double[] ARM_GAINS = {0.00047, 0, 0};
   public static final double[] CLAW_GAINS = {0.00003, 0, 0};
 
@@ -172,30 +170,32 @@ public final class Constants {
   public static final double CLOSING_DISTANCE = 8;
 
   public static final double CUBE_VALUE = 1350;
-  public static final double CONE_VALUE = 2100;
+  public static final double CONE_VALUE = 2000;
 
 
   //Scoring Setpoints
-  public static final double ELEVATOR_HIGH = -1200;
+  public static final double ELEVATOR_HIGH = -1300;
   public static final double ELEVATOR_MID = -200;
   public static final double ELEVATOR_HOLD = 1900;
   public static final double ELEVATOR_INTAKE = 1100;
   public static final double ELEVATOR_SUBSTATION = -550;
 
-  public static final double LS_HIGH = -50633;
-  public static final double LS_MID = -21000;
-  public static final double LS_RETRACTED = -3000;
+  public static final double LS_HIGH = -56650;
+  public static final double LS_MID = -24500;
+  public static final double LS_RETRACTED = -1500;
   public static final double LS_SUBSTATION = -20000;
 
 
-  public static final double ARM_HOLD = 5220;
-  public static final double ARM_SCORE = 4790;
-  public static final double ARM_STOW = 7140;
+  public static final double ARM_HOLD = 5820;
+  public static final double ARM_SCORE = 4680;
+  public static final double ARM_STOW = 7110;
   public static final double ARM_SUBSTATION = 5420;
 
 
   // Limelight Constants
-  
+  public static final double LIMELIGHT_THRESH = 0.1;
+  public static final double ROTATE_THRESH = Math.toRadians(25);
+  // public static final double[] LIMELIGHT_GAINS = {0.11, 0, 0};
 
 
 

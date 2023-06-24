@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.libs.wrappers.Controller;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
 
@@ -14,12 +15,20 @@ public class ScoringStateManager extends SubsystemBase {
   public Elevator elevator;
   public Intake intake;
 
+  public Controller manip;
+  public Controller driver;
+
   public ScoringStateManager() {
     linearSlide = RobotContainer.getLinearSlide();
     elevator = RobotContainer.getElevator();
     gripper = RobotContainer.getGripper();
     intake = RobotContainer.getIntake();
+
+    driver = RobotContainer.getDriver();
+    manip = RobotContainer.getManip();
   }
+
+  // public void vibrate
 
   public double getIntakeState() {
     return intake.getIntake();
@@ -97,7 +106,7 @@ public class ScoringStateManager extends SubsystemBase {
   }
 
   public boolean intakeTargetReached() {
-    return (0.8 * (Math.abs(getIntakeState() - intake.getTarget())) <= Constants.INTAKE_THRESHOLD);
+    return (0.85 * (Math.abs(getIntakeState() - intake.getTarget())) <= Constants.INTAKE_THRESHOLD);
   }
 
   public boolean linearSlideTargetReached() { // make threshold a constant later
