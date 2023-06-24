@@ -7,6 +7,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.Constants;
 import frc.robot.Robot;
 import frc.robot.subsystems.ScoringStateManager;
@@ -21,6 +22,7 @@ public class Scoring extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new InstantCommand(() -> Robot.m_robotContainer.manager.setArmTarget(Constants.ARM_SCORE)),
+      new WaitCommand(0.25),
       new InstantCommand(Robot.m_robotContainer.manager::clawOuttake),
       new WaitCommand(0.5),
       new InstantCommand(Robot.m_robotContainer.manager::stopClaw),

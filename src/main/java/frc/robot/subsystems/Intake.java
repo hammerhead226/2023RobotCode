@@ -18,9 +18,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 // import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.libs.wrappers.GenericMotor;
+import frc.libs.wrappers.LimeLight;
 import frc.robot.Constants;
 import frc.robot.Robot;
 import frc.robot.RobotMap;
+import frc.robot.commands.LimelightLineUp;
 
 public class Intake extends SubsystemBase {
 
@@ -67,7 +69,8 @@ public class Intake extends SubsystemBase {
     intakeOn = false;
     intakeTucked = false;
 
-    intakePosition = IntakePosition.EXTEND;
+    //TODO:: change this later 
+    intakePosition = IntakePosition.LOWER;
   }
 
   public void run() {
@@ -188,5 +191,7 @@ public class Intake extends SubsystemBase {
   @Override
   public void periodic() {
     SmartDashboard.putNumber("intake enc", getIntake());
+    SmartDashboard.putNumber("limelight stuff", LimeLight.getHorizontalOffset());
+    SmartDashboard.putNumber("limelight stuff 2", LimeLight.getValue());
   }
 }

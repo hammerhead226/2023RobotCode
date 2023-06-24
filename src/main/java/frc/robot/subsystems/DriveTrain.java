@@ -24,6 +24,10 @@ public class DriveTrain extends SubsystemBase {
 
     private final PIDController balanceController;
 
+    private final PIDController limelightController;
+
+    private final PIDController rotateController;
+
     public static DriveTrain getInstance() {
         return INSTANCE;
     }
@@ -33,6 +37,8 @@ public class DriveTrain extends SubsystemBase {
     private Gyro gyro;
 
     private boolean isPlaying;
+
+    private boolean driveTrainLock;
 
 
     private DriveTrain() {
@@ -67,6 +73,11 @@ public class DriveTrain extends SubsystemBase {
 
         this.balanceController = new PIDController(0.012, 0, 0);
 
+        this.limelightController = new PIDController(0.07, 0, 0);
+
+        // TODO:: play around with this
+        this.rotateController = new PIDController(0.334, 0, 0);
+
         isPlaying = false;
 
 
@@ -76,7 +87,7 @@ public class DriveTrain extends SubsystemBase {
         if(isPlaying) {
             MotionOfTheOcean.Executor.executeRecording(() -> DriveTrain.getInstance().toPose(MotionOfTheOcean.Executor.getState().getPose()));
         }
-        else swerve.control(x, y, -rotate * 0.75);
+        else if(!driveTrainLock) swerve.control(x, y, -rotate * 0.75);
         double[] pose = swerve.getPose();
         SmartDashboard.putNumber("x", pose[0]);
         SmartDashboard.putNumber("y", pose[1]);
@@ -114,6 +125,14 @@ public class DriveTrain extends SubsystemBase {
         return balanceController;
     }
 
+    public PIDController getLimelightController() {
+        return this.limelightController;
+    }
+
+    public PIDController getRotateController() {
+        return this.rotateController;
+    }
+
     public boolean isChassisUnstable() {
         // return Math.abs(gyro.getTilt()) > Constants.DRIVETRAIN_TILT_THRESHOLD;
         return gyro.getTilt() > Constants.DRIVETRAIN_TILT_THRESHOLD || gyro.getTilt() < -9;
@@ -127,6 +146,18 @@ public class DriveTrain extends SubsystemBase {
         return gyro.getTilt();
     }
 
+    public double getGyroYaw() {
+        return gyro.getYaw();
+    }
+
+    public void lockDriveTrain() {
+        this.driveTrainLock = true;
+    }
+
+    public void unlockDriveTrain() {
+        this.driveTrainLock = false;
+    }
+    
     @Override
     public void periodic() {
       for(int i=0; i < Constants.NUMBER_OF_MODULES; i++)
