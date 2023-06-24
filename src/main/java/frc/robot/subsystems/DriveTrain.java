@@ -88,6 +88,8 @@ public class DriveTrain extends SubsystemBase {
         // TODO:: play around with this
         this.rotateController = new PIDController(0.334, 0, 0);
 
+        this.swerve = Swerve.fromConfiguration(config);
+
         isPlaying = false;
 
 

@@ -110,10 +110,10 @@ public class RobotContainer {
     //      elevator
     //     ));
 
-    gripper.setDefaultCommand(new RunCommand(gripper::run, gripper));
-    intake.setDefaultCommand(new RunCommand(intake::run, intake));
-    linearSlide.setDefaultCommand(new RunCommand(linearSlide::run, linearSlide));
-    elevator.setDefaultCommand(new RunCommand(elevator::run, elevator));
+    // gripper.setDefaultCommand(new RunCommand(gripper::run, gripper));
+    // intake.setDefaultCommand(new RunCommand(intake::run, intake));
+    // linearSlide.setDefaultCommand(new RunCommand(linearSlide::run, linearSlide));
+    // elevator.setDefaultCommand(new RunCommand(elevator::run, elevator));
 
     led.setDefaultCommand(new SetColorMode());
 
@@ -163,18 +163,18 @@ public class RobotContainer {
     // .andThen(new RunCommand(() -> dt.toPose(new double[]{0, 100, 0}), dt).until(dt::atSetpoint)));
     // driver.getAButton().whileTrue(new TestAuto().handleInterrupt(DriveTrain.getInstance()::togglePlayback));
 
-    driver.getSTARTButton().onTrue(new InstantCommand(dt::reset, dt));
-    // driver.getLBButton().onTrue(new InstantCommand(() -> dt.toggleSpeed(), dt));
+    // driver.getSTARTButton().onTrue(new InstantCommand(dt::reset, dt));
+    // // driver.getLBButton().onTrue(new InstantCommand(() -> dt.toggleSpeed(), dt));
 
-    // driver.getAButton().onTrue(new InstantCommand(intake::retractIntake, intake));
+    // // driver.getAButton().onTrue(new InstantCommand(intake::retractIntake, intake));
 
-    manip.getYButton().onTrue(new Level3());
-    manip.getBButton().onTrue(new Level2());
-    manip.getAButton().onTrue(new Stow());
+    // manip.getYButton().onTrue(new Level3());
+    // manip.getBButton().onTrue(new Level2());
+    // manip.getAButton().onTrue(new Stow());
 
-    //make is so when slide is fully in after scoring akul controller buzzes
-    manip.getLBButton().onTrue(new Scoring());
-    manip.getRightStickPress().onTrue(new Substation());
+    // //make is so when slide is fully in after scoring akul controller buzzes
+    // manip.getLBButton().onTrue(new Scoring());
+    // manip.getRightStickPress().onTrue(new Substation());
 
     // manip.getRBButton().onTrue(new Ins)
 
@@ -191,9 +191,9 @@ public class RobotContainer {
 
     // make it so when alignment is done akul controller get buzzed 
     // make it so when akul lets go of alignment button anish contorller gets buzzed
-    driver.getBButton().whileTrue(new LimelightLineUp());
-    driver.getBButton().onFalse(new InstantCommand(() -> DriveTrain.getInstance().control(0, 0, 0), DriveTrain.getInstance()));
-    driver.getAButton().onTrue(new InstantCommand(intake::retractIntake, intake));
+    // driver.getBButton().whileTrue(new LimelightLineUp());
+    // driver.getBButton().onFalse(new InstantCommand(() -> DriveTrain.getInstance().control(0, 0, 0), DriveTrain.getInstance()));
+    // driver.getAButton().onTrue(new InstantCommand(intake::retractIntake, intake));
     // manip.getAButton().onTrue(new InstantCommand(() -> elevator.setTarget(Constants.ELEVATOR_HIGH), elevator));
     // manip.getBButton().onTrue(new InstantCommand(() -> elevator.setTarget(Constants.ELEVATOR_MID), elevator));
     // manip.getXButton().onTrue(new InstantCommand(() -> elevator.setTarget(1600), elevator));
