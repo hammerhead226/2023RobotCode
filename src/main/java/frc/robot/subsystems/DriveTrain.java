@@ -61,7 +61,7 @@ public class DriveTrain extends SubsystemBase {
             drives[i] = new LazyTalonFX(drive, Constants.TICKS_PER_METER);
             steers[i] = new LazyTalonFX(steer, Constants.TICKS_PER_METER);
 
-            encoders[i] = new ThreadedCANcoder(i, Math.PI, Constants.MODULE_OFFSETS[i], 10, "CAN BUS 2");
+            encoders[i] = new ThreadedCANcoder(i, Math.PI, Constants.MODULE_OFFSETS[i], 20, "CAN Bus 2");
         }
 
         gyro = new Pigeon2IMU(RobotMap.GYRO, "CAN Bus 2");
