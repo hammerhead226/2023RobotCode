@@ -22,7 +22,7 @@ public class ScoringStateManager extends SubsystemBase {
     linearSlide = RobotContainer.getLinearSlide();
     elevator = RobotContainer.getElevator();
     gripper = RobotContainer.getGripper();
-    // intake = RobotContainer.getIntake();
+    intake = RobotContainer.getIntake();
 
     driver = RobotContainer.getDriver();
     manip = RobotContainer.getManip();

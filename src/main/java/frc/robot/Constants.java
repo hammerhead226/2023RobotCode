@@ -69,6 +69,9 @@ public final class Constants {
  
      // PID Configurations
      public static final double[] DRIVE_GAINS = {0.04, 0.0, 0.0}; //0.7115, 0.6, .18
+
+     public static final double[] TRANSLATIONAL_GAINS = {1, 0 , 0};
+     public static final double[] ROTATIONAL_GAINS = {0 ,0 ,0 };
  
      public static final double[] STEER_GAINS_LOW = {0.62, 0, 0.0};
      public static final double[] STEER_GAINS_HIGH = {.68, 0, 0.0};
@@ -143,12 +146,13 @@ public final class Constants {
 
   // Intake Constants
   public static final double ROLLER_RUN_SPEED = 0.65;
-  public static final double[] INTAKE_GAINS = { 0.0009, 0, 0 };
+  // public static final double[] INTAKE_GAINS = { 0.0009, 0, 0 };
+  public static final double[] INTAKE_GAINS = { 0.0011, 0, 0 };
   public static final int INTAKE_OFFSET = 0;
 
-  public static final double INTAKE_EXTEND = 3560;
-  public static final double INTAKE_LOWERED = 3000;
-  public static final double INTAKE_RETRACT = 2700;
+  public static final double INTAKE_EXTEND = 2100;
+  public static final double INTAKE_LOWERED = 1800;
+  public static final double INTAKE_RETRACT = 1600;
 
   public static final double INTAKE_THRESHOLD = 100;
       
@@ -174,12 +178,12 @@ public final class Constants {
 
 
   //Scoring Setpoints
-  public static final double ELEVATOR_HIGH = -1300;
-  public static final double ELEVATOR_MID = -200;
+  public static final double ELEVATOR_HIGH = -1200;
+  public static final double ELEVATOR_MID = -100;
   // public static final double ELEVATOR_HOLD = 1900;
-  public static final double ELEVATOR_HOLD = 1700;
-  public static final double ELEVATOR_INTAKE = 1100;
-  public static final double ELEVATOR_SUBSTATION = -550;
+  public static final double ELEVATOR_HOLD = 1800;
+  public static final double ELEVATOR_INTAKE = 1200;
+  public static final double ELEVATOR_SUBSTATION = -450;
 
   public static final double LS_HIGH = -56650;
   public static final double LS_MID = -24500;
@@ -194,8 +198,8 @@ public final class Constants {
 
 
   // Limelight Constants
-  public static final double LIMELIGHT_THRESH = 0.05;
-  public static final double ROTATE_THRESH = Math.toRadians(7);
+  public static final double LIMELIGHT_THRESH = 0.1;
+  public static final double ROTATE_THRESH = Math.toRadians(25);
   // public static final double[] LIMELIGHT_GAINS = {0.11, 0, 0};
 
 

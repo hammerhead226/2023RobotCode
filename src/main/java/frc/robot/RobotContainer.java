@@ -72,7 +72,7 @@ public class RobotContainer {
   
   public static final Elevator elevator = new Elevator();
   public static final Gripper gripper = new Gripper();
-  // public static final Intake intake = new Intake();
+  public static final Intake intake = new Intake();
   public static final LinearSlide linearSlide = new LinearSlide();
   public static final LED led = new LED();
   // public static final Vision vision = new Vision();
@@ -111,7 +111,7 @@ public class RobotContainer {
     //     ));
 
     gripper.setDefaultCommand(new RunCommand(gripper::run, gripper));
-    // intake.setDefaultCommand(new RunCommand(intake::run, intake));
+    intake.setDefaultCommand(new RunCommand(intake::run, intake));
     linearSlide.setDefaultCommand(new RunCommand(linearSlide::run, linearSlide));
     elevator.setDefaultCommand(new RunCommand(elevator::run, elevator));
 
@@ -166,7 +166,10 @@ public class RobotContainer {
     driver.getSTARTButton().onTrue(new InstantCommand(dt::reset, dt));
     // driver.getLBButton().onTrue(new InstantCommand(() -> dt.toggleSpeed(), dt));
 
-    // driver.getAButton().onTrue(new InstantCommand(intake::retractIntake, intake));
+    driver.getAButton().onTrue(new InstantCommand(intake::retractIntake, intake));
+    driver.getYButton().onTrue(new InstantCommand(intake::extendIntake, intake));
+    driver.getXButton().onTrue(new InstantCommand(intake::lowerIntake, intake));
+
 
     manip.getYButton().onTrue(new Level3());
     manip.getBButton().onTrue(new Level2());
@@ -306,9 +309,9 @@ public class RobotContainer {
     return gripper;
   }
 
-  // public static Intake getIntake() {
-  //   return intake;
-  // }
+  public static Intake getIntake() {
+    return intake;
+  }
 
   public static Controller getManip() {
     return manip;
