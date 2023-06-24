@@ -176,7 +176,8 @@ public final class Constants {
   //Scoring Setpoints
   public static final double ELEVATOR_HIGH = -1300;
   public static final double ELEVATOR_MID = -200;
-  public static final double ELEVATOR_HOLD = 1900;
+  // public static final double ELEVATOR_HOLD = 1900;
+  public static final double ELEVATOR_HOLD = 1700;
   public static final double ELEVATOR_INTAKE = 1100;
   public static final double ELEVATOR_SUBSTATION = -550;
 
@@ -193,8 +194,8 @@ public final class Constants {
 
 
   // Limelight Constants
-  public static final double LIMELIGHT_THRESH = 0.1;
-  public static final double ROTATE_THRESH = Math.toRadians(25);
+  public static final double LIMELIGHT_THRESH = 0.05;
+  public static final double ROTATE_THRESH = Math.toRadians(7);
   // public static final double[] LIMELIGHT_GAINS = {0.11, 0, 0};
 
 

@@ -73,10 +73,10 @@ public class DriveTrain extends SubsystemBase {
 
         this.balanceController = new PIDController(0.012, 0, 0);
 
-        this.limelightController = new PIDController(0.07, 0, 0);
+        this.limelightController = new PIDController(0.1, 0, 0);
 
         // TODO:: play around with this
-        this.rotateController = new PIDController(0.334, 0, 0);
+        this.rotateController = new PIDController(0.4, 0, 0);
 
         isPlaying = false;
 

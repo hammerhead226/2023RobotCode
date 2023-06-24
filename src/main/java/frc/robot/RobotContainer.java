@@ -72,7 +72,7 @@ public class RobotContainer {
   
   public static final Elevator elevator = new Elevator();
   public static final Gripper gripper = new Gripper();
-  public static final Intake intake = new Intake();
+  // public static final Intake intake = new Intake();
   public static final LinearSlide linearSlide = new LinearSlide();
   public static final LED led = new LED();
   // public static final Vision vision = new Vision();
@@ -111,7 +111,7 @@ public class RobotContainer {
     //     ));
 
     gripper.setDefaultCommand(new RunCommand(gripper::run, gripper));
-    intake.setDefaultCommand(new RunCommand(intake::run, intake));
+    // intake.setDefaultCommand(new RunCommand(intake::run, intake));
     linearSlide.setDefaultCommand(new RunCommand(linearSlide::run, linearSlide));
     elevator.setDefaultCommand(new RunCommand(elevator::run, elevator));
 
@@ -191,7 +191,7 @@ public class RobotContainer {
     // make it so when akul lets go of alignment button anish contorller gets buzzed
     driver.getBButton().whileTrue(new LimelightLineUp());
     driver.getBButton().onFalse(new InstantCommand(() -> DriveTrain.getInstance().control(0, 0, 0), DriveTrain.getInstance()));
-    driver.getAButton().onTrue(new InstantCommand(intake::retractIntake, intake));
+    // driver.getAButton().onTrue(new InstantCommand(intake::retractIntake, intake));
     // manip.getAButton().onTrue(new InstantCommand(() -> elevator.setTarget(Constants.ELEVATOR_HIGH), elevator));
     // manip.getBButton().onTrue(new InstantCommand(() -> elevator.setTarget(Constants.ELEVATOR_MID), elevator));
     // manip.getXButton().onTrue(new InstantCommand(() -> elevator.setTarget(1600), elevator));
@@ -306,9 +306,9 @@ public class RobotContainer {
     return gripper;
   }
 
-  public static Intake getIntake() {
-    return intake;
-  }
+  // public static Intake getIntake() {
+  //   return intake;
+  // }
 
   public static Controller getManip() {
     return manip;
