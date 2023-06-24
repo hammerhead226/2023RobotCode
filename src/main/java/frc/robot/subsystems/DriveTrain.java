@@ -54,14 +54,15 @@ public class DriveTrain extends SubsystemBase {
             TalonFX drive = new TalonFX(RobotMap.DRIVE_MOTORS[i]);
             TalonFX steer = new TalonFX(RobotMap.STEER_MOTORS[i]);
 
-            CANCoder encoder = new CANCoder(RobotMap.ENCODERS[i], Constants.CANBUS);
+            // CANCoder encoder = new CANCoder(RobotMap.ENCODERS[i], Constants.CANBUS);
 
             // drive.set(NeutralMode.Brake);
+            steer.setInverted(true);
 
             drives[i] = new LazyTalonFX(drive, Constants.TICKS_PER_METER);
             steers[i] = new LazyTalonFX(steer, Constants.TICKS_PER_METER);
 
-            encoders[i] = new ThreadedCANcoder(i, Math.PI, Constants.MODULE_OFFSETS[i], 10, "CAN BUS 2");
+            encoders[i] = new ThreadedCANcoder(i, Math.PI, Constants.MODULE_OFFSETS[i], 10, "CAN Bus 2");
         }
 
         gyro = new Pigeon2IMU(RobotMap.GYRO, "CAN Bus 2");
@@ -76,7 +77,7 @@ public class DriveTrain extends SubsystemBase {
         config.translationalPIDGains = new double[]{0.03, 0.0, 0.0};
         config.rotationalPIDGains = new double[]{0.65, 0.0, 0.0};
         config.drivePIDFGains = new double[]{0.01, 0.0, 0.0, 1.0/4.96824};
-        config.steerPIDGains = new double[]{0.62, 0.0, 0.0};
+        config.steerPIDGains = new double[]{0.2, 0.0, 0.0};
         config.MAX_MODULE_SPEED = Constants.MAX_MODULE_SPEED;
         config.radius = Math.hypot(0.5794/2, 0.5794/2);
         config.numberOfModules = Constants.NUMBER_OF_MODULES;

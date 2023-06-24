@@ -34,8 +34,8 @@ public final class Constants {
  
      // Physical Configuration 
      public static final int NUMBER_OF_MODULES = 4;
-     public static final double LENGTH = 22.8125;
-     public static final double WIDTH = 22.8125;
+     public static final double LENGTH = 0.5794375;
+     public static final double WIDTH = 0.5794375;
  
  
      public static final double TRANSLATIONAL_ERROR = 3;

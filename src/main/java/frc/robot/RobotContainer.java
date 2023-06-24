@@ -163,7 +163,7 @@ public class RobotContainer {
     // .andThen(new RunCommand(() -> dt.toPose(new double[]{0, 100, 0}), dt).until(dt::atSetpoint)));
     // driver.getAButton().whileTrue(new TestAuto().handleInterrupt(DriveTrain.getInstance()::togglePlayback));
 
-    // driver.getSTARTButton().onTrue(new InstantCommand(dt::reset, dt));
+    driver.getSTARTButton().onTrue(new InstantCommand(dt::reset, dt));
     // // driver.getLBButton().onTrue(new InstantCommand(() -> dt.toggleSpeed(), dt));
 
     // // driver.getAButton().onTrue(new InstantCommand(intake::retractIntake, intake));
