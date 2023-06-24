@@ -33,7 +33,7 @@ import frc.robot.commands.Scoring;
 import frc.robot.commands.Stow;
 import frc.robot.commands.Substation;
 // import frc.robot.commands.OneConeEngage;
-// import frc.robot.commands.OneConeMobilityEngage;
+import frc.robot.commands.OneConeMobilityEngage;
 // import frc.robot.commands.OneCubeMobilityEngage;
 // import frc.robot.commands.RedOneConeMobile;
 // import frc.robot.commands.RedThreePieceBump;
@@ -122,7 +122,7 @@ public class RobotContainer {
     // selecter.setDefaultOption("one and engage", new OneConeEngage());
     // selecter.addOption("blue one cone mobile", new BlueOneConeMobile());
     // selecter.addOption("red one cone mobile", new RedOneConeMobile());
-    // selecter.addOption("one cone mobile and engage", new OneConeMobilityEngage());
+    selecter.addOption("one cone mobile and engage", new OneConeMobilityEngage());
     // selecter.addOption("one cube mobility engage", new OneCubeMobilityEngage());
     // selecter.addOption("red two piece no bump", new RedTwoPieceNoBump());
     // selecter.addOption("blue two piece no bump", new BlueTwoPieceNoBump());
