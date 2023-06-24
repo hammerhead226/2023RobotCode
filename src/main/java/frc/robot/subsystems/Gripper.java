@@ -95,7 +95,7 @@ public class Gripper extends SubsystemBase {
 
     // wrist.setIdleMode(IdleMode.kBrake);
     wheeledClaw.setNeutralMode(PassiveMode.BRAKE);
-    arm.setNeutralMode(PassiveMode.BRAKE);
+    // arm.setNeutralMode(PassiveMode.BRAKE);
 
     armPID = new PIDController(Constants.ARM_GAINS[0], Constants.ARM_GAINS[1], Constants.ARM_GAINS[2]);
     wheeledClawPID = new PIDController(Constants.CLAW_GAINS[0], Constants.CLAW_GAINS[1], Constants.CLAW_GAINS[2]);

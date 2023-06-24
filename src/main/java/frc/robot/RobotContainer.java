@@ -176,6 +176,8 @@ public class RobotContainer {
     manip.getLBButton().onTrue(new Scoring());
     manip.getRightStickPress().onTrue(new Substation());
 
+    // manip.getRBButton().onTrue(new Ins)
+
 
     // manip.getAButton().onTrue(new InstantCommand(() -> gripper.setArmTarget(Constants.ARM_HOLD), lock));
     // manip.getBButton().onTrue(new InstantCommand(() -> gripper.setArmTarget(Constants.ARM_STOW), lock));
