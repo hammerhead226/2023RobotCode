@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import java.util.Arrays;
+
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.sensors.CANCoder;
@@ -13,6 +15,7 @@ import frc.libs.electronics.motors.LazyTalonFX;
 import frc.libs.swerveyshark.MotionOfTheOcean;
 import frc.libs.swerveyshark.Swerve;
 import frc.libs.swerveyshark.SwerveConfiguration;
+import frc.libs.swerveyshark.motionoftheocean.SharkExecutor;
 import frc.libs.wrappers.GenericEncoder;
 import frc.libs.wrappers.GenericMotor;
 import frc.libs.wrappers.Gyro;
@@ -97,9 +100,9 @@ public class DriveTrain extends SubsystemBase {
 
     public void control(double x, double y, double rotate) {
         if(isPlaying) {
-            MotionOfTheOcean.Executor.executeRecording(() -> DriveTrain.getInstance().toPose(MotionOfTheOcean.Executor.getState().getPose(), 
-                                                                                            MotionOfTheOcean.Executor.getState().getLinearVelocity(), 
-                                                                                            MotionOfTheOcean.Executor.getState().getAngularVelocity(), 
+            MotionOfTheOcean.Executor.executeRecording(() -> DriveTrain.getInstance().toPose(Arrays.copyOfRange(SharkExecutor.getState().getAsArray(), 0, 3), 
+                                                                                            SharkExecutor.getState().getAsArray()[3],
+                                                                                            SharkExecutor.getState().getAsArray()[4],
                                                                                             gyro.getYaw()));
         }
         else if(!driveTrainLock) swerve.controlWithPercent(x, y, rotate);
