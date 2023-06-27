@@ -159,7 +159,7 @@ public final class Constants {
   // 3000 to be fully retracted
   
   public static final double MAX_SPEED_UP = 0.5; //extend
-  public static final double MAX_SPEED_DOWN = 0.8; //retract
+  public static final double MAX_SPEED_DOWN = 0.5; //retract
 
 
   // Gripper Constants
@@ -178,12 +178,12 @@ public final class Constants {
 
 
   //Scoring Setpoints
-  public static final double ELEVATOR_HIGH = -1200;
-  public static final double ELEVATOR_MID = -100;
+  public static final double ELEVATOR_HIGH = -700;
+  public static final double ELEVATOR_MID = 400;
   // public static final double ELEVATOR_HOLD = 1900;
-  public static final double ELEVATOR_HOLD = 1800;
-  public static final double ELEVATOR_INTAKE = 1200;
-  public static final double ELEVATOR_SUBSTATION = -450;
+  public static final double ELEVATOR_HOLD = 2300;
+  public static final double ELEVATOR_INTAKE = 1700;
+  public static final double ELEVATOR_SUBSTATION = 50;
 
   public static final double LS_HIGH = -56650;
   public static final double LS_MID = -24500;
