@@ -108,7 +108,7 @@ public class Swerve {
 
     //this is the controller inputed
     public void controlWithPercent(double x, double y, double rotate) {
-        control(x * maxModuleSpeed, y*maxModuleSpeed, rotate*maxModuleSpeed);
+        control(x * maxModuleSpeed, y*maxModuleSpeed, -rotate*maxModuleSpeed);
     }
 
     //assume all vectors given are m/s
@@ -133,6 +133,7 @@ public class Swerve {
         }
 
         double chassisHeading = gyro.getYaw();
+        // double chassisHeading = 0;
 
         for(int i = 0; i < modules.length; i++) {
             double[] rotationVector = new double[] {

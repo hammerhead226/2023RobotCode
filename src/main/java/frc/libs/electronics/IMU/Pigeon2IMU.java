@@ -31,7 +31,7 @@ public class Pigeon2IMU implements Gyro<Pigeon2> {
 
     @Override
     public double getYaw() {
-        return gyro.getYaw();
+        return Math.toRadians(gyro.getYaw());
     }
 
     @Override

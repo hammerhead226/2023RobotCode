@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.DemandType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.sensors.CANCoder;
@@ -7,6 +9,7 @@ import com.ctre.phoenix.sensors.CANCoder;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.libs.electronics.IMU.Pigeon;
 import frc.libs.electronics.IMU.Pigeon2IMU;
 import frc.libs.electronics.encoders.ThreadedCANcoder;
 import frc.libs.electronics.motors.LazyTalonFX;
@@ -43,6 +46,8 @@ public class DriveTrain extends SubsystemBase {
 
     private boolean driveTrainLock;
 
+    private LazyTalonFX saved;
+
 
     private DriveTrain() {
 
@@ -54,19 +59,17 @@ public class DriveTrain extends SubsystemBase {
             TalonFX drive = new TalonFX(RobotMap.DRIVE_MOTORS[i]);
             TalonFX steer = new TalonFX(RobotMap.STEER_MOTORS[i]);
 
-            // CANCoder encoder = new CANCoder(RobotMap.ENCODERS[i], Constants.CANBUS);
-
-            // drive.set(NeutralMode.Brake);
-            steer.setInverted(true);
+            drive.configOpenloopRamp(0.25);
 
             drives[i] = new LazyTalonFX(drive, Constants.TICKS_PER_METER);
             steers[i] = new LazyTalonFX(steer, Constants.TICKS_PER_METER);
 
-            encoders[i] = new ThreadedCANcoder(i, Math.PI, Constants.MODULE_OFFSETS[i], 10, "CAN Bus 2");
+            encoders[i] = new ThreadedCANcoder(i, Math.PI, Constants.MODULE_OFFSETS[i], 10, Constants.CANBUS, false);
         }
 
-        gyro = new Pigeon2IMU(RobotMap.GYRO, "CAN Bus 2");
+        saved=drives[0];
 
+        gyro = new Pigeon2IMU(RobotMap.GYRO, Constants.CANBUS);
         SwerveConfiguration config = new SwerveConfiguration();
 
         config.drives = drives;
@@ -76,8 +79,8 @@ public class DriveTrain extends SubsystemBase {
         config.modulePositions = Constants.MODULE_POSITIONS;
         config.translationalPIDGains = new double[]{0.03, 0.0, 0.0};
         config.rotationalPIDGains = new double[]{0.65, 0.0, 0.0};
-        config.drivePIDFGains = new double[]{0.01, 0.0, 0.0, 1.0/4.96824};
-        config.steerPIDGains = new double[]{0.2, 0.0, 0.0};
+        config.drivePIDFGains = new double[]{0.05, 0.0, 0.0, 1.0/Constants.MAX_MODULE_SPEED};
+        config.steerPIDGains = new double[]{0.62, 0.0, 0.0};
         config.MAX_MODULE_SPEED = Constants.MAX_MODULE_SPEED;
         config.radius = Math.hypot(0.5794/2, 0.5794/2);
         config.numberOfModules = Constants.NUMBER_OF_MODULES;
@@ -112,6 +115,9 @@ public class DriveTrain extends SubsystemBase {
         SmartDashboard.putNumber("heading", pose[4]);
 
         SmartDashboard.putBoolean("atSetpoint", swerve.atSetpoint());
+
+        SmartDashboard.putNumber("output percent", saved.getMotorController().getMotorOutputPercent());
+        SmartDashboard.putNumber("joystick percent", Math.hypot(x, y));
     }
 
     public void reset() {
@@ -180,6 +186,9 @@ public class DriveTrain extends SubsystemBase {
       for(int i=0; i < Constants.NUMBER_OF_MODULES; i++)
           SmartDashboard.putNumber("module offset " + i, swerve.getModuleRotationalPose(i));
       SmartDashboard.putNumber("gyro tilt", getGyroPitch());
+
+      SmartDashboard.putNumber("speed in t/s", saved.getVelocity());
+      SmartDashboard.putNumber("speed in t/100ms", saved.getVelocityInTicks());
     }
 }
 

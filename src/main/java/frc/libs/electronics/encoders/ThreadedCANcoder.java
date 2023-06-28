@@ -19,16 +19,19 @@ public class ThreadedCANcoder implements ThreadedEncoder<CANCoder> {
     private double lastSensorPose;
 
 
-    public ThreadedCANcoder(int port, double threshold, double offset, int delayms, String bus) {
+    public ThreadedCANcoder(int port, double threshold, double offset, int delayms, String bus, boolean isReversed) {
         encoder = new CANCoder(port, bus);
         this.overflowThreshold = threshold;
         this.offset = offset;
+
+        encoder.configSensorDirection(isReversed);
 
         overflows = 0;
         lastSensorPose = encoder.getAbsolutePosition();
 
         threadService = Executors.newSingleThreadScheduledExecutor();
         threadService.scheduleAtFixedRate(this::trackOverflows, 0, delayms, TimeUnit.MILLISECONDS);
+        
     }
 
     @Override
@@ -46,7 +49,7 @@ public class ThreadedCANcoder implements ThreadedEncoder<CANCoder> {
 
     @Override
     public synchronized double getOffsetPosition() {
-        return -(overflows * 360 + encoder.getAbsolutePosition() + offset);
+        return (overflows * 360 + encoder.getAbsolutePosition() + offset);
     }
 
     @Override
