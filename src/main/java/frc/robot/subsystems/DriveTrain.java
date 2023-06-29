@@ -2,6 +2,8 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.DemandType;
+import java.util.Arrays;
+
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.sensors.CANCoder;
@@ -16,6 +18,7 @@ import frc.libs.electronics.motors.LazyTalonFX;
 import frc.libs.swerveyshark.MotionOfTheOcean;
 import frc.libs.swerveyshark.Swerve;
 import frc.libs.swerveyshark.SwerveConfiguration;
+import frc.libs.swerveyshark.motionoftheocean.SharkExecutor;
 import frc.libs.wrappers.GenericEncoder;
 import frc.libs.wrappers.GenericMotor;
 import frc.libs.wrappers.Gyro;
@@ -77,7 +80,7 @@ public class DriveTrain extends SubsystemBase {
         config.encoders = encoders;
         config.gyro = gyro;
         config.modulePositions = Constants.MODULE_POSITIONS;
-        config.translationalPIDGains = new double[]{0.03, 0.0, 0.0};
+        config.translationalPIDGains = new double[]{0.6, 0.0, 0.0};
         config.rotationalPIDGains = new double[]{0.65, 0.0, 0.0};
         config.drivePIDFGains = new double[]{0.05, 0.0, 0.0, 1.0/Constants.MAX_MODULE_SPEED};
         config.steerPIDGains = new double[]{0.62, 0.0, 0.0};
@@ -101,23 +104,11 @@ public class DriveTrain extends SubsystemBase {
 
     public void control(double x, double y, double rotate) {
         if(isPlaying) {
-            MotionOfTheOcean.Executor.executeRecording(() -> DriveTrain.getInstance().toPose(MotionOfTheOcean.Executor.getState().getPose(), 
-                                                                                            MotionOfTheOcean.Executor.getState().getLinearVelocity(), 
-                                                                                            MotionOfTheOcean.Executor.getState().getAngularVelocity(), 
-                                                                                            gyro.getYaw()));
+            // MotionOfTheOcean.Executor.executeRecording(() -> DriveTrain.getInstance().toPose(Arrays.copyOfRange(SharkExecutor.getState().getAsArray(), 0, 3), 
+            //                                                                                 SharkExecutor.getState().getAsArray()[3],
+            //                                                                                 SharkExecutor.getState().getAsArray()[4]));
         }
         else if(!driveTrainLock) swerve.controlWithPercent(x, y, rotate);
-        double[] pose = swerve.getSwerveState();
-        SmartDashboard.putNumber("x", pose[0]);
-        SmartDashboard.putNumber("y", pose[1]);
-        SmartDashboard.putNumber("rotate", pose[2]);
-        SmartDashboard.putNumber("linear velocity", pose[3]);
-        SmartDashboard.putNumber("heading", pose[4]);
-
-        SmartDashboard.putBoolean("atSetpoint", swerve.atSetpoint());
-
-        SmartDashboard.putNumber("output percent", saved.getMotorController().getMotorOutputPercent());
-        SmartDashboard.putNumber("joystick percent", Math.hypot(x, y));
     }
 
     public void reset() {
@@ -126,6 +117,10 @@ public class DriveTrain extends SubsystemBase {
 
     public void toPose(double[] target, double linearVelocity, double angularVelocity, double heading) {
         swerve.setSwerveState(target, linearVelocity, angularVelocity, heading);
+    }
+
+    public void toPose(double[] targetData) {
+        swerve.setSwerveState(new double[]{targetData[0], targetData[1], targetData[2]}, targetData[3], targetData[4], targetData[5]);
     }
 
     public boolean atSetpoint() {
@@ -158,15 +153,15 @@ public class DriveTrain extends SubsystemBase {
 
     public boolean isChassisUnstable() {
         // return Math.abs(gyro.getTilt()) > Constants.DRIVETRAIN_TILT_THRESHOLD;
-        return gyro.getPitch() > Constants.DRIVETRAIN_TILT_THRESHOLD || gyro.getPitch() < -9;
+        return gyro.getRoll() > Constants.DRIVETRAIN_TILT_THRESHOLD || gyro.getRoll() < -9;
     }
 
     public boolean isChassisStable() {
-        return Math.abs(gyro.getPitch()) < 4.5;
+        return Math.abs(gyro.getRoll()) < 4.5;
     }
 
     public double getGyroPitch() {
-        return gyro.getPitch();
+        return gyro.getRoll();
     }
 
     public double getGyroYaw() {
@@ -189,6 +184,16 @@ public class DriveTrain extends SubsystemBase {
 
       SmartDashboard.putNumber("speed in t/s", saved.getVelocity());
       SmartDashboard.putNumber("speed in t/100ms", saved.getVelocityInTicks());
+      double[] pose = swerve.getSwerveState();
+        SmartDashboard.putNumber("x", pose[0]);
+        SmartDashboard.putNumber("y", pose[1]);
+        SmartDashboard.putNumber("rotate", pose[2]);
+        SmartDashboard.putNumber("linear velocity", pose[3]);
+        SmartDashboard.putNumber("heading", pose[4]);
+
+        SmartDashboard.putBoolean("atSetpoint", swerve.atSetpoint());
+
+        SmartDashboard.putNumber("output percent", saved.getMotorController().getMotorOutputPercent());
     }
 }
 
