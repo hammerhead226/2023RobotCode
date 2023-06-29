@@ -14,13 +14,16 @@ public class SharkState {
 
     private double angularVelocity;
 
-    public SharkState(double time, double x, double y, double heading, double linearVelocity, double angularVelocity) {
+    private double directionalMotion;
+
+    public SharkState(double time, double x, double y, double heading, double linearVelocity, double angularVelocity, double directionalMotion) {
         this.time = time;
         this.x = x;
         this.y = y;
         this.heading = heading;
         this.linearVelocity = linearVelocity;
         this.angularVelocity = angularVelocity;
+        this.directionalMotion = directionalMotion;
     }
 
     public double getTime() {
@@ -47,6 +50,11 @@ public class SharkState {
         return angularVelocity;
     }
 
+    public double getDirectionalMotion() {
+        return directionalMotion;
+    }
+
+
     public void setTime(double time) {
         this.time = time;
     }
@@ -72,7 +80,7 @@ public class SharkState {
     }
 
     public double[] getAsArray() {
-        return new double[] {x, y, heading, linearVelocity, angularVelocity};
+        return new double[] {x, y, heading, linearVelocity, angularVelocity, directionalMotion};
     }
 
     public String toString() {

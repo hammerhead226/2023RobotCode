@@ -29,9 +29,11 @@ import frc.robot.commands.AutoBalance;
 import frc.robot.commands.Level2;
 import frc.robot.commands.Level3;
 import frc.robot.commands.LimelightLineUp;
+import frc.robot.commands.OneConeMobilityEngage;
 import frc.robot.commands.Scoring;
 import frc.robot.commands.Stow;
 import frc.robot.commands.Substation;
+import frc.robot.commands.TestNewAuto;
 // import frc.robot.commands.OneConeEngage;
 // import frc.robot.commands.OneConeMobilityEngage;
 // import frc.robot.commands.OneCubeMobilityEngage;
@@ -110,10 +112,10 @@ public class RobotContainer {
     //      elevator
     //     ));
 
-    // gripper.setDefaultCommand(new RunCommand(gripper::run, gripper));
+    gripper.setDefaultCommand(new RunCommand(gripper::run, gripper));
     intake.setDefaultCommand(new RunCommand(intake::run, intake));
-    // linearSlide.setDefaultCommand(new RunCommand(linearSlide::run, linearSlide));
-    // elevator.setDefaultCommand(new RunCommand(elevator::run, elevator));
+    linearSlide.setDefaultCommand(new RunCommand(linearSlide::run, linearSlide));
+    elevator.setDefaultCommand(new RunCommand(elevator::run, elevator));
 
     led.setDefaultCommand(new SetColorMode());
 
@@ -164,6 +166,8 @@ public class RobotContainer {
     // driver.getAButton().whileTrue(new TestAuto().handleInterrupt(DriveTrain.getInstance()::togglePlayback));
 
     driver.getSTARTButton().onTrue(new InstantCommand(dt::reset, dt));
+    driver.getAButton().whileTrue(new TestNewAuto());
+    driver.getBButton().whileTrue(new OneConeMobilityEngage());
     // // driver.getLBButton().onTrue(new InstantCommand(() -> dt.toggleSpeed(), dt));
 
     // // driver.getAButton().onTrue(new InstantCommand(intake::retractIntake, intake));

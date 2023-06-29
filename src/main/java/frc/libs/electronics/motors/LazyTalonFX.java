@@ -44,7 +44,6 @@ public class LazyTalonFX implements LazyMotorController<TalonFX> {
     public void setVelocityInMeters(double speed) {
         speed *= ticksPerMeter;
         speed /= 10;
-        SmartDashboard.putNumber("speedisspeed", speed);
         motor.set(ControlMode.Velocity, speed);
     }
 

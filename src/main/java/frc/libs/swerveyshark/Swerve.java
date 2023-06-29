@@ -8,6 +8,8 @@ import frc.libs.electronics.encoders.ThreadedEncoder;
 
 import java.util.Arrays;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 public class Swerve {
     private final SwerveModule[] modules;
 
@@ -176,6 +178,10 @@ public class Swerve {
 
         double adjustedAngularVel = angularVelocity + rotationalPIDController.calculate(currentSwerveState[2], position[2]);
 
+        SmartDashboard.putNumber("adjustedX", adjustedXLinearVel);
+        SmartDashboard.putNumber("adjustedY", adjustedYLinearVel);
+        SmartDashboard.putNumber("adjustedR", adjustedAngularVel*radius);
+
         control(adjustedXLinearVel, adjustedYLinearVel, adjustedAngularVel * radius);
     }
 
@@ -189,8 +195,8 @@ public class Swerve {
             x += modPose[0]/modules.length;
             y += modPose[1]/modules.length;
 
-            xVelocity += modVelocity[0];
-            yVelocity += modVelocity[1];
+            xVelocity += modVelocity[0]/modules.length;
+            yVelocity += modVelocity[1]/modules.length;
         }
 
         double linearVelocity = Math.hypot(xVelocity, yVelocity);

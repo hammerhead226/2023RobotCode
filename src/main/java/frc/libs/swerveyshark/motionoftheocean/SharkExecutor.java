@@ -18,7 +18,6 @@ public class SharkExecutor {
 
     public static double startTime;
 
-    // TODO:: use this in autons dont forget to throw IOException lol with a try catch 
     public static void loadAndConfigurePath(String filePath, Consumer<double[]> toPose) throws IOException {
         BufferedReader reader = null;
 
@@ -32,7 +31,7 @@ public class SharkExecutor {
         iterator = 0;
         SharkExecutor.toPose = toPose;
 
-        reader.skip(2);
+        // reader.skip(2); I'm manually reformatting rn
 
         while (reader.ready()) {
             String raw = reader.readLine();
@@ -45,7 +44,8 @@ public class SharkExecutor {
                 Double.parseDouble(data[2]),
                 Double.parseDouble(data[3]),
                 Double.parseDouble(data[4]),
-                Double.parseDouble(data[5])
+                Double.parseDouble(data[5]),
+                Double.parseDouble(data[6])
             );
 
             executable.add(state);
