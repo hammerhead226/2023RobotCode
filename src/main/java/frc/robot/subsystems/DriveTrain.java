@@ -68,7 +68,7 @@ public class DriveTrain extends SubsystemBase {
             encoders[i] = new ThreadedCANcoder(i, Math.PI, Constants.MODULE_OFFSETS[i], 10, Constants.CANBUS, false);
         }
 
-        saved=drives[0];
+        // saved=drives[0];
 
         gyro = new Pigeon2IMU(RobotMap.GYRO, Constants.CANBUS);
         SwerveConfiguration config = new SwerveConfiguration();
@@ -176,18 +176,6 @@ public class DriveTrain extends SubsystemBase {
     public void unlockDriveTrain() {
         this.driveTrainLock = false;
     }
-
-    public double getGyroYaw() {
-        return gyro.getYaw();
-    }
-
-    public void lockDriveTrain() {
-        this.driveTrainLock = true;
-    }
-
-    public void unlockDriveTrain() {
-        this.driveTrainLock = false;
-    }
     
     @Override
     public void periodic() {
@@ -195,8 +183,8 @@ public class DriveTrain extends SubsystemBase {
           SmartDashboard.putNumber("module offset " + i, swerve.getModuleRotationalPose(i));
       SmartDashboard.putNumber("gyro tilt", getGyroPitch());
 
-      SmartDashboard.putNumber("speed in t/s", saved.getVelocity());
-      SmartDashboard.putNumber("speed in t/100ms", saved.getVelocityInTicks());
+    //   SmartDashboard.putNumber("speed in t/s", saved.getVelocity());
+    //   SmartDashboard.putNumber("speed in t/100ms", saved.getVelocityInTicks());
       double[] pose = swerve.getSwerveState();
         SmartDashboard.putNumber("x", pose[0]);
         SmartDashboard.putNumber("y", pose[1]);
@@ -206,7 +194,7 @@ public class DriveTrain extends SubsystemBase {
 
         SmartDashboard.putBoolean("atSetpoint", swerve.atSetpoint());
 
-        SmartDashboard.putNumber("output percent", saved.getMotorController().getMotorOutputPercent());
+        // SmartDashboard.putNumber("output percent", saved.getMotorController().getMotorOutputPercent());
     }
 }
 
