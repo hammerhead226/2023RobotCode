@@ -5,27 +5,25 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.Rev2mDistanceSensor;
-import com.revrobotics.CANSparkMax.IdleMode;
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkMaxAbsoluteEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-import com.revrobotics.Rev2mDistanceSensor.Port;
-import com.revrobotics.Rev2mDistanceSensor.RangeProfile;
-import com.revrobotics.Rev2mDistanceSensor.Unit;
+import com.revrobotics.SparkMaxAbsoluteEncoder.Type;
+// import com.revrobotics.SparkMaxRelativeEncoder.Type;
 
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.estimator.KalmanFilter;
 import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.libs.wrappers.GenericMotor;
 import frc.libs.wrappers.GenericMotor.PassiveMode;
 import frc.robot.Constants;
-import frc.robot.Robot;
 import frc.robot.RobotMap;
-import frc.robot.commands.FlashGreen;
+// import frc.robot.commands.FlashGreen;
 
 public class Gripper extends SubsystemBase {
   /**
@@ -39,24 +37,33 @@ public class Gripper extends SubsystemBase {
    */
 
   // private TalonFX wrist;
-  private CANSparkMax wrist;
+  // private CANSparkMax wrist;
   private GenericMotor arm;
-  private GenericMotor claw; 
+  private GenericMotor wheeledClaw; 
 
   private PIDController armPID;
-  private PIDController clawPID;
-  private PIDController wristPID;
+  private PIDController wheeledClawPID;
+  // private PIDController wristPID;
+
+  // private AbsoluteEncoder armEncoder;
+  private CANSparkMax armEncoder;
+
+  private DutyCycleEncoder armCoder;
+
+  private CANSparkMax armSpark;
+
+  private AbsoluteEncoder aCoder;
 
   // private Rev2mDistanceSensor distanceSensor;
 
   private AnalogInput proximitySensor;
 
-  private boolean wristToggle = true;
+  // private boolean wristToggle = true;
   private boolean armToggle = true;
 
-  private double armTarget = 0;
+  private double armTarget = Constants.ARM_HOLD;
 
-  private boolean clawToggle = true;
+  // private boolean clawToggle = true;
 
   private boolean cubeMode = false;
 
@@ -64,55 +71,67 @@ public class Gripper extends SubsystemBase {
 
   private boolean substationMode = false;
 
+  int sustain = 0;
+
 
   public Gripper() {
     // wrist = new CANSparkMax(RobotMap.GRIPPER_WRIST, MotorType.kBrushless);
-    claw = new GenericMotor(new TalonFX(RobotMap.CLAW_MOTOR, Constants.CANBUS));
+    wheeledClaw = new GenericMotor(new TalonFX(RobotMap.WHEELED_CLAW_MOTOR, Constants.CANBUS));
     arm = new GenericMotor(new TalonFX(RobotMap.ARM_MOTOR, Constants.CANBUS));
+    // armEncoder = new CANSparkMax(18, MotorType.kBrushed);
 
+    armSpark = new CANSparkMax(18, MotorType.kBrushed);
+    aCoder = armSpark.getAbsoluteEncoder(Type.kDutyCycle);
+
+    aCoder.setPositionConversionFactor(8192);
+    
+    // armSpark.getEncoder(Type.kQuadrature, 8192).get
+
+    wheeledClaw.inverted(true);
+
+
+    // armCoder = new DutyCycleEncoder(18);
     // distanceSensor = new Rev2mDistanceSensor(Port.kOnboard);
 
     // wrist.setIdleMode(IdleMode.kBrake);
-    claw.setNeutralMode(PassiveMode.BRAKE);
-    arm.setNeutralMode(PassiveMode.BRAKE);
+    wheeledClaw.setNeutralMode(PassiveMode.BRAKE);
+    // arm.setNeutralMode(PassiveMode.BRAKE);
 
     armPID = new PIDController(Constants.ARM_GAINS[0], Constants.ARM_GAINS[1], Constants.ARM_GAINS[2]);
-    clawPID = new PIDController(Constants.CLAW_GAINS[0], Constants.CLAW_GAINS[1], Constants.CLAW_GAINS[2]);
-    wristPID = new PIDController(Constants.WRIST_GAINS[0], Constants.WRIST_GAINS[1], Constants.WRIST_GAINS[2]);
-    
+    wheeledClawPID = new PIDController(Constants.CLAW_GAINS[0], Constants.CLAW_GAINS[1], Constants.CLAW_GAINS[2]);
+    // wristPID = new PIDController(Constants.WRIST_GAINS[0], Constants.WRIST_GAINS[1], Constants.WRIST_GAINS[2]);
 
     // distanceSensor = new Rev2mDistanceSensor(Port.kOnboard, Unit.kInches, RangeProfile.kHighAccuracy);
-    armSpeedLimit = 0.8;
+    armSpeedLimit = 0.65;
     this.proximitySensor = new AnalogInput(0);
 
   }
 
   public void run() {
-    if(substationMode)
-      closeClawWhenSeen();
+    // if(substationMode) {
+    //   stopClawWhenSeen();
+    // }
+    
 
-    if(clawToggle) {
-      if(cubeMode) {
-        claw.set( clawPID.calculate(claw.getSensorPose(), Constants.CLAW_CLOSE_CUBE));
-      }
-      else {
-        claw.set( clawPID.calculate(claw.getSensorPose(), Constants.CLAW_CLOSE_CONE));
-      }
-    }
-    else {
-      claw.set( clawPID.calculate(claw.getSensorPose(), Constants.CLAW_OPEN_CONE));
-    }
-
-    double armSpeed = armPID.calculate(arm.getSensorPose(), armTarget);
+    // wheeledClaw.set(0.3);
+    // if(cubeMode) {
+    //   wheeledClaw.set(wheeledClawPID.calculate(wheeledClaw.getSensorPose(), Constants.CLAW_CLOSE_CUBE));
+    // }
+    // else {
+    //   wheeledClaw.set(wheeledClawPID.calculate(wheeledClaw.getSensorPose(), Constants.CLAW_CLOSE_CONE));
+    // }
+    
+    
+    double armSpeed = armPID.calculate(aCoder.getPosition(), armTarget);
 
     if(armSpeed > armSpeedLimit) armSpeed = armSpeedLimit;
     else if(armSpeed < -armSpeedLimit) armSpeed = -armSpeedLimit;
 
-    arm.set(armSpeed);
+    arm.set(-armSpeed);
 
     // arm.set(Robot.m_robotContainer.manip.getLeftJoyY());
-    SmartDashboard.putBoolean("claw toggle", clawToggle);
-    SmartDashboard.putBoolean("cube mode", cubeMode);
+    // SmartDashboard.putBoolean("claw toggle", clawToggle);
+    // SmartDashboard.putBoolean("cube mode", cubeMode);
     
     }
 
@@ -121,10 +140,25 @@ public class Gripper extends SubsystemBase {
     substationMode = true;
   }
 
-
-  public void toggleWrist() {
-    wristToggle = !wristToggle;
+  public void setSubstationMode(boolean substationMode) {
+    this.substationMode = substationMode;
   }
+
+  public void wheeledClawIntake() {
+    wheeledClaw.set(0.75);
+  }
+
+  public void wheeledClawOuttake() {
+    wheeledClaw.set(-0.85);
+  }
+
+  public void wheeledClawStop() {
+    wheeledClaw.set(0);
+  }
+
+  // public void toggleWrist() {
+  //   wristToggle = !wristToggle;
+  // }
 
   public void toggleArm() {
     armToggle = !armToggle;
@@ -159,61 +193,92 @@ public class Gripper extends SubsystemBase {
     cubeMode = !cubeMode;
   }
 
-  public void toggleClaw() {
-    clawToggle = !clawToggle;
-  }
+  // public void toggleClaw() {
+  //   clawToggle = !clawToggle;
+  // }
 
-  public void openClaw() {
-    clawToggle = false;
-  }
+  // public void openClaw() {
+  //   clawToggle = false;
+  // }
   
-  public void closeClaw() {
-    clawToggle = true;
-  }
+  // public void closeClaw() {
+  //   clawToggle = true;
+  // }
 
-  public void wristFalconUp() {
-    wristToggle = false;
-  }
+  // public void wristFalconUp() {
+  //   wristToggle = false;
+  // }
 
-  public void wristFalconDown() {
-    wristToggle = true;
-  }
+  // public void wristFalconDown() {
+  //   wristToggle = true;
+  // }
 
   public boolean getCubeMode() {
     return cubeMode;
   }
 
-  public void setCubeMode() {
+  public void cubeModeOn() {
     cubeMode = true;
   }
 
-  int sustain = 0;
-  public void closeClawWhenSeen() {
-    if (proximitySensor.getValue() > 1100 && proximitySensor.getValue() < 2500) {
+  public void cubeModeOff() {
+    cubeMode = false;
+  }
+
+  public boolean pieceDetected() {
+    double distanceSensorVal = cubeMode ? Constants.CUBE_VALUE : Constants.CONE_VALUE;
+
+    return proximitySensor.getValue() > distanceSensorVal && proximitySensor.getValue() < 2600;
+  }
+ 
+  
+  public boolean stopClawWhenSeen() {
+    double distanceSensorVal = cubeMode ? Constants.CUBE_VALUE : Constants.CONE_VALUE;
+
+    if (proximitySensor.getValue() > distanceSensorVal && proximitySensor.getValue() < 2600) {
       sustain++;
-    }
-    else {
+    } else {
       sustain = 0;
     }
-
+   
     if(sustain >= 5) {
-      closeClaw();
-      if(!Robot.m_robotContainer.animation.isScheduled())
-      Robot.m_robotContainer.animation.schedule();
+      wheeledClaw.set(0); // if speed is too high sensor might not have enough time to react
+      // if(!Robot.m_robotContainer.animation.isScheduled())
+      // Robot.m_robotContainer.animation.schedule();
+      return true;
     }
+    return false;
   }
+
 
 
   @Override
   public void periodic() {
+    SmartDashboard.putNumber("sustain", sustain);
     // This method will be called once per scheduler run
     // SmartDashboard.putNumber("periodic wrist", wrist.getEncoder().getPosition());
     // SmartDashboard.putNumber("wrist pose", wrist.getEncoder().getPosition());
-    SmartDashboard.putNumber("arm enc", arm.getSensorPose());
-    SmartDashboard.putNumber("claw enc", claw.getSensorPose());
+    // SmartDashboard.putNumber("arm enc", arm.getSensorPose());
+    // SmartDashboard.putNumber("claw enc", wheeledClaw.getSensorPose());
+    SmartDashboard.putBoolean("ur mom", cubeMode);
     // SmartDashboard.putNumber("distance sens", distanceSensor.getRange());
 
     SmartDashboard.putNumber("sensor deez", proximitySensor.getValue());
-    SmartDashboard.putBoolean("does it work", proximitySensor.getValue() > 600 && proximitySensor.getValue() < 2000);
+    SmartDashboard.putBoolean("does it work", proximitySensor.getValue() > Constants.CONE_VALUE && proximitySensor.getValue() < 2600);
+
+
+    // SmartDashboard.putNumber("falcon encoder", arm.getSensorPose());
+
+
+    // SmartDashboard.putNumber("absolute encoder", aCoder.getPosition());
+    SmartDashboard.putNumber("bro... fr?", aCoder.getPosition());
+    // SmartDashboard.putNumber("balls in ur jaws", armEncoder.getAbsoluteEncoder(Type.kDutyCycle).getPosition());
+    // SmartDashboard.putNumber("arm encoder please work im beggin you", armEncoder.getEncoder(, sustain));
+    // SmartDashboard.putNumber("please", aCoder.getEncoder().getPosition());
+    // SmartDashboard.putNumber("PLEASE MAN", aCoder.getAlternateEncoder(4096).getPosition());
+    // SmartDashboard.putNumber("my rreaction", armCoder.getPosition()*armCoder.getPositionConversionFactor());
+    // SmartDashboard.putNumber("armcoder", armCoder.getAbsolutePosition());
   }
 }
+
+// 2249166 ur bals

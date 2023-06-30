@@ -14,8 +14,9 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.libs.swervey.MotionOfTheOcean;
-import frc.robot.commands.BlueOneConeMobile;
+import frc.libs.swerveyshark.MotionOfTheOcean;
+import frc.libs.swerveyshark.motionoftheocean.SharkExecutor;
+// import frc.robot.commands.BlueOneConeMobile;
 import frc.robot.subsystems.DriveTrain;
 
 /**
@@ -49,7 +50,7 @@ public class Robot extends TimedRobot {
 
     PortForwarder.add(1181, "hammerheads-jetson.local", 1181);
     PortForwarder.add(1182, "hammerheads-jetson.local", 1182);
-    m_robotContainer.vision.shutdown();
+    // m_robotContainer.vision.shutdown();
   }
 
   /**
@@ -90,7 +91,16 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during autonomous. */
   @Override
-  public void autonomousPeriodic() {}
+  public void autonomousPeriodic() {
+    double elaspedTime;
+    double startTime;
+
+    
+
+    if(!SharkExecutor.isFinished()) {
+      elaspedTime = System.currentTimeMillis()/1000. - SharkExecutor.startTime;
+    }
+  }
 
   @Override
   public void teleopInit() {
