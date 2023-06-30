@@ -35,7 +35,7 @@ import frc.robot.commands.Stow;
 import frc.robot.commands.Substation;
 import frc.robot.commands.TestNewAuto;
 // import frc.robot.commands.OneConeEngage;
-// import frc.robot.commands.OneConeMobilityEngage;
+import frc.robot.commands.OneConeMobilityEngage;
 // import frc.robot.commands.OneCubeMobilityEngage;
 // import frc.robot.commands.RedOneConeMobile;
 // import frc.robot.commands.RedThreePieceBump;
@@ -124,7 +124,7 @@ public class RobotContainer {
     // selecter.setDefaultOption("one and engage", new OneConeEngage());
     // selecter.addOption("blue one cone mobile", new BlueOneConeMobile());
     // selecter.addOption("red one cone mobile", new RedOneConeMobile());
-    // selecter.addOption("one cone mobile and engage", new OneConeMobilityEngage());
+    selecter.addOption("one cone mobile and engage", new OneConeMobilityEngage());
     // selecter.addOption("one cube mobility engage", new OneCubeMobilityEngage());
     // selecter.addOption("red two piece no bump", new RedTwoPieceNoBump());
     // selecter.addOption("blue two piece no bump", new BlueTwoPieceNoBump());
@@ -166,19 +166,20 @@ public class RobotContainer {
     // driver.getAButton().whileTrue(new TestAuto().handleInterrupt(DriveTrain.getInstance()::togglePlayback));
 
     driver.getSTARTButton().onTrue(new InstantCommand(dt::reset, dt));
-    driver.getAButton().whileTrue(new TestNewAuto());
-    driver.getBButton().whileTrue(new OneConeMobilityEngage());
-    // // driver.getLBButton().onTrue(new InstantCommand(() -> dt.toggleSpeed(), dt));
+    // driver.getLBButton().onTrue(new InstantCommand(() -> dt.toggleSpeed(), dt));
 
-    // // driver.getAButton().onTrue(new InstantCommand(intake::retractIntake, intake));
+    driver.getAButton().onTrue(new InstantCommand(intake::retractIntake, intake));
+    driver.getYButton().onTrue(new InstantCommand(intake::extendIntake, intake));
+    driver.getXButton().onTrue(new InstantCommand(intake::lowerIntake, intake));
 
-    // manip.getYButton().onTrue(new Level3());
-    // manip.getBButton().onTrue(new Level2());
-    // manip.getAButton().onTrue(new Stow());
 
-    // //make is so when slide is fully in after scoring akul controller buzzes
-    // manip.getLBButton().onTrue(new Scoring());
-    // manip.getRightStickPress().onTrue(new Substation());
+    manip.getYButton().onTrue(new Level3());
+    manip.getBButton().onTrue(new Level2());
+    manip.getAButton().onTrue(new Stow());
+
+    //make is so when slide is fully in after scoring akul controller buzzes
+    manip.getLBButton().onTrue(new Scoring());
+    manip.getRightStickPress().onTrue(new Substation());
 
     // manip.getRBButton().onTrue(new Ins)
 
@@ -195,8 +196,10 @@ public class RobotContainer {
 
     // make it so when alignment is done akul controller get buzzed 
     // make it so when akul lets go of alignment button anish contorller gets buzzed
-    // driver.getBButton().whileTrue(new LimelightLineUp());
-    // driver.getBButton().onFalse(new InstantCommand(() -> DriveTrain.getInstance().control(0, 0, 0), DriveTrain.getInstance()));
+    driver.getBButton().whileTrue(new LimelightLineUp());
+    driver.getBButton().onFalse(new InstantCommand(() -> DriveTrain.getInstance().control(0, 0, 0), DriveTrain.getInstance()));
+
+    
     // driver.getAButton().onTrue(new InstantCommand(intake::retractIntake, intake));
     // manip.getAButton().onTrue(new InstantCommand(() -> elevator.setTarget(Constants.ELEVATOR_HIGH), elevator));
     // manip.getBButton().onTrue(new InstantCommand(() -> elevator.setTarget(Constants.ELEVATOR_MID), elevator));

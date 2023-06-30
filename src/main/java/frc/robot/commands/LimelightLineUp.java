@@ -48,7 +48,7 @@ public class LimelightLineUp extends CommandBase {
       velocityMultiplier = gyroYaw < 0 ? -1 : 1;
       DriveTrain.getInstance().control
       // TODO:: may need to change later but field element at woodshop is aligned with tx is 3.5
-      (DriveTrain.getInstance().getLimelightController().calculate(LimeLight.getHorizontalOffset(), 5), 
+      (DriveTrain.getInstance().getLimelightController().calculate(LimeLight.getHorizontalOffset(), 2), 
       Robot.m_robotContainer.driver.getLeftJoyY(), 
       -DriveTrain.getInstance().getRotateController().calculate(Math.abs(gyroYaw % (2 * Math.PI)), Math.PI) * velocityMultiplier);
     }

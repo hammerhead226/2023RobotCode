@@ -45,6 +45,7 @@ public final class Constants {
      public static final double TICKS_PER_INCHES = 1170.58602;//44.228775
      public static final double MAX_MODULE_SPEED = 4.96824;
      public static final double TICKS_PER_METER = 196460/MAX_MODULE_SPEED;
+
  
      public static String AUTONOMOUS_PATH_FILENAME = "/paths/recording.csv";
  
@@ -145,7 +146,8 @@ public final class Constants {
 
   // Intake Constants
   public static final double ROLLER_RUN_SPEED = 0.65;
-  public static final double[] INTAKE_GAINS = { 0.0009, 0, 0 };
+  // public static final double[] INTAKE_GAINS = { 0.0009, 0, 0 };
+  public static final double[] INTAKE_GAINS = { 0.0011, 0, 0 };
   public static final int INTAKE_OFFSET = 0;
 
   public static final double INTAKE_EXTEND = 1500;
@@ -157,7 +159,7 @@ public final class Constants {
   // 3000 to be fully retracted
   
   public static final double MAX_SPEED_UP = 0.5; //extend
-  public static final double MAX_SPEED_DOWN = 0.8; //retract
+  public static final double MAX_SPEED_DOWN = 0.5; //retract
 
 
   // Gripper Constants
@@ -176,11 +178,12 @@ public final class Constants {
 
 
   //Scoring Setpoints
-  public static final double ELEVATOR_HIGH = -1300;
-  public static final double ELEVATOR_MID = -200;
-  public static final double ELEVATOR_HOLD = 1900;
-  public static final double ELEVATOR_INTAKE = 1100;
-  public static final double ELEVATOR_SUBSTATION = -550;
+  public static final double ELEVATOR_HIGH = -700;
+  public static final double ELEVATOR_MID = 400;
+  // public static final double ELEVATOR_HOLD = 1900;
+  public static final double ELEVATOR_HOLD = 2300;
+  public static final double ELEVATOR_INTAKE = 1700;
+  public static final double ELEVATOR_SUBSTATION = 50;
 
   public static final double LS_HIGH = -56650;
   public static final double LS_MID = -24500;

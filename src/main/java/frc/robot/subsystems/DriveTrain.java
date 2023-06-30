@@ -49,8 +49,6 @@ public class DriveTrain extends SubsystemBase {
 
     private boolean driveTrainLock;
 
-    private LazyTalonFX saved;
-
 
     private DriveTrain() {
 
@@ -90,12 +88,14 @@ public class DriveTrain extends SubsystemBase {
 
         this.balanceController = new PIDController(0.012, 0, 0);
 
-        this.limelightController = new PIDController(0.07, 0, 0);
-
-        // TODO:: play around with this
-        this.rotateController = new PIDController(0.334, 0, 0);
 
         this.swerve = Swerve.fromConfiguration(config);
+
+        this.limelightController = new PIDController(0.1, 0, 0);
+
+        // TODO:: play around with this
+        this.rotateController = new PIDController(0.4, 0, 0);
+
 
         isPlaying = false;
 
@@ -109,6 +109,7 @@ public class DriveTrain extends SubsystemBase {
             //                                                                                 SharkExecutor.getState().getAsArray()[4]));
         }
         else if(!driveTrainLock) swerve.controlWithPercent(x, y, rotate);
+
     }
 
     public void reset() {
@@ -176,6 +177,18 @@ public class DriveTrain extends SubsystemBase {
         this.driveTrainLock = false;
     }
 
+    public double getGyroYaw() {
+        return gyro.getYaw();
+    }
+
+    public void lockDriveTrain() {
+        this.driveTrainLock = true;
+    }
+
+    public void unlockDriveTrain() {
+        this.driveTrainLock = false;
+    }
+    
     @Override
     public void periodic() {
       for(int i=0; i < Constants.NUMBER_OF_MODULES; i++)

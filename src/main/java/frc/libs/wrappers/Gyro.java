@@ -49,7 +49,7 @@ public class Gyro {
 
     public double getTilt() {
         double[] ypr = new double[3];
-        return pigeon2.getPitch();
+        return pigeon2.getRoll();
     }
 
     public void zeroGyro() {
