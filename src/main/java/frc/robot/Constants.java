@@ -34,8 +34,8 @@ public final class Constants {
  
      // Physical Configuration 
      public static final int NUMBER_OF_MODULES = 4;
-     public static final double LENGTH = 22.8125;
-     public static final double WIDTH = 22.8125;
+     public static final double LENGTH = 0.5794375;
+     public static final double WIDTH = 0.5794375;
  
  
      public static final double TRANSLATIONAL_ERROR = 3;
@@ -43,9 +43,9 @@ public final class Constants {
      public static final double LIMELIGHT_OFFSET = 0;
  
      public static final double TICKS_PER_INCHES = 1170.58602;//44.228775
-     public static final double TICKS_PER_METER = 46260;
+     public static final double MAX_MODULE_SPEED = 4.96824;
+     public static final double TICKS_PER_METER = 196460/MAX_MODULE_SPEED;
 
-     public static final double MAX_MODULE_SPEED = 5;
  
      public static String AUTONOMOUS_PATH_FILENAME = "/paths/recording.csv";
  
@@ -150,9 +150,9 @@ public final class Constants {
   public static final double[] INTAKE_GAINS = { 0.0011, 0, 0 };
   public static final int INTAKE_OFFSET = 0;
 
-  public static final double INTAKE_EXTEND = 2100;
-  public static final double INTAKE_LOWERED = 1800;
-  public static final double INTAKE_RETRACT = 1600;
+  public static final double INTAKE_EXTEND = 1500;
+  public static final double INTAKE_LOWERED = 1000;
+  public static final double INTAKE_RETRACT = 700;
 
   public static final double INTAKE_THRESHOLD = 100;
       

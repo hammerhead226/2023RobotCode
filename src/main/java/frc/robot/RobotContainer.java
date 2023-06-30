@@ -29,9 +29,11 @@ import frc.robot.commands.AutoBalance;
 import frc.robot.commands.Level2;
 import frc.robot.commands.Level3;
 import frc.robot.commands.LimelightLineUp;
+import frc.robot.commands.OneConeMobilityEngage;
 import frc.robot.commands.Scoring;
 import frc.robot.commands.Stow;
 import frc.robot.commands.Substation;
+import frc.robot.commands.TestNewAuto;
 // import frc.robot.commands.OneConeEngage;
 import frc.robot.commands.OneConeMobilityEngage;
 // import frc.robot.commands.OneCubeMobilityEngage;
@@ -111,7 +113,7 @@ public class RobotContainer {
     //     ));
 
     gripper.setDefaultCommand(new RunCommand(gripper::run, gripper));
-    // intake.setDefaultCommand(new RunCommand(intake::run, intake));
+    intake.setDefaultCommand(new RunCommand(intake::run, intake));
     linearSlide.setDefaultCommand(new RunCommand(linearSlide::run, linearSlide));
     elevator.setDefaultCommand(new RunCommand(elevator::run, elevator));
 
@@ -179,6 +181,8 @@ public class RobotContainer {
     manip.getLBButton().onTrue(new Scoring());
     manip.getRightStickPress().onTrue(new Substation());
 
+    // manip.getRBButton().onTrue(new Ins)
+
 
     // manip.getAButton().onTrue(new InstantCommand(() -> gripper.setArmTarget(Constants.ARM_HOLD), lock));
     // manip.getBButton().onTrue(new InstantCommand(() -> gripper.setArmTarget(Constants.ARM_STOW), lock));
@@ -194,6 +198,8 @@ public class RobotContainer {
     // make it so when akul lets go of alignment button anish contorller gets buzzed
     driver.getBButton().whileTrue(new LimelightLineUp());
     driver.getBButton().onFalse(new InstantCommand(() -> DriveTrain.getInstance().control(0, 0, 0), DriveTrain.getInstance()));
+
+    
     // driver.getAButton().onTrue(new InstantCommand(intake::retractIntake, intake));
     // manip.getAButton().onTrue(new InstantCommand(() -> elevator.setTarget(Constants.ELEVATOR_HIGH), elevator));
     // manip.getBButton().onTrue(new InstantCommand(() -> elevator.setTarget(Constants.ELEVATOR_MID), elevator));

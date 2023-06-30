@@ -1,4 +1,4 @@
-package frc.libs.swervey;
+package frc.libs.swerveyshark;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -49,10 +49,10 @@ public class MotionOfTheOcean {
          * 
          * @param poseSupplier Supplier to get pose of robot in an x, y, theta triplet
          */
-        public static void recordState(Supplier<double[]> poseSupplier) {
-            recording.add(new State(poseSupplier.get(), currentCommands));
-            currentCommands = new ArrayList<>();
-        }
+        // public static void recordState(Supplier<double[]> poseSupplier) {
+        //     recording.add(new State(poseSupplier.get(), currentCommands));
+        //     currentCommands = new ArrayList<>();
+        // }
 
         /**
          * Save recording to specified file name
@@ -106,20 +106,23 @@ public class MotionOfTheOcean {
 
                     String line;
                     while ((line = fileReader.readLine()) != null) {
-                        double x, y, theta;
+                        double x, y, theta, linearVelocity, angularVelocity;
                         ArrayList<String> recordedCommands = new ArrayList<String>();
 
                         String[] split = line.split(",");
                         x = Double.parseDouble(split[0]);
                         y = Double.parseDouble(split[1]);
                         theta = Double.parseDouble(split[2]);
+                        linearVelocity = Double.parseDouble(split[3]);
+                        angularVelocity = Double.parseDouble(split[4]);
+                        
 
                         if (split.length == 4) {
                             String[] splitCommands = split[3].split("#");
                             recordedCommands.addAll(Arrays.asList(splitCommands));
                         }
 
-                        currentLoadingRecording.add(new State(x, y, theta, recordedCommands));
+                        currentLoadingRecording.add(new State(x, y, theta, linearVelocity, angularVelocity, recordedCommands));
                     }
 
                     loadedRecordings.put(fileName, currentLoadingRecording);
@@ -213,6 +216,9 @@ public class MotionOfTheOcean {
         private double x;
         private double y;
         private double theta;
+        private double linearVelocity;
+        private double angularVelocity;
+
         private ArrayList<String> commands;
 
         /**
@@ -223,10 +229,12 @@ public class MotionOfTheOcean {
          * @param theta angle of robot
          * @param commands ArrayList of commands to be executed with pose
          */
-        public State(double x, double y, double theta, ArrayList<String> commands) {
+        public State(double x, double y, double theta, double linearVelocity, double angularVelocity, ArrayList<String> commands) {
             this.x = x;
             this.y = y;
             this.theta = theta;
+            this.linearVelocity = linearVelocity;
+            this.angularVelocity = angularVelocity;
             this.commands = commands;
         }
 
@@ -236,8 +244,8 @@ public class MotionOfTheOcean {
          * @param pose x, y, theta triplet of robot
          * @param commands ArrayList of commands to be executed with pose
          */
-        public State(double[] pose, ArrayList<String> commands) {
-            this(pose[0], pose[1], pose[2], commands);
+        public State(double[] pose, double linearVelocity, double angularVelocity, ArrayList<String> commands) {
+            this(pose[0], pose[1], pose[2], linearVelocity, angularVelocity, commands);
         }
 
         public double getX() {
@@ -260,8 +268,16 @@ public class MotionOfTheOcean {
             return new double[]{x, y, theta};
         }
 
+        public double getLinearVelocity() {
+            return linearVelocity;
+        }
+
+        public double getAngularVelocity() {
+            return angularVelocity;
+        }
+
         public String toString() {
-            return x + "," + y + "," + theta + "," + String.join("#", commands);
+            return x + "," + y + "," + theta + "," + "," + linearVelocity + "," + angularVelocity + String.join("#", commands);
         }
     }
 }

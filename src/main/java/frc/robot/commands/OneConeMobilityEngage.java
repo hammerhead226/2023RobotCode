@@ -23,17 +23,18 @@ public class OneConeMobilityEngage extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new Level3(),
-      new WaitUntilCommand(Robot.m_robotContainer.manager::linearSlideTargetReached),
-      new WaitCommand(0.25),
-      new Scoring(),
+    //   new Level3(),
+    //   new WaitUntilCommand(Robot.m_robotContainer.manager::linearSlideTargetReached),
+    //   new WaitCommand(0.25),
+    //   new Scoring(),
       new InstantCommand(() -> DriveTrain.getInstance().reset(), DriveTrain.getInstance()),
-      new RunCommand(() -> DriveTrain.getInstance().control(0, -2.25, 0), DriveTrain.getInstance()).until(DriveTrain.getInstance()::isChassisUnstable),
-      new RunCommand(() -> DriveTrain.getInstance().control(0, -0.5, 0), DriveTrain.getInstance()).until(DriveTrain.getInstance()::isChassisStable),
-      new RunCommand(() -> DriveTrain.getInstance().control(0.1, -0.25, 0), DriveTrain.getInstance()).withTimeout(1.5),
+      new RunCommand(() -> DriveTrain.getInstance().control(0, -0.7, 0), DriveTrain.getInstance()).until(DriveTrain.getInstance()::isChassisUnstable),
+      new RunCommand(() -> DriveTrain.getInstance().control(0, -0.35, 0), DriveTrain.getInstance()).until(DriveTrain.getInstance()::isChassisStable),
+      new RunCommand(() -> DriveTrain.getInstance().control(0.07, -0.175, 0), DriveTrain.getInstance()).withTimeout(1.5),
       new InstantCommand(() -> DriveTrain.getInstance().control(0, 0, 0), DriveTrain.getInstance()),
       new WaitCommand(1),
-      new RunCommand(() -> DriveTrain.getInstance().control(0, 2.25, 0), DriveTrain.getInstance()).until(DriveTrain.getInstance()::isChassisUnstable),
+      new RunCommand(() -> DriveTrain.getInstance().control(0, 0.7, 0), DriveTrain.getInstance()).until(DriveTrain.getInstance()::isChassisUnstable),
+
       new WaitCommand(0.1),
       new InstantCommand(() -> DriveTrain.getInstance().control(0, 0, 0), DriveTrain.getInstance()),
       new AutoBalance(false, 0.018)

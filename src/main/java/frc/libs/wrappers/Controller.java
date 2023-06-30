@@ -5,6 +5,8 @@
 package frc.libs.wrappers;
 
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 /** 
@@ -18,6 +20,12 @@ public class Controller {
     public Controller(int port, double deadband) {
         joy = new Joystick(port);
         this.deadband = deadband;
+    }
+
+    public void vibrate() {
+        joy.setRumble(RumbleType.kBothRumble, 0.5);
+        new WaitCommand(1);
+        joy.setRumble(RumbleType.kBothRumble, 0);
     }
 
     public double getAxis(int axis) {
