@@ -67,6 +67,9 @@ public class LimelightLineUp extends CommandBase {
     //   SmartDashboard.putBoolean("done?????!?!??!", false);
     // }
     // the limelight is lining up before the gyro can correct itself ?
+
+    // this probably isnt going to work lols
+    Robot.m_robotContainer.driver.vibrate();
     return Math.abs(LimeLight.getHorizontalOffset()) <= Constants.LIMELIGHT_THRESH && Math.abs(gyroYaw % (2 * Math.PI)) <= Constants.ROTATE_THRESH;
     // return false;
   }
