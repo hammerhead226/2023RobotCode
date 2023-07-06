@@ -17,6 +17,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 // import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.libs.swerveyshark.motionoftheocean.SharkExecutor;
 import frc.libs.wrappers.GenericMotor;
 import frc.libs.wrappers.LimeLight;
 import frc.robot.Constants;
@@ -71,6 +72,13 @@ public class Intake extends SubsystemBase {
 
     //TODO:: change this later 
     intakePosition = IntakePosition.LOWER;
+
+    SharkExecutor.createRunnable("intake.extend", this::extendIntake);
+    SharkExecutor.createRunnable("intake.runIn", this::runIn);
+    SharkExecutor.createRunnable("intake.runOut", this::runOut);
+    SharkExecutor.createRunnable("intake.stop", this::stop);
+    SharkExecutor.createRunnable("intake.lower", this::lowerIntake);
+
   }
 
   public void run() {

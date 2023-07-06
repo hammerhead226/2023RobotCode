@@ -78,7 +78,7 @@ public class DriveTrain extends SubsystemBase {
         config.encoders = encoders;
         config.gyro = gyro;
         config.modulePositions = Constants.MODULE_POSITIONS;
-        config.translationalPIDGains = new double[]{0.6, 0.0, 0.0};
+        config.translationalPIDGains = new double[]{1, 0.0, 0.0};
         config.rotationalPIDGains = new double[]{0.65, 0.0, 0.0};
         config.drivePIDFGains = new double[]{0.05, 0.0, 0.0, 1.0/Constants.MAX_MODULE_SPEED};
         config.steerPIDGains = new double[]{0.62, 0.0, 0.0};

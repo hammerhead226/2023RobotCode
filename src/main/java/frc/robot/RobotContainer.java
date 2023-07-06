@@ -143,34 +143,12 @@ public class RobotContainer {
   
   private void configureBindings() {
 
-    // driver.getLBButton().onTrue(new InstantCommand(led::leftBumperPressed, led));
-    // driver.getLBButton().onFalse(new InstantCommand(led::noBumpersPressed, led));
-
-    // driver.getRBButton().onTrue(new InstantCommand(led::rightBumperPressed, led));
-    // driver.getRBButton().onFalse(new InstantCommand(led::noBumpersPressed, led));
-
-
-
-
-    // driver.getRBButton().onTrue(new InstantCommand(intake::toggleIntake, intake));
-
-
-
-
-
-
-
-    // driver.getAButton().onTrue(new InstantCommand(intake::toggleIntake, intake));
-    // driver.getAButton().whileTrue(new RunCommand(() -> dt.toPose(new double[]{0, 20, Math.PI}), dt).until(dt::atSetpoint)
-    // .andThen(new RunCommand(() -> dt.toPose(new double[]{0, 100, 0}), dt).until(dt::atSetpoint)));
-    // driver.getAButton().whileTrue(new TestAuto().handleInterrupt(DriveTrain.getInstance()::togglePlayback));
-
     driver.getSTARTButton().onTrue(new InstantCommand(dt::reset, dt));
-    // driver.getLBButton().onTrue(new InstantCommand(() -> dt.toggleSpeed(), dt));
 
     driver.getAButton().onTrue(new InstantCommand(intake::retractIntake, intake));
     driver.getYButton().onTrue(new InstantCommand(intake::extendIntake, intake));
     driver.getXButton().onTrue(new InstantCommand(intake::lowerIntake, intake));
+    driver.getBButton().whileTrue(new LimelightLineUp());
 
 
     manip.getYButton().onTrue(new Level3());
@@ -180,116 +158,8 @@ public class RobotContainer {
     //make is so when slide is fully in after scoring akul controller buzzes
     manip.getLBButton().onTrue(new Scoring());
     manip.getRightStickPress().onTrue(new Substation());
-
-    // manip.getRBButton().onTrue(new Ins)
-
-
-    // manip.getAButton().onTrue(new InstantCommand(() -> gripper.setArmTarget(Constants.ARM_HOLD), lock));
-    // manip.getBButton().onTrue(new InstantCommand(() -> gripper.setArmTarget(Constants.ARM_STOW), lock));
-    // manip.getYButton().onTrue(new InstantCommand(() -> gripper.setArmTarget(Constants.ARM_SCORE), lock));
-    // manip.getXButton().onTrue(new InstantCommand(() -> gripper.setArmTarget(Constants.ARM_SUBSTATION), lock));
-
-    // manip.getAButton().onTrue(new InstantCommand(() -> linearSlide.setTarget(Constants.LS_RETRACTED)));
-    // manip.getBButton().onTrue(new InstantCommand(() -> linearSlide.setTarget(Constants.LS_HIGH)));
-    // manip.getXButton().onTrue(new InstantCommand(() -> linearSlide.setTarget(Constants.LS_MID)));
-    // manip.getYButton().onTrue(new InstantCommand(() -> linearSlide.setTarget(Constants.LS_SUBSTATION)));
-
-    // make it so when alignment is done akul controller get buzzed 
-    // make it so when akul lets go of alignment button anish contorller gets buzzed
-    driver.getBButton().whileTrue(new LimelightLineUp());
-    driver.getBButton().onFalse(new InstantCommand(() -> DriveTrain.getInstance().control(0, 0, 0), DriveTrain.getInstance()));
-
     
-    // driver.getAButton().onTrue(new InstantCommand(intake::retractIntake, intake));
-    // manip.getAButton().onTrue(new InstantCommand(() -> elevator.setTarget(Constants.ELEVATOR_HIGH), elevator));
-    // manip.getBButton().onTrue(new InstantCommand(() -> elevator.setTarget(Constants.ELEVATOR_MID), elevator));
-    // manip.getXButton().onTrue(new InstantCommand(() -> elevator.setTarget(1600), elevator));
-    // manip.getAButton().onTrue(new InstantCommand(() -> linearSlide.setTarget(Constants.LS_HIGH), linearSlide));
-    // manip.getBButton().onTrue(new InstantCommand(() -> linearSlide.setTarget(Constants.LS_MID), linearSlide));
-    // manip.getXButton().onTrue(new InstantCommand(() -> linearSlide.setTarget(800), linearSlide));
-
-    // manip.getSTARTButton().onTrue(new InstantCommand(gripper::toggleCubeMode, gripper));
-
-    // manip.getAButton().onTrue(new InstantCommand(gripper::wheeledClawIntake, gripper));
-    // manip.getAButton().onFalse(new InstantCommand(gripper::wheeledClawStop, gripper));
-
-    // manip.getBButton().onTrue(new InstantCommand(gripper::wheeledClawOuttake, gripper));
-    // manip.getBButton().onFalse(new InstantCommand(gripper::wheeledClawStop, gripper));
-    // manip.getRBButton().onTrue(new InstantCommand(gripper::toggleClaw, gripper));
-
-
-    // manip.getLBButton().onTrue(
-    //   new InstantCommand(intake::runIn, intake)
-    // );
-
-    // manip.getLBButton().onFalse(
-    //   new InstantCommand(intake::stop, intake)
-    // );
-
-    // manip.getMENUButton().onTrue(
-    //   new InstantCommand(intake::runOut, intake)
-    // );
-
-    // manip.getMENUButton().onFalse(
-    //   new InstantCommand(intake::stop, intake)
-    // );
-    // manip.getLeftStickPress().onTrue(
-    //   new InstantCommand(() -> linearSlide.setTarget(0), lockTwo)
-    //   .andThen(new WaitCommand(0.5))
-    //   .andThen(gripper::armHoldPosition, lockTwo)
-    //   .andThen(new WaitCommand(0.25))
-    //   .andThen(() -> elevator.setTarget(0), lockTwo)
-    // );
-
-    // manip.getXButton().onTrue(
-    //   new InstantCommand(() -> linearSlide.setTarget(Constants.LS_RETRACTED), lockTwo)
-    //   .andThen(gripper::cubeModeOn, lockTwo)
-    //   .andThen(new WaitCommand(0.5))
-    //   .andThen(gripper::armHoldPosition, lockTwo)
-    //   .andThen(new WaitCommand(0.25))
-    //   // .andThen(gripper::openClaw, lockTwo) // i think we can keep the wait command for the outtake claw part
-    //   .andThen(new WaitCommand(0.5))
-    //   .andThen(() -> elevator.setTarget(Constants.ELEVATOR_INTAKE), lockTwo)
-    //   .andThen(() -> gripper.setArmTarget(Constants.ARM_INTAKE), lockTwo)
-    //   );
-
-
-    // manip.getLeftStickPress().onTrue(new InstantCommand(gripper::toggleWrist, gripper));
-
-    // manip.getAButton().onTrue(
-    //   new InstantCommand(() -> linearSlide.setTarget(Constants.LS_RETRACTED), lockTwo)
-    //   .andThen(new WaitCommand(0.65))
-    //   .andThen(gripper::armHoldPosition, lockTwo)
-    //   .andThen(new WaitCommand(0.25))
-    //   .andThen(() -> elevator.setTarget(Constants.ELEVATOR_HOLD), lockTwo)
-    //   );
-
-    //   manip.getBButton().onTrue(
-    //     new InstantCommand(() -> elevator.setTarget(Constants.ELEVATOR_MID), lockTwo)
-    //     .andThen(new WaitCommand(0.1))
-    //     .andThen(() -> gripper.armHoldPosition(), lockTwo)
-    //     .andThen(new WaitCommand(0.25))
-    //     .andThen(() -> gripper.setArmTarget(Constants.ARM_SCORE), lockTwo)
-    //     .andThen(new WaitCommand(0.75))
-    //     .andThen(() -> linearSlide.setTarget(Constants.LS_MID), lockTwo));
-      
-    //     manip.getYButton().onTrue(
-    //       new InstantCommand(() -> elevator.setTarget(Constants.ELEVATOR_HIGH), lockTwo)
-    //       .andThen(new WaitCommand(0.1))
-    //       .andThen(() -> gripper.armHoldPosition(), lockTwo)
-    //       .andThen(new WaitCommand(0.25))
-    //       .andThen(() -> gripper.setArmTarget(Constants.ARM_SCORE), lockTwo)
-    //       .andThen(new WaitCommand(0.75))
-    //       .andThen(() -> linearSlide.setTarget(Constants.LS_HIGH), lockTwo));
-    
-    //   manip.getRightStickPress().onTrue(
-    //     new InstantCommand(() -> elevator.setTarget(Constants.ELEVATOR_SUBSTATION), lockTwo)
-    //       .andThen(new WaitCommand(0.1))
-    //       .andThen(() -> gripper.armHoldPosition(), lockTwo)
-    //       .andThen(new WaitCommand(0.25))
-    //       .andThen(() -> gripper.setDoubleSubstation(), lockTwo)
-    //       .andThen(new WaitCommand(0.75))
-    //       .andThen(() -> linearSlide.setTarget(Constants.LS_SUBSTATION), lockTwo));
+    manip.getSTARTButton().onTrue(new InstantCommand(gripper::toggleCubeMode, gripper));
   }
 
   /**

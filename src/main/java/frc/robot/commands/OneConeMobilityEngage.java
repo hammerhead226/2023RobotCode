@@ -23,10 +23,11 @@ public class OneConeMobilityEngage extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-    //   new Level3(),
-    //   new WaitUntilCommand(Robot.m_robotContainer.manager::linearSlideTargetReached),
-    //   new WaitCommand(0.25),
-    //   new Scoring(),
+      new Level3(),
+      new WaitUntilCommand(Robot.m_robotContainer.manager::linearSlideTargetReached),
+      new WaitCommand(0.25),
+      new Scoring(),
+      new WaitCommand(0.5),
       new InstantCommand(() -> DriveTrain.getInstance().reset(), DriveTrain.getInstance()),
       new RunCommand(() -> DriveTrain.getInstance().control(0, -0.7, 0), DriveTrain.getInstance()).until(DriveTrain.getInstance()::isChassisUnstable),
       new RunCommand(() -> DriveTrain.getInstance().control(0, -0.35, 0), DriveTrain.getInstance()).until(DriveTrain.getInstance()::isChassisStable),

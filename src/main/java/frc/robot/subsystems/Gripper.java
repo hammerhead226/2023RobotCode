@@ -78,6 +78,7 @@ public class Gripper extends SubsystemBase {
     // wrist = new CANSparkMax(RobotMap.GRIPPER_WRIST, MotorType.kBrushless);
     wheeledClaw = new GenericMotor(new TalonFX(RobotMap.WHEELED_CLAW_MOTOR, Constants.CANBUS));
     arm = new GenericMotor(new TalonFX(RobotMap.ARM_MOTOR, Constants.CANBUS));
+    arm.setNeutralMode(PassiveMode.BRAKE);
     // armEncoder = new CANSparkMax(18, MotorType.kBrushed);
 
     armSpark = new CANSparkMax(18, MotorType.kBrushed);
