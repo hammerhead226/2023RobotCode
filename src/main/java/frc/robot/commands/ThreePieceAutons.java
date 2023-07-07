@@ -20,10 +20,11 @@ import frc.robot.subsystems.balls;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class TestNewAuto extends SequentialCommandGroup {
+public class ThreePieceAutons extends SequentialCommandGroup {
   /** Creates a new TestNewAuto. */
   private double startTime;
-  public TestNewAuto() {
+
+  public ThreePieceAutons(String path) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     Consumer<double[]> toPose = (target) -> DriveTrain.getInstance().toPose(target);
@@ -31,7 +32,7 @@ public class TestNewAuto extends SequentialCommandGroup {
     addCommands(
       new InstantCommand(() -> {
         try {
-          SharkExecutor.loadAndConfigurePath("paths/export.csv", toPose);
+          SharkExecutor.loadAndConfigurePath(path, toPose);
         } catch (IOException e) {
           // TODO Auto-generated catch block
           e.printStackTrace();

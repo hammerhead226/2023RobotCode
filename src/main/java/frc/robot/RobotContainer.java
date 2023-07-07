@@ -26,14 +26,17 @@ import frc.robot.subsystems.ScoringStateManager;
 import frc.robot.subsystems.Elevator;
 import frc.libs.wrappers.Controller;
 import frc.robot.commands.AutoBalance;
+import frc.robot.commands.BlueOneConeMobile;
 import frc.robot.commands.Level2;
 import frc.robot.commands.Level3;
 import frc.robot.commands.LimelightLineUp;
+import frc.robot.commands.OneConeEngage;
 import frc.robot.commands.OneConeMobilityEngage;
+import frc.robot.commands.RedOneConeMobile;
 import frc.robot.commands.Scoring;
 import frc.robot.commands.Stow;
 import frc.robot.commands.Substation;
-import frc.robot.commands.TestNewAuto;
+import frc.robot.commands.ThreePieceAutons;
 // import frc.robot.commands.OneConeEngage;
 import frc.robot.commands.OneConeMobilityEngage;
 // import frc.robot.commands.OneCubeMobilityEngage;
@@ -119,11 +122,16 @@ public class RobotContainer {
 
     led.setDefaultCommand(new SetColorMode());
 
-    
+    // three pieces 
+    // rememebr to fill in the csv files from reformatter
+    selecter.addOption("red three piece no bump", new ThreePieceAutons("/paths/"));
+    selecter.addOption("red three piece bump", new ThreePieceAutons("/paths/"));
+    selecter.addOption("blue three piece no bump", new ThreePieceAutons("/paths/"));
+    selecter.addOption("blue three peice bump", new ThreePieceAutons("/paths/"));
 
-    // selecter.setDefaultOption("one and engage", new OneConeEngage());
-    // selecter.addOption("blue one cone mobile", new BlueOneConeMobile());
-    // selecter.addOption("red one cone mobile", new RedOneConeMobile());
+    selecter.setDefaultOption("one and engage", new OneConeEngage());
+    selecter.addOption("blue one cone mobile", new BlueOneConeMobile());
+    selecter.addOption("red one cone mobile", new RedOneConeMobile());
     selecter.addOption("one cone mobile and engage", new OneConeMobilityEngage());
     // selecter.addOption("one cube mobility engage", new OneCubeMobilityEngage());
     // selecter.addOption("red two piece no bump", new RedTwoPieceNoBump());
