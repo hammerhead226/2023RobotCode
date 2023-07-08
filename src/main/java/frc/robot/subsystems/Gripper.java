@@ -146,7 +146,7 @@ public class Gripper extends SubsystemBase {
   }
 
   public void wheeledClawIntake() {
-    wheeledClaw.set(0.75);
+    wheeledClaw.set(0.8);
   }
 
   public void wheeledClawOuttake() {
@@ -241,11 +241,13 @@ public class Gripper extends SubsystemBase {
     } else {
       sustain = 0;
     }
+
    
-    if(sustain >= 5) {
+    if(sustain >= 2) {
       wheeledClaw.set(0); // if speed is too high sensor might not have enough time to react
       // if(!Robot.m_robotContainer.animation.isScheduled())
       // Robot.m_robotContainer.animation.schedule();
+      sustain = 0;
       return true;
     }
     return false;
@@ -255,30 +257,13 @@ public class Gripper extends SubsystemBase {
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("sustain", sustain);
-    // This method will be called once per scheduler run
-    // SmartDashboard.putNumber("periodic wrist", wrist.getEncoder().getPosition());
-    // SmartDashboard.putNumber("wrist pose", wrist.getEncoder().getPosition());
-    // SmartDashboard.putNumber("arm enc", arm.getSensorPose());
-    // SmartDashboard.putNumber("claw enc", wheeledClaw.getSensorPose());
-    SmartDashboard.putBoolean("ur mom", cubeMode);
-    // SmartDashboard.putNumber("distance sens", distanceSensor.getRange());
+    SmartDashboard.putNumber("Gripper Sustain", sustain);
+    SmartDashboard.putBoolean("Cube Mode", cubeMode);
 
-    SmartDashboard.putNumber("sensor deez", proximitySensor.getValue());
-    SmartDashboard.putBoolean("does it work", proximitySensor.getValue() > Constants.CONE_VALUE && proximitySensor.getValue() < 2600);
+    SmartDashboard.putNumber("Prox. Sensor", proximitySensor.getValue());
+    SmartDashboard.putBoolean("Piece Detected?", pieceDetected());
 
-
-    // SmartDashboard.putNumber("falcon encoder", arm.getSensorPose());
-
-
-    // SmartDashboard.putNumber("absolute encoder", aCoder.getPosition());
-    SmartDashboard.putNumber("bro... fr?", aCoder.getPosition());
-    // SmartDashboard.putNumber("balls in ur jaws", armEncoder.getAbsoluteEncoder(Type.kDutyCycle).getPosition());
-    // SmartDashboard.putNumber("arm encoder please work im beggin you", armEncoder.getEncoder(, sustain));
-    // SmartDashboard.putNumber("please", aCoder.getEncoder().getPosition());
-    // SmartDashboard.putNumber("PLEASE MAN", aCoder.getAlternateEncoder(4096).getPosition());
-    // SmartDashboard.putNumber("my rreaction", armCoder.getPosition()*armCoder.getPositionConversionFactor());
-    // SmartDashboard.putNumber("armcoder", armCoder.getAbsolutePosition());
+    SmartDashboard.putNumber("Arm Enc", aCoder.getPosition());
   }
 }
 

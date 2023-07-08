@@ -91,16 +91,7 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during autonomous. */
   @Override
-  public void autonomousPeriodic() {
-    double elaspedTime;
-    double startTime;
-
-    
-
-    if(!SharkExecutor.isFinished()) {
-      elaspedTime = System.currentTimeMillis()/1000. - SharkExecutor.startTime;
-    }
-  }
+  public void autonomousPeriodic() {}
 
   @Override
   public void teleopInit() {

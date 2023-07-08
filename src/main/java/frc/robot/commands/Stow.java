@@ -20,6 +20,7 @@ public class Stow extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
+      new InstantCommand(Robot.m_robotContainer.gripper::wheeledClawStop),
       new InstantCommand(() -> Robot.m_robotContainer.manager.setLinearSlideTarget(Constants.LS_RETRACTED), Robot.m_robotContainer.lock),
       new WaitUntilCommand(Robot.m_robotContainer.manager::linearSlideTargetReached),
       new InstantCommand(() -> Robot.m_robotContainer.manager.vibrate(Robot.m_robotContainer.driver), Robot.m_robotContainer.lock),

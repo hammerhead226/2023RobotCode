@@ -87,7 +87,7 @@ public class LinearSlide extends SubsystemBase {
       // motorSpeed = Math.abs(motorSpeed) < 0.09 ? 0 : motorSpeed;
       control(motorSpeed);
     }
-    SmartDashboard.putNumber("slide deez nuts into yo", slider.getSelectedSensorPosition());
+    SmartDashboard.putNumber("linear slide extension", slider.getSelectedSensorPosition());
   }
 
   public void setTarget(double t) {

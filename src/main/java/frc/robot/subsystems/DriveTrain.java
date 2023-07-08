@@ -108,7 +108,7 @@ public class DriveTrain extends SubsystemBase {
             //                                                                                 SharkExecutor.getState().getAsArray()[3],
             //                                                                                 SharkExecutor.getState().getAsArray()[4]));
         }
-        else if(!driveTrainLock) swerve.controlWithPercent(x, y, rotate);
+        else if(!driveTrainLock) swerve.controlWithPercent(x, y, 0.6*rotate);
 
     }
 
@@ -179,20 +179,20 @@ public class DriveTrain extends SubsystemBase {
     
     @Override
     public void periodic() {
-      for(int i=0; i < Constants.NUMBER_OF_MODULES; i++)
-          SmartDashboard.putNumber("module offset " + i, swerve.getModuleRotationalPose(i));
-      SmartDashboard.putNumber("gyro tilt", getGyroPitch());
+    //   for(int i=0; i < Constants.NUMBER_OF_MODULES; i++)
+    //       SmartDashboard.putNumber("module offset " + i, swerve.getModuleRotationalPose(i));
+    //   SmartDashboard.putNumber("gyro tilt", getGyroPitch());
 
     //   SmartDashboard.putNumber("speed in t/s", saved.getVelocity());
     //   SmartDashboard.putNumber("speed in t/100ms", saved.getVelocityInTicks());
-      double[] pose = swerve.getSwerveState();
-        SmartDashboard.putNumber("x", pose[0]);
-        SmartDashboard.putNumber("y", pose[1]);
-        SmartDashboard.putNumber("rotate", pose[2]);
-        SmartDashboard.putNumber("linear velocity", pose[3]);
-        SmartDashboard.putNumber("heading", pose[4]);
+    //   double[] pose = swerve.getSwerveState();
+    //     SmartDashboard.putNumber("x", pose[0]);
+    //     SmartDashboard.putNumber("y", pose[1]);
+    //     SmartDashboard.putNumber("rotate", pose[2]);
+    //     SmartDashboard.putNumber("linear velocity", pose[3]);
+    //     SmartDashboard.putNumber("heading", pose[4]);
 
-        SmartDashboard.putBoolean("atSetpoint", swerve.atSetpoint());
+    //     SmartDashboard.putBoolean("atSetpoint", swerve.atSetpoint());
 
         // SmartDashboard.putNumber("output percent", saved.getMotorController().getMotorOutputPercent());
     }

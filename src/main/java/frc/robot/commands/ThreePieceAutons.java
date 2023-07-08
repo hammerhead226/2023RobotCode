@@ -30,6 +30,7 @@ public class ThreePieceAutons extends SequentialCommandGroup {
     Consumer<double[]> toPose = (target) -> DriveTrain.getInstance().toPose(target);
     
     addCommands(
+      new Stow(),
       new InstantCommand(() -> {
         try {
           SharkExecutor.loadAndConfigurePath(path, toPose);

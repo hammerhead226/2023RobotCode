@@ -21,7 +21,7 @@ public class SharkExecutor {
 
     public static double startTime;
     
-    private static HashMap<String, Runnable> runnableHash;
+    private static HashMap<String, Runnable> runnableHash = new HashMap<>();;
 
     public static void loadAndConfigurePath(String filePath, Consumer<double[]> toPose) throws IOException {
         BufferedReader reader = null;
@@ -33,6 +33,7 @@ public class SharkExecutor {
         }
 
         executable = new ArrayList<>();
+        
         iterator = 0;
         SharkExecutor.toPose = toPose;
 

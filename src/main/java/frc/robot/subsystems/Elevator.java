@@ -88,7 +88,6 @@ public class Elevator extends SubsystemBase {
     }
 
     control(motorSpeed);
-    SmartDashboard.putNumber("motor sped", motorSpeed);
   }
 
   public void setTarget(double t) {

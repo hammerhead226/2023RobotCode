@@ -199,7 +199,7 @@ public class Intake extends SubsystemBase {
   @Override
   public void periodic() {
     SmartDashboard.putNumber("intake enc", getIntake());
-    SmartDashboard.putNumber("limelight stuff", LimeLight.getHorizontalOffset());
-    SmartDashboard.putNumber("limelight stuff 2", LimeLight.getValue());
+    // SmartDashboard.putNumber("limelight stuff", LimeLight.getHorizontalOffset());
+    // SmartDashboard.putNumber("limelight stuff 2", LimeLight.getValue());
   }
 }

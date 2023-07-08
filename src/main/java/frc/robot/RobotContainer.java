@@ -30,9 +30,10 @@ import frc.robot.commands.BlueOneConeMobile;
 import frc.robot.commands.Level2;
 import frc.robot.commands.Level3;
 import frc.robot.commands.LimelightLineUp;
+import frc.robot.commands.MobilityEngage;
 import frc.robot.commands.OneConeEngage;
 import frc.robot.commands.OneConeMobilityEngage;
-import frc.robot.commands.RedOneConeMobile;
+// import frc.robot.commands.RedOneConeMobile;
 import frc.robot.commands.Scoring;
 import frc.robot.commands.Stow;
 import frc.robot.commands.Substation;
@@ -122,17 +123,19 @@ public class RobotContainer {
 
     led.setDefaultCommand(new SetColorMode());
 
-    // three pieces 
+    // three pieces
     // rememebr to fill in the csv files from reformatter
-    selecter.addOption("red three piece no bump", new ThreePieceAutons("/paths/"));
-    selecter.addOption("red three piece bump", new ThreePieceAutons("/paths/"));
-    selecter.addOption("blue three piece no bump", new ThreePieceAutons("/paths/"));
-    selecter.addOption("blue three peice bump", new ThreePieceAutons("/paths/"));
 
-    selecter.setDefaultOption("one and engage", new OneConeEngage());
-    selecter.addOption("blue one cone mobile", new BlueOneConeMobile());
-    selecter.addOption("red one cone mobile", new RedOneConeMobile());
+    selecter.addOption("mobility engage", new MobilityEngage());
     selecter.addOption("one cone mobile and engage", new OneConeMobilityEngage());
+    selecter.addOption("red three piece no bump", new ThreePieceAutons("/paths/red_three_piece_nobump.csv"));
+    // selecter.addOption("red three piece bump", new ThreePieceAutons("/paths/"));
+    selecter.addOption("blue three piece no bump", new ThreePieceAutons("/paths/blue_three_piece_nobump.csv"));
+    // selecter.addOption("blue three peice bump", new ThreePieceAutons("/paths/"));
+
+    // selecter.setDefaultOption("one and engage", new OneConeEngage());
+    // selecter.addOption("blue one cone mobile", new BlueOneConeMobile());
+    // selecter.addOption("red one cone mobile", new RedOneConeMobile());
     // selecter.addOption("one cube mobility engage", new OneCubeMobilityEngage());
     // selecter.addOption("red two piece no bump", new RedTwoPieceNoBump());
     // selecter.addOption("blue two piece no bump", new BlueTwoPieceNoBump());
@@ -154,9 +157,9 @@ public class RobotContainer {
     driver.getSTARTButton().onTrue(new InstantCommand(dt::reset, dt));
 
     driver.getAButton().onTrue(new InstantCommand(intake::retractIntake, intake));
-    driver.getYButton().onTrue(new InstantCommand(intake::extendIntake, intake));
-    driver.getXButton().onTrue(new InstantCommand(intake::lowerIntake, intake));
-    driver.getBButton().whileTrue(new LimelightLineUp());
+    driver.getXButton().onTrue(new InstantCommand(intake::extendIntake, intake));
+    driver.getYButton().onTrue(new InstantCommand(intake::lowerIntake, intake));
+    // driver.getBButton().whileTrue(new LimelightLineUp());
 
 
     manip.getYButton().onTrue(new Level3());
@@ -164,9 +167,16 @@ public class RobotContainer {
     manip.getAButton().onTrue(new Stow());
 
     //make is so when slide is fully in after scoring akul controller buzzes
-    manip.getLBButton().onTrue(new Scoring());
+    manip.getRBButton().onTrue(new Scoring());
     manip.getRightStickPress().onTrue(new Substation());
     
+    manip.getLBButton().onTrue(new InstantCommand(intake::runIn));
+    manip.getLBButton().onFalse(new InstantCommand(intake::stop));
+
+    manip.getMENUButton().onTrue(new InstantCommand(intake::runOut));
+    manip.getMENUButton().onFalse(new InstantCommand(intake::stop));
+
+
     manip.getSTARTButton().onTrue(new InstantCommand(gripper::toggleCubeMode, gripper));
   }
 

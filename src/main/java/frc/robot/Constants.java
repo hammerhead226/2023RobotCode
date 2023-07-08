@@ -131,6 +131,8 @@ public final class Constants {
 
   public static final double[] LINEAR_SLIDE_GAINS_HIGH = { 0.000049, 0.0000015, 0 };
   public static final double[] LINEAR_SLIDE_GAINS_LOW = { 0.000042, 0.00000125, 0 };
+  // public static final double[] LINEAR_SLIDE_GAINS_HIGH = { 0.000052, 0.0000015, 0 };
+  // public static final double[] LINEAR_SLIDE_GAINS_LOW = { 0.000043, 0.00000125, 0 };
   public static final boolean LS_SET_INVERTED = true;
   public static final double LS_THRESHOLD = 2000;
 
@@ -173,20 +175,29 @@ public final class Constants {
 
   public static final double CLOSING_DISTANCE = 8;
 
-  public static final double CUBE_VALUE = 1350;
-  public static final double CONE_VALUE = 2000;
+  public static final double CUBE_VALUE = 1500;
+  public static final double CONE_VALUE = 2300;
 
 
   //Scoring Setpoints
-  public static final double ELEVATOR_HIGH = -700;
-  public static final double ELEVATOR_MID = 400;
-  // public static final double ELEVATOR_HOLD = 1900;
-  public static final double ELEVATOR_HOLD = 2300;
-  public static final double ELEVATOR_INTAKE = 1700;
-  public static final double ELEVATOR_SUBSTATION = 50;
 
-  public static final double LS_HIGH = -56650;
-  public static final double LS_MID = -24500;
+  // // old stuff
+  // public static final double ELEVATOR_HIGH = -700;
+  // public static final double ELEVATOR_MID = 400;
+  // // public static final double ELEVATOR_HOLD = 1900;
+  // public static final double ELEVATOR_HOLD = 2300;
+  // public static final double ELEVATOR_INTAKE = 1700;
+  // public static final double ELEVATOR_SUBSTATION = -50;
+
+  public static final double ELEVATOR_HIGH = -700 + 50;
+  public static final double ELEVATOR_MID = 400 + 50;
+  // public static final double ELEVATOR_HOLD = 1900;
+  public static final double ELEVATOR_HOLD = 2300 + 50;
+  public static final double ELEVATOR_INTAKE = 1700 + 50;
+  public static final double ELEVATOR_SUBSTATION = -50 + 50;
+
+  public static final double LS_HIGH = -56000;
+  public static final double LS_MID = -25400;
   public static final double LS_RETRACTED = -1500;
   public static final double LS_SUBSTATION = -20000;
 
@@ -194,8 +205,8 @@ public final class Constants {
   public static final double ARM_HOLD = 5820;
   public static final double ARM_SCORE = 4680;
   public static final double ARM_STOW = 7110;
-  public static final double ARM_SUBSTATION = 5420;
-
+  // public static final double ARM_SUBSTATION = 5420;
+  public static final double ARM_SUBSTATION = 5200;
 
   // Limelight Constants
   public static final double LIMELIGHT_THRESH = 0.1;
