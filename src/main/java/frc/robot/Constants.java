@@ -121,7 +121,7 @@ public final class Constants {
   public static final double ELEVATOR_INTERVAL_MARKER = 2800;
   public static final double SRX_ENCODER_TICKS = 4096;
 
-  public static final double ELEVATOR_THRESHOLD = 100;
+  public static final double ELEVATOR_THRESHOLD = 1000;
 
 
 
@@ -189,14 +189,14 @@ public final class Constants {
   // public static final double ELEVATOR_INTAKE = 1700;
   // public static final double ELEVATOR_SUBSTATION = -50;
 
-  public static final double ELEVATOR_HIGH = -700 + 50;
-  public static final double ELEVATOR_MID = 400 + 50;
+  public static final double ELEVATOR_HIGH = -700 + 100;
+  public static final double ELEVATOR_MID = 400 + 100;
   // public static final double ELEVATOR_HOLD = 1900;
-  public static final double ELEVATOR_HOLD = 2300 + 50;
-  public static final double ELEVATOR_INTAKE = 1700 + 50;
-  public static final double ELEVATOR_SUBSTATION = -50 + 50;
+  public static final double ELEVATOR_HOLD = 2300 + 100;
+  public static final double ELEVATOR_INTAKE = 1700 + 100;
+  public static final double ELEVATOR_SUBSTATION = -50 + 100;
 
-  public static final double LS_HIGH = -56000;
+  public static final double LS_HIGH = -55500;
   public static final double LS_MID = -25400;
   public static final double LS_RETRACTED = -1500;
   public static final double LS_SUBSTATION = -20000;

@@ -104,7 +104,7 @@ public class ScoringStateManager extends SubsystemBase {
   //   return (0.8 * Math.abs(getIntakeState() - intake.get))
   // }
 
-  public boolean gripperPieceDetected() {
+  public boolean pieceDetected() {
     return gripper.pieceDetected();
   }
 

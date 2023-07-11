@@ -61,6 +61,7 @@ public class DriveTrain extends SubsystemBase {
             TalonFX steer = new TalonFX(RobotMap.STEER_MOTORS[i]);
 
             drive.configOpenloopRamp(0.25);
+            drive.setNeutralMode(NeutralMode.Brake);
 
             drives[i] = new LazyTalonFX(drive, Constants.TICKS_PER_METER);
             steers[i] = new LazyTalonFX(steer, Constants.TICKS_PER_METER);
@@ -79,9 +80,9 @@ public class DriveTrain extends SubsystemBase {
         config.gyro = gyro;
         config.modulePositions = Constants.MODULE_POSITIONS;
         config.translationalPIDGains = new double[]{1, 0.0, 0.0};
-        config.rotationalPIDGains = new double[]{0.65, 0.0, 0.0};
+        config.rotationalPIDGains = new double[]{1, 0.0, 0.0};
         config.drivePIDFGains = new double[]{0.05, 0.0, 0.0, 1.0/Constants.MAX_MODULE_SPEED};
-        config.steerPIDGains = new double[]{0.62, 0.0, 0.0};
+        config.steerPIDGains = new double[]{0.69, 0.0, 0.0};
         config.MAX_MODULE_SPEED = Constants.MAX_MODULE_SPEED;
         config.radius = Math.hypot(0.5794/2, 0.5794/2);
         config.numberOfModules = Constants.NUMBER_OF_MODULES;
@@ -182,7 +183,7 @@ public class DriveTrain extends SubsystemBase {
     //   for(int i=0; i < Constants.NUMBER_OF_MODULES; i++)
     //       SmartDashboard.putNumber("module offset " + i, swerve.getModuleRotationalPose(i));
     //   SmartDashboard.putNumber("gyro tilt", getGyroPitch());
-
+        
     //   SmartDashboard.putNumber("speed in t/s", saved.getVelocity());
     //   SmartDashboard.putNumber("speed in t/100ms", saved.getVelocityInTicks());
     //   double[] pose = swerve.getSwerveState();

@@ -53,7 +53,7 @@ public class SwerveModule {
 
         SmartDashboard.putNumber("velocity", velocity);
         SmartDashboard.putNumber("targetAngle", adjustedTargetAngle);
-        SmartDashboard.putNumber("steercoder", steercoder.getContinuousPosition());
+        SmartDashboard.putNumber("steercoder", steercoder.getContinuousPosition() % (2 * Math.PI));
         SmartDashboard.putNumber("steer", steerSpeed);
 
         double driveMotorOutput = velocity * kVelocity + driveController.calculate(drive.getVelocity(), velocity);

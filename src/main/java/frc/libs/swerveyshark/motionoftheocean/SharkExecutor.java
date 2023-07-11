@@ -52,7 +52,7 @@ public class SharkExecutor {
                     Double.parseDouble(data[4]),
                     Double.parseDouble(data[5]),
                     Double.parseDouble(data[6]),
-                    data[7]
+                    data.length > 7 ? data[7] : ""
             );
 
             executable.add(state);
@@ -79,12 +79,16 @@ public class SharkExecutor {
                 continue;
             }
 
-            toPose.accept(nexState.getAsArray());
             for(String event : eventStack) {
                 if(runnableHash.containsKey(event)) {
                     runnableHash.get(event).run();
                 }
             }
+
+            if(isFinished()) break;
+
+            toPose.accept(nexState.getAsArray());
+            
 
             hasExecuted = true;
         }

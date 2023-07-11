@@ -115,25 +115,6 @@ public class Swerve {
 
     //assume all vectors given are m/s
     private void control(double x, double y, double rotate) {
-
-        if (highSpeedMode) {
-            if (x == 0 && y == 0 && rotate == 0){
-                currentPercentSpeed = highPercentSpeed * initialSpeed;
-            }
-            
-            else if (currentPercentSpeed < highPercentSpeed) {
-                currentPercentSpeed += accelerationRate;
-            }
-        } else {
-            if (x == 0 && y == 0 && rotate == 0){
-                currentPercentSpeed = lowPercentSpeed * initialSpeed;
-            }
-            
-            else if (currentPercentSpeed < lowPercentSpeed) {
-                currentPercentSpeed += accelerationRate;
-            }
-        }
-
         double chassisHeading = gyro.getYaw();
         // double chassisHeading = 0;
 
@@ -176,7 +157,11 @@ public class Swerve {
         double adjustedXLinearVel = xLinearVelocity + translationalPIDController.calculate(currentSwerveState[0], position[0]);
         double adjustedYLinearVel = yLinearVelocity + translationalPIDController.calculate(currentSwerveState[1], position[1]);
 
+        SmartDashboard.putNumber("y error/t", position[0] - currentSwerveState[0]);
+
         double adjustedAngularVel = angularVelocity + rotationalPIDController.calculate(currentSwerveState[2], position[2]);
+
+        SmartDashboard.putNumber("rotate error/t", position[2] - currentSwerveState[2]);
 
         SmartDashboard.putNumber("adjustedX", adjustedXLinearVel);
         SmartDashboard.putNumber("adjustedY", adjustedYLinearVel);
