@@ -39,7 +39,9 @@ public class ThreePieceAutons extends SequentialCommandGroup {
           e.printStackTrace();
         }
       }, DriveTrain.getInstance()),
-      new InstantCommand(this::setStartTime, Robot.m_robotContainer.lock).alongWith(new RunCommand(()-> SharkExecutor.executeNextAvailableStep(System.currentTimeMillis()/1000. - startTime)).until(SharkExecutor::isFinished))
+      new InstantCommand(this::setStartTime, Robot.m_robotContainer.lock)
+      .alongWith(new RunCommand(()-> SharkExecutor.executeNextAvailableStep(System.currentTimeMillis()/1000. - startTime))
+                 .until(SharkExecutor::isFinished))
     );
   }
 
