@@ -2,13 +2,11 @@ package frc.libs.swerveyshark;
 
 import frc.libs.wrappers.PIDController;
 import frc.libs.electronics.IMU.Gyro;
-import frc.libs.electronics.IMU.Pigeon2IMU;
 import frc.libs.electronics.motors.LazyMotorController;
 import frc.libs.electronics.encoders.ThreadedEncoder;
 
 import java.util.Arrays;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Swerve {
     private final SwerveModule[] modules;
@@ -157,15 +155,15 @@ public class Swerve {
         double adjustedXLinearVel = xLinearVelocity + translationalPIDController.calculate(currentSwerveState[0], position[0]);
         double adjustedYLinearVel = yLinearVelocity + translationalPIDController.calculate(currentSwerveState[1], position[1]);
 
-        SmartDashboard.putNumber("y error/t", position[0] - currentSwerveState[0]);
+        // SmartDashboard.putNumber("y error/t", position[0] - currentSwerveState[0]);
 
         double adjustedAngularVel = angularVelocity + rotationalPIDController.calculate(currentSwerveState[2], position[2]);
 
-        SmartDashboard.putNumber("rotate error/t", position[2] - currentSwerveState[2]);
+        // SmartDashboard.putNumber("rotate error/t", position[2] - currentSwerveState[2]);
 
-        SmartDashboard.putNumber("adjustedX", adjustedXLinearVel);
-        SmartDashboard.putNumber("adjustedY", adjustedYLinearVel);
-        SmartDashboard.putNumber("adjustedR", adjustedAngularVel*radius);
+        // SmartDashboard.putNumber("adjustedX", adjustedXLinearVel);
+        // SmartDashboard.putNumber("adjustedY", adjustedYLinearVel);
+        // SmartDashboard.putNumber("adjustedR", adjustedAngularVel*radius);
 
         control(adjustedXLinearVel, adjustedYLinearVel, adjustedAngularVel * radius);
     }

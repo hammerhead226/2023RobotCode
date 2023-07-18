@@ -1,6 +1,5 @@
 package frc.libs.swerveyshark;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.libs.wrappers.PIDController;
 import frc.libs.electronics.motors.LazyMotorController;
 import frc.libs.electronics.encoders.ThreadedEncoder;
@@ -50,11 +49,6 @@ public class SwerveModule {
         velocity *= velocityMultiplier;
 
         double steerSpeed = steerController.calculate(error);
-
-        SmartDashboard.putNumber("velocity", velocity);
-        SmartDashboard.putNumber("targetAngle", adjustedTargetAngle);
-        SmartDashboard.putNumber("steercoder", steercoder.getContinuousPosition() % (2 * Math.PI));
-        SmartDashboard.putNumber("steer", steerSpeed);
 
         double driveMotorOutput = velocity * kVelocity + driveController.calculate(drive.getVelocity(), velocity);
 

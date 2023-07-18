@@ -128,10 +128,10 @@ public class RobotContainer {
 
     selecter.addOption("mobility engage", new MobilityEngage());
     selecter.addOption("one cone mobile and engage", new OneConeMobilityEngage());
-    selecter.addOption("red three piece no bump", new ThreePieceAutons("/paths/red_three_piece_nobump.csv"));
-    // selecter.addOption("red three piece bump", new ThreePieceAutons("/paths/"));
-    selecter.addOption("blue three piece no bump", new ThreePieceAutons("/paths/blue_three_piece_nobump.csv"));
-    // selecter.addOption("blue three peice bump", new ThreePieceAutons("/paths/"));
+    selecter.addOption("red three piece no bump", new ThreePieceAutons("red3nb"));
+    selecter.addOption("red three piece bump", new ThreePieceAutons("red3b"));
+    selecter.addOption("blue three piece no bump", new ThreePieceAutons("blue3nb"));
+    selecter.addOption("blue three peice bump", new ThreePieceAutons("blue3b"));
 
     // selecter.setDefaultOption("one and engage", new OneConeEngage());
     // selecter.addOption("blue one cone mobile", new BlueOneConeMobile());

@@ -149,19 +149,19 @@ public final class Constants {
   // Intake Constants
   public static final double ROLLER_RUN_SPEED = 0.65;
   // public static final double[] INTAKE_GAINS = { 0.0009, 0, 0 };
-  public static final double[] INTAKE_GAINS = { 0.0011, 0, 0 };
+  public static final double[] INTAKE_GAINS = { 0.01, 0, 0 };
   public static final int INTAKE_OFFSET = 0;
 
-  public static final double INTAKE_EXTEND = 1500;
-  public static final double INTAKE_LOWERED = 1000;
-  public static final double INTAKE_RETRACT = 700;
+  public static final double INTAKE_EXTEND = 500;
+  public static final double INTAKE_LOWERED = 300;
+  public static final double INTAKE_RETRACT = 0;
 
   public static final double INTAKE_THRESHOLD = 100;
       
   // 3000 to be fully retracted
   
-  public static final double MAX_SPEED_UP = 0.5; //extend
-  public static final double MAX_SPEED_DOWN = 0.5; //retract
+  public static final double MAX_SPEED_UP = 1; //extend
+  public static final double MAX_SPEED_DOWN = 1; //retract
 
 
   // Gripper Constants

@@ -8,8 +8,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
-import frc.libs.swerveyshark.motionoftheocean.SharkExecutor;
-
+import frc.libs.swerveyshark.sharkexe.SharkExecutor;
 import frc.robot.Constants;
 import frc.robot.Robot;
 import frc.robot.subsystems.ScoringStateManager;

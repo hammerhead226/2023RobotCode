@@ -1,4 +1,4 @@
-package frc.libs.swerveyshark.motionoftheocean;
+package frc.libs.swerveyshark.sharkexe;
 
 public class SharkState {
 

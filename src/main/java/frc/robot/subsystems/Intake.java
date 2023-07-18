@@ -17,7 +17,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 // import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.libs.swerveyshark.motionoftheocean.SharkExecutor;
+import frc.libs.swerveyshark.sharkexe.SharkExecutor;
 import frc.libs.wrappers.GenericMotor;
 import frc.libs.wrappers.LimeLight;
 import frc.robot.Constants;
@@ -93,7 +93,7 @@ public class Intake extends SubsystemBase {
       case EXTEND:
         target = Constants.INTAKE_EXTEND;
         double extendSpeed = intakePID.calculate(intakeEncoder.getSensorPose(), target);
-        if (extendSpeed > Constants.MAX_SPEED_UP) {
+        if (Math.abs(extendSpeed) > Constants.MAX_SPEED_UP) {
           extendSpeed = Constants.MAX_SPEED_UP;
         }
         control(extendSpeed);
