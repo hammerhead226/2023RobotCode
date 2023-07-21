@@ -84,7 +84,6 @@ public class Robot extends TimedRobot {
   @Override
   public void disabledInit() {
     state = Phase.DISABLED;
-    DriveTrain.getInstance().stopPlayback();
   }
 
   @Override

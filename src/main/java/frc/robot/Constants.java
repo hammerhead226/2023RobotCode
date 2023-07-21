@@ -18,7 +18,7 @@ package frc.robot;
  */
 public final class Constants {
   // Controller Configuration
-  public static final double CONTROLLER_DEADBAND = 0.15;
+  public static final double CONTROLLER_DEADBAND = 0.1;
 
   public static final String CANBUS = "CAN Bus 2";
 
@@ -149,7 +149,7 @@ public final class Constants {
   // Intake Constants
   public static final double ROLLER_RUN_SPEED = 0.65;
   // public static final double[] INTAKE_GAINS = { 0.0009, 0, 0 };
-  public static final double[] INTAKE_GAINS = { 0.01, 0, 0 };
+  public static final double[] INTAKE_GAINS = { 0.0075, 0, 0 };
   public static final int INTAKE_OFFSET = 0;
 
   public static final double INTAKE_EXTEND = 500;
@@ -196,8 +196,8 @@ public final class Constants {
   public static final double ELEVATOR_INTAKE = 1700 + 100;
   public static final double ELEVATOR_SUBSTATION = -50 + 100;
 
-  public static final double LS_HIGH = -55500;
-  public static final double LS_MID = -25400;
+  public static final double LS_HIGH = -61000;
+  public static final double LS_MID = -31000;
   public static final double LS_RETRACTED = -1500;
   public static final double LS_SUBSTATION = -20000;
 

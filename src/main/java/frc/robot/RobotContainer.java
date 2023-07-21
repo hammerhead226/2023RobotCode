@@ -159,6 +159,7 @@ public class RobotContainer {
     driver.getAButton().onTrue(new InstantCommand(intake::retractIntake, intake));
     driver.getXButton().onTrue(new InstantCommand(intake::extendIntake, intake));
     driver.getYButton().onTrue(new InstantCommand(intake::lowerIntake, intake));
+    driver.getRBButton().onTrue(new InstantCommand(dt::toggleSpeed, dt));
     // driver.getBButton().whileTrue(new LimelightLineUp());
     // driver.getBButton().whileTrue(new RunCommand(() -> dt.control(0, 0.2, 0)));
     // driver.getBButton().onFalse(new InstantCommand(() -> dt.control(0, 0, 0)));

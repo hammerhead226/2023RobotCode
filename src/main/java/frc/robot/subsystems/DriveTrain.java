@@ -59,7 +59,7 @@ public class DriveTrain extends SubsystemBase {
             TalonFX drive = new TalonFX(RobotMap.DRIVE_MOTORS[i]);
             TalonFX steer = new TalonFX(RobotMap.STEER_MOTORS[i]);
 
-            drive.configOpenloopRamp(0.25);
+            drive.configOpenloopRamp(0.1);
             drive.setNeutralMode(NeutralMode.Brake);
 
             drives[i] = new LazyTalonFX(drive, Constants.TICKS_PER_METER);
@@ -108,7 +108,7 @@ public class DriveTrain extends SubsystemBase {
             //                                                                                 SharkExecutor.getState().getAsArray()[3],
             //                                                                                 SharkExecutor.getState().getAsArray()[4]));
         }
-        else if(!driveTrainLock) swerve.controlWithPercent(x, y, 0.6*rotate);
+        else if(!driveTrainLock) swerve.controlWithPercent(x, y, 0.8*rotate);
 
     }
 
@@ -126,10 +126,6 @@ public class DriveTrain extends SubsystemBase {
 
     public boolean atSetpoint() {
         return swerve.atSetpoint();
-    }
-
-    public void toggleSpeed() {
-        swerve.toggleSpeed();
     }
 
     public void togglePlayback() {
@@ -156,6 +152,12 @@ public class DriveTrain extends SubsystemBase {
         // return Math.abs(gyro.getTilt()) > Constants.DRIVETRAIN_TILT_THRESHOLD;
         return gyro.getRoll() > Constants.DRIVETRAIN_TILT_THRESHOLD || gyro.getRoll() < -9;
     }
+    private boolean isHighSpeed = false;
+    public void toggleSpeed() {
+        if(isHighSpeed) swerve.changeMaxVelocity(3.5);
+        else swerve.changeMaxVelocity(Constants.MAX_MODULE_SPEED);
+        isHighSpeed = !isHighSpeed;
+    }
 
     public boolean isChassisStable() {
         return Math.abs(gyro.getRoll()) < 4.5;
@@ -179,6 +181,7 @@ public class DriveTrain extends SubsystemBase {
     
     @Override
     public void periodic() {
+        SmartDashboard.putBoolean("togle ", isHighSpeed);
     //   for(int i=0; i < Constants.NUMBER_OF_MODULES; i++)
     //       SmartDashboard.putNumber("module offset " + i, swerve.getModuleRotationalPose(i));
     //   SmartDashboard.putNumber("gyro tilt", getGyroPitch());

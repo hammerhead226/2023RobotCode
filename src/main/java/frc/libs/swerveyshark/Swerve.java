@@ -106,6 +106,10 @@ public class Swerve {
         );
     }
 
+    public void changeMaxVelocity(double mV) {
+        this.maxModuleSpeed = mV;
+    }
+
     //this is the controller inputed
     public void controlWithPercent(double x, double y, double rotate) {
         control(x * maxModuleSpeed, y*maxModuleSpeed, -rotate*maxModuleSpeed);
