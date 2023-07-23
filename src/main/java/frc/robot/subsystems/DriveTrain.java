@@ -109,8 +109,9 @@ public class DriveTrain extends SubsystemBase {
             //                                                                                 SharkExecutor.getState().getAsArray()[3],
             //                                                                                 SharkExecutor.getState().getAsArray()[4]));
         }
-        else if(!driveTrainLock) swerve.controlWithPercent(x, y, 0.8*rotate);
-
+        else if(!driveTrainLock) {
+            swerve.controlWithPercent(Math.pow(x, 2), Math.pow(y, 2), Math.pow(rotate, 2));
+        }
     }
 
     public void reset() {
@@ -157,11 +158,11 @@ public class DriveTrain extends SubsystemBase {
         // return Math.abs(gyro.getTilt()) > Constants.DRIVETRAIN_TILT_THRESHOLD;
         return gyro.getRoll() > Constants.DRIVETRAIN_TILT_THRESHOLD || gyro.getRoll() < -9;
     }
-    private boolean isHighSpeed = false;
+    private boolean isLowSpeed = true;
     public void toggleSpeed() {
-        if(isHighSpeed) swerve.changeMaxVelocity(3.5);
+        if(isLowSpeed) swerve.changeMaxVelocity(3.5);
         else swerve.changeMaxVelocity(Constants.MAX_MODULE_SPEED);
-        isHighSpeed = !isHighSpeed;
+        isLowSpeed = !isLowSpeed;
     }
 
     public boolean isChassisStable() {
@@ -186,7 +187,7 @@ public class DriveTrain extends SubsystemBase {
     
     @Override
     public void periodic() {
-        SmartDashboard.putBoolean("togle ", isHighSpeed);
+        SmartDashboard.putBoolean("togle ", isLowSpeed);
 
         SmartDashboard.putNumber("Controller input", Robot.m_robotContainer.driver.getLeftJoyX());
     //   for(int i=0; i < Constants.NUMBER_OF_MODULES; i++)
