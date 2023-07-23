@@ -22,6 +22,7 @@ import frc.libs.wrappers.GenericEncoder;
 import frc.libs.wrappers.GenericMotor;
 import frc.libs.wrappers.Gyro;
 import frc.robot.Constants;
+import frc.robot.Robot;
 import frc.robot.RobotMap;
 
 
@@ -116,6 +117,10 @@ public class DriveTrain extends SubsystemBase {
         swerve.reset();
     }
 
+    public void resetFlip() {
+        swerve.resetFlip();
+    }
+
     public void toPose(double[] target, double linearVelocity, double angularVelocity, double heading) {
         swerve.setSwerveState(target, linearVelocity, angularVelocity, heading);
     }
@@ -182,6 +187,8 @@ public class DriveTrain extends SubsystemBase {
     @Override
     public void periodic() {
         SmartDashboard.putBoolean("togle ", isHighSpeed);
+
+        SmartDashboard.putNumber("Controller input", Robot.m_robotContainer.driver.getLeftJoyX());
     //   for(int i=0; i < Constants.NUMBER_OF_MODULES; i++)
     //       SmartDashboard.putNumber("module offset " + i, swerve.getModuleRotationalPose(i));
     //   SmartDashboard.putNumber("gyro tilt", getGyroPitch());

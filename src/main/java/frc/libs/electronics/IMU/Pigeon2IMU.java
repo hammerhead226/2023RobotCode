@@ -43,4 +43,9 @@ public class Pigeon2IMU implements Gyro<Pigeon2> {
     public void reset() {
         gyro.setYaw(0);
     }
+
+    @Override
+    public void resetFlip() {
+        gyro.setYaw(180);
+    }
 }

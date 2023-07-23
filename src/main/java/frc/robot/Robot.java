@@ -51,7 +51,7 @@ public class Robot extends TimedRobot {
     state = Phase.DISABLED;
     try {
       SharkExecutor.loadAndConfigurePath("blue3nb", "/paths/blue_three_piece_nobump_wip.csv", (target) -> DriveTrain.getInstance().toPose(target));
-      SharkExecutor.loadAndConfigurePath("red3nb", "/paths/red_three_piece_nobump.csv", (target) -> DriveTrain.getInstance().toPose(target));
+      // SharkExecutor.loadAndConfigurePath("red3nb", "/paths/red_three_piece_nobump_wip.csv", (target) -> DriveTrain.getInstance().toPose(target));
       SharkExecutor.loadAndConfigurePath("blue3b", "/paths/blue_three_piece_bump.csv", (target) -> DriveTrain.getInstance().toPose(target));
       SharkExecutor.loadAndConfigurePath("red3b", "/paths/red_three_piece_bump.csv", (target) -> DriveTrain.getInstance().toPose(target));
     } catch (IOException e) {
@@ -103,6 +103,8 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
+    Robot.m_robotContainer.dt.resetFlip();
+    // Robot.m_robotContainer.dt.toggleAuto();
     // This makes sure that the autonomous stops running when
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove

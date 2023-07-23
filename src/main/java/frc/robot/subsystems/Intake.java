@@ -71,7 +71,7 @@ public class Intake extends SubsystemBase {
     intakeTucked = false;
 
     //TODO:: change this later 
-    intakePosition = IntakePosition.LOWER;
+    intakePosition = IntakePosition.RETRACT;
 
     SharkExecutor.createRunnable("intake.extend", this::extendIntake);
     SharkExecutor.createRunnable("intake.runIn", this::runIn);

@@ -149,12 +149,12 @@ public final class Constants {
   // Intake Constants
   public static final double ROLLER_RUN_SPEED = 0.65;
   // public static final double[] INTAKE_GAINS = { 0.0009, 0, 0 };
-  public static final double[] INTAKE_GAINS = { 0.0075, 0, 0 };
+  public static final double[] INTAKE_GAINS = { 0.0015, 0, 0 };
   public static final int INTAKE_OFFSET = 0;
 
-  public static final double INTAKE_EXTEND = 500;
-  public static final double INTAKE_LOWERED = 300;
-  public static final double INTAKE_RETRACT = 0;
+  public static final double INTAKE_EXTEND = 500 + 2800;
+  public static final double INTAKE_LOWERED = 300 + 2500;
+  public static final double INTAKE_RETRACT = 0 + 2200;
 
   public static final double INTAKE_THRESHOLD = 100;
       
@@ -211,6 +211,8 @@ public final class Constants {
   // Limelight Constants
   public static final double LIMELIGHT_THRESH = 0.1;
   public static final double ROTATE_THRESH = Math.toRadians(25);
+  public static final double TRANSLATION_CUTOFF_THRESH = 0;
+  public static final double ROTATE_CUTOFF_THRESH = 0;
   // public static final double[] LIMELIGHT_GAINS = {0.11, 0, 0};
 
 

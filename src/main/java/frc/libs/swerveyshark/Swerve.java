@@ -39,6 +39,8 @@ public class Swerve {
 
     private double[] target;
 
+    private boolean isFlipped;
+
     public Swerve(
             LazyMotorController<?>[] drives,
             LazyMotorController<?>[] steers,
@@ -70,7 +72,9 @@ public class Swerve {
         this.gyro = gyro;
 
         this.target = new double[3];
-
+        
+        this.isFlipped = false;
+        
         for(int i = 0; i < numberOfModules; i++) {
             modules[i] = new SwerveModule(
                     drives[i],
@@ -197,6 +201,19 @@ public class Swerve {
             mod.reset();
         }
         gyro.reset();
+        isFlipped = false;
+    }
+
+    public void resetFlip() {
+        for(SwerveModule mod : modules) {
+            mod.reset();
+        }
+        gyro.resetFlip();
+        isFlipped = true;
+    }
+
+    public boolean getIsFlipped() {
+        return isFlipped;
     }
 
     public boolean atSetpoint() {

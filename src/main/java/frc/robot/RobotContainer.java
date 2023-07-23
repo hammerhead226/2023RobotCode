@@ -27,12 +27,18 @@ import frc.robot.subsystems.Elevator;
 import frc.libs.wrappers.Controller;
 import frc.robot.commands.AutoBalance;
 import frc.robot.commands.BlueOneConeMobile;
+import frc.robot.commands.EmptyAuto;
 import frc.robot.commands.Level2;
 import frc.robot.commands.Level3;
 import frc.robot.commands.LimelightLineUp;
 import frc.robot.commands.MobilityEngage;
 import frc.robot.commands.OneConeEngage;
+import frc.robot.commands.OneConeLowMobilityEngage;
 import frc.robot.commands.OneConeMobilityEngage;
+import frc.robot.commands.OneCubeLow;
+import frc.robot.commands.OneCubeMobilityEngage;
+import frc.robot.commands.OnePieceLowMobility;
+import frc.robot.commands.ScoreConeOrCube;
 // import frc.robot.commands.RedOneConeMobile;
 import frc.robot.commands.Scoring;
 import frc.robot.commands.Stow;
@@ -116,22 +122,31 @@ public class RobotContainer {
     //      elevator
     //     ));
 
-    gripper.setDefaultCommand(new RunCommand(gripper::run, gripper));
+    // gripper.setDefaultCommand(new RunCommand(gripper::run, gripper));
     intake.setDefaultCommand(new RunCommand(intake::run, intake));
-    linearSlide.setDefaultCommand(new RunCommand(linearSlide::run, linearSlide));
-    elevator.setDefaultCommand(new RunCommand(elevator::run, elevator));
+    // linearSlide.setDefaultCommand(new RunCommand(linearSlide::run, linearSlide));
+    // elevator.setDefaultCommand(new RunCommand(elevator::run, elevator));
 
     led.setDefaultCommand(new SetColorMode());
 
     // three pieces
     // rememebr to fill in the csv files from reformatter
+    selecter.addOption("red one cone low mobility engage", new OneConeLowMobilityEngage("Red"));
+    selecter.addOption("blue one cone low mobility engage", new OneConeLowMobilityEngage("Blue"));
 
+    selecter.addOption("one piece low mobility", new OnePieceLowMobility());
+
+    selecter.addOption("score cone or cube", new ScoreConeOrCube());
+    selecter.addOption("score cube low", new OneCubeLow());
     selecter.addOption("mobility engage", new MobilityEngage());
     selecter.addOption("one cone mobile and engage", new OneConeMobilityEngage());
+    selecter.addOption("one cube mobile and engage", new OneCubeMobilityEngage());
     selecter.addOption("red three piece no bump", new ThreePieceAutons("red3nb"));
     selecter.addOption("red three piece bump", new ThreePieceAutons("red3b"));
     selecter.addOption("blue three piece no bump", new ThreePieceAutons("blue3nb"));
     selecter.addOption("blue three peice bump", new ThreePieceAutons("blue3b"));
+
+    selecter.addOption("empty", new EmptyAuto());
 
     // selecter.setDefaultOption("one and engage", new OneConeEngage());
     // selecter.addOption("blue one cone mobile", new BlueOneConeMobile());
@@ -153,6 +168,7 @@ public class RobotContainer {
   }
   
   private void configureBindings() {
+    driver.getMENUButton().onTrue(new InstantCommand(dt::resetFlip, dt));
 
     driver.getSTARTButton().onTrue(new InstantCommand(dt::reset, dt));
 

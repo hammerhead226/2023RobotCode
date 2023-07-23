@@ -42,6 +42,13 @@ public class Pigeon implements Gyro<PigeonIMU> {
     }
 
     @Override
+    public void resetFlip() {
+        // TODO Auto-generated method stub
+        gyro.setYaw(180);
+        
+    }
+
+    @Override
     public void setYaw(double value) {
         // TODO Auto-generated method stub
         gyro.setYaw(value);

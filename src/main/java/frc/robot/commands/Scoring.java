@@ -28,8 +28,8 @@ public class Scoring extends SequentialCommandGroup {
       new WaitCommand(0.5),
       new InstantCommand(Robot.m_robotContainer.manager::stopClaw),
       new InstantCommand(() -> Robot.m_robotContainer.manager.setArmTarget(Constants.ARM_HOLD)),
-      new Stow(),
-      new InstantCommand(() -> Robot.m_robotContainer.manager.setIntakeHigh(true), Robot.m_robotContainer.lock)
+      new Stow()
+      // new InstantCommand(() -> Robot.m_robotContainer.manager.setIntakeHigh(true), Robot.m_robotContainer.lock)
     );
   }
 }

@@ -13,4 +13,6 @@ public interface Gyro<T> {
     public void setYaw(double value);
 
     public void reset();
+
+    public void resetFlip();
 }
