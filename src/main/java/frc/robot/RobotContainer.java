@@ -100,13 +100,21 @@ public class RobotContainer {
                                           .andThen(new InstantCommand(() -> RobotContainer.driver.getJoystick().setRumble(RumbleType.kBothRumble, 0)));
 
   SendableChooser<Command> selecter = new SendableChooser<>();
+
+  private double clamp(double value, double min, double max) {
+    return Math.max(min, Math.min(value, max));
+  }
+
+  private final double ADJ_SPEED = 0.75;
   
   public RobotContainer() {
     configureBindings();
 
     dt.setDefaultCommand(
       new RunCommand(
-        () -> dt.control(driver.getLeftJoyX(), driver.getLeftJoyY(), driver.getRightJoyX()),
+        () -> dt.control(clamp(Math.pow(driver.getLeftJoyX(), 2), 0, ADJ_SPEED) * (driver.getLeftJoyX() < 0 ? -1 : 1),
+                         clamp(Math.pow(driver.getLeftJoyY(), 2), 0, ADJ_SPEED) * (driver.getLeftJoyY() < 0 ? -1 : 1), 
+                         clamp(Math.pow(driver.getRightJoyX(), 2), 0, ADJ_SPEED) * (driver.getRightJoyX() < 0 ? -1 : 1)),
         dt
         ));
 
