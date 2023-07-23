@@ -32,6 +32,7 @@ import frc.robot.commands.Level2;
 import frc.robot.commands.Level3;
 import frc.robot.commands.LimelightLineUp;
 import frc.robot.commands.MobilityEngage;
+import frc.robot.commands.OneAndHalfPieceMobility;
 import frc.robot.commands.OneConeEngage;
 import frc.robot.commands.OneConeLowMobilityEngage;
 import frc.robot.commands.OneConeMobilityEngage;
@@ -139,6 +140,8 @@ public class RobotContainer {
 
     // three pieces
     // rememebr to fill in the csv files from reformatter
+
+    selecter.addOption("one and half piece mobility", new OneAndHalfPieceMobility());
     selecter.addOption("red one cone low mobility engage", new OneConeLowMobilityEngage("Red"));
     selecter.addOption("blue one cone low mobility engage", new OneConeLowMobilityEngage("Blue"));
 
