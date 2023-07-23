@@ -54,6 +54,9 @@ public class Robot extends TimedRobot {
       // SharkExecutor.loadAndConfigurePath("red3nb", "/paths/red_three_piece_nobump_wip.csv", (target) -> DriveTrain.getInstance().toPose(target));
       SharkExecutor.loadAndConfigurePath("blue3b", "/paths/blue_three_piece_bump.csv", (target) -> DriveTrain.getInstance().toPose(target));
       SharkExecutor.loadAndConfigurePath("red3b", "/paths/red_three_piece_bump.csv", (target) -> DriveTrain.getInstance().toPose(target));
+
+      SharkExecutor.loadAndConfigurePath("blue1.5b", "/paths/blue_one-and-half-piece.csv", (target) -> DriveTrain.getInstance().toPose(target));
+      SharkExecutor.loadAndConfigurePath("red1.5b", "/paths/red_one-and-half-piece.csv", (target) -> DriveTrain.getInstance().toPose(target));
     } catch (IOException e) {
       // TODO Auto-generated catch block
       e.printStackTrace();
