@@ -4,8 +4,6 @@
 
 package frc.robot.commands;
 
-import org.opencv.core.Mat;
-
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.libs.wrappers.LimeLight;
@@ -40,17 +38,28 @@ public class LimelightLineUp extends CommandBase {
   public void execute() {
     SmartDashboard.putBoolean("moving?????!?!??!", true);
     if (LimeLight.getValue() == 1) {
-      SmartDashboard.putBoolean("does it reach?????!?!??!", true);
-      // if (blueAlliance) {
-      //   velocityMultiplier *= -1;
-      // } 
-      gyroYaw = DriveTrain.getInstance().getGyroYaw();
+      double translationSpeed;
+      double rotateSpeed;
+
       velocityMultiplier = gyroYaw < 0 ? -1 : 1;
-      DriveTrain.getInstance().control
+      
+      //TODO:: GIVE THESE THRESHOLDS ACTUAL VALUES LOL
+      if (Math.abs(2 - LimeLight.getHorizontalOffset()) >= Constants.TRANSLATION_CUTOFF_THRESH) {
+        translationSpeed = DriveTrain.getInstance().getLimelightController().calculate(LimeLight.getHorizontalOffset(), 2);
+      } else {
+        translationSpeed = 0;
+      }
+
+      if (Math.PI - Math.abs(gyroYaw % (2 * Math.PI)) >= Constants.ROTATE_CUTOFF_THRESH) {
+        rotateSpeed = -DriveTrain.getInstance().getRotateController().calculate(Math.abs(gyroYaw % (2 * Math.PI)), Math.PI) * velocityMultiplier;
+      } else {
+        rotateSpeed = 0;
+      }
+      
+      gyroYaw = DriveTrain.getInstance().getGyroYaw();
+      
+      DriveTrain.getInstance().control(translationSpeed, Robot.m_robotContainer.driver.getLeftJoyY(), rotateSpeed);
       // TODO:: may need to change later but field element at woodshop is aligned with tx is 3.5
-      (DriveTrain.getInstance().getLimelightController().calculate(LimeLight.getHorizontalOffset(), 2), 
-      Robot.m_robotContainer.driver.getLeftJoyY(), 
-      -DriveTrain.getInstance().getRotateController().calculate(Math.abs(gyroYaw % (2 * Math.PI)), Math.PI) * velocityMultiplier);
     }
   }
 
@@ -67,6 +76,7 @@ public class LimelightLineUp extends CommandBase {
     //   SmartDashboard.putBoolean("done?????!?!??!", false);
     // }
     // the limelight is lining up before the gyro can correct itself ?
+
     return Math.abs(LimeLight.getHorizontalOffset()) <= Constants.LIMELIGHT_THRESH && Math.abs(gyroYaw % (2 * Math.PI)) <= Constants.ROTATE_THRESH;
     // return false;
   }

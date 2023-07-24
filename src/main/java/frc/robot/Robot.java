@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import java.io.IOException;
+
 import org.opencv.video.Video;
 
 import edu.wpi.first.cameraserver.CameraServer;
@@ -14,8 +16,8 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.libs.swerveyshark.MotionOfTheOcean;
-import frc.libs.swerveyshark.motionoftheocean.SharkExecutor;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import frc.libs.swerveyshark.sharkexe.SharkExecutor;
 // import frc.robot.commands.BlueOneConeMobile;
 import frc.robot.subsystems.DriveTrain;
 
@@ -47,9 +49,18 @@ public class Robot extends TimedRobot {
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
     state = Phase.DISABLED;
+    try {
+      SharkExecutor.loadAndConfigurePath("blue3nb", "/paths/blue_three_piece_nobump_wip.csv", (target) -> DriveTrain.getInstance().toPose(target));
+      // SharkExecutor.loadAndConfigurePath("red3nb", "/paths/red_three_piece_nobump_wip.csv", (target) -> DriveTrain.getInstance().toPose(target));
+      SharkExecutor.loadAndConfigurePath("blue3b", "/paths/blue_three_piece_bump.csv", (target) -> DriveTrain.getInstance().toPose(target));
+      SharkExecutor.loadAndConfigurePath("red3b", "/paths/red_three_piece_bump.csv", (target) -> DriveTrain.getInstance().toPose(target));
+    } catch (IOException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
 
-    PortForwarder.add(1181, "hammerheads-jetson.local", 1181);
-    PortForwarder.add(1182, "hammerheads-jetson.local", 1182);
+    // PortForwarder.add(1181, "hammerheads-jetson.local", 1181);
+    // PortForwarder.add(1182, "hammerheads-jetson.local", 1182);
     // m_robotContainer.vision.shutdown();
   }
 
@@ -73,9 +84,6 @@ public class Robot extends TimedRobot {
   @Override
   public void disabledInit() {
     state = Phase.DISABLED;
-    SmartDashboard.putBoolean("auto balance running", false);
-    DriveTrain.getInstance().stopPlayback();
-    MotionOfTheOcean.Executor.resetExecutor(DriveTrain.getInstance()::reset);
   }
 
   @Override
@@ -91,19 +99,12 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during autonomous. */
   @Override
-  public void autonomousPeriodic() {
-    double elaspedTime;
-    double startTime;
-
-    
-
-    if(!SharkExecutor.isFinished()) {
-      elaspedTime = System.currentTimeMillis()/1000. - SharkExecutor.startTime;
-    }
-  }
+  public void autonomousPeriodic() {}
 
   @Override
   public void teleopInit() {
+    Robot.m_robotContainer.dt.resetFlip();
+    // Robot.m_robotContainer.dt.toggleAuto();
     // This makes sure that the autonomous stops running when
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove

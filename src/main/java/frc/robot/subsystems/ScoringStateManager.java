@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.libs.wrappers.Controller;
 import frc.robot.Constants;
@@ -28,7 +29,9 @@ public class ScoringStateManager extends SubsystemBase {
     manip = RobotContainer.getManip();
   }
 
-  // public void vibrate
+  public void vibrate(Controller controller) {
+    controller.vibrate();
+  }
 
   public double getIntakeState() {
     return intake.getIntake();
@@ -101,7 +104,7 @@ public class ScoringStateManager extends SubsystemBase {
   //   return (0.8 * Math.abs(getIntakeState() - intake.get))
   // }
 
-  public boolean gripperPieceDetected() {
+  public boolean pieceDetected() {
     return gripper.pieceDetected();
   }
 

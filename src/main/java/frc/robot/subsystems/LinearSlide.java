@@ -28,6 +28,8 @@ public class LinearSlide extends SubsystemBase {
   public LinearSlide() {
     slider = new TalonFX(RobotMap.SLIDER_PORT,"CAN Bus 2");
     slider.setInverted(Constants.LS_SET_INVERTED);
+
+    slider.configOpenloopRamp(0.6);
     
     slider.setNeutralMode(NeutralMode.Brake);
     slider.configNeutralDeadband(0.1);
@@ -85,7 +87,7 @@ public class LinearSlide extends SubsystemBase {
       // motorSpeed = Math.abs(motorSpeed) < 0.09 ? 0 : motorSpeed;
       control(motorSpeed);
     }
-    SmartDashboard.putNumber("slide deez nuts into yo", slider.getSelectedSensorPosition());
+    SmartDashboard.putNumber("linear slide extension", slider.getSelectedSensorPosition());
   }
 
   public void setTarget(double t) {

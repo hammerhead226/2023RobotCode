@@ -7,6 +7,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.Constants;
 import frc.robot.Robot;
@@ -29,7 +30,8 @@ public class Substation extends SequentialCommandGroup {
       new InstantCommand(() -> Robot.m_robotContainer.manager.setIntakeHigh(true), Robot.m_robotContainer.lock),
       new InstantCommand(() -> Robot.m_robotContainer.manager.setLinearSlideTarget(Constants.LS_SUBSTATION)),
       new InstantCommand(Robot.m_robotContainer.manager::clawIntake),
-      new WaitUntilCommand(Robot.m_robotContainer.manager::stopClawWhenSeen),
+      new WaitUntilCommand(Robot.m_robotContainer.manager::pieceDetected),
+      new WaitCommand(0.1),
       new Stow(),
       new InstantCommand(() -> Robot.m_robotContainer.manager.setIntakeHigh(true), Robot.m_robotContainer.lock)
     );

@@ -1,11 +1,11 @@
-package frc.libs.swerveyshark.motionoftheocean;
+package frc.libs.swerveyshark.sharkexe;
 
 public class SharkState {
 
     private double time;
 
     private double x;
-    
+
     private double y;
 
     private double heading;
@@ -16,7 +16,9 @@ public class SharkState {
 
     private double directionalMotion;
 
-    public SharkState(double time, double x, double y, double heading, double linearVelocity, double angularVelocity, double directionalMotion) {
+    private String event;
+
+    public SharkState(double time, double x, double y, double heading, double linearVelocity, double angularVelocity, double directionalMotion, String event) {
         this.time = time;
         this.x = x;
         this.y = y;
@@ -24,6 +26,7 @@ public class SharkState {
         this.linearVelocity = linearVelocity;
         this.angularVelocity = angularVelocity;
         this.directionalMotion = directionalMotion;
+        this.event = event;
     }
 
     public double getTime() {
@@ -54,6 +57,14 @@ public class SharkState {
         return directionalMotion;
     }
 
+    public String getEvent() {
+        return event;
+    }
+
+    public boolean hasEvent() {
+        return event.length() > 0;
+    }
+
 
     public void setTime(double time) {
         this.time = time;
@@ -61,7 +72,7 @@ public class SharkState {
 
     public void setX(double x) {
         this.x = x;
-    } 
+    }
 
     public void setY(double y) {
         this.y = y;

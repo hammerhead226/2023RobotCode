@@ -8,8 +8,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
-import frc.libs.swerveyshark.motionoftheocean.SharkExecutor;
-
+import frc.libs.swerveyshark.sharkexe.SharkExecutor;
 import frc.robot.Constants;
 import frc.robot.Robot;
 import frc.robot.subsystems.ScoringStateManager;
@@ -29,8 +28,8 @@ public class Scoring extends SequentialCommandGroup {
       new WaitCommand(0.5),
       new InstantCommand(Robot.m_robotContainer.manager::stopClaw),
       new InstantCommand(() -> Robot.m_robotContainer.manager.setArmTarget(Constants.ARM_HOLD)),
-      new Stow(),
-      new InstantCommand(() -> Robot.m_robotContainer.manager.setIntakeHigh(true), Robot.m_robotContainer.lock)
+      new Stow()
+      // new InstantCommand(() -> Robot.m_robotContainer.manager.setIntakeHigh(true), Robot.m_robotContainer.lock)
     );
   }
 }

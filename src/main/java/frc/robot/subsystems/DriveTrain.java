@@ -15,14 +15,14 @@ import frc.libs.electronics.IMU.Pigeon;
 import frc.libs.electronics.IMU.Pigeon2IMU;
 import frc.libs.electronics.encoders.ThreadedCANcoder;
 import frc.libs.electronics.motors.LazyTalonFX;
-import frc.libs.swerveyshark.MotionOfTheOcean;
 import frc.libs.swerveyshark.Swerve;
 import frc.libs.swerveyshark.SwerveConfiguration;
-import frc.libs.swerveyshark.motionoftheocean.SharkExecutor;
+import frc.libs.swerveyshark.sharkexe.SharkExecutor;
 import frc.libs.wrappers.GenericEncoder;
 import frc.libs.wrappers.GenericMotor;
 import frc.libs.wrappers.Gyro;
 import frc.robot.Constants;
+import frc.robot.Robot;
 import frc.robot.RobotMap;
 
 
@@ -60,7 +60,8 @@ public class DriveTrain extends SubsystemBase {
             TalonFX drive = new TalonFX(RobotMap.DRIVE_MOTORS[i]);
             TalonFX steer = new TalonFX(RobotMap.STEER_MOTORS[i]);
 
-            drive.configOpenloopRamp(0.25);
+            drive.configOpenloopRamp(0.1);
+            drive.setNeutralMode(NeutralMode.Brake);
 
             drives[i] = new LazyTalonFX(drive, Constants.TICKS_PER_METER);
             steers[i] = new LazyTalonFX(steer, Constants.TICKS_PER_METER);
@@ -68,7 +69,7 @@ public class DriveTrain extends SubsystemBase {
             encoders[i] = new ThreadedCANcoder(i, Math.PI, Constants.MODULE_OFFSETS[i], 10, Constants.CANBUS, false);
         }
 
-        saved=drives[0];
+        // saved=drives[0];
 
         gyro = new Pigeon2IMU(RobotMap.GYRO, Constants.CANBUS);
         SwerveConfiguration config = new SwerveConfiguration();
@@ -78,10 +79,10 @@ public class DriveTrain extends SubsystemBase {
         config.encoders = encoders;
         config.gyro = gyro;
         config.modulePositions = Constants.MODULE_POSITIONS;
-        config.translationalPIDGains = new double[]{0.6, 0.0, 0.0};
-        config.rotationalPIDGains = new double[]{0.65, 0.0, 0.0};
+        config.translationalPIDGains = new double[]{1.5, 0.0, 0.0};
+        config.rotationalPIDGains = new double[]{1.4, 0.0, 0.0};
         config.drivePIDFGains = new double[]{0.05, 0.0, 0.0, 1.0/Constants.MAX_MODULE_SPEED};
-        config.steerPIDGains = new double[]{0.62, 0.0, 0.0};
+        config.steerPIDGains = new double[]{0.69, 0.0, 0.0};
         config.MAX_MODULE_SPEED = Constants.MAX_MODULE_SPEED;
         config.radius = Math.hypot(0.5794/2, 0.5794/2);
         config.numberOfModules = Constants.NUMBER_OF_MODULES;
@@ -108,12 +109,16 @@ public class DriveTrain extends SubsystemBase {
             //                                                                                 SharkExecutor.getState().getAsArray()[3],
             //                                                                                 SharkExecutor.getState().getAsArray()[4]));
         }
-        else if(!driveTrainLock) swerve.controlWithPercent(x, y, rotate);
+        else if(!driveTrainLock) swerve.controlWithPercent(x, y, 0.8*rotate);
 
     }
 
     public void reset() {
         swerve.reset();
+    }
+
+    public void resetFlip() {
+        swerve.resetFlip();
     }
 
     public void toPose(double[] target, double linearVelocity, double angularVelocity, double heading) {
@@ -126,10 +131,6 @@ public class DriveTrain extends SubsystemBase {
 
     public boolean atSetpoint() {
         return swerve.atSetpoint();
-    }
-
-    public void toggleSpeed() {
-        swerve.toggleSpeed();
     }
 
     public void togglePlayback() {
@@ -156,6 +157,12 @@ public class DriveTrain extends SubsystemBase {
         // return Math.abs(gyro.getTilt()) > Constants.DRIVETRAIN_TILT_THRESHOLD;
         return gyro.getRoll() > Constants.DRIVETRAIN_TILT_THRESHOLD || gyro.getRoll() < -9;
     }
+    private boolean isHighSpeed = false;
+    public void toggleSpeed() {
+        if(isHighSpeed) swerve.changeMaxVelocity(3.5);
+        else swerve.changeMaxVelocity(Constants.MAX_MODULE_SPEED);
+        isHighSpeed = !isHighSpeed;
+    }
 
     public boolean isChassisStable() {
         return Math.abs(gyro.getRoll()) < 4.5;
@@ -176,37 +183,28 @@ public class DriveTrain extends SubsystemBase {
     public void unlockDriveTrain() {
         this.driveTrainLock = false;
     }
-
-    public double getGyroYaw() {
-        return gyro.getYaw();
-    }
-
-    public void lockDriveTrain() {
-        this.driveTrainLock = true;
-    }
-
-    public void unlockDriveTrain() {
-        this.driveTrainLock = false;
-    }
     
     @Override
     public void periodic() {
-      for(int i=0; i < Constants.NUMBER_OF_MODULES; i++)
-          SmartDashboard.putNumber("module offset " + i, swerve.getModuleRotationalPose(i));
-      SmartDashboard.putNumber("gyro tilt", getGyroPitch());
+        SmartDashboard.putBoolean("togle ", isHighSpeed);
 
-      SmartDashboard.putNumber("speed in t/s", saved.getVelocity());
-      SmartDashboard.putNumber("speed in t/100ms", saved.getVelocityInTicks());
-      double[] pose = swerve.getSwerveState();
-        SmartDashboard.putNumber("x", pose[0]);
-        SmartDashboard.putNumber("y", pose[1]);
-        SmartDashboard.putNumber("rotate", pose[2]);
-        SmartDashboard.putNumber("linear velocity", pose[3]);
-        SmartDashboard.putNumber("heading", pose[4]);
+        SmartDashboard.putNumber("Controller input", Robot.m_robotContainer.driver.getLeftJoyX());
+    //   for(int i=0; i < Constants.NUMBER_OF_MODULES; i++)
+    //       SmartDashboard.putNumber("module offset " + i, swerve.getModuleRotationalPose(i));
+    //   SmartDashboard.putNumber("gyro tilt", getGyroPitch());
+        
+    //   SmartDashboard.putNumber("speed in t/s", saved.getVelocity());
+    //   SmartDashboard.putNumber("speed in t/100ms", saved.getVelocityInTicks());
+    //   double[] pose = swerve.getSwerveState();
+    //     SmartDashboard.putNumber("x", pose[0]);
+    //     SmartDashboard.putNumber("y", pose[1]);
+    //     SmartDashboard.putNumber("rotate", pose[2]);
+    //     SmartDashboard.putNumber("linear velocity", pose[3]);
+    //     SmartDashboard.putNumber("heading", pose[4]);
 
-        SmartDashboard.putBoolean("atSetpoint", swerve.atSetpoint());
+    //     SmartDashboard.putBoolean("atSetpoint", swerve.atSetpoint());
 
-        SmartDashboard.putNumber("output percent", saved.getMotorController().getMotorOutputPercent());
+        // SmartDashboard.putNumber("output percent", saved.getMotorController().getMotorOutputPercent());
     }
 }
 

@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.libs.wrappers.GenericMotor;
 import frc.robot.Constants;
+import frc.robot.Robot;
 import frc.robot.RobotMap;
 
 public class Elevator extends SubsystemBase {
@@ -46,7 +47,7 @@ public class Elevator extends SubsystemBase {
     left.setInverted(true);
     right.setInverted(true);
 
-    right.setStatusFramePeriod(StatusFrameEnhanced.Status_8_PulseWidth, 100);
+    // right.setStatusFramePeriod(StatusFrameEnhanced.Status_1_General, 100);
 
 
     encoder.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute);
@@ -88,7 +89,6 @@ public class Elevator extends SubsystemBase {
     }
 
     control(motorSpeed);
-    SmartDashboard.putNumber("motor sped", motorSpeed);
   }
 
   public void setTarget(double t) {
@@ -107,6 +107,12 @@ public class Elevator extends SubsystemBase {
   public void periodic() {
     SmartDashboard.putNumber("elevator encoder offset", get());
     SmartDashboard.putNumber("elevator encoder raw", elevatorEncoder.getSensorPose());
+
+    
+    SmartDashboard.putNumber("target elevator", getTarget());
+    SmartDashboard.putNumber("the difference", Math.abs(get() - getTarget()));
+
+    SmartDashboard.putBoolean("elevator target reached", Robot.m_robotContainer.manager.elevatorTargetReached());
 
   }
 }

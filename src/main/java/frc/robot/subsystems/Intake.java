@@ -17,6 +17,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 // import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.libs.swerveyshark.sharkexe.SharkExecutor;
 import frc.libs.wrappers.GenericMotor;
 import frc.libs.wrappers.LimeLight;
 import frc.robot.Constants;
@@ -70,7 +71,14 @@ public class Intake extends SubsystemBase {
     intakeTucked = false;
 
     //TODO:: change this later 
-    intakePosition = IntakePosition.LOWER;
+    intakePosition = IntakePosition.RETRACT;
+
+    SharkExecutor.createRunnable("intake.extend", this::extendIntake);
+    SharkExecutor.createRunnable("intake.runIn", this::runIn);
+    SharkExecutor.createRunnable("intake.runOut", this::runOut);
+    SharkExecutor.createRunnable("intake.stop", this::stop);
+    SharkExecutor.createRunnable("intake.lower", this::lowerIntake);
+
   }
 
   public void run() {
@@ -85,7 +93,7 @@ public class Intake extends SubsystemBase {
       case EXTEND:
         target = Constants.INTAKE_EXTEND;
         double extendSpeed = intakePID.calculate(intakeEncoder.getSensorPose(), target);
-        if (extendSpeed > Constants.MAX_SPEED_UP) {
+        if (Math.abs(extendSpeed) > Constants.MAX_SPEED_UP) {
           extendSpeed = Constants.MAX_SPEED_UP;
         }
         control(extendSpeed);
@@ -191,7 +199,7 @@ public class Intake extends SubsystemBase {
   @Override
   public void periodic() {
     SmartDashboard.putNumber("intake enc", getIntake());
-    SmartDashboard.putNumber("limelight stuff", LimeLight.getHorizontalOffset());
-    SmartDashboard.putNumber("limelight stuff 2", LimeLight.getValue());
+    // SmartDashboard.putNumber("limelight stuff", LimeLight.getHorizontalOffset());
+    // SmartDashboard.putNumber("limelight stuff 2", LimeLight.getValue());
   }
 }

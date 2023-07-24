@@ -18,7 +18,7 @@ package frc.robot;
  */
 public final class Constants {
   // Controller Configuration
-  public static final double CONTROLLER_DEADBAND = 0.15;
+  public static final double CONTROLLER_DEADBAND = 0.1;
 
   public static final String CANBUS = "CAN Bus 2";
 
@@ -121,7 +121,7 @@ public final class Constants {
   public static final double ELEVATOR_INTERVAL_MARKER = 2800;
   public static final double SRX_ENCODER_TICKS = 4096;
 
-  public static final double ELEVATOR_THRESHOLD = 100;
+  public static final double ELEVATOR_THRESHOLD = 1000;
 
 
 
@@ -131,6 +131,8 @@ public final class Constants {
 
   public static final double[] LINEAR_SLIDE_GAINS_HIGH = { 0.000049, 0.0000015, 0 };
   public static final double[] LINEAR_SLIDE_GAINS_LOW = { 0.000042, 0.00000125, 0 };
+  // public static final double[] LINEAR_SLIDE_GAINS_HIGH = { 0.000052, 0.0000015, 0 };
+  // public static final double[] LINEAR_SLIDE_GAINS_LOW = { 0.000043, 0.00000125, 0 };
   public static final boolean LS_SET_INVERTED = true;
   public static final double LS_THRESHOLD = 2000;
 
@@ -147,19 +149,19 @@ public final class Constants {
   // Intake Constants
   public static final double ROLLER_RUN_SPEED = 0.65;
   // public static final double[] INTAKE_GAINS = { 0.0009, 0, 0 };
-  public static final double[] INTAKE_GAINS = { 0.0011, 0, 0 };
+  public static final double[] INTAKE_GAINS = { 0.0015, 0, 0 };
   public static final int INTAKE_OFFSET = 0;
 
-  public static final double INTAKE_EXTEND = 1500;
-  public static final double INTAKE_LOWERED = 1000;
-  public static final double INTAKE_RETRACT = 700;
+  public static final double INTAKE_EXTEND = 500 + 2800;
+  public static final double INTAKE_LOWERED = 300 + 2500;
+  public static final double INTAKE_RETRACT = 0 + 2200;
 
   public static final double INTAKE_THRESHOLD = 100;
       
   // 3000 to be fully retracted
   
-  public static final double MAX_SPEED_UP = 0.5; //extend
-  public static final double MAX_SPEED_DOWN = 0.5; //retract
+  public static final double MAX_SPEED_UP = 1; //extend
+  public static final double MAX_SPEED_DOWN = 1; //retract
 
 
   // Gripper Constants
@@ -173,20 +175,29 @@ public final class Constants {
 
   public static final double CLOSING_DISTANCE = 8;
 
-  public static final double CUBE_VALUE = 1350;
-  public static final double CONE_VALUE = 2000;
+  public static final double CUBE_VALUE = 1500;
+  public static final double CONE_VALUE = 2300;
 
 
   //Scoring Setpoints
-  public static final double ELEVATOR_HIGH = -700;
-  public static final double ELEVATOR_MID = 400;
-  // public static final double ELEVATOR_HOLD = 1900;
-  public static final double ELEVATOR_HOLD = 2300;
-  public static final double ELEVATOR_INTAKE = 1700;
-  public static final double ELEVATOR_SUBSTATION = 50;
 
-  public static final double LS_HIGH = -56650;
-  public static final double LS_MID = -24500;
+  // // old stuff
+  // public static final double ELEVATOR_HIGH = -700;
+  // public static final double ELEVATOR_MID = 400;
+  // // public static final double ELEVATOR_HOLD = 1900;
+  // public static final double ELEVATOR_HOLD = 2300;
+  // public static final double ELEVATOR_INTAKE = 1700;
+  // public static final double ELEVATOR_SUBSTATION = -50;
+
+  public static final double ELEVATOR_HIGH = -700 + 100;
+  public static final double ELEVATOR_MID = 400 + 100;
+  // public static final double ELEVATOR_HOLD = 1900;
+  public static final double ELEVATOR_HOLD = 2300 + 100;
+  public static final double ELEVATOR_INTAKE = 1700 + 100;
+  public static final double ELEVATOR_SUBSTATION = -50 + 100;
+
+  public static final double LS_HIGH = -61000;
+  public static final double LS_MID = -31000;
   public static final double LS_RETRACTED = -1500;
   public static final double LS_SUBSTATION = -20000;
 
@@ -194,12 +205,14 @@ public final class Constants {
   public static final double ARM_HOLD = 5820;
   public static final double ARM_SCORE = 4680;
   public static final double ARM_STOW = 7110;
-  public static final double ARM_SUBSTATION = 5420;
-
+  // public static final double ARM_SUBSTATION = 5420;
+  public static final double ARM_SUBSTATION = 5200;
 
   // Limelight Constants
   public static final double LIMELIGHT_THRESH = 0.1;
   public static final double ROTATE_THRESH = Math.toRadians(25);
+  public static final double TRANSLATION_CUTOFF_THRESH = 0;
+  public static final double ROTATE_CUTOFF_THRESH = 0;
   // public static final double[] LIMELIGHT_GAINS = {0.11, 0, 0};
 
 
