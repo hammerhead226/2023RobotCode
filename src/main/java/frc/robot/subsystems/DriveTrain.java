@@ -59,8 +59,8 @@ public class DriveTrain extends SubsystemBase {
         ThreadedCANcoder[] encoders = new ThreadedCANcoder[Constants.NUMBER_OF_MODULES];
 
         for(int i = 0; i < Constants.NUMBER_OF_MODULES; i++) {
-            TalonFX drive = new TalonFX(RobotMap.DRIVE_MOTORS[i]);
-            TalonFX steer = new TalonFX(RobotMap.STEER_MOTORS[i]);
+            TalonFX drive = new TalonFX(RobotMap.DRIVE_MOTORS[i], Constants.CANBUS);
+            TalonFX steer = new TalonFX(RobotMap.STEER_MOTORS[i], Constants.CANBUS);
 
             drive.configOpenloopRamp(0.1);
             drive.setNeutralMode(NeutralMode.Brake);
