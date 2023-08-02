@@ -8,6 +8,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
+import frc.libs.wrappers.LoggedTunableNumber;
 import frc.libs.wrappers.GenericMotor.PassiveMode;
 import frc.robot.Constants;
 import frc.robot.RobotMap;
@@ -17,6 +18,40 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class LinearSlide extends SubsystemBase {
   /** Creates a new LinearSlide. */
+
+  private static LoggedTunableNumber highLsKp = new LoggedTunableNumber("LS_High/kP");
+  private static LoggedTunableNumber highLsKi = new LoggedTunableNumber("LS_High/Ki");
+  private static LoggedTunableNumber highLsKd = new LoggedTunableNumber("LS_High/Kd");
+
+  private static LoggedTunableNumber lowLsKp = new LoggedTunableNumber("LS_Low/kP");
+  private static LoggedTunableNumber lowLsKi = new LoggedTunableNumber("LS_Low/Ki");
+  private static LoggedTunableNumber lowLsKd = new LoggedTunableNumber("LS_Low/Kd");
+
+  private static LoggedTunableNumber lsHigh = new LoggedTunableNumber("LS/High");
+  private static LoggedTunableNumber lsMid = new LoggedTunableNumber("LS/Mid");
+  private static LoggedTunableNumber lsRetracted = new LoggedTunableNumber("LS/Retract");
+  private static LoggedTunableNumber lsSub = new LoggedTunableNumber("LS/Sub");
+
+  static {
+    highLsKp.initDefault(0);
+    highLsKi.initDefault(0);
+    highLsKd.initDefault(0);
+
+    lowLsKp.initDefault(0);
+    lowLsKi.initDefault(0);
+    lowLsKd.initDefault(0);
+
+    lsHigh.initDefault(0);
+    lsMid.initDefault(0);
+    lsRetracted.initDefault(0);
+    lsSub.initDefault(0);
+  }
+
+  private static double elsHigh;
+  private static double elsMid;
+  private static double elsRetracted;
+  private static double elsSub;
+
   private TalonFX slider;
 
   private double target;

@@ -20,12 +20,35 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.libs.swerveyshark.sharkexe.SharkExecutor;
 import frc.libs.wrappers.GenericMotor;
 import frc.libs.wrappers.LimeLight;
+import frc.libs.wrappers.LoggedTunableNumber;
 import frc.robot.Constants;
 import frc.robot.Robot;
 import frc.robot.RobotMap;
 import frc.robot.commands.LimelightLineUp;
 
+
+
+
 public class Intake extends SubsystemBase {
+
+  private static LoggedTunableNumber intakeKp = new LoggedTunableNumber("Intake/kP");
+  private static LoggedTunableNumber intakeKi = new LoggedTunableNumber("Intake/Ki");
+  private static LoggedTunableNumber intakeKd = new LoggedTunableNumber("Intake/Kd");
+
+  private static LoggedTunableNumber intakeExtend = new LoggedTunableNumber("Intake/Extend");
+  private static LoggedTunableNumber intakeLow = new LoggedTunableNumber("Intake/Low");
+  private static LoggedTunableNumber intakeRetract = new LoggedTunableNumber("Intake/Retract");
+
+  static {
+    intakeKp.initDefault(0.0015);
+    intakeKi.initDefault(0);
+    intakeKd.initDefault(0);
+
+    intakeExtend.initDefault(0);
+    intakeLow.initDefault(0);
+    intakeRetract.initDefault(0);
+  }
+  
 
   private GenericMotor roller;
   private GenericMotor intake;
@@ -36,6 +59,10 @@ public class Intake extends SubsystemBase {
   private boolean intakeOn;
   private boolean intakeLowered;
   private PIDController intakePID;
+
+  private double eIntakeExtend;
+  private double eIntakeLowered;
+  private double eIntakeRetracted;
 
   private double target;
 
@@ -66,12 +93,16 @@ public class Intake extends SubsystemBase {
     intake = new GenericMotor(intakeNeo);
     roller = new GenericMotor(roll);
     intakeEncoder = new GenericMotor(encoder);
-    intakePID = new PIDController(Constants.INTAKE_GAINS[0], Constants.INTAKE_GAINS[1], Constants.INTAKE_GAINS[2]);
+    intakePID = new PIDController(intakeKp.get(), intakeKi.get(), intakeKd.get());
     intakeOn = false;
     intakeTucked = false;
 
     //TODO:: change this later 
     intakePosition = IntakePosition.RETRACT;
+
+    eIntakeExtend = intakeExtend.get();
+    eIntakeLowered = intakeLow.get();
+    eIntakeRetracted = intakeRetract.get();
 
     SharkExecutor.createRunnable("intake.extend", this::extendIntake);
     SharkExecutor.createRunnable("intake.runIn", this::runIn);
@@ -91,7 +122,7 @@ public class Intake extends SubsystemBase {
     // }
     switch (intakePosition){
       case EXTEND:
-        target = Constants.INTAKE_EXTEND;
+        target = eIntakeExtend;
         double extendSpeed = intakePID.calculate(intakeEncoder.getSensorPose(), target);
         if (Math.abs(extendSpeed) > Constants.MAX_SPEED_UP) {
           extendSpeed = Constants.MAX_SPEED_UP;
@@ -100,7 +131,7 @@ public class Intake extends SubsystemBase {
         break;
 
       case RETRACT:
-        target = Constants.INTAKE_RETRACT;
+        target = eIntakeRetracted;
         double retractSpeed = intakePID.calculate(intakeEncoder.getSensorPose(), target);
         if (Math.abs(retractSpeed) > Constants.MAX_SPEED_DOWN){
           retractSpeed = -Constants.MAX_SPEED_DOWN;
@@ -108,7 +139,7 @@ public class Intake extends SubsystemBase {
         control(retractSpeed);
         break;
       case LOWER:
-        target = Constants.INTAKE_LOWERED;
+        target = eIntakeLowered;
         double lowerSpeed = intakePID.calculate(intakeEncoder.getSensorPose(), target);
         control(lowerSpeed);
         break;
@@ -199,6 +230,17 @@ public class Intake extends SubsystemBase {
   @Override
   public void periodic() {
     SmartDashboard.putNumber("intake enc", getIntake());
+
+    if (intakeKp.hasChanged(hashCode()) || intakeKi.hasChanged(hashCode()) || intakeKd.hasChanged(hashCode()) || 
+        intakeExtend.hasChanged(hashCode()) || intakeLow.hasChanged(hashCode()) || intakeRetract.hasChanged(hashCode())) {
+      intakePID.setP(intakeKp.get());
+      intakePID.setI(intakeKi.get());
+      intakePID.setD(intakeKd.get());
+
+      eIntakeExtend = intakeExtend.get();
+      eIntakeLowered = intakeLow.get();
+      eIntakeRetracted = intakeRetract.get();
+    } 
     // SmartDashboard.putNumber("limelight stuff", LimeLight.getHorizontalOffset());
     // SmartDashboard.putNumber("limelight stuff 2", LimeLight.getValue());
   }

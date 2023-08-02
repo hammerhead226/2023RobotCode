@@ -42,6 +42,8 @@ public class LimelightLineUp extends CommandBase {
       double rotateSpeed;
 
       velocityMultiplier = gyroYaw < 0 ? -1 : 1;
+
+      gyroYaw = DriveTrain.getInstance().getGyroYaw();
       
       //TODO:: GIVE THESE THRESHOLDS ACTUAL VALUES LOL
       if (Math.abs(2 - LimeLight.getHorizontalOffset()) >= Constants.TRANSLATION_CUTOFF_THRESH) {
@@ -50,13 +52,12 @@ public class LimelightLineUp extends CommandBase {
         translationSpeed = 0;
       }
 
-      if (Math.PI - Math.abs(gyroYaw % (2 * Math.PI)) >= Constants.ROTATE_CUTOFF_THRESH) {
+      if (Math.abs(Math.PI - gyroYaw % (2 * Math.PI)) >= Constants.ROTATE_CUTOFF_THRESH) {
         rotateSpeed = -DriveTrain.getInstance().getRotateController().calculate(Math.abs(gyroYaw % (2 * Math.PI)), Math.PI) * velocityMultiplier;
       } else {
         rotateSpeed = 0;
       }
-      
-      gyroYaw = DriveTrain.getInstance().getGyroYaw();
+
       
       DriveTrain.getInstance().control(translationSpeed, Robot.m_robotContainer.driver.getLeftJoyY(), rotateSpeed);
       // TODO:: may need to change later but field element at woodshop is aligned with tx is 3.5
