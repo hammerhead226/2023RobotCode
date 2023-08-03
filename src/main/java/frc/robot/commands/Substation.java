@@ -11,6 +11,9 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.Constants;
 import frc.robot.Robot;
+import frc.robot.subsystems.Elevator;
+import frc.robot.subsystems.Gripper;
+import frc.robot.subsystems.LinearSlide;
 import frc.robot.subsystems.ScoringStateManager;
 
 // // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
@@ -24,11 +27,11 @@ public class Substation extends SequentialCommandGroup {
     addCommands(
       new InstantCommand(Robot.m_robotContainer.manager::setIntakeLower, Robot.m_robotContainer.lock),
       new WaitUntilCommand(Robot.m_robotContainer.manager::intakeTargetReached),
-      new InstantCommand(() -> Robot.m_robotContainer.manager.setElevatorTarget(Constants.ELEVATOR_SUBSTATION)),
-      new InstantCommand(() -> Robot.m_robotContainer.manager.setArmTarget(Constants.ARM_SUBSTATION)),
+      new InstantCommand(() -> Robot.m_robotContainer.manager.setElevatorTarget(Elevator.getSub())),
+      new InstantCommand(() -> Robot.m_robotContainer.manager.setArmTarget(Gripper.getSub())),
       new WaitUntilCommand(Robot.m_robotContainer.manager::armAndElevatorReached),
       new InstantCommand(() -> Robot.m_robotContainer.manager.setIntakeHigh(true), Robot.m_robotContainer.lock),
-      new InstantCommand(() -> Robot.m_robotContainer.manager.setLinearSlideTarget(Constants.LS_SUBSTATION)),
+      new InstantCommand(() -> Robot.m_robotContainer.manager.setLinearSlideTarget(LinearSlide.getSub())),
       new InstantCommand(Robot.m_robotContainer.manager::clawIntake),
       new WaitUntilCommand(Robot.m_robotContainer.manager::pieceDetected),
       new WaitCommand(0.1),
