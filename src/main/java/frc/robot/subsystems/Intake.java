@@ -10,8 +10,12 @@ import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.Rev2mDistanceSensor;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.Rev2mDistanceSensor.Port;
+import com.revrobotics.Rev2mDistanceSensor.RangeProfile;
+import com.revrobotics.Rev2mDistanceSensor.Unit;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -31,6 +35,8 @@ public class Intake extends SubsystemBase {
   private GenericMotor intake;
   private GenericMotor intakeEncoder;
 
+  private Rev2mDistanceSensor distanceSensor;
+
   // private String intakePosition;
 
   private boolean intakeOn;
@@ -39,39 +45,37 @@ public class Intake extends SubsystemBase {
 
   private double target;
 
-  private boolean intakeTucked;
+  private boolean intakeExtended;
 
-  private enum IntakePosition {
-    RETRACT,
-    EXTEND,
-    LOWER
-  }
-
-  private IntakePosition intakePosition;
 
   public Intake() {
-    CANSparkMax intakeNeo = new CANSparkMax(RobotMap.INTAKE_PORT, MotorType.kBrushless);
+    TalonFX intakeNeo = new TalonFX(RobotMap.INTAKE_PORT);
     TalonFX roll = new TalonFX(RobotMap.ROLLER_PORT, Constants.CANBUS);
     TalonSRX encoder = new TalonSRX(RobotMap.INTAKE_ENCODER_PORT);
 
     roll.setStatusFramePeriod(StatusFrameEnhanced.Status_8_PulseWidth, 100);
 
-    intakeNeo.setIdleMode(IdleMode.kBrake);
+    intakeNeo.setNeutralMode(NeutralMode.Brake);
     roll.setNeutralMode(NeutralMode.Coast);
 
     roll.setInverted(false);
     
     encoder.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute);
 
+    distanceSensor = new Rev2mDistanceSensor(Port.kOnboard);
+
+    distanceSensor.setRangeProfile(RangeProfile.kHighSpeed);
+    distanceSensor.setDistanceUnits(Unit.kInches);
+
     intake = new GenericMotor(intakeNeo);
     roller = new GenericMotor(roll);
     intakeEncoder = new GenericMotor(encoder);
     intakePID = new PIDController(Constants.INTAKE_GAINS[0], Constants.INTAKE_GAINS[1], Constants.INTAKE_GAINS[2]);
-    intakeOn = false;
-    intakeTucked = false;
 
-    //TODO:: change this later 
-    intakePosition = IntakePosition.RETRACT;
+    intakeExtended = true;
+ 
+
+   
 
     SharkExecutor.createRunnable("intake.extend", this::extendIntake);
     SharkExecutor.createRunnable("intake.runIn", this::runIn);
@@ -89,32 +93,43 @@ public class Intake extends SubsystemBase {
     //  ) {
     //   intakeOn = true;
     // }
-    switch (intakePosition){
-      case EXTEND:
-        target = Constants.INTAKE_EXTEND;
-        double extendSpeed = intakePID.calculate(intakeEncoder.getSensorPose(), target);
-        if (Math.abs(extendSpeed) > Constants.MAX_SPEED_UP) {
-          extendSpeed = Constants.MAX_SPEED_UP;
-        }
-        control(extendSpeed);
-        break;
 
-      case RETRACT:
-        target = Constants.INTAKE_RETRACT;
-        double retractSpeed = intakePID.calculate(intakeEncoder.getSensorPose(), target);
-        if (Math.abs(retractSpeed) > Constants.MAX_SPEED_DOWN){
-          retractSpeed = -Constants.MAX_SPEED_DOWN;
-        }
-        control(retractSpeed);
-        break;
-      case LOWER:
-        target = Constants.INTAKE_LOWERED;
-        double lowerSpeed = intakePID.calculate(intakeEncoder.getSensorPose(), target);
-        control(lowerSpeed);
-        break;
-      default:
-        SmartDashboard.putString("cry about it", "cry about it");
-    }
+    target = intakeExtended == true ? Constants.INTAKE_EXTEND : Constants.INTAKE_RETRACT;
+
+    double speed = intakePID.calculate(intakeEncoder.getSensorPose(), target);
+
+    speed = clamp(speed, Constants.MAX_SPEED_DOWN, Constants.MAX_SPEED_UP);
+
+    control(speed);
+
+    
+    // if ()
+    // switch (intakePosition){
+    //   case EXTEND:
+    //     target = Constants.INTAKE_EXTEND;
+    //     double extendSpeed = intakePID.calculate(intakeEncoder.getSensorPose(), target);
+    //     if (Math.abs(extendSpeed) > Constants.MAX_SPEED_UP) {
+    //       extendSpeed = Constants.MAX_SPEED_UP;
+    //     }
+    //     control(extendSpeed);
+    //     break;
+
+    //   case RETRACT:
+    //     target = Constants.INTAKE_RETRACT;
+    //     double retractSpeed = intakePID.calculate(intakeEncoder.getSensorPose(), target);
+    //     if (Math.abs(retractSpeed) > Constants.MAX_SPEED_DOWN){
+    //       retractSpeed = -Constants.MAX_SPEED_DOWN;
+    //     }
+    //     control(retractSpeed);
+    //     break;
+    //   case LOWER:
+    //     target = Constants.INTAKE_LOWERED;
+    //     double lowerSpeed = intakePID.calculate(intakeEncoder.getSensorPose(), target);
+    //     control(lowerSpeed);
+    //     break;
+    //   default:
+    //     SmartDashboard.putString("cry about it", "cry about it");
+    // }
 
     // if (intakeLowered){
     //   target = Constants.INTAKE_LOWERED;
@@ -144,18 +159,20 @@ public class Intake extends SubsystemBase {
     // SmartDashboard.putNumber("intake supply", intake.getFalcon().getSupplyCurrent());
   }
 
+  private double clamp(double value, double min, double max) {
+    return Math.max(min, Math.min(value, max));
+  }
+
   // public void toggleIntake() {
   //   intakeOn = !intakeOn;
   // }
 
   public void extendIntake() {
-    intakePosition = IntakePosition.EXTEND;
-    // intakeOn = true;
+    intakeExtended = true;
   }
 
   public void retractIntake() {
-    intakePosition = IntakePosition.RETRACT;
-    // intakeOn = false;
+    intakeExtended = false;
   }
 
   // public void toggleLowerIntake() {
@@ -163,14 +180,19 @@ public class Intake extends SubsystemBase {
   // }
 
   public void lowerIntake() {
-    intakePosition = IntakePosition.LOWER;
+    // intakePosition = IntakePosition.LOWER;
     // intakeLowered = true;
   }
 
   // Roller Methods
   public void runIn() {
     // if (intakeOn) {
-      roller.set(Constants.ROLLER_RUN_SPEED);
+      if (!detected()) {
+        roller.set(Constants.ROLLER_RUN_SPEED);
+      } else {
+        stop();
+      }
+      
     // }
   }
 
@@ -194,6 +216,18 @@ public class Intake extends SubsystemBase {
 
   public double getTarget() {
     return target;
+  }
+
+  public void setDistanceSensor(boolean bool) {
+    distanceSensor.setEnabled(bool);
+  }
+
+  public void setDistanceSensorAuto(boolean bool) {
+    distanceSensor.setAutomaticMode(bool);
+  }
+
+  public boolean detected() {
+    return distanceSensor.getRange() <= 19 && distanceSensor.getRange() > 0;
   }
 
   @Override
