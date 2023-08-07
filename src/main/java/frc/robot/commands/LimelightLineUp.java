@@ -37,14 +37,18 @@ public class LimelightLineUp extends CommandBase {
   @Override
   public void execute() {
     SmartDashboard.putBoolean("moving?????!?!??!", true);
-    if (LimeLight.getValue() == 1) {
+    //horizontal offset into pixels 
+    //double horizontalPixels = (LimeLight.getHorizontalOffset() / Constants.LIMELIGHT_FOV) * Constants.LIMELIGHT_WIDTH;
+    //double tagWidth = LimeLight.getHorizontalSide(); //In pixels
+    double distance = (Constants.VERTICAL_TARGET_HEIGHT - Constants.CAMERA_HEIGHT) / Math.tan(Constants.MOUNTING_ANGLE + LimeLight.getHorizontalOffset());
+    if (LimeLight.getValue() == 1 && distance <= Constants.ACCEPTABLE_DISTANCE) {
       double translationSpeed;
       double rotateSpeed;
 
       velocityMultiplier = gyroYaw < 0 ? -1 : 1;
       
       //TODO:: GIVE THESE THRESHOLDS ACTUAL VALUES LOL
-      if (Math.abs(2 - LimeLight.getHorizontalOffset()) >= Constants.TRANSLATION_CUTOFF_THRESH) {
+      /*if (Math.abs(2 - LimeLight.getHorizontalOffset()) >= Constants.TRANSLATION_CUTOFF_THRESH) {
         translationSpeed = DriveTrain.getInstance().getLimelightController().calculate(LimeLight.getHorizontalOffset(), 2);
       } else {
         translationSpeed = 0;
@@ -55,8 +59,20 @@ public class LimelightLineUp extends CommandBase {
       } else {
         rotateSpeed = 0;
       }
-      
+      */
       gyroYaw = DriveTrain.getInstance().getGyroYaw();
+      if( Math.abs(2 - LimeLight.getHorizontalOffset()) >= Constants.TRANSLATION_THRESHOLD){
+          translationSpeed = DriveTrain.getInstance().getLimelightController().calculate(LimeLight.getHorizontalOffset(), 2);
+      } else {
+        translationSpeed = 0;
+      }
+
+      if( Math.abs(Math.PI - Math.abs(gyroYaw % (2 * Math.PI))) >= Constants.ROTATION_THRESHOLD ){
+        rotateSpeed = DriveTrain.getInstance().getLimelightController().calculate(Math.abs(gyroYaw % (2 * Math.PI)), Math.PI);
+      } else {
+        rotateSpeed = 0;
+      }
+      
       
       DriveTrain.getInstance().control(translationSpeed, Robot.m_robotContainer.driver.getLeftJoyY(), rotateSpeed);
       // TODO:: may need to change later but field element at woodshop is aligned with tx is 3.5
