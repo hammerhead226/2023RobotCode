@@ -49,13 +49,13 @@ public class Intake extends SubsystemBase {
 
 
   public Intake() {
-    TalonFX intakeNeo = new TalonFX(RobotMap.INTAKE_PORT);
+    TalonFX pivot = new TalonFX(RobotMap.INTAKE_PORT, Constants.CANBUS);
     TalonFX roll = new TalonFX(RobotMap.ROLLER_PORT, Constants.CANBUS);
     TalonSRX encoder = new TalonSRX(RobotMap.INTAKE_ENCODER_PORT);
 
     roll.setStatusFramePeriod(StatusFrameEnhanced.Status_8_PulseWidth, 100);
 
-    intakeNeo.setNeutralMode(NeutralMode.Brake);
+    pivot.setNeutralMode(NeutralMode.Brake);
     roll.setNeutralMode(NeutralMode.Coast);
 
     roll.setInverted(false);
@@ -67,7 +67,7 @@ public class Intake extends SubsystemBase {
     distanceSensor.setRangeProfile(RangeProfile.kHighSpeed);
     distanceSensor.setDistanceUnits(Unit.kInches);
 
-    intake = new GenericMotor(intakeNeo);
+    intake = new GenericMotor(pivot);
     roller = new GenericMotor(roll);
     intakeEncoder = new GenericMotor(encoder);
     intakePID = new PIDController(Constants.INTAKE_GAINS[0], Constants.INTAKE_GAINS[1], Constants.INTAKE_GAINS[2]);
