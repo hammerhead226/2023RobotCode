@@ -15,39 +15,12 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.libs.wrappers.GenericMotor;
-import frc.libs.wrappers.LoggedTunableNumber;
 import frc.robot.Constants;
 import frc.robot.Robot;
 import frc.robot.RobotMap;
 
 public class Elevator extends SubsystemBase {
   /** Creates a new Elevator. */
-
-  private static LoggedTunableNumber elevatorKp = new LoggedTunableNumber("Elevantor/kP");
-  private static LoggedTunableNumber elevatorKi = new LoggedTunableNumber("Elevator/Ki");
-  private static LoggedTunableNumber elevatorKd = new LoggedTunableNumber("Elevator/Kd");
-
-  private static LoggedTunableNumber elevatorHigh = new LoggedTunableNumber("Elevator/High");
-  private static LoggedTunableNumber elevatorMid = new LoggedTunableNumber("Elevator/Mid");
-  private static LoggedTunableNumber elevatorHold = new LoggedTunableNumber("Elevator/Hold");
-  private static LoggedTunableNumber elevatorSub = new LoggedTunableNumber("Elevator/Sub");
-
-  static {
-    elevatorKp.initDefault(0.0015);
-    elevatorKi.initDefault(0);
-    elevatorKd.initDefault(0);
-
-    elevatorHigh.initDefault(0);
-    elevatorMid.initDefault(0);
-    elevatorHold.initDefault(0);
-    elevatorSub.initDefault(0);
-  }
-
-  private static double eElevatorHigh;
-  private static double eElevatorMid;
-  private static double eElevatorHold;
-  private static double eElevatorSub;
-
   private GenericMotor elevatorLeft;
   private GenericMotor elevatorRight;
   private GenericMotor elevatorEncoder; 
@@ -79,7 +52,8 @@ public class Elevator extends SubsystemBase {
 
     encoder.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute);
 
-    elevatorPID = new PIDController(elevatorKp.get(), elevatorKi.get(), elevatorKd.get());
+    elevatorPID = new PIDController(Constants.ELEVATOR_GAINS[0], Constants.ELEVATOR_GAINS[1],
+        Constants.ELEVATOR_GAINS[2]);
     right.follow(left);
 
     elevatorLeft = new GenericMotor(left);
@@ -87,15 +61,10 @@ public class Elevator extends SubsystemBase {
 
     upperLimitSwitch = new DigitalInput(0);
 
-    eElevatorHigh = elevatorHigh.get();
-    eElevatorMid = elevatorMid.get();
-    eElevatorHold = elevatorHold.get();
-    eElevatorSub = elevatorSub.get();
-
     if(elevatorEncoder.getSensorPose() > Constants.ELEVATOR_INTERVAL_MARKER) encoderOffset = Constants.SRX_ENCODER_TICKS;
     else encoderOffset = 0;
 
-    target = getHigh();
+    target = Constants.ELEVATOR_HIGH;
     speedLimit = .8;
   }
 
@@ -134,23 +103,6 @@ public class Elevator extends SubsystemBase {
     elevatorLeft.set(speed);
   }
 
-  public static double getHigh() {
-    return elevatorHigh.get();
-  }
-
-  public static double getMid() {
-    return elevatorMid.get();
-  }
-
-  public static double getHold() {
-    return elevatorHold.get();
-  }
-
-  public static double getSub() {
-    return elevatorSub.get();
-  }
-
-
   @Override
   public void periodic() {
     SmartDashboard.putNumber("elevator encoder offset", get());
@@ -162,16 +114,5 @@ public class Elevator extends SubsystemBase {
 
     SmartDashboard.putBoolean("elevator target reached", Robot.m_robotContainer.manager.elevatorTargetReached());
 
-    if (elevatorKp.hasChanged(hashCode()) || elevatorKi.hasChanged(hashCode()) || elevatorKd.hasChanged(hashCode()) || 
-        elevatorHigh.hasChanged(hashCode()) || elevatorMid.hasChanged(hashCode()) || elevatorHold.hasChanged(hashCode()) || elevatorSub.hasChanged(hashCode())) {
-      elevatorPID.setP(elevatorKp.get());
-      elevatorPID.setI(elevatorKi.get());
-      elevatorPID.setD(elevatorKd.get());
-
-      eElevatorHigh = elevatorHigh.get();
-      eElevatorMid = elevatorMid.get();
-      eElevatorHold = elevatorHold.get();
-      eElevatorSub = elevatorSub.get();
-    } 
   }
 }

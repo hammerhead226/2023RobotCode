@@ -4,9 +4,7 @@
 
 package frc.robot;
 
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.Properties;
 
 import org.opencv.video.Video;
 
@@ -33,8 +31,6 @@ public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
   public static RobotContainer m_robotContainer;
 
-  public static Properties properties;
-
   public enum Phase {
     AUTON,
     TELEOP,
@@ -53,14 +49,6 @@ public class Robot extends TimedRobot {
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
     state = Phase.DISABLED;
-
-    properties = new Properties();
-    try (FileInputStream fis = new FileInputStream("constatnsConfig\\constants.config")) {
-      properties.load(fis);
-    } catch (IOException e) {
-        e.printStackTrace();
-    }
-
     try {
       SharkExecutor.loadAndConfigurePath("blue3nb", "/paths/blue_three_piece_nobump_wip.csv", (target) -> DriveTrain.getInstance().toPose(target));
       // SharkExecutor.loadAndConfigurePath("red3nb", "/paths/red_three_piece_nobump_wip.csv", (target) -> DriveTrain.getInstance().toPose(target));

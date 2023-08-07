@@ -20,7 +20,6 @@ import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.libs.wrappers.GenericMotor;
-import frc.libs.wrappers.LoggedTunableNumber;
 import frc.libs.wrappers.GenericMotor.PassiveMode;
 import frc.robot.Constants;
 import frc.robot.RobotMap;
@@ -36,41 +35,6 @@ public class Gripper extends SubsystemBase {
    * pincing (toggle) --> B button
    * wrist rotation (180 or 0 degrees; also toggle) --> X button
    */
-
-
-  private static LoggedTunableNumber armKp = new LoggedTunableNumber("Gripper/kP");
-  private static LoggedTunableNumber armKi = new LoggedTunableNumber("Gripper/Ki");
-  private static LoggedTunableNumber armKd = new LoggedTunableNumber("Gripper/Kd");
-
-  private static LoggedTunableNumber armStow = new LoggedTunableNumber("Gripper/Stow");
-  private static LoggedTunableNumber armHold = new LoggedTunableNumber("Gripper/Hold");
-  private static LoggedTunableNumber armSub = new LoggedTunableNumber("Gripper/Sub");
-  private static LoggedTunableNumber armScore = new LoggedTunableNumber("Gripper/Score");
-
-  private static LoggedTunableNumber coneValue = new LoggedTunableNumber("Gripper/ConeVal");
-  private static LoggedTunableNumber cubeValue = new LoggedTunableNumber("Gripper/CubeVal");
-
-  static {
-    armKp.initDefault(0.0015);
-    armKi.initDefault(0);
-    armKd.initDefault(0);
-
-    armStow.initDefault(0);
-    armHold.initDefault(0);
-    armSub.initDefault(0);
-    armScore.initDefault(0);
-
-    coneValue.initDefault(0);
-    cubeValue.initDefault(0);
-  }
-
-  private static double eArmStow;
-  private static double eArmHold;
-  private static double eArmSub;
-  private static double eArmScore;
-
-  private static double dConeValue;
-  private static double dCubeValue;
 
   // private TalonFX wrist;
   // private CANSparkMax wrist;
@@ -134,7 +98,7 @@ public class Gripper extends SubsystemBase {
     wheeledClaw.setNeutralMode(PassiveMode.BRAKE);
     // arm.setNeutralMode(PassiveMode.BRAKE);
 
-    armPID = new PIDController(armKp.get(), armKi.get(), armKd.get());
+    armPID = new PIDController(Constants.ARM_GAINS[0], Constants.ARM_GAINS[1], Constants.ARM_GAINS[2]);
     wheeledClawPID = new PIDController(Constants.CLAW_GAINS[0], Constants.CLAW_GAINS[1], Constants.CLAW_GAINS[2]);
     // wristPID = new PIDController(Constants.WRIST_GAINS[0], Constants.WRIST_GAINS[1], Constants.WRIST_GAINS[2]);
 
@@ -263,14 +227,14 @@ public class Gripper extends SubsystemBase {
   }
 
   public boolean pieceDetected() {
-    double distanceSensorVal = cubeMode ? dCubeValue : dConeValue;
+    double distanceSensorVal = cubeMode ? Constants.CUBE_VALUE : Constants.CONE_VALUE;
 
     return proximitySensor.getValue() > distanceSensorVal && proximitySensor.getValue() < 2600;
   }
  
   
   public boolean stopClawWhenSeen() {
-    double distanceSensorVal = cubeMode ? dCubeValue : dConeValue;
+    double distanceSensorVal = cubeMode ? Constants.CUBE_VALUE : Constants.CONE_VALUE;
 
     if (proximitySensor.getValue() > distanceSensorVal && proximitySensor.getValue() < 2600) {
       sustain++;
@@ -289,29 +253,7 @@ public class Gripper extends SubsystemBase {
     return false;
   }
 
-  public static double getStow() {
-    return armStow.get();
-  }
 
-  public static double getScore() {
-    return armScore.get();
-  }
-
-  public static double getHold() {
-    return armHold.get();
-  }
-
-  public static double getSub() {
-    return armSub.get();
-  }
-
-  public static double getConeVal() {
-    return coneValue.get();
-  }
-
-  public static double getCubeVal() {
-    return cubeValue.get();
-  }
 
   @Override
   public void periodic() {
@@ -322,21 +264,6 @@ public class Gripper extends SubsystemBase {
     SmartDashboard.putBoolean("Piece Detected?", pieceDetected());
 
     SmartDashboard.putNumber("Arm Enc", aCoder.getPosition());
-
-    if (armKp.hasChanged(hashCode()) || armKi.hasChanged(hashCode()) || armKd.hasChanged(hashCode()) || 
-        armStow.hasChanged(hashCode()) || armHold.hasChanged(hashCode()) || armScore.hasChanged(hashCode()) || armSub.hasChanged(hashCode())) {
-      armPID.setP(armKp.get());
-      armPID.setI(armKi.get());
-      armPID.setD(armKd.get());
-
-      eArmStow = armStow.get();
-      eArmHold = armHold.get();
-      eArmScore = armScore.get();
-      eArmSub = armSub.get();
-
-      dConeValue = coneValue.get();
-      dCubeValue = cubeValue.get();
-    } 
   }
 }
 
