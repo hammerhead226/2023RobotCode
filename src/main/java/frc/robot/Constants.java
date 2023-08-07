@@ -163,7 +163,7 @@ public final class Constants {
   // 3000 to be fully retracted
   
   public static final double MAX_SPEED_UP = 1; //extend
-  public static final double MAX_SPEED_DOWN = 1; //retract
+  public static final double MAX_SPEED_DOWN = -1; //retract
 
 
   // Gripper Constants

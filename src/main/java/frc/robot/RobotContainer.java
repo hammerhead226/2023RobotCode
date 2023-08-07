@@ -33,6 +33,7 @@ import frc.robot.commands.Level2;
 import frc.robot.commands.Level3;
 import frc.robot.commands.LimelightLineUp;
 import frc.robot.commands.MobilityEngage;
+import frc.robot.commands.OneAndHalfPieceMobility;
 import frc.robot.commands.OneConeEngage;
 import frc.robot.commands.OneConeLowMobilityEngage;
 import frc.robot.commands.OneConeMobilityEngage;
@@ -102,13 +103,21 @@ public class RobotContainer {
                                           .andThen(new InstantCommand(() -> RobotContainer.driver.getJoystick().setRumble(RumbleType.kBothRumble, 0)));
 
   SendableChooser<Command> selecter = new SendableChooser<>();
+
+  private double clamp(double value, double min, double max) {
+    return Math.max(min, Math.min(value, max));
+  }
+
+  private final double ADJ_SPEED = 0.75;
   
   public RobotContainer() {
     configureBindings();
 
     dt.setDefaultCommand(
       new RunCommand(
-        () -> dt.control(driver.getLeftJoyX(), driver.getLeftJoyY(), driver.getRightJoyX()),
+        () -> dt.control(clamp(Math.pow(driver.getLeftJoyX(), 2), 0, ADJ_SPEED) * (driver.getLeftJoyX() < 0 ? -1 : 1),
+                         clamp(Math.pow(driver.getLeftJoyY(), 2), 0, ADJ_SPEED) * (driver.getLeftJoyY() < 0 ? -1 : 1), 
+                         clamp(Math.pow(driver.getRightJoyX(), 2), 0, ADJ_SPEED) * (driver.getRightJoyX() < 0 ? -1 : 1)),
         dt
         ));
 
@@ -133,6 +142,10 @@ public class RobotContainer {
 
     // three pieces
     // rememebr to fill in the csv files from reformatter
+
+    selecter.addOption("red one and half piece mobility", new OneAndHalfPieceMobility("red1.5b"));
+    selecter.addOption("blue one and half piece mobility", new OneAndHalfPieceMobility("blue.5b"));
+
     selecter.addOption("red one cone low mobility engage", new OneConeLowMobilityEngage("Red"));
     selecter.addOption("blue one cone low mobility engage", new OneConeLowMobilityEngage("Blue"));
 
@@ -174,9 +187,14 @@ public class RobotContainer {
 
     driver.getSTARTButton().onTrue(new InstantCommand(dt::reset, dt));
 
-    driver.getAButton().onTrue(new InstantCommand(intake::retractIntake, intake));
+    // driver.getAButton().onTrue(new InstantCommand(intake::retractIntake, intake));
+    // driver.getXButton().onTrue(new InstantCommand(intake::extendIntake, intake));
+    // driver.getYButton().onTrue(new InstantCommand(intake::lowerIntake, intake));
     driver.getXButton().onTrue(new InstantCommand(intake::extendIntake, intake));
-    driver.getYButton().onTrue(new InstantCommand(intake::lowerIntake, intake));
+    driver.getXButton().onTrue(new InstantCommand(intake::runIn, intake));
+    driver.getXButton().onFalse(new InstantCommand(intake::retractIntake, intake));
+    driver.getXButton().onFalse(new InstantCommand(intake::stop, intake));
+
     driver.getRBButton().onTrue(new InstantCommand(dt::toggleSpeed, dt));
     // driver.getBButton().whileTrue(new LimelightLineUp());
     // driver.getBButton().whileTrue(new RunCommand(() -> dt.control(0, 0.2, 0)));
@@ -190,12 +208,6 @@ public class RobotContainer {
     //make is so when slide is fully in after scoring akul controller buzzes
     manip.getRBButton().onTrue(new Scoring());
     manip.getRightStickPress().onTrue(new Substation());
-    
-    manip.getLBButton().onTrue(new InstantCommand(intake::runIn));
-    manip.getLBButton().onFalse(new InstantCommand(intake::stop));
-
-    manip.getMENUButton().onTrue(new InstantCommand(intake::runOut));
-    manip.getMENUButton().onFalse(new InstantCommand(intake::stop));
 
 
     manip.getSTARTButton().onTrue(new InstantCommand(gripper::toggleCubeMode, gripper));
