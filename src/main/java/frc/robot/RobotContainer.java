@@ -185,9 +185,14 @@ public class RobotContainer {
 
     driver.getSTARTButton().onTrue(new InstantCommand(dt::reset, dt));
 
-    driver.getAButton().onTrue(new InstantCommand(intake::retractIntake, intake));
+    // driver.getAButton().onTrue(new InstantCommand(intake::retractIntake, intake));
+    // driver.getXButton().onTrue(new InstantCommand(intake::extendIntake, intake));
+    // driver.getYButton().onTrue(new InstantCommand(intake::lowerIntake, intake));
     driver.getXButton().onTrue(new InstantCommand(intake::extendIntake, intake));
-    driver.getYButton().onTrue(new InstantCommand(intake::lowerIntake, intake));
+    driver.getXButton().onTrue(new InstantCommand(intake::runIn, intake));
+    driver.getXButton().onFalse(new InstantCommand(intake::retractIntake, intake));
+    driver.getXButton().onFalse(new InstantCommand(intake::stop, intake));
+
     driver.getRBButton().onTrue(new InstantCommand(dt::toggleSpeed, dt));
     // driver.getBButton().whileTrue(new LimelightLineUp());
     // driver.getBButton().whileTrue(new RunCommand(() -> dt.control(0, 0.2, 0)));
@@ -201,12 +206,6 @@ public class RobotContainer {
     //make is so when slide is fully in after scoring akul controller buzzes
     manip.getRBButton().onTrue(new Scoring());
     manip.getRightStickPress().onTrue(new Substation());
-    
-    manip.getLBButton().onTrue(new InstantCommand(intake::runIn));
-    manip.getLBButton().onFalse(new InstantCommand(intake::stop));
-
-    manip.getMENUButton().onTrue(new InstantCommand(intake::runOut));
-    manip.getMENUButton().onFalse(new InstantCommand(intake::stop));
 
 
     manip.getSTARTButton().onTrue(new InstantCommand(gripper::toggleCubeMode, gripper));

@@ -26,7 +26,7 @@ public class LinearSlide extends SubsystemBase {
   private PIDController pid;
 
   public LinearSlide() {
-    slider = new TalonFX(RobotMap.SLIDER_PORT,"CAN Bus 2");
+    slider = new TalonFX(RobotMap.SLIDER_PORT, Constants.CANBUS);
     slider.setInverted(Constants.LS_SET_INVERTED);
 
     slider.configOpenloopRamp(0.6);
