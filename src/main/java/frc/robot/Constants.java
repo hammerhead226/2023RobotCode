@@ -17,6 +17,8 @@ package frc.robot;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
+  public static final boolean tuningMode = false;
+
   // Controller Configuration
   public static final double CONTROLLER_DEADBAND = 0.1;
 
@@ -149,12 +151,12 @@ public final class Constants {
   // Intake Constants
   public static final double ROLLER_RUN_SPEED = 0.65;
   // public static final double[] INTAKE_GAINS = { 0.0009, 0, 0 };
-  public static final double[] INTAKE_GAINS = { 0.0015, 0, 0 };
+  // public static final double[] INTAKE_GAINS = { 0.0015, 0, 0 };
   public static final int INTAKE_OFFSET = 0;
 
-  public static final double INTAKE_EXTEND = 500 + 2800;
-  public static final double INTAKE_LOWERED = 300 + 2500;
-  public static final double INTAKE_RETRACT = 0 + 2200;
+  public static double INTAKE_EXTEND = 500 + 2800;
+  public static double INTAKE_LOWERED = 300 + 2500;
+  public static double INTAKE_RETRACT = 0 + 2200;
 
   public static final double INTAKE_THRESHOLD = 100;
       

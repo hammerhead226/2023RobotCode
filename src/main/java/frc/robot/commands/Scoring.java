@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.libs.swerveyshark.sharkexe.SharkExecutor;
 import frc.robot.Constants;
 import frc.robot.Robot;
+import frc.robot.subsystems.Gripper;
 import frc.robot.subsystems.ScoringStateManager;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
@@ -22,12 +23,12 @@ public class Scoring extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new InstantCommand(() -> Robot.m_robotContainer.manager.setArmTarget(Constants.ARM_SCORE)),
+      new InstantCommand(() -> Robot.m_robotContainer.manager.setArmTarget(Gripper.getScore())),
       new WaitCommand(0.25),
       new InstantCommand(Robot.m_robotContainer.manager::clawOuttake),
       new WaitCommand(0.5),
       new InstantCommand(Robot.m_robotContainer.manager::stopClaw),
-      new InstantCommand(() -> Robot.m_robotContainer.manager.setArmTarget(Constants.ARM_HOLD)),
+      new InstantCommand(() -> Robot.m_robotContainer.manager.setArmTarget(Gripper.getHold())),
       new Stow()
       // new InstantCommand(() -> Robot.m_robotContainer.manager.setIntakeHigh(true), Robot.m_robotContainer.lock)
     );

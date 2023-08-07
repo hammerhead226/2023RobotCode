@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.subsystems.LED;
+
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
@@ -77,6 +78,7 @@ import frc.robot.subsystems.ballsTwo;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
+
   public static final Controller driver = new Controller(0, Constants.CONTROLLER_DEADBAND);
   public static final Controller manip = new Controller(1, Constants.CONTROLLER_DEADBAND);
   public static final Controller test = new Controller(2, Constants.CONTROLLER_DEADBAND);
