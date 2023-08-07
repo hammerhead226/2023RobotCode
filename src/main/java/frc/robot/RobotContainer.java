@@ -141,9 +141,7 @@ public class RobotContainer {
     // three pieces
     // rememebr to fill in the csv files from reformatter
 
-    selecter.addOption("red one and half piece mobility", new OneAndHalfPieceMobility("red1.5b"));
-    selecter.addOption("blue one and half piece mobility", new OneAndHalfPieceMobility("blue.5b"));
-
+    selecter.addOption("one and half piece mobility", new OneAndHalfPieceMobility());
     selecter.addOption("red one cone low mobility engage", new OneConeLowMobilityEngage("Red"));
     selecter.addOption("blue one cone low mobility engage", new OneConeLowMobilityEngage("Blue"));
 

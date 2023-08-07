@@ -8,7 +8,6 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
-import frc.libs.swerveyshark.sharkexe.SharkExecutor;
 import frc.robot.Robot;
 import frc.robot.subsystems.DriveTrain;
 
@@ -16,20 +15,21 @@ import frc.robot.subsystems.DriveTrain;
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class OneAndHalfPieceMobility extends SequentialCommandGroup {
-  private double startTime;
   /** Creates a new OneAndHalfPieceMobility. */
-  public OneAndHalfPieceMobility(String pathName) {
+  public OneAndHalfPieceMobility() {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new InstantCommand(DriveTrain.getInstance()::reset, DriveTrain.getInstance()),
       new InstantCommand(Robot.m_robotContainer.intake::runOut, Robot.m_robotContainer.lock),
-      new WaitCommand(1),
+      new WaitCommand(2),
       new InstantCommand(Robot.m_robotContainer.intake::stop, Robot.m_robotContainer.lock),
-      new InstantCommand(this::setStartTime, Robot.m_robotContainer.lock).alongWith(new RunCommand(()-> SharkExecutor.executeNextAvailableStep(pathName, System.currentTimeMillis()/1000. - startTime), DriveTrain.getInstance()).until(() -> SharkExecutor.isFinished(pathName)))
+      new InstantCommand(() -> DriveTrain.getInstance().reset(), DriveTrain.getInstance()),
+      // new RunCommand(() -> DriveTrain.getInstance().control(0, -0.275, 0), DriveTrain.getInstance()).withTimeout(4.25),
+      new RunCommand(() -> DriveTrain.getInstance().control(0, -0.275, 0), DriveTrain.getInstance()).withTimeout(3.75),
+      new RunCommand(() -> DriveTrain.getInstance().control(0, 0, Math.PI)),
+      new WaitCommand(0.75),
+      new RunCommand(() -> DriveTrain.getInstance().control(0, -0.275, 0), DriveTrain.getInstance()).withTimeout(0.5),
+      new InstantCommand(() -> DriveTrain.getInstance().control(0, 0, 0), DriveTrain.getInstance())
     );
-  }
-  public void setStartTime() {
-    startTime = System.currentTimeMillis()/1000.;
   }
 }
