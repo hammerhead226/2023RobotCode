@@ -90,6 +90,10 @@ public class SharkState {
         this.angularVelocity = angularVelocity;
     }
 
+    public void setDirectionalMotion(double directionalMotion) {
+        this.directionalMotion = directionalMotion;
+    }
+
     public double[] getAsArray() {
         return new double[] {x, y, heading, linearVelocity, angularVelocity, directionalMotion};
     }
@@ -102,6 +106,7 @@ public class SharkState {
                 ", heading=" + heading +
                 ", linearVelocity=" + linearVelocity +
                 ", angularVelocity=" + angularVelocity +
+                ", directionalMotion=" + directionalMotion +
                 "}";
     }
 

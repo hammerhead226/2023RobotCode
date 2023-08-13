@@ -22,8 +22,8 @@ public class Substation extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new InstantCommand(Robot.m_robotContainer.manager::setIntakeLower, Robot.m_robotContainer.lock),
-      new WaitUntilCommand(Robot.m_robotContainer.manager::intakeTargetReached),
+      // new InstantCommand(Robot.m_robotContainer.manager::setIntakeLower, Robot.m_robotContainer.lock),
+      // new WaitUntilCommand(Robot.m_robotContainer.manager::intakeTargetReached),
       new InstantCommand(() -> Robot.m_robotContainer.manager.setElevatorTarget(Constants.ELEVATOR_SUBSTATION)),
       new InstantCommand(() -> Robot.m_robotContainer.manager.setArmTarget(Constants.ARM_SUBSTATION)),
       new WaitUntilCommand(Robot.m_robotContainer.manager::armAndElevatorReached),
@@ -32,8 +32,8 @@ public class Substation extends SequentialCommandGroup {
       new InstantCommand(Robot.m_robotContainer.manager::clawIntake),
       new WaitUntilCommand(Robot.m_robotContainer.manager::pieceDetected),
       new WaitCommand(0.1),
-      new Stow(),
-      new InstantCommand(() -> Robot.m_robotContainer.manager.setIntakeHigh(true), Robot.m_robotContainer.lock)
+      new Stow()
+      // new InstantCommand(() -> Robot.m_robotContainer.manager.setIntakeHigh(true), Robot.m_robotContainer.lock)
     );
   }
 }

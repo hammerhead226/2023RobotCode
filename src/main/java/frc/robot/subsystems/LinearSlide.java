@@ -8,6 +8,9 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
+// -60000 high
+// -29966 mid
+// -8180
 import frc.libs.wrappers.GenericMotor.PassiveMode;
 import frc.robot.Constants;
 import frc.robot.RobotMap;
@@ -52,7 +55,7 @@ public class LinearSlide extends SubsystemBase {
     if (!manual) {
       double err = Math.abs(target - getPosition());
       pid.setPID(Constants.LINEAR_SLIDE_GAINS_HIGH[0], Constants.LINEAR_SLIDE_GAINS_HIGH[1], Constants.LINEAR_SLIDE_GAINS_HIGH[2]);
-      if (err <= 20000) {
+      if (err <= 31000) {
         pid.setPID(Constants.LINEAR_SLIDE_GAINS_HIGH[0], Constants.LINEAR_SLIDE_GAINS_HIGH[1], Constants.LINEAR_SLIDE_GAINS_HIGH[2]);
       } else {
         pid.setPID(Constants.LINEAR_SLIDE_GAINS_LOW[0], Constants.LINEAR_SLIDE_GAINS_LOW[1], Constants.LINEAR_SLIDE_GAINS_LOW[2]);
@@ -80,6 +83,10 @@ public class LinearSlide extends SubsystemBase {
         // if (Math.abs(slider.getSelectedSensorPosition()) <= 0.8 * Math.abs(target)) {
         //   motorSpeed = 0;
         // }
+      }
+
+      if (Math.abs(err) <= 100) {
+        motorSpeed = 0;
       }
       
       // SmartDashboard.putNumber("motor speed", motorSpeed);

@@ -5,6 +5,7 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.sql.ShardingKey;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -46,16 +47,30 @@ public class SharkExecutor {
 
             String[] data = raw.split(",");
 
+            String x = data[1];
+
+            if (x.contains("e")) {
+                x = "0";
+            }
+
+            String y = data[2];
+            
+            if (x.contains("e")) {
+                y = "0";
+            }
+
             SharkState state = new SharkState(
                     Double.parseDouble(data[0]),
-                    Double.parseDouble(data[1]),
-                    Double.parseDouble(data[2]),
+                    Double.parseDouble(x),
+                    Double.parseDouble(y),
                     Double.parseDouble(data[3]),
                     Double.parseDouble(data[4]),
                     Double.parseDouble(data[5]),
                     Double.parseDouble(data[6]),
                     data.length > 7 ? data[7] : ""
             );
+
+            // if (state.get)
 
             executable.add(state);
         }

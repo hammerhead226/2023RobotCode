@@ -45,6 +45,7 @@ import frc.robot.commands.Scoring;
 import frc.robot.commands.Stow;
 import frc.robot.commands.Substation;
 import frc.robot.commands.ThreePieceAutons;
+import frc.robot.commands.ballsballs;
 // import frc.robot.commands.OneConeEngage;
 import frc.robot.commands.OneConeMobilityEngage;
 // import frc.robot.commands.OneCubeMobilityEngage;
@@ -61,6 +62,7 @@ import frc.robot.commands.SetColorMode;
 // import frc.robot.commands.BlueTwoPieceBump;
 // import frc.robot.commands.BlueTwoPieceNoBump;
 import frc.robot.commands.FlashGreen;
+import frc.robot.commands.Handoff;
 // import frc.robot.commands.OneConeEngage;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Vision;
@@ -106,7 +108,7 @@ public class RobotContainer {
     return Math.max(min, Math.min(value, max));
   }
 
-  private final double ADJ_SPEED = 0.75;
+  private final double ADJ_SPEED = 0.65;
   
   public RobotContainer() {
     configureBindings();
@@ -115,9 +117,17 @@ public class RobotContainer {
       new RunCommand(
         () -> dt.control(clamp(Math.pow(driver.getLeftJoyX(), 2), 0, ADJ_SPEED) * (driver.getLeftJoyX() < 0 ? -1 : 1),
                          clamp(Math.pow(driver.getLeftJoyY(), 2), 0, ADJ_SPEED) * (driver.getLeftJoyY() < 0 ? -1 : 1), 
-                         clamp(Math.pow(driver.getRightJoyX(), 2), 0, ADJ_SPEED) * (driver.getRightJoyX() < 0 ? -1 : 1)),
+                         -clamp(Math.pow(driver.getRightJoyX(), 2), 0, ADJ_SPEED) * (driver.getRightJoyX() < 0 ? -1 : 1)),
         dt
         ));
+
+    // linearSlide.setDefaultCommand(
+    //   new RunCommand(() -> linearSlide.control(clamp(manip.getLeftJoyY(), -0.6, 0.6)), linearSlide)
+    // );
+    
+    // elevator.setDefaultCommand(
+    //   new RunCommand(() -> elevator.control(clamp(manip.getLeftJoyY(), -0.6, 0.6)), elevator)
+    // );
 
     // linearSlide.setDefaultCommand(
     //   new RunCommand(
@@ -131,10 +141,10 @@ public class RobotContainer {
     //      elevator
     //     ));
 
-    // gripper.setDefaultCommand(new RunCommand(gripper::run, gripper));
+    gripper.setDefaultCommand(new RunCommand(gripper::run, gripper));
     intake.setDefaultCommand(new RunCommand(intake::run, intake));
-    // linearSlide.setDefaultCommand(new RunCommand(linearSlide::run, linearSlide));
-    // elevator.setDefaultCommand(new RunCommand(elevator::run, elevator));
+    linearSlide.setDefaultCommand(new RunCommand(linearSlide::run, linearSlide));
+    elevator.setDefaultCommand(new RunCommand(elevator::run, elevator));
 
     led.setDefaultCommand(new SetColorMode());
 
@@ -158,6 +168,8 @@ public class RobotContainer {
     selecter.addOption("blue three peice bump", new ThreePieceAutons("blue3b"));
 
     selecter.addOption("empty", new EmptyAuto());
+
+    selecter.addOption("balls", new ballsballs("balls"));
 
     // selecter.setDefaultOption("one and engage", new OneConeEngage());
     // selecter.addOption("blue one cone mobile", new BlueOneConeMobile());
@@ -186,10 +198,10 @@ public class RobotContainer {
     // driver.getAButton().onTrue(new InstantCommand(intake::retractIntake, intake));
     // driver.getXButton().onTrue(new InstantCommand(intake::extendIntake, intake));
     // driver.getYButton().onTrue(new InstantCommand(intake::lowerIntake, intake));
-    driver.getXButton().onTrue(new InstantCommand(intake::extendIntake, intake));
-    driver.getXButton().onTrue(new InstantCommand(intake::runIn, intake));
-    driver.getXButton().onFalse(new InstantCommand(intake::retractIntake, intake));
-    driver.getXButton().onFalse(new InstantCommand(intake::stop, intake));
+    // driver.getXButton().onTrue(new InstantCommand(intake::extendIntake, intake));
+    // driver.getXButton().onTrue(new InstantCommand(intake::runIn, intake));
+    // driver.getXButton().onFalse(new InstantCommand(intake::retractIntake, intake));
+    // driver.getXButton().onFalse(new InstantCommand(intake::stop, intake));
 
     driver.getRBButton().onTrue(new InstantCommand(dt::toggleSpeed, dt));
     // driver.getBButton().whileTrue(new LimelightLineUp());
@@ -205,8 +217,32 @@ public class RobotContainer {
     manip.getRBButton().onTrue(new Scoring());
     manip.getRightStickPress().onTrue(new Substation());
 
+    driver.getAButton().onTrue(new InstantCommand(intake::runOut, intake));
+    driver.getAButton().onFalse(new InstantCommand(intake::stop, intake));
 
-    manip.getSTARTButton().onTrue(new InstantCommand(gripper::toggleCubeMode, gripper));
+    driver.getYButton().onTrue(new InstantCommand(intake::runIn, intake));
+    driver.getYButton().onFalse(new InstantCommand(intake::deadStop, intake));
+
+    driver.getYButton().onTrue(new InstantCommand(intake::extendIntake, intake));
+    driver.getYButton().onFalse(new InstantCommand(intake::retractIntake, intake));
+
+    // manip.getAButton().onTrue(new Handoff());
+
+    // manip.getBButton().onTrue(new InstantCommand(gripper::toggleBrakeMode));
+    // manip.getAButton().onTrue(new InstantCommand(() -> linearSlide.setTarget(Constants.LS_MID), linearSlide));
+    // manip.getBButton().onTrue(new InstantCommand(() -> linearSlide.setTarget(Constants.LS_RETRACTED), linearSlide));
+    // manip.getYButton().onTrue(new InstantCommand(() -> linearSlide.setTarget(Constants.LS_HIGH), linearSlide));
+
+    // manip.getAButton().onTrue(new InstantCommand(() -> elevator.setTarget(Constants.ELEVATOR_HIGH), elevator));
+    // manip.getBButton().onTrue(new InstantCommand(() -> elevator.setTarget(Constants.ELEVATOR_MID), elevator));
+    // manip.getYButton().onTrue(new InstantCommand(() -> elevator.setTarget(Constants.ELEVATOR_HOLD), elevator));
+    // manip.getXButton().onTrue(new InstantCommand(() -> elevator.setTarget(Constants.ELEVATOR_SUBSTATION), elevator));
+
+    // manip.getAButton().onTrue(new InstantCommand(() -> gripper.setArmTarget(Constants.ARM_STOW), gripper));
+    // manip.getBButton().onTrue(new InstantCommand(() -> gripper.setArmTarget(Constants.ARM_SCORE), gripper));
+    // manip.getYButton().onTrue(new InstantCommand(() -> gripper.setArmTarget(Constants.ARM_HOLD), gripper));
+    // manip.getXButton().onTrue(new InstantCommand(() -> gripper.setArmTarget(Constants.ARM_SUBSTATION), gripper));
+    // manip.getSTARTButton().onTrue(new InstantCommand(gripper::toggleCubeMode, gripper));
   }
 
   /**

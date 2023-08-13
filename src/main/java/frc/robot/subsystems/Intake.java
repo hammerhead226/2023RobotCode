@@ -4,6 +4,9 @@
 
 package frc.robot.subsystems;
 
+import java.util.Date;
+import java.util.concurrent.TimeUnit;
+
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
@@ -18,6 +21,7 @@ import com.revrobotics.Rev2mDistanceSensor.RangeProfile;
 import com.revrobotics.Rev2mDistanceSensor.Unit;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 // import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -35,7 +39,9 @@ public class Intake extends SubsystemBase {
   private GenericMotor intake;
   private GenericMotor intakeEncoder;
 
-  private Rev2mDistanceSensor distanceSensor;
+  // private Rev2mDistanceSensor dist;
+
+  private AnalogInput distanceSensor;
 
   // private String intakePosition;
 
@@ -43,9 +49,26 @@ public class Intake extends SubsystemBase {
   private boolean intakeLowered;
   private PIDController intakePID;
 
+  private boolean runningOut;
+
   private double target;
 
   private boolean intakeExtended;
+
+  private double lastSpeed;
+
+  private enum INTAKE_STATES{
+    INWARD,
+    OUTWARD,
+    DEAD_STOP,
+    STOP
+  }
+
+  private INTAKE_STATES intakeState;
+
+  private boolean runInward;
+
+  private boolean runOutward;
 
 
   public Intake() {
@@ -55,24 +78,33 @@ public class Intake extends SubsystemBase {
 
     roll.setStatusFramePeriod(StatusFrameEnhanced.Status_8_PulseWidth, 100);
 
-    pivot.setNeutralMode(NeutralMode.Brake);
-    roll.setNeutralMode(NeutralMode.Coast);
+    pivot.setNeutralMode(NeutralMode.Coast);
+    roll.setNeutralMode(NeutralMode.Brake);
 
     roll.setInverted(false);
+    pivot.setInverted(true);
     
     encoder.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute);
 
-    distanceSensor = new Rev2mDistanceSensor(Port.kOnboard);
+    // dist = new Rev2mDistanceSensor(Port.kOnboard);
 
-    distanceSensor.setRangeProfile(RangeProfile.kHighSpeed);
-    distanceSensor.setDistanceUnits(Unit.kInches);
+    // dist.setRangeProfile(RangeProfile.kHighSpeed);
+    // dist.setDistanceUnits(Unit.kInches);
 
     intake = new GenericMotor(pivot);
     roller = new GenericMotor(roll);
     intakeEncoder = new GenericMotor(encoder);
-    intakePID = new PIDController(Constants.INTAKE_GAINS[0], Constants.INTAKE_GAINS[1], Constants.INTAKE_GAINS[2]);
+    intakePID = new PIDController(Constants.INTAKE_GAINS_RETRACT[0], Constants.INTAKE_GAINS_RETRACT[1], Constants.INTAKE_GAINS_RETRACT[2]);
 
-    intakeExtended = true;
+    target = Constants.INTAKE_EXTEND;
+
+    intakeState = INTAKE_STATES.STOP;
+
+    runningOut = true;
+
+    lastSpeed = 0;
+
+    distanceSensor = new AnalogInput(1);
  
 
    
@@ -93,12 +125,47 @@ public class Intake extends SubsystemBase {
     //  ) {
     //   intakeOn = true;
     // }
+    if (target == Constants.INTAKE_EXTEND) {
+      intakePID.setPID(Constants.INTAKE_GAINS_EXTEND[0], Constants.INTAKE_GAINS_EXTEND[1], Constants.INTAKE_GAINS_EXTEND[2]);
+    } else {
+      intakePID.setPID(Constants.INTAKE_GAINS_RETRACT[0], Constants.INTAKE_GAINS_RETRACT[1], Constants.INTAKE_GAINS_RETRACT[2]);
+    }
 
-    target = intakeExtended == true ? Constants.INTAKE_EXTEND : Constants.INTAKE_RETRACT;
+    switch (intakeState) {
+      case INWARD:
+        roller.set(Constants.ROLLER_RUN_SPEED);
+        runningOut = false;
+        break;
+      case OUTWARD:
+        roller.set(-0.3);
+        runningOut = true;
+        break;
+      case DEAD_STOP:
+        if (Math.abs(intakeEncoder.getSensorPose() - target) >= 300) {
+          roller.set(0.15);
+        } else {
+          intakeState = INTAKE_STATES.STOP;
+          }
+        break; 
+      case STOP:
+        roller.set(0);
+        break;
+      default:
+        SmartDashboard.putString("deez", "nuts");
+        break;
+    }
 
     double speed = intakePID.calculate(intakeEncoder.getSensorPose(), target);
 
     speed = clamp(speed, Constants.MAX_SPEED_DOWN, Constants.MAX_SPEED_UP);
+    
+    boolean condition = (speed > 0 && lastSpeed < 0) || (speed < 0 && lastSpeed > 0);
+
+    // if (intake.getFalconCurrent() >= 35 && !condition) {
+    //   speed = 0;
+    // }
+
+    lastSpeed = speed;
 
     control(speed);
 
@@ -168,11 +235,11 @@ public class Intake extends SubsystemBase {
   // }
 
   public void extendIntake() {
-    intakeExtended = true;
+    target = Constants.INTAKE_EXTEND;
   }
 
   public void retractIntake() {
-    intakeExtended = false;
+    target = Constants.INTAKE_RETRACT;
   }
 
   // public void toggleLowerIntake() {
@@ -187,25 +254,37 @@ public class Intake extends SubsystemBase {
   // Roller Methods
   public void runIn() {
     // if (intakeOn) {
-      if (!detected()) {
-        roller.set(Constants.ROLLER_RUN_SPEED);
-      } else {
-        stop();
-      }
+      // extendIntake();
+      intakeState = INTAKE_STATES.INWARD;
+      // roller.set(Constants.ROLLER_RUN_SPEED);
+      // runningOut = false;
+      // Robot.m_robotContainer.manip.get
+      // if (!detected()) {
+      //   roller.set(Constants.ROLLER_RUN_SPEED);
+      // } else {
+      //   stop();
+      // }
       
     // }
   }
 
   public void runOut() {
     // if (intakeOn) {
-      roller.set(-0.7);
+      // runOutward = true;
+      intakeState = INTAKE_STATES.OUTWARD;
+      // roller.set(-0.3);
+      // runningOut = true;
     // }
   }
 
   public void stop() {
-    roller.set(0);
+    // roller.set(0);
+    intakeState = INTAKE_STATES.STOP;
   }
 
+  public void deadStop() {
+    intakeState = INTAKE_STATES.DEAD_STOP;
+  }
   public void control(double speed) {
     intake.set(speed);
   }
@@ -218,21 +297,53 @@ public class Intake extends SubsystemBase {
     return target;
   }
 
-  public void setDistanceSensor(boolean bool) {
-    distanceSensor.setEnabled(bool);
+  public void runInUntilSpike(double amps) {
+    while(roller.getFalconCurrent() < amps) {
+      roller.set(0.06);
+    }
+    stop();
   }
 
-  public void setDistanceSensorAuto(boolean bool) {
-    distanceSensor.setAutomaticMode(bool);
-  }
+  // public void setDistanceSensor(boolean bool) {
+    // dist.setEnabled(bool);
+  // }
+
+  // public void setDistanceSensorAuto(boolean bool) {
+    // dist.setAutomaticMode(bool);
+  // }
 
   public boolean detected() {
-    return distanceSensor.getRange() <= 19 && distanceSensor.getRange() > 0;
+    return distanceSensor.getValue() >= 700 && distanceSensor.getValue() < 2500;
   }
+
+  // public boolean detectedDelay() {
+  //   return detected() && 
+  // }
 
   @Override
   public void periodic() {
     SmartDashboard.putNumber("intake enc", getIntake());
+    SmartDashboard.putNumber("distance", distanceSensor.getValue());
+
+    SmartDashboard.putString("intake state", intakeState.toString());
+
+    SmartDashboard.putNumber("intake diff", Math.abs(intakeEncoder.getSensorPose() - target));
+
+    SmartDashboard.putNumber("intake target", target);
+    
+    // if (detected() && !runningOut) { 
+      
+    // //   // runInUntilSpike(1.3);
+    
+    //   retractIntake();
+    //   // deadStop();
+    // //   // Robot.m_robotContainer.manager.
+    // //   // deadStop();
+    
+      
+      
+
+    // } 
     // SmartDashboard.putNumber("limelight stuff", LimeLight.getHorizontalOffset());
     // SmartDashboard.putNumber("limelight stuff 2", LimeLight.getValue());
   }

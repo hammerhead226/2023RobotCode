@@ -64,7 +64,7 @@ public class Elevator extends SubsystemBase {
     if(elevatorEncoder.getSensorPose() > Constants.ELEVATOR_INTERVAL_MARKER) encoderOffset = Constants.SRX_ENCODER_TICKS;
     else encoderOffset = 0;
 
-    target = Constants.ELEVATOR_HIGH;
+    target = Constants.ELEVATOR_HOLD;
     speedLimit = .8;
   }
 

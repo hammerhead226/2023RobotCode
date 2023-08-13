@@ -125,8 +125,8 @@ public class DriveTrain extends SubsystemBase {
         swerve.resetFlip();
     }
 
-    public void toPose(double[] target, double linearVelocity, double angularVelocity, double heading) {
-        swerve.setSwerveState(target, linearVelocity, angularVelocity, heading);
+    public void toPose(double[] target, double linearVelocity, double angularVelocity, double directionalMotion) {
+        swerve.setSwerveState(target, linearVelocity, angularVelocity, directionalMotion);
     }
 
     public void toPose(double[] targetData) {
@@ -193,8 +193,8 @@ public class DriveTrain extends SubsystemBase {
         SmartDashboard.putBoolean("togle ", isHighSpeed);
 
         SmartDashboard.putNumber("Controller input", Robot.m_robotContainer.driver.getLeftJoyX());
-    //   for(int i=0; i < Constants.NUMBER_OF_MODULES; i++)
-    //       SmartDashboard.putNumber("module offset " + i, swerve.getModuleRotationalPose(i));
+      for(int i=0; i < Constants.NUMBER_OF_MODULES; i++)
+          SmartDashboard.putNumber("module offset " + i, swerve.getModuleRotationalPose(i));
     //   SmartDashboard.putNumber("gyro tilt", getGyroPitch());
         
     //   SmartDashboard.putNumber("speed in t/s", saved.getVelocity());

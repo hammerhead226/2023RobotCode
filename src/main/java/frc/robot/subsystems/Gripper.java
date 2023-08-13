@@ -61,7 +61,7 @@ public class Gripper extends SubsystemBase {
   // private boolean wristToggle = true;
   private boolean armToggle = true;
 
-  private double armTarget = Constants.ARM_HOLD;
+  private double armTarget = Constants.ARM_STOW;
 
   // private boolean clawToggle = true;
 
@@ -73,12 +73,13 @@ public class Gripper extends SubsystemBase {
 
   int sustain = 0;
 
+  private boolean toggleBrake;
 
   public Gripper() {
     // wrist = new CANSparkMax(RobotMap.GRIPPER_WRIST, MotorType.kBrushless);
     wheeledClaw = new GenericMotor(new TalonFX(RobotMap.WHEELED_CLAW_MOTOR, Constants.CANBUS));
     arm = new GenericMotor(new TalonFX(RobotMap.ARM_MOTOR, Constants.CANBUS));
-    arm.setNeutralMode(PassiveMode.BRAKE);
+    // arm.setNeutralMode(PassiveMode.BRAKE);
     // armEncoder = new CANSparkMax(18, MotorType.kBrushed);
 
     armSpark = new CANSparkMax(18, MotorType.kBrushed);
@@ -106,12 +107,20 @@ public class Gripper extends SubsystemBase {
     armSpeedLimit = 0.65;
     this.proximitySensor = new AnalogInput(0);
 
+    toggleBrake = true;
+
   }
 
   public void run() {
     // if(substationMode) {
     //   stopClawWhenSeen();
     // }
+
+    if (toggleBrake) {
+      arm.setNeutralMode(PassiveMode.BRAKE);
+    } else {
+      arm.setNeutralMode(PassiveMode.COAST);
+    }
     
 
     // wheeledClaw.set(0.3);
@@ -136,6 +145,11 @@ public class Gripper extends SubsystemBase {
     
     }
 
+  public void toggleBrakeMode() {
+    toggleBrake = !toggleBrake;
+  }
+
+  
   public void setDoubleSubstation() {
     setArmTarget(Constants.ARM_SUBSTATION);
     substationMode = true;
@@ -146,7 +160,7 @@ public class Gripper extends SubsystemBase {
   }
 
   public void wheeledClawIntake() {
-    wheeledClaw.set(0.8);
+    wheeledClaw.set(1);
   }
 
   public void wheeledClawOuttake() {
@@ -243,7 +257,7 @@ public class Gripper extends SubsystemBase {
     }
 
    
-    if(sustain >= 2) {
+    if(sustain >= 3) {
       wheeledClaw.set(0); // if speed is too high sensor might not have enough time to react
       // if(!Robot.m_robotContainer.animation.isScheduled())
       // Robot.m_robotContainer.animation.schedule();

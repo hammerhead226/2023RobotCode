@@ -29,7 +29,9 @@ public final class Constants {
      // Encoder Parameters
      public static final double OVERFLOW_THRESHOLD = Math.PI;
  
-     public static final double[] MODULE_OFFSETS = {22.5, 313.857421875, 21.26953125, 123.92578125};
+    //  public static final double[] MODULE_OFFSETS = {22.5, 313.857421875, 21.26953125, 123.92578125};
+
+    public static final double[] MODULE_OFFSETS = {22.5 + 180, 313.857421875 + 900, 21.26953125 + 540, 123.92578125+180};
  
  
      // Physical Configuration 
@@ -73,10 +75,15 @@ public final class Constants {
      public static final double[] TRANSLATIONAL_GAINS = {1, 0 , 0};
      public static final double[] ROTATIONAL_GAINS = {0 ,0 ,0 };
  
-     public static final double[] STEER_GAINS_LOW = {0.62, 0, 0.0};
-     public static final double[] STEER_GAINS_HIGH = {.68, 0, 0.0};
+    //  public static final double[] STEER_GAINS_LOW = {0.62, 0, 0.0};
+    //  public static final double[] STEER_GAINS_HIGH = {.68, 0, 0.0};
+    public static final double[] STEER_GAINS_LOW = {0.6, 0, 0.0};
+     public static final double[] STEER_GAINS_HIGH = {.66, 0, 0.0};
  
-     public static final double[] ROTATE_GAINS_LOW = {1.5, 0.0, 0.0};//.669, 2.5
+    //  public static final double[] ROTATE_GAINS_LOW = {1.5, 0.0, 0.0};//.669, 2.5
+    //  public static final double[] ROTATE_GAINS_HIGH = {0.4, 0.0, 0.0};//.9
+
+    public static final double[] ROTATE_GAINS_LOW = {0.8, 0.0, 0.0};//.669, 2.5
      public static final double[] ROTATE_GAINS_HIGH = {0.4, 0.0, 0.0};//.9
  
     //  public static double[] LIMELIGHT_GAINS = {0.065, 0.0, 0.0};
@@ -121,7 +128,7 @@ public final class Constants {
   public static final double ELEVATOR_INTERVAL_MARKER = 2800;
   public static final double SRX_ENCODER_TICKS = 4096;
 
-  public static final double ELEVATOR_THRESHOLD = 1000;
+  public static final double ELEVATOR_THRESHOLD = 8000;
 
 
 
@@ -129,12 +136,12 @@ public final class Constants {
   // public static final double[] LINEAR_SLIDE_GAINS_HIGH = { 0.0000475, 0.0000015, 0 };
   // public static final double[] LINEAR_SLIDE_GAINS_LOW = { 0.0000325, 0.000001, 0 };
 
-  public static final double[] LINEAR_SLIDE_GAINS_HIGH = { 0.000049, 0.0000015, 0 };
-  public static final double[] LINEAR_SLIDE_GAINS_LOW = { 0.000042, 0.00000125, 0 };
+  public static final double[] LINEAR_SLIDE_GAINS_HIGH = { 0.000045, 0.00001, 0 };
+  public static final double[] LINEAR_SLIDE_GAINS_LOW = { 0.000012, 0.00000125, 0 };
   // public static final double[] LINEAR_SLIDE_GAINS_HIGH = { 0.000052, 0.0000015, 0 };
   // public static final double[] LINEAR_SLIDE_GAINS_LOW = { 0.000043, 0.00000125, 0 };
   public static final boolean LS_SET_INVERTED = true;
-  public static final double LS_THRESHOLD = 2000;
+  public static final double LS_THRESHOLD = 5000;
 
 
   // LED Constants
@@ -147,18 +154,22 @@ public final class Constants {
 
 
   // Intake Constants
-  public static final double ROLLER_RUN_SPEED = 0.65;
+  public static final double ROLLER_RUN_SPEED = 0.43;
   // public static final double[] INTAKE_GAINS = { 0.0009, 0, 0 };
-  public static final double[] INTAKE_GAINS = { 0.0015, 0, 0 };
+  // public static final double[] INTAKE_GAINS = {0.0017, 0, 0 };
+  public static final double[] INTAKE_GAINS_RETRACT = {0.0008, 0.0003 , 0};
+  public static final double[] INTAKE_GAINS_EXTEND = {0.0012, 0.0004, 0 };
   public static final int INTAKE_OFFSET = 0;
 
-  public static final double INTAKE_EXTEND = 500 + 2800;
-  public static final double INTAKE_LOWERED = 300 + 2500;
-  public static final double INTAKE_RETRACT = 0 + 2200;
+  // public static final double INTAKE_EXTEND = -760;
+  // public static final double INTAKE_LOWERED = 300 + 2500;
+  // public static final double INTAKE_RETRACT = 500;
+  public static final double INTAKE_EXTEND = 3290;
+  public static final double INTAKE_RETRACT = 4540;
 
-  public static final double INTAKE_THRESHOLD = 100;
+  public static final double INTAKE_THRESHOLD = 500;
       
-  // 3000 to be fully retracted
+  // 3000 to be fully retracted 
   
   public static final double MAX_SPEED_UP = 1; //extend
   public static final double MAX_SPEED_DOWN = -1; //retract
@@ -171,7 +182,7 @@ public final class Constants {
   public static final double[] ARM_GAINS = {0.00047, 0, 0};
   public static final double[] CLAW_GAINS = {0.00003, 0, 0};
 
-  public static final double ARM_THRESHOLD = 2000;
+  public static final double ARM_THRESHOLD = 1000;
 
   public static final double CLOSING_DISTANCE = 8;
 
@@ -189,24 +200,33 @@ public final class Constants {
   // public static final double ELEVATOR_INTAKE = 1700;
   // public static final double ELEVATOR_SUBSTATION = -50;
 
-  public static final double ELEVATOR_HIGH = -700 + 100;
-  public static final double ELEVATOR_MID = 400 + 100;
-  // public static final double ELEVATOR_HOLD = 1900;
-  public static final double ELEVATOR_HOLD = 2300 + 100;
-  public static final double ELEVATOR_INTAKE = 1700 + 100;
-  public static final double ELEVATOR_SUBSTATION = -50 + 100;
+  public static final double ELEVATOR_HIGH = -500;
+  public static final double ELEVATOR_MID = 800;
+  public static final double ELEVATOR_HOLD = 1113;
+  public static final double ELEVATOR_SUBSTATION = 800;
 
-  public static final double LS_HIGH = -61000;
-  public static final double LS_MID = -31000;
-  public static final double LS_RETRACTED = -1500;
-  public static final double LS_SUBSTATION = -20000;
+
+  // public static final double ELEVATOR_HIGH = -700 + 100;
+  // public static final double ELEVATOR_MID = 400 + 100;
+  // public static final double ELEVATOR_HOLD = 1900;
+  // public static final double ELEVATOR_HOLD = 2300 + 100;
+  
+  // public static final double ELEVATOR_INTAKE = 1700 + 100;
+  // public static final double ELEVATOR_SUBSTATION = -50 + 100;
+  // public static final double ELEVATOR_HANDOFF = 1610;
+
+  public static final double LS_HIGH = -60000;
+  public static final double LS_MID = -29966;
+  public static final double LS_RETRACTED = -600;
+  public static final double LS_SUBSTATION = -8180;
 
 
   public static final double ARM_HOLD = 5820;
   public static final double ARM_SCORE = 4680;
   public static final double ARM_STOW = 7110;
   // public static final double ARM_SUBSTATION = 5420;
-  public static final double ARM_SUBSTATION = 5200;
+  public static final double ARM_SUBSTATION = 5400;
+  // public static final double ARM_HANDOFF = 3900;
 
   // Limelight Constants
   public static final double LIMELIGHT_THRESH = 0.1;
