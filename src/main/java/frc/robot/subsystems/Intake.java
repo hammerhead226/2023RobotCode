@@ -4,20 +4,27 @@
 
 package frc.robot.subsystems;
 
+import java.util.Map;
+
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.Rev2mDistanceSensor;
+// import com.revrobotics.Rev2mDistanceSensor;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-import com.revrobotics.Rev2mDistanceSensor.Port;
-import com.revrobotics.Rev2mDistanceSensor.RangeProfile;
-import com.revrobotics.Rev2mDistanceSensor.Unit;
+// import com.revrobotics.Rev2mDistanceSensor.Port;
+// import com.revrobotics.Rev2mDistanceSensor.RangeProfile;
+// import com.revrobotics.Rev2mDistanceSensor.Unit;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.networktables.GenericEntry;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.SimpleWidget;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 // import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -35,7 +42,7 @@ public class Intake extends SubsystemBase {
   private GenericMotor intake;
   private GenericMotor intakeEncoder;
 
-  private Rev2mDistanceSensor distanceSensor;
+  // private Rev2mDistanceSensor distanceSensor;
 
   // private String intakePosition;
 
@@ -47,6 +54,11 @@ public class Intake extends SubsystemBase {
 
   private boolean intakeExtended;
 
+  boolean pivot_brake = Constants.INTAKE_PIVOT_BRAKE_DEFAULT;
+    GenericEntry pivot_brake_toggle = Shuffleboard.getTab(getName())
+    .add("Enable Brake Mode", pivot_brake)
+    .withWidget(BuiltInWidgets.kToggleSwitch).getEntry();
+
 
   public Intake() {
     TalonFX pivot = new TalonFX(RobotMap.INTAKE_PORT, Constants.CANBUS);
@@ -55,17 +67,17 @@ public class Intake extends SubsystemBase {
 
     roll.setStatusFramePeriod(StatusFrameEnhanced.Status_8_PulseWidth, 100);
 
-    pivot.setNeutralMode(NeutralMode.Brake);
+    
     roll.setNeutralMode(NeutralMode.Coast);
 
     roll.setInverted(false);
     
     encoder.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute);
 
-    distanceSensor = new Rev2mDistanceSensor(Port.kOnboard);
+    // distanceSensor = new Rev2mDistanceSensor(Port.kOnboard);
 
-    distanceSensor.setRangeProfile(RangeProfile.kHighSpeed);
-    distanceSensor.setDistanceUnits(Unit.kInches);
+    // distanceSensor.setRangeProfile(RangeProfile.kHighSpeed);
+    // distanceSensor.setDistanceUnits(Unit.kInches);
 
     intake = new GenericMotor(pivot);
     roller = new GenericMotor(roll);
@@ -74,14 +86,14 @@ public class Intake extends SubsystemBase {
 
     intakeExtended = true;
  
-
-   
-
     SharkExecutor.createRunnable("intake.extend", this::extendIntake);
     SharkExecutor.createRunnable("intake.runIn", this::runIn);
     SharkExecutor.createRunnable("intake.runOut", this::runOut);
     SharkExecutor.createRunnable("intake.stop", this::stop);
     SharkExecutor.createRunnable("intake.lower", this::lowerIntake);
+
+    
+    pivot.setNeutralMode(pivot_brake ? NeutralMode.Brake : NeutralMode.Coast);
 
   }
 
@@ -219,21 +231,31 @@ public class Intake extends SubsystemBase {
   }
 
   public void setDistanceSensor(boolean bool) {
-    distanceSensor.setEnabled(bool);
+    // distanceSensor.setEnabled(bool);
   }
 
   public void setDistanceSensorAuto(boolean bool) {
-    distanceSensor.setAutomaticMode(bool);
+    // distanceSensor.setAutomaticMode(bool);
   }
 
   public boolean detected() {
-    return distanceSensor.getRange() <= 19 && distanceSensor.getRange() > 0;
+    // return distanceSensor.getRange() <= 19 && distanceSensor.getRange() > 0;
+  return true;
   }
 
   @Override
   public void periodic() {
+
     SmartDashboard.putNumber("intake enc", getIntake());
+
     // SmartDashboard.putNumber("limelight stuff", LimeLight.getHorizontalOffset());
     // SmartDashboard.putNumber("limelight stuff 2", LimeLight.getValue());
+
+    if (pivot_brake_toggle.getBoolean(Constants.INTAKE_PIVOT_BRAKE_DEFAULT) != pivot_brake) {
+      pivot_brake = pivot_brake_toggle.getBoolean(Constants.INTAKE_PIVOT_BRAKE_DEFAULT);
+      intake.getFalcon().setNeutralMode(pivot_brake ? NeutralMode.Brake : NeutralMode.Coast);
+      
+    }
+    
   }
 }

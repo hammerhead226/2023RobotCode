@@ -215,6 +215,9 @@ public final class Constants {
   public static final double ROTATE_CUTOFF_THRESH = 0;
   // public static final double[] LIMELIGHT_GAINS = {0.11, 0, 0};
 
+  // Brake Mode Defaults
+  public static final boolean INTAKE_PIVOT_BRAKE_DEFAULT = true;
+
 
 
   @Deprecated
