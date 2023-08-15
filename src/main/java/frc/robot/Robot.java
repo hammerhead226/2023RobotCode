@@ -126,7 +126,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-    Robot.m_robotContainer.dt.resetFlip();
+    // Robot.m_robotContainer.dt.resetFlip();
     // Robot.m_robotContainer.dt.toggleAuto();
     // This makes sure that the autonomous stops running when
     // teleop starts running. If you want the autonomous to

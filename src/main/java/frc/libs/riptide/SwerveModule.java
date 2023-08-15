@@ -9,14 +9,15 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.libs.electronics.encoders.ThreadedEncoder;
 import frc.libs.electronics.motors.LazyMotorController;
 
 public class SwerveModule {
-    private static double kWheelRadius;
-    private static int kEncoderResolution;
+    private static double kWheelRadius =  0.0762; // meters
+    private static int kEncoderResolution = 4096;
     private static double kModuleMaxAngularVelocity;
-    private static double kModuleMaxAngularAcceleration;
+    private static double kModuleMaxAngularAcceleration = 2 * Math.PI; // radians per second per second
 
     private final LazyMotorController<?> drive;
     private final LazyMotorController<?> turn;
@@ -25,17 +26,18 @@ public class SwerveModule {
     // Swerve Module Locations (+x = front, +y = left)
     public final Translation2d location;
 
-    private final PIDController m_drivePID = new PIDController(1, 0, 0);
-    private final ProfiledPIDController m_turnPID = new ProfiledPIDController(1, 0, 0, new TrapezoidProfile.Constraints(kModuleMaxAngularVelocity, kModuleMaxAngularAcceleration));
+    private final PIDController m_drivePID = new PIDController(0, 0, 0);
+    private final ProfiledPIDController m_turnPID = new ProfiledPIDController(0, 0, 0, new TrapezoidProfile.Constraints(kModuleMaxAngularVelocity, kModuleMaxAngularAcceleration));
 
     private final SimpleMotorFeedforward m_driveFeedforward = new SimpleMotorFeedforward(1, 3);
     private final SimpleMotorFeedforward m_turnFeedforward = new SimpleMotorFeedforward(1, 0.5);
 
-    public SwerveModule(LazyMotorController<?> mdrive, LazyMotorController<?> mturn, ThreadedEncoder<?> m_encoder, Translation2d mlocation) {
+    public SwerveModule(LazyMotorController<?> mdrive, LazyMotorController<?> mturn, ThreadedEncoder<?> m_encoder, Translation2d mlocation, double maxrotationspeed) {
         drive = mdrive;
         turn = mturn;
         encoder = m_encoder;
         location = mlocation;
+        kModuleMaxAngularVelocity = maxrotationspeed;
     }
 
     public SwerveModulePosition getPosition() {
@@ -63,5 +65,11 @@ public class SwerveModule {
 
         drive.set(driveOutput + driveFF);
         turn.set(turnOutput + turnFF);
+
+        SmartDashboard.putNumberArray("/swerve/desiredState", new double[]{state.speedMetersPerSecond, state.angle.getRadians()});
+        SmartDashboard.putNumber("/swerve/driveOutput", driveOutput);
+        SmartDashboard.putNumber("/swerve/driveFF", driveFF);
+        SmartDashboard.putNumber("/swerve/turnOutput", turnOutput);
+        SmartDashboard.putNumber("/swerve/turnFF", turnFF);
     }
 }
