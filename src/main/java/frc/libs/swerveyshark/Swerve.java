@@ -6,6 +6,9 @@ import frc.libs.electronics.motors.LazyMotorController;
 import frc.libs.electronics.encoders.ThreadedEncoder;
 
 import java.util.Arrays;
+import java.util.function.Supplier;
+
+import edu.wpi.first.math.geometry.Pose2d;
 
 
 public class Swerve {
@@ -194,7 +197,7 @@ public class Swerve {
         double heading = Math.atan2(yVelocity, xVelocity);
 
         return new double[]{x, y, gyro.getYaw(), linearVelocity, heading};
-    }
+    } 
 
     public void reset() {
         for(SwerveModule mod : modules) {

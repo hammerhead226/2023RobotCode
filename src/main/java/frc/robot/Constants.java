@@ -164,8 +164,8 @@ public final class Constants {
   // public static final double INTAKE_EXTEND = -760;
   // public static final double INTAKE_LOWERED = 300 + 2500;
   // public static final double INTAKE_RETRACT = 500;
-  public static final double INTAKE_EXTEND = 3290;
-  public static final double INTAKE_RETRACT = 4540;
+  public static final double INTAKE_EXTEND = -800;
+  public static final double INTAKE_RETRACT = 500;
 
   public static final double INTAKE_THRESHOLD = 500;
       
@@ -173,7 +173,6 @@ public final class Constants {
   
   public static final double MAX_SPEED_UP = 1; //extend
   public static final double MAX_SPEED_DOWN = -1; //retract
-
 
   // Gripper Constants
   public static final double ARM_POS_1 = 0;

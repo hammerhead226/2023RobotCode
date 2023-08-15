@@ -8,6 +8,11 @@ import java.io.IOException;
 
 import org.opencv.video.Video;
 
+import com.pathplanner.lib.PathConstraints;
+import com.pathplanner.lib.PathPlanner;
+import com.pathplanner.lib.PathPlannerTrajectory;
+import com.pathplanner.lib.PathPlannerTrajectory.PathPlannerState;
+
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.cscore.VideoSource;
@@ -49,16 +54,30 @@ public class Robot extends TimedRobot {
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
     state = Phase.DISABLED;
-    try {
-      SharkExecutor.loadAndConfigurePath("blue3nb", "/paths/blue_three_piece_nobump_wip.csv", (target) -> DriveTrain.getInstance().toPose(target));
-      // SharkExecutor.loadAndConfigurePath("red3nb", "/paths/red_three_piece_nobump_wip.csv", (target) -> DriveTrain.getInstance().toPose(target));
-      SharkExecutor.loadAndConfigurePath("blue3b", "/paths/blue_three_piece_bump.csv", (target) -> DriveTrain.getInstance().toPose(target));
-      SharkExecutor.loadAndConfigurePath("red3b", "/paths/red_three_piece_bump.csv", (target) -> DriveTrain.getInstance().toPose(target));
-      SharkExecutor.loadAndConfigurePath("balls", "/paths/blue_New_New_New_New_Path.csv", (target) -> DriveTrain.getInstance().toPose(target));
-    } catch (IOException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    }
+
+    PathPlannerTrajectory examplePath = PathPlanner.loadPath("New Path", new PathConstraints(4, 3));
+
+    // This trajectory can then be passed to a path follower such as a PPSwerveControllerCommand
+    // Or the path can be sampled at a given point in time for custom path following
+
+    // Sample the state of the path at 1.2 seconds
+    PathPlannerState exampleState = (PathPlannerState) examplePath.sample(1.2);
+    
+    // Print the velocity at the sampled time
+    System.out.println(exampleState.velocityMetersPerSecond);
+
+    
+
+    // try {
+    //   // SharkExecutor.loadAndConfigurePath("blue3nb", "/paths/blue_three_piece_nobump_wip.csv", (target) -> DriveTrain.getInstance().toPose(target));
+    //   // // SharkExecutor.loadAndConfigurePath("red3nb", "/paths/red_three_piece_nobump_wip.csv", (target) -> DriveTrain.getInstance().toPose(target));
+    //   // SharkExecutor.loadAndConfigurePath("blue3b", "/paths/blue_three_piece_bump.csv", (target) -> DriveTrain.getInstance().toPose(target));
+    //   // SharkExecutor.loadAndConfigurePath("red3b", "/paths/red_three_piece_bump.csv", (target) -> DriveTrain.getInstance().toPose(target));
+    //   // SharkExecutor.loadAndConfigurePath("balls", "/paths/blue_testingPath.csv", (target) -> DriveTrain.getInstance().toPose(target));
+    // } catch (IOException e) {
+    //   // TODO Auto-generated catch block
+    //   e.printStackTrace();
+    // }
 
     // Robot.m_robotContainer.intake.setDistanceSensor(true);
     // Robot.m_robotContainer.intake.setDistanceSensorAuto(true);

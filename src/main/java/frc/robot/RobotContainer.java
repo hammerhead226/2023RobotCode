@@ -8,10 +8,21 @@ package frc.robot;
 
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.subsystems.LED;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+
+import com.pathplanner.lib.PathConstraints;
+import com.pathplanner.lib.PathPlanner;
+import com.pathplanner.lib.PathPlannerTrajectory;
+import com.pathplanner.lib.auto.PIDConstants;
+import com.pathplanner.lib.auto.SwerveAutoBuilder;
+
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
@@ -147,6 +158,30 @@ public class RobotContainer {
     elevator.setDefaultCommand(new RunCommand(elevator::run, elevator));
 
     led.setDefaultCommand(new SetColorMode());
+
+    // TODO: Check if this type cast is legit
+    // PathPlannerTrajectory path = PathPlanner.loadPath("New Path", new PathConstraints(4, 3));
+
+    // // TODO: Implement Event Map
+    // // This is just an example event map. It would be better to have a constant, global event map
+    // // in your code that will be used by all path following commands.
+    // HashMap<String, Command> eventMap = new HashMap<>();
+    // // eventMap.put("marker1", new PrintCommand("Passed marker 1"));
+    // // eventMap.put("intakeDown", new IntakeDown());
+
+    // SwerveAutoBuilder autoBuilder = new SwerveAutoBuilder(
+    //     dt::getPose, // Pose2d supplier
+    //     dt::resetPose, // Pose2d consumer, used to reset odometry at the beginning of auto
+    //     dt.kinematics, // SwerveDriveKinematics
+    //     new PIDConstants(5.0, 0.0, 0.0), // PID constants to correct for translation error (used to create the X and Y PID controllers)
+    //     new PIDConstants(0.5, 0.0, 0.0), // PID constants to correct for rotation error (used to create the rotation controller)
+    //     dt::setModuleStates, // Module states consumer used to output to the drive subsystem
+    //     eventMap,
+    //     true, // Should the path be automatically mirrored depending on alliance color. Optional, defaults to true
+    //     dt // The drive subsystem. Used to properly set the requirements of path following commands
+    // );
+
+    // Command fullAuto = autoBuilder.fullAuto(path);
 
     // three pieces
     // rememebr to fill in the csv files from reformatter

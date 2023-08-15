@@ -167,7 +167,7 @@ public class Intake extends SubsystemBase {
 
     lastSpeed = speed;
 
-    control(speed);
+    // control(speed);
 
     
     // if ()
