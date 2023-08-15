@@ -18,27 +18,31 @@ public class SwerveModule {
     private static int kEncoderResolution = 4096;
     private static double kModuleMaxAngularVelocity;
     private static double kModuleMaxAngularAcceleration = 2 * Math.PI; // radians per second per second
+    private static double kModuleMaxLinearVelocity = 2; // meters per second
 
     private final LazyMotorController<?> drive;
     private final LazyMotorController<?> turn;
     private final ThreadedEncoder<?> encoder;
 
+    final int mod_num;
+
     // Swerve Module Locations (+x = front, +y = left)
     public final Translation2d location;
 
-    private final PIDController m_drivePID = new PIDController(0, 0, 0);
-    private final ProfiledPIDController m_turnPID = new ProfiledPIDController(0, 0, 0, new TrapezoidProfile.Constraints(kModuleMaxAngularVelocity, kModuleMaxAngularAcceleration));
+    private final PIDController m_drivePID = new PIDController(0.1, 0.0, 0.0);
+    private final PIDController m_turnPID = new PIDController(0.04, 0.0, 0.00);
 
-    private final SimpleMotorFeedforward m_driveFeedforward = new SimpleMotorFeedforward(1, 0.2);
+    private final SimpleMotorFeedforward m_driveFeedforward = new SimpleMotorFeedforward(0.2, 0.1);
     // TODO:: calc this for radians/second (max displacement should be pi)
-    private final SimpleMotorFeedforward m_turnFeedforward = new SimpleMotorFeedforward(1, 0.5);
-
-    public SwerveModule(LazyMotorController<?> mdrive, LazyMotorController<?> mturn, ThreadedEncoder<?> m_encoder, Translation2d mlocation, double maxrotationspeed) {
+    private final SimpleMotorFeedforward m_turnFeedforward = new SimpleMotorFeedforward(0.2, 0.1);
+// 
+    public SwerveModule(LazyMotorController<?> mdrive, LazyMotorController<?> mturn, ThreadedEncoder<?> m_encoder, Translation2d mlocation, double maxrotationspeed, int mod_num) {
         drive = mdrive;
         turn = mturn;
         encoder = m_encoder;
         location = mlocation;
         kModuleMaxAngularVelocity = maxrotationspeed;
+        this.mod_num = mod_num;
     }
 
     public SwerveModulePosition getPosition() {
@@ -47,25 +51,37 @@ public class SwerveModule {
 
     public SwerveModuleState getState() { return new SwerveModuleState(drive.getVelocity(), getEncoderAngle()); }
 
-    private Rotation2d getEncoderAngle() { return new Rotation2d(encoder.getContinuousPosition() % (2 * Math.PI)); }
+    private Rotation2d getEncoderAngle() { return new Rotation2d(encoder.getRawPosition() % (2 * Math.PI)); }
 
     private double getDriveDistance() { return drive.getPosition(); }
 
 
     public void setDesiredState(SwerveModuleState desiredState) {
+        SmartDashboard.putNumber("swerve/mod_" + mod_num + "_Desired State", desiredState.angle.getDegrees());
         
-        SwerveModuleState state = SwerveModuleState.optimize(desiredState, getEncoderAngle());
 
-        final double driveOutput = m_drivePID.calculate(drive.getVelocity(), state.speedMetersPerSecond);
+        
+        SwerveModuleState state = SwerveModuleState.optimize(desiredState, getState().angle);
 
-        final double driveFF = m_driveFeedforward.calculate(state.speedMetersPerSecond);
+        drive.set(desiredState.speedMetersPerSecond / kModuleMaxLinearVelocity);
+        turn.set(m_turnPID.calculate(getEncoderAngle().getRadians(), desiredState.angle.getRadians()));
+        SmartDashboard.putString("Module " + mod_num + " state:", state.toString());
 
-        final double turnOutput = m_turnPID.calculate(getEncoderAngle().getRadians(), state.angle.getRadians());
+        // final double driveOutput = m_drivePID.calculate(drive.getVelocity(), state.speedMetersPerSecond);
 
-        final double turnFF = m_turnFeedforward.calculate(m_turnPID.getSetpoint().velocity);
+        // final double driveFF = m_driveFeedforward.calculate(state.speedMetersPerSecond);
 
-        drive.set(driveOutput + driveFF);
-        turn.set(turnOutput + turnFF);
+        // final double turnOutput = m_turnPID.calculate(getEncoderAngle().getRadians(), state.angle.getRadians());
+
+        // SmartDashboard.putNumber("swerve/mod_" + mod_num + "_PID_OUTPUT", turnOutput);
+
+        // final double turnFF = m_turnFeedforward.calculate(m_turnPID.getSetpoint().velocity);
+
+        // drive.set(driveOutput + driveFF);
+        // // turn.set(turnOutput + turnFF);
+        // turn.set(0);
+        // drive.set(driveOutput);
+        // turn.set(turnOutput);
 
         // SmartDashboard.putNumberArray("/swerve/desiredState", new double[]{state.speedMetersPerSecond, state.angle.getRadians()});
         // SmartDashboard.putNumber("/swerve/driveOutput", driveOutput);
