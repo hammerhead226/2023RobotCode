@@ -29,7 +29,8 @@ public class SwerveModule {
     private final PIDController m_drivePID = new PIDController(0, 0, 0);
     private final ProfiledPIDController m_turnPID = new ProfiledPIDController(0, 0, 0, new TrapezoidProfile.Constraints(kModuleMaxAngularVelocity, kModuleMaxAngularAcceleration));
 
-    private final SimpleMotorFeedforward m_driveFeedforward = new SimpleMotorFeedforward(1, 3);
+    private final SimpleMotorFeedforward m_driveFeedforward = new SimpleMotorFeedforward(1, 0.2);
+    // TODO:: calc this for radians/second (max displacement should be pi)
     private final SimpleMotorFeedforward m_turnFeedforward = new SimpleMotorFeedforward(1, 0.5);
 
     public SwerveModule(LazyMotorController<?> mdrive, LazyMotorController<?> mturn, ThreadedEncoder<?> m_encoder, Translation2d mlocation, double maxrotationspeed) {

@@ -48,12 +48,12 @@ public class Swerve extends SubsystemBase {
             encoders[i] = new ThreadedCANcoder(i, Math.PI, Constants.MODULE_OFFSETS[i], 10, Constants.CANBUS, false);
         }
 
-        final double MODULE_POSITION_OFFSET = 0.381;
+        // final double MODULE_POSITION_OFFSET = 0.381;
         final double MODULE_MAX_ANGULAR_VELOCITY = 2 * Math.PI;
-        SwerveModule _fl = new SwerveModule(drives[0], steers[0], encoders[0], new Translation2d(MODULE_POSITION_OFFSET, MODULE_POSITION_OFFSET), MODULE_MAX_ANGULAR_VELOCITY);
-        SwerveModule _fr = new SwerveModule(drives[1], steers[1], encoders[1], new Translation2d(MODULE_POSITION_OFFSET, -MODULE_POSITION_OFFSET), MODULE_MAX_ANGULAR_VELOCITY);
-        SwerveModule _bl = new SwerveModule(drives[2], steers[2], encoders[2], new Translation2d(-MODULE_POSITION_OFFSET, MODULE_POSITION_OFFSET), MODULE_MAX_ANGULAR_VELOCITY);
-        SwerveModule _br = new SwerveModule(drives[3], steers[3], encoders[3], new Translation2d(-MODULE_POSITION_OFFSET, -MODULE_POSITION_OFFSET), MODULE_MAX_ANGULAR_VELOCITY);
+        SwerveModule _fl = new SwerveModule(drives[0], steers[0], encoders[0], new Translation2d(Constants.LENGTH, Constants.WIDTH), MODULE_MAX_ANGULAR_VELOCITY);
+        SwerveModule _fr = new SwerveModule(drives[1], steers[1], encoders[1], new Translation2d(Constants.LENGTH, -Constants.WIDTH), MODULE_MAX_ANGULAR_VELOCITY);
+        SwerveModule _bl = new SwerveModule(drives[2], steers[2], encoders[2], new Translation2d(-Constants.LENGTH, Constants.WIDTH), MODULE_MAX_ANGULAR_VELOCITY);
+        SwerveModule _br = new SwerveModule(drives[3], steers[3], encoders[3], new Translation2d(-Constants.LENGTH, -Constants.WIDTH), MODULE_MAX_ANGULAR_VELOCITY);
         
         gyro = new Pigeon2IMU(RobotMap.GYRO, Constants.CANBUS);
 
@@ -67,7 +67,8 @@ public class Swerve extends SubsystemBase {
         dt.control(x, y, theta, true);
     }
 
-    public void updateOdometry() {
+    @Override
+    public void periodic() {
         dt.updateOdometry();
     }
 

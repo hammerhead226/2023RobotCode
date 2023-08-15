@@ -17,11 +17,11 @@ public class SwerveDrive {
     
     public static double kMaxDriveSpeed; // meters per second
 
-    // public static double kMaxAngularSpeed; // rotations per second
+    public static double kMaxAngularSpeed; // rotations per second
 
-    // public static double kRadius;
+    public static double kRadius;
 
-    // public static double kEncoderResolution;
+    public static double kEncoderResolution;
 
     private SwerveModule m_frontLeft;
     private SwerveModule m_frontRight;
@@ -35,16 +35,12 @@ public class SwerveDrive {
     private SwerveDriveOdometry m_odometry;
     
     
-    public SwerveDrive(Gyro<?> gyro, double maxdrivespeed, SwerveModule fl, SwerveModule fr, SwerveModule bl, SwerveModule br) {
+    public SwerveDrive(Gyro<?> gyro, double radius, double resolution, double maxdrivespeed, double maxrotationspeed) {
         this.m_gyro = gyro;
         kMaxDriveSpeed = maxdrivespeed;
-        // kMaxAngularSpeed = maxrotationspeed;
-        // kRadius = radius;
-        // kEncoderResolution = resolution;
-        m_frontLeft = fl;
-        m_frontRight  = fr;
-        m_backLeft = bl;
-        m_backRight = br;
+        kMaxAngularSpeed = maxrotationspeed;
+        kRadius = radius;
+        kEncoderResolution = resolution;
         
         m_gyro.reset();
         
@@ -62,9 +58,36 @@ public class SwerveDrive {
                 m_backLeft.getPosition(),
                 m_backRight.getPosition()
             }
-
+            
         );
                 
+    }
+
+    public SwerveDrive (Gyro<?> gyro, double radius, SwerveModule fl, SwerveModule fr, SwerveModule bl, SwerveModule br) {
+        this.m_gyro = gyro;
+
+        SwerveDrive.kMaxDriveSpeed = 5;
+
+        this.m_frontLeft = fl;
+        this.m_frontRight = fr;
+        this.m_backLeft = bl;
+        this.m_backRight = br;
+
+        m_kinematics = new SwerveDriveKinematics(
+            m_frontLeft.location, m_frontRight.location, m_backLeft.location, m_backRight.location);
+        
+            m_odometry =
+            new SwerveDriveOdometry(
+                m_kinematics,
+                new Rotation2d(m_gyro.getYaw()),
+                new SwerveModulePosition[] {
+                    m_frontLeft.getPosition(),
+                    m_frontRight.getPosition(),
+                    m_backLeft.getPosition(),
+                    m_backRight.getPosition()
+                }
+                
+            );    
     }
     public Rotation2d getRotation2d() {return new Rotation2d(m_gyro.getYaw());}
     
@@ -91,13 +114,11 @@ public class SwerveDrive {
 
 
     /**
-   * Method to drive the robot using joystick info.
-   *
-   * @param vx Speed of the robot in the x direction (forward).
-   * @param vy Speed of the robot in the y direction (sideways).
-   * @param theta Angular rate of the robot.
-   * @param fieldRelative Whether the provided x and y speeds are relative to the field.
-   */
+     * @param vx - x velocity
+     * @param vy - y velocity
+     * @param theta - robot angle
+     * @param fieldRelative - is field relative?
+     */
     public void control(double vx, double vy, double theta, boolean fieldRelative) {
         var swerveModuleStates =
         m_kinematics.toSwerveModuleStates(
@@ -114,8 +135,6 @@ public class SwerveDrive {
         m_frontRight.setDesiredState(swerveModuleStates[1]);
         m_backLeft.setDesiredState(swerveModuleStates[2]);
         m_backRight.setDesiredState(swerveModuleStates[3]);
-
-        
     }
 
 }
