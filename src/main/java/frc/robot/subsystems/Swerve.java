@@ -67,4 +67,8 @@ public class Swerve extends SubsystemBase {
         dt.control(x, y, theta, true);
     }
 
+    public void updateOdometry() {
+        dt.updateOdometry();
+    }
+
 }

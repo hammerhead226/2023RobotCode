@@ -122,7 +122,9 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during autonomous. */
   @Override
-  public void autonomousPeriodic() {}
+  public void autonomousPeriodic() {
+    RobotContainer.dt.updateOdometry();
+  }
 
   @Override
   public void teleopInit() {

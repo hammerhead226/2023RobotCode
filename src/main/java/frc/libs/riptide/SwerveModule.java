@@ -66,10 +66,10 @@ public class SwerveModule {
         drive.set(driveOutput + driveFF);
         turn.set(turnOutput + turnFF);
 
-        SmartDashboard.putNumberArray("/swerve/desiredState", new double[]{state.speedMetersPerSecond, state.angle.getRadians()});
-        SmartDashboard.putNumber("/swerve/driveOutput", driveOutput);
-        SmartDashboard.putNumber("/swerve/driveFF", driveFF);
-        SmartDashboard.putNumber("/swerve/turnOutput", turnOutput);
-        SmartDashboard.putNumber("/swerve/turnFF", turnFF);
+        // SmartDashboard.putNumberArray("/swerve/desiredState", new double[]{state.speedMetersPerSecond, state.angle.getRadians()});
+        // SmartDashboard.putNumber("/swerve/driveOutput", driveOutput);
+        // SmartDashboard.putNumber("/swerve/driveFF", driveFF);
+        // SmartDashboard.putNumber("/swerve/turnOutput", turnOutput);
+        // SmartDashboard.putNumber("/swerve/turnFF", turnFF);
     }
 }
