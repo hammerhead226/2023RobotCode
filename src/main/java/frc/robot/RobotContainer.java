@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.subsystems.LED;
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
@@ -90,6 +91,8 @@ public class RobotContainer {
   public static final Intake intake = new Intake();
   public static final LinearSlide linearSlide = new LinearSlide();
   public static final LED led = new LED();
+
+  // private SlewRateLimiter limiter = new SlewRateLimiter(20);
   // public static final Vision vision = new Vision();
 
   public static final ScoringStateManager manager = new ScoringStateManager();
@@ -113,13 +116,21 @@ public class RobotContainer {
   public RobotContainer() {
     configureBindings();
 
-    dt.setDefaultCommand(
-      new RunCommand(
-        () -> dt.control(clamp(Math.pow(driver.getLeftJoyX(), 2), 0, ADJ_SPEED) * (driver.getLeftJoyX() < 0 ? -1 : 1),
-                         clamp(Math.pow(driver.getLeftJoyY(), 2), 0, ADJ_SPEED) * (driver.getLeftJoyY() < 0 ? -1 : 1), 
-                         -clamp(Math.pow(driver.getRightJoyX(), 2), 0, ADJ_SPEED) * (driver.getRightJoyX() < 0 ? -1 : 1)),
-        dt
-        ));
+    // dt.setDefaultCommand(
+    //   new RunCommand(
+    //     () -> dt.control(limiter.calculate(Math.pow(driver.getLeftJoyX(), 2) * (driver.getLeftJoyX() < 0 ? -1 : 1)),
+    //                      limiter.calculate(Math.pow(driver.getLeftJoyY(), 2) * (driver.getLeftJoyY() < 0 ? -1 : 1)), 
+    //                      -clamp(Math.pow(driver.getRightJoyX(), 2), 0, ADJ_SPEED) * (driver.getRightJoyX() < 0 ? -1 : 1)),
+    //     dt
+    //     ));
+
+        dt.setDefaultCommand(
+          new RunCommand(
+            () -> dt.control((clamp(Math.pow(driver.getLeftJoyX(), 2), 0, ADJ_SPEED) * (driver.getLeftJoyX() < 0 ? -1 : 1)),
+                             (clamp(Math.pow(driver.getLeftJoyY(), 2), 0, ADJ_SPEED) * (driver.getLeftJoyY() < 0 ? -1 : 1)), 
+                             -clamp(Math.pow(driver.getRightJoyX(), 2), 0, ADJ_SPEED) * (driver.getRightJoyX() < 0 ? -1 : 1)),
+            dt
+            ));
 
     // linearSlide.setDefaultCommand(
     //   new RunCommand(() -> linearSlide.control(clamp(manip.getLeftJoyY(), -0.6, 0.6)), linearSlide)
@@ -141,10 +152,10 @@ public class RobotContainer {
     //      elevator
     //     ));
 
-    gripper.setDefaultCommand(new RunCommand(gripper::run, gripper));
-    intake.setDefaultCommand(new RunCommand(intake::run, intake));
-    linearSlide.setDefaultCommand(new RunCommand(linearSlide::run, linearSlide));
-    elevator.setDefaultCommand(new RunCommand(elevator::run, elevator));
+    // gripper.setDefaultCommand(new RunCommand(gripper::run, gripper));
+    // intake.setDefaultCommand(new RunCommand(intake::run, intake));
+    // linearSlide.setDefaultCommand(new RunCommand(linearSlide::run, linearSlide));
+    // elevator.setDefaultCommand(new RunCommand(elevator::run, elevator));
 
     led.setDefaultCommand(new SetColorMode());
 
