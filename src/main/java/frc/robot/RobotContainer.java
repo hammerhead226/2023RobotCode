@@ -219,6 +219,8 @@ public class RobotContainer {
 
     driver.getAButton().onTrue(new InstantCommand(intake::runOut, intake));
     driver.getAButton().onFalse(new InstantCommand(intake::stop, intake));
+    driver.getAButton().onFalse(new InstantCommand(intake::retractIntake, intake));
+    
 
     driver.getYButton().onTrue(new InstantCommand(intake::runIn, intake));
     driver.getYButton().onFalse(new InstantCommand(intake::deadStop, intake));
