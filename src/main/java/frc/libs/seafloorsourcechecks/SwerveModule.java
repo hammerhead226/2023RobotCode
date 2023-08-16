@@ -1,4 +1,4 @@
-package frc.libs.whirlpool;
+package frc.libs.seafloorsourcechecks;
 
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.sensors.CANCoder;

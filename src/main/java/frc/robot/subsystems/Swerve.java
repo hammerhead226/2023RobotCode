@@ -14,7 +14,8 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.libs.electronics.IMU.Gyro;
 import frc.libs.electronics.IMU.Pigeon2IMU;
-import frc.libs.whirlpool.SwerveModule;
+import frc.libs.electronics.encoders.ThreadedCANcoder;
+import frc.libs.seafloorsourcechecks.SwerveModule;
 import frc.robot.Constants;
 
 public class Swerve extends SubsystemBase {
@@ -28,9 +29,9 @@ public class Swerve extends SubsystemBase {
   public SwerveDriveOdometry odometry;
   public SwerveDriveKinematics kinematics;
   public SwerveModule[] modules;
-  public Gyro<?> gyro;
+  public Pigeon2IMU gyro;
 
-  public Swerve(Gyro<?> gyro) {
+  public Swerve(Pigeon2IMU gyro) {
     this.gyro = gyro;
     gyro.reset();
 

@@ -57,8 +57,6 @@ public class ThreadedCANcoder implements ThreadedEncoder<CANCoder> {
         return Math.toRadians(overflows * 360 + getOffsetPosition());
     }
 
-
-
     @Override
     public synchronized CANCoder getEncoder() {
         return encoder;
