@@ -35,7 +35,7 @@ public class Vision extends SubsystemBase {
     // This method will be called once per scheduler run
     SharkSight.updateIntakeClosest();
     SharkSight.updateGripperClosest();
-    CameraServer.startAutomaticCapture("Shark Eye",0);
+    //CameraServer.startAutomaticCapture("Shark Eye",0);
     //CameraServer.putVideo("Camera Stream", 4, 4);
   }
 }

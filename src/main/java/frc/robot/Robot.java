@@ -121,7 +121,9 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during operator control. */
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+    CameraServer.startAutomaticCapture("Shark Eye",0);
+  }
 
   @Override
   public void testInit() {
