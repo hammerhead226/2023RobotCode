@@ -53,7 +53,7 @@ public class Swerve extends SubsystemBase {
             drives[i] = new LazyTalonFX(drive, Constants.TICKS_PER_METER);
             steers[i] = new LazyTalonFX(steer, Constants.TICKS_PER_METER);
 
-            encoders[i] = new ThreadedCANcoder(i, Math.PI, Constants.MODULE_OFFSETS[i], 10, Constants.CANBUS, false);
+            encoders[i] = new ThreadedCANcoder(i, Math.PI, Constants.MODULE_OFFSETS[i], 10, Constants.CANBUS, true);
         }
 
         // final double MODULE_POSITION_OFFSET = 0.381;
@@ -67,7 +67,7 @@ public class Swerve extends SubsystemBase {
         modules[1] = _fr;
         modules[2] = _bl;
         modules[3] = _br;
-        
+
         gyro = new Pigeon2IMU(RobotMap.GYRO, Constants.CANBUS);
 
 

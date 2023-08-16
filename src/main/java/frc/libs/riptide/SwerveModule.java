@@ -1,5 +1,7 @@
 package frc.libs.riptide;
 
+import org.opencv.core.Mat;
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
@@ -30,7 +32,7 @@ public class SwerveModule {
     public final Translation2d location;
 
     private final PIDController m_drivePID = new PIDController(0.1, 0.0, 0.0);
-    private final PIDController m_turnPID = new PIDController(0.04, 0.0, 0.00);
+    private final PIDController m_turnPID = new PIDController(0.16, 0.0, 0.0);
 
     private final SimpleMotorFeedforward m_driveFeedforward = new SimpleMotorFeedforward(0.2, 0.1);
     // TODO:: calc this for radians/second (max displacement should be pi)
@@ -44,6 +46,7 @@ public class SwerveModule {
         kModuleMaxAngularVelocity = maxrotationspeed;
         this.mod_num = mod_num;
     }
+    
 
     public SwerveModulePosition getPosition() {
         return new SwerveModulePosition(getDriveDistance(), getEncoderAngle());
@@ -51,20 +54,24 @@ public class SwerveModule {
 
     public SwerveModuleState getState() { return new SwerveModuleState(drive.getVelocity(), getEncoderAngle()); }
 
-    private Rotation2d getEncoderAngle() { return new Rotation2d(encoder.getRawPosition() % (2 * Math.PI)); }
+    private Rotation2d getEncoderAngle() { return new Rotation2d(encoder.getContinuousPosition() % (Math.PI)); }
 
     private double getDriveDistance() { return drive.getPosition(); }
 
 
     public void setDesiredState(SwerveModuleState desiredState) {
+
         SmartDashboard.putNumber("swerve/mod_" + mod_num + "_Desired State", desiredState.angle.getDegrees());
         
 
-        
         SwerveModuleState state = SwerveModuleState.optimize(desiredState, getState().angle);
-
-        drive.set(desiredState.speedMetersPerSecond / kModuleMaxLinearVelocity);
-        turn.set(m_turnPID.calculate(getEncoderAngle().getRadians(), desiredState.angle.getRadians()));
+        
+        double steerErr = state.angle.getRadians() - encoder.getContinuousPosition();
+        steerErr = steerErr % (2 * Math.PI);
+        
+        turn.set(m_turnPID.calculate(steerErr));
+        drive.set(state.speedMetersPerSecond / kModuleMaxLinearVelocity);
+        // turn.set(m_turnFeedforward.calculate(m_turnPID.getSetpoint()) + m_turnPID.calculate(getEncoderAngle().getRadians(), state.angle.getRadians()));
         SmartDashboard.putString("Module " + mod_num + " state:", state.toString());
 
         // final double driveOutput = m_drivePID.calculate(drive.getVelocity(), state.speedMetersPerSecond);
