@@ -117,12 +117,13 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+    CameraServer.startAutomaticCapture("Shark Eye",0);
   }
 
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    CameraServer.startAutomaticCapture("Shark Eye",0);
+    
   }
 
   @Override
