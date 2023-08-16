@@ -49,16 +49,16 @@ public class Robot extends TimedRobot {
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
     state = Phase.DISABLED;
-    try {
-      SharkExecutor.loadAndConfigurePath("blue3nb", "/paths/blue_three_piece_nobump_wip.csv", (target) -> DriveTrain.getInstance().toPose(target));
-      // SharkExecutor.loadAndConfigurePath("red3nb", "/paths/red_three_piece_nobump_wip.csv", (target) -> DriveTrain.getInstance().toPose(target));
-      SharkExecutor.loadAndConfigurePath("blue3b", "/paths/blue_three_piece_bump.csv", (target) -> DriveTrain.getInstance().toPose(target));
-      SharkExecutor.loadAndConfigurePath("red3b", "/paths/red_three_piece_bump.csv", (target) -> DriveTrain.getInstance().toPose(target));
-      SharkExecutor.loadAndConfigurePath("balls", "/paths/blue_New_New_New_New_Path.csv", (target) -> DriveTrain.getInstance().toPose(target));
-    } catch (IOException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    }
+    // try {
+    //   SharkExecutor.loadAndConfigurePath("blue3nb", "/paths/blue_three_piece_nobump_wip.csv", (target) -> DriveTrain.getInstance().toPose(target));
+    //   // SharkExecutor.loadAndConfigurePath("red3nb", "/paths/red_three_piece_nobump_wip.csv", (target) -> DriveTrain.getInstance().toPose(target));
+    //   SharkExecutor.loadAndConfigurePath("blue3b", "/paths/blue_three_piece_bump.csv", (target) -> DriveTrain.getInstance().toPose(target));
+    //   SharkExecutor.loadAndConfigurePath("red3b", "/paths/red_three_piece_bump.csv", (target) -> DriveTrain.getInstance().toPose(target));
+    //   SharkExecutor.loadAndConfigurePath("balls", "/paths/blue_New_New_New_New_Path.csv", (target) -> DriveTrain.getInstance().toPose(target));
+    // } catch (IOException e) {
+    //   // TODO Auto-generated catch block
+    //   e.printStackTrace();
+    // }
 
     // Robot.m_robotContainer.intake.setDistanceSensor(true);
     // Robot.m_robotContainer.intake.setDistanceSensorAuto(true);
@@ -107,7 +107,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-    Robot.m_robotContainer.dt.resetFlip();
+    // Robot.m_robotContainer.dt.resetFlip();
     // Robot.m_robotContainer.dt.toggleAuto();
     // This makes sure that the autonomous stops running when
     // teleop starts running. If you want the autonomous to

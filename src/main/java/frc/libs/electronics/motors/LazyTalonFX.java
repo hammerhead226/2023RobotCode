@@ -11,6 +11,7 @@ public class LazyTalonFX implements LazyMotorController<TalonFX> {
 
     private TalonFX motor;
     private double lastSpeed = 0.;
+    private double lastPosition = 0.;
 
     private double ticksPerMeter;
 
@@ -38,6 +39,10 @@ public class LazyTalonFX implements LazyMotorController<TalonFX> {
         if(speed != lastSpeed)
             motor.set(ControlMode.PercentOutput, speed);
         lastSpeed = speed;
+    }
+
+    public void setPosition(double position) {
+        if (position != lastSpeed) motor.set(ControlMode.Position, position); lastPosition = position;
     }
 
     @Override

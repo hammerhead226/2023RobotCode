@@ -23,6 +23,7 @@ import frc.robot.subsystems.Gripper;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.LinearSlide;
 import frc.robot.subsystems.ScoringStateManager;
+import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.Elevator;
 import frc.libs.wrappers.Controller;
 import frc.robot.commands.AutoBalance;
@@ -44,6 +45,7 @@ import frc.robot.commands.ScoreConeOrCube;
 import frc.robot.commands.Scoring;
 import frc.robot.commands.Stow;
 import frc.robot.commands.Substation;
+import frc.robot.commands.TeleOpSwerve;
 import frc.robot.commands.ThreePieceAutons;
 import frc.robot.commands.ballsballs;
 // import frc.robot.commands.OneConeEngage;
@@ -83,7 +85,8 @@ public class RobotContainer {
   public static final Controller manip = new Controller(1, Constants.CONTROLLER_DEADBAND);
   public static final Controller test = new Controller(2, Constants.CONTROLLER_DEADBAND);
 
-  public static final DriveTrain dt = DriveTrain.getInstance();
+  // public static final DriveTrain dt = DriveTrain.getInstance();
+  public static final Swerve dt = Swerve.getInstance();
   
   public static final Elevator elevator = new Elevator();
   public static final Gripper gripper = new Gripper();
@@ -113,13 +116,21 @@ public class RobotContainer {
   public RobotContainer() {
     configureBindings();
 
+    // dt.setDefaultCommand(
+    //   new RunCommand(
+    //     () -> dt.control(clamp(Math.pow(driver.getLeftJoyX(), 2), 0, ADJ_SPEED) * (driver.getLeftJoyX() < 0 ? -1 : 1),
+    //                      clamp(Math.pow(driver.getLeftJoyY(), 2), 0, ADJ_SPEED) * (driver.getLeftJoyY() < 0 ? -1 : 1), 
+    //                      -clamp(Math.pow(driver.getRightJoyX(), 2), 0, ADJ_SPEED) * (driver.getRightJoyX() < 0 ? -1 : 1)),
+    //     dt
+    //     ));
+
     dt.setDefaultCommand(
-      new RunCommand(
-        () -> dt.control(clamp(Math.pow(driver.getLeftJoyX(), 2), 0, ADJ_SPEED) * (driver.getLeftJoyX() < 0 ? -1 : 1),
-                         clamp(Math.pow(driver.getLeftJoyY(), 2), 0, ADJ_SPEED) * (driver.getLeftJoyY() < 0 ? -1 : 1), 
-                         -clamp(Math.pow(driver.getRightJoyX(), 2), 0, ADJ_SPEED) * (driver.getRightJoyX() < 0 ? -1 : 1)),
-        dt
-        ));
+      new TeleOpSwerve(dt,
+       () -> -driver.getLeftJoyY(),
+       () -> -driver.getLeftJoyX(),
+       () -> -driver.getLeftJoyY(),
+       () -> driver.getAButton().getAsBoolean())
+    );
 
     // linearSlide.setDefaultCommand(
     //   new RunCommand(() -> linearSlide.control(clamp(manip.getLeftJoyY(), -0.6, 0.6)), linearSlide)
@@ -191,9 +202,9 @@ public class RobotContainer {
   }
   
   private void configureBindings() {
-    driver.getMENUButton().onTrue(new InstantCommand(dt::resetFlip, dt));
+    // driver.getMENUButton().onTrue(new InstantCommand(dt::resetFlip, dt));
 
-    driver.getSTARTButton().onTrue(new InstantCommand(dt::reset, dt));
+    // driver.getSTARTButton().onTrue(new InstantCommand(dt::reset, dt));
 
     // driver.getAButton().onTrue(new InstantCommand(intake::retractIntake, intake));
     // driver.getXButton().onTrue(new InstantCommand(intake::extendIntake, intake));
@@ -203,7 +214,7 @@ public class RobotContainer {
     // driver.getXButton().onFalse(new InstantCommand(intake::retractIntake, intake));
     // driver.getXButton().onFalse(new InstantCommand(intake::stop, intake));
 
-    driver.getRBButton().onTrue(new InstantCommand(dt::toggleSpeed, dt));
+    // driver.getRBButton().onTrue(new InstantCommand(dt::toggleSpeed, dt));
     // driver.getBButton().whileTrue(new LimelightLineUp());
     // driver.getBButton().whileTrue(new RunCommand(() -> dt.control(0, 0.2, 0)));
     // driver.getBButton().onFalse(new InstantCommand(() -> dt.control(0, 0, 0)));
