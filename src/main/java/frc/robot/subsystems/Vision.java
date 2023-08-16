@@ -4,13 +4,15 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.MjpegServer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.libs.wrappers.SharkSight;
 
 public class Vision extends SubsystemBase {
 
   private static boolean toggleEnabled = SharkSight.isEnabled();
-
+  
 
   public Vision() {}
 
@@ -33,5 +35,7 @@ public class Vision extends SubsystemBase {
     // This method will be called once per scheduler run
     SharkSight.updateIntakeClosest();
     SharkSight.updateGripperClosest();
+    CameraServer.startAutomaticCapture("Shark Eye",0);
+    //CameraServer.putVideo("Camera Stream", 4, 4);
   }
 }
