@@ -123,15 +123,7 @@ public class RobotContainer {
     //                      -clamp(Math.pow(driver.getRightJoyX(), 2), 0, ADJ_SPEED) * (driver.getRightJoyX() < 0 ? -1 : 1)),
     //     dt
     //     ));
-
-    dt.setDefaultCommand(
-      new TeleOpSwerve(dt,
-       () -> -driver.getLeftJoyY(),
-       () -> -driver.getLeftJoyX(),
-       () -> -driver.getLeftJoyY(),
-       () -> driver.getAButton().getAsBoolean())
-    );
-
+    
     // linearSlide.setDefaultCommand(
     //   new RunCommand(() -> linearSlide.control(clamp(manip.getLeftJoyY(), -0.6, 0.6)), linearSlide)
     // );
@@ -151,6 +143,14 @@ public class RobotContainer {
     //     () -> elevator.control(manip.getRightJoyY()),
     //      elevator
     //     ));
+
+    dt.setDefaultCommand(
+      new TeleOpSwerve(dt,
+       () -> -driver.getLeftJoyY(),
+       () -> -driver.getLeftJoyX(),
+       () -> -driver.getRightJoyX(),
+       () -> driver.getLBButton().getAsBoolean())
+    );
 
     gripper.setDefaultCommand(new RunCommand(gripper::run, gripper));
     intake.setDefaultCommand(new RunCommand(intake::run, intake));
@@ -205,20 +205,6 @@ public class RobotContainer {
     // driver.getMENUButton().onTrue(new InstantCommand(dt::resetFlip, dt));
 
     // driver.getSTARTButton().onTrue(new InstantCommand(dt::reset, dt));
-
-    // driver.getAButton().onTrue(new InstantCommand(intake::retractIntake, intake));
-    // driver.getXButton().onTrue(new InstantCommand(intake::extendIntake, intake));
-    // driver.getYButton().onTrue(new InstantCommand(intake::lowerIntake, intake));
-    // driver.getXButton().onTrue(new InstantCommand(intake::extendIntake, intake));
-    // driver.getXButton().onTrue(new InstantCommand(intake::runIn, intake));
-    // driver.getXButton().onFalse(new InstantCommand(intake::retractIntake, intake));
-    // driver.getXButton().onFalse(new InstantCommand(intake::stop, intake));
-
-    // driver.getRBButton().onTrue(new InstantCommand(dt::toggleSpeed, dt));
-    // driver.getBButton().whileTrue(new LimelightLineUp());
-    // driver.getBButton().whileTrue(new RunCommand(() -> dt.control(0, 0.2, 0)));
-    // driver.getBButton().onFalse(new InstantCommand(() -> dt.control(0, 0, 0)));
-
 
     manip.getYButton().onTrue(new Level3());
     manip.getBButton().onTrue(new Level2());

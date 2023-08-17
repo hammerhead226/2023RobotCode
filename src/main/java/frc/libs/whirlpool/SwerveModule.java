@@ -1,10 +1,13 @@
 package frc.libs.whirlpool;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.sensors.CANCoder;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import frc.libs.electronics.encoders.ThreadedEncoder;
@@ -21,9 +24,15 @@ public class SwerveModule {
     private LazyTalonFX drive;
     private ThreadedEncoder<?> steerCoder;
 
+    private Translation2d module_location;
+
     SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(0, 0, 0);
 
-    public SwerveModule(int moduleNumber, LazyTalonFX drive, LazyTalonFX steer, ThreadedEncoder<?> steerCoder) {
+    // PIDController turn_controller = new PIDController(0.2, 0, 0);
+
+    private static final double MODULE_GEAR_RATIO = 1 / 6.75;
+
+    public SwerveModule(int moduleNumber, LazyTalonFX drive, LazyTalonFX steer, ThreadedEncoder<?> steerCoder, Translation2d moduleLocation) {
         this.moduleNumber = moduleNumber;
 
         this.angleOffset = new Rotation2d(steerCoder.getOffsetPosition());
@@ -33,15 +42,20 @@ public class SwerveModule {
 
         this.steerCoder = steerCoder;
 
+        this.module_location = moduleLocation;
+
         lastAngle = getState().angle;
+
+        // turn_controller.enableContinuousInput(Math.toRadians(0), Math.toRadians(359));
     }
 
-    public SwerveModule(int moduleNumber) {
-        this.moduleNumber = moduleNumber;
+    // public SwerveModule(int moduleNumber) {
+    //     this.moduleNumber = moduleNumber;
 
-        this.drive = new LazyTalonFX(moduleNumber, Constants.TICKS_PER_METER);
-        this.steer = new LazyTalonFX(moduleNumber+4, Constants.TICKS_PER_METER);
-    }
+    //     this.drive = new LazyTalonFX(moduleNumber, Constants.TICKS_PER_METER);
+    //     this.steer = new LazyTalonFX(moduleNumber+4, Constants.TICKS_PER_METER);
+    //     // this.steerCoder = new LazyTalo
+    // }
 
     public SwerveModulePosition getState(){
         return new SwerveModulePosition(
@@ -50,15 +64,20 @@ public class SwerveModule {
         ); 
     }
 
-    private Rotation2d getAngle(){
-        return Rotation2d.fromRadians(steerCoder.getRawPosition());
+    public Translation2d getModuleLocation() { return this.module_location; }
+
+    public Rotation2d getAngle(){
+        // return Rotation2d.fromRadians(steerCoder.getRawPosition());
+        return Rotation2d.fromDegrees(Conversions.falconToDegrees(steer.getSelectedSensorPosition(), MODULE_GEAR_RATIO));
+
     }
 
     private void setAngle(SwerveModuleState desiredState){
         Rotation2d angle = (Math.abs(desiredState.speedMetersPerSecond) <= (5 * 0.01)) ? lastAngle : desiredState.angle; //Prevent rotating module if speed is less then 1%. Prevents Jittering.
         
-        // steer.set(ControlMode.Position, Conversions.degreesToFalcon(angle.getDegrees(), Constants.Swerve.angleGearRatio));
-        steer.setPosition(angle.getRadians());
+        steer.setPosition(Conversions.degreesToFalcon(angle.getDegrees(), MODULE_GEAR_RATIO));
+        
+        // steer.set(turn_controller.calculate(getAngle().getRadians(), angle.getRadians()));
         lastAngle = angle;
     }
 
@@ -79,6 +98,17 @@ public class SwerveModule {
         desiredState = CTREModuleState.optimize(desiredState, getState().angle); 
         setAngle(desiredState);
         setSpeed(desiredState, isOpenLoop);
+    }
+
+    public Rotation2d getCanCoder(){
+        return Rotation2d.fromDegrees(steerCoder.getRawPosition());
+    }
+
+    public void resetToAbsolute(){
+        // double absolutePosition = Conversions.degreesToFalcon(getCanCoder().getDegrees() - angleOffset.getDegrees(), MODULE_GEAR_RATIO);
+        // double absolutePosition = Conversions.degreesToFalcon(getCanCoder().getDegrees())
+
+        steer.setSelectedSensorPosition(0);
     }
 
 }
