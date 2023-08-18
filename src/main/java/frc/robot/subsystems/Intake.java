@@ -25,9 +25,11 @@ import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 // import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.libs.Tunable.TunableBoolean;
 import frc.libs.swerveyshark.sharkexe.SharkExecutor;
 import frc.libs.wrappers.GenericMotor;
 import frc.libs.wrappers.LimeLight;
+import frc.libs.wrappers.GenericMotor.PassiveMode;
 import frc.robot.Constants;
 import frc.robot.Robot;
 import frc.robot.RobotMap;
@@ -69,16 +71,19 @@ public class Intake extends SubsystemBase {
   private boolean runInward;
 
   private boolean runOutward;
-
+  
+  Boolean PIVOT_BRAKE = false;
+  TunableBoolean pivot_brake_tunable = new TunableBoolean("intake/pivot_brake_toggle", PIVOT_BRAKE);
 
   public Intake() {
+
     TalonFX pivot = new TalonFX(RobotMap.INTAKE_PORT, Constants.CANBUS);
     TalonFX roll = new TalonFX(RobotMap.ROLLER_PORT, Constants.CANBUS);
     TalonSRX encoder = new TalonSRX(RobotMap.INTAKE_ENCODER_PORT);
 
     roll.setStatusFramePeriod(StatusFrameEnhanced.Status_8_PulseWidth, 100);
 
-    pivot.setNeutralMode(NeutralMode.Coast);
+    pivot.setNeutralMode(PIVOT_BRAKE ? NeutralMode.Brake : NeutralMode.Coast);
     roll.setNeutralMode(NeutralMode.Brake);
 
     roll.setInverted(false);
@@ -125,6 +130,11 @@ public class Intake extends SubsystemBase {
     //  ) {
     //   intakeOn = true;
     // }
+    if (pivot_brake_tunable.getValue() != PIVOT_BRAKE) {
+      PIVOT_BRAKE = pivot_brake_tunable.getValue();
+      intake.setNeutralMode(PIVOT_BRAKE ? PassiveMode.BRAKE : PassiveMode.COAST);
+    }
+
     if (target == Constants.INTAKE_EXTEND) {
       intakePID.setPID(Constants.INTAKE_GAINS_EXTEND[0], Constants.INTAKE_GAINS_EXTEND[1], Constants.INTAKE_GAINS_EXTEND[2]);
     } else {
