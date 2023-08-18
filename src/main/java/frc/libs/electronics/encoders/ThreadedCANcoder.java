@@ -28,11 +28,18 @@ public class ThreadedCANcoder implements ThreadedEncoder<CANCoder> {
 
         overflows = 0;
         lastSensorPose = encoder.getAbsolutePosition();
-
+        
         threadService = Executors.newSingleThreadScheduledExecutor();
         threadService.scheduleAtFixedRate(this::trackOverflows, 0, delayms, TimeUnit.MILLISECONDS);
         
     }
+    
+    // public ThreadedCANcoder(int i, String bus) {
+    //     encoder = new CANCoder(i, bus);
+    //     lastSensorPose = encoder.getAbsolutePosition();
+    //     overflows = 0;
+        
+    // }
 
     @Override
     public synchronized void trackOverflows() {

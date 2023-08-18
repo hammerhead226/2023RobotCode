@@ -9,6 +9,7 @@ import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 import com.ctre.phoenix.sensors.AbsoluteSensorRange;
+import com.ctre.phoenix.sensors.CANCoder;
 import com.ctre.phoenix.sensors.CANCoderConfiguration;
 import com.ctre.phoenix.sensors.SensorInitializationStrategy;
 
@@ -38,7 +39,7 @@ public class Swerve extends SubsystemBase {
   private static final double anglePeakCurrentLimit = 0;
   private static final double anglePeakCurrentDuration = 0;
 
-  private static final boolean CANCODER_INVERT = false;
+  private static final boolean CANCODER_INVERT = true;
 
   public static Swerve getInstance() {
     return INSTANCE;
@@ -68,9 +69,9 @@ public class Swerve extends SubsystemBase {
   // }
 
   public Swerve() {
-    LazyTalonFX[] drives = new LazyTalonFX[Constants.NUMBER_OF_MODULES];
-    LazyTalonFX[] steers = new LazyTalonFX[Constants.NUMBER_OF_MODULES];
-    ThreadedCANcoder[] encoders = new ThreadedCANcoder[Constants.NUMBER_OF_MODULES];
+    TalonFX[] drives = new TalonFX[Constants.NUMBER_OF_MODULES];
+    TalonFX[] steers = new TalonFX[Constants.NUMBER_OF_MODULES];
+    CANCoder[] encoders = new CANCoder[Constants.NUMBER_OF_MODULES];
 
     for (int i = 0; i < Constants.NUMBER_OF_MODULES; i++) {
       TalonFX drive = new TalonFX(RobotMap.DRIVE_MOTORS[i], Constants.CANBUS);
@@ -93,7 +94,15 @@ public class Swerve extends SubsystemBase {
       angleConfig.slot0.kF = 0.0;
       angleConfig.supplyCurrLimit = angleSupplyLimit;
 
-      // TODO: DRIVE MOTOR CONFIGURATION
+      // DRIVE MOTOR CONFIGURATION
+      TalonFXConfiguration driveConfig = new TalonFXConfiguration();
+      driveConfig.slot0.kP = 0.05; // TODO: Tune this
+      driveConfig.slot0.kI = 0; 
+      driveConfig.slot0.kD = 0;
+      driveConfig.slot0.kF = 0;        
+      // driveConfig.supplyCurrLimit = driveSupplyLimit;
+      driveConfig.openloopRamp = 0.25;
+      driveConfig.closedloopRamp = 0;
 
       // CANCODER CONFIGURATION
       CANCoderConfiguration cancoderConfig = new CANCoderConfiguration();
@@ -101,25 +110,39 @@ public class Swerve extends SubsystemBase {
       cancoderConfig.sensorDirection = CANCODER_INVERT;
       cancoderConfig.initializationStrategy = SensorInitializationStrategy.BootToAbsolutePosition;
 
-      // drive.configAllSettings(driveConfig);
+      drive.configFactoryDefault();
+      steer.configFactoryDefault();
+      drive.configAllSettings(driveConfig);
       steer.configAllSettings(angleConfig);
-      // TODO: SET ENCODER CONFIGURATION
+      drive.setNeutralMode(NeutralMode.Brake);
+      steer.setNeutralMode(NeutralMode.Brake);
 
-      encoders[i] = new ThreadedCANcoder(i, Math.PI, Constants.MODULE_OFFSETS[i], 10, Constants.CANBUS, true);
-      drives[i] = new LazyTalonFX(drive, Constants.TICKS_PER_METER);
-      steers[i] = new LazyTalonFX(steer, Constants.TICKS_PER_METER);
+      
+      encoders[i] = new CANCoder(i, Constants.CANBUS);
+      encoders[i].configFactoryDefault();
+      encoders[i].configAllSettings(cancoderConfig);
+      
+      // encoders[i] = new ThreadedCANcoder(i, Math.PI, Constants.MODULE_OFFSETS[i], 10, Constants.CANBUS, true);
+
+      drives[i] = drive;
+      steers[i] = steer;
       // modules[i] = new SwerveModule(i);
     }
 
+    Rotation2d _fl_offset = Rotation2d.fromDegrees(0);
+    Rotation2d _fr_offset = Rotation2d.fromDegrees(0);
+    Rotation2d _bl_offset = Rotation2d.fromDegrees(0);
+    Rotation2d _br_offset = Rotation2d.fromDegrees(0);
+
     final double MODULE_MAX_ANGULAR_VELOCITY = 2 * Math.PI;
     SwerveModule _fl = new SwerveModule(0, drives[0], steers[0], encoders[0],
-        new Translation2d(Constants.LENGTH, Constants.WIDTH));
+        new Translation2d(Constants.LENGTH, Constants.WIDTH), _fl_offset);
     SwerveModule _fr = new SwerveModule(1, drives[1], steers[1], encoders[1],
-        new Translation2d(Constants.LENGTH, -Constants.WIDTH));
+        new Translation2d(Constants.LENGTH, -Constants.WIDTH),_fr_offset);
     SwerveModule _bl = new SwerveModule(2, drives[2], steers[2], encoders[2],
-        new Translation2d(-Constants.LENGTH, Constants.WIDTH));
+        new Translation2d(-Constants.LENGTH, Constants.WIDTH), _bl_offset);
     SwerveModule _br = new SwerveModule(3, drives[3], steers[3], encoders[3],
-        new Translation2d(-Constants.LENGTH, -Constants.WIDTH));
+        new Translation2d(-Constants.LENGTH, -Constants.WIDTH), _br_offset);
 
     _fl.resetToAbsolute();
     _fr.resetToAbsolute();
@@ -137,22 +160,32 @@ public class Swerve extends SubsystemBase {
 
     // return new SwerveDrive(gyro, 1, _fl, _fr, _bl, _br);
 
-    kinematics = new SwerveDriveKinematics(_fl.getModuleLocation(),
+    kinematics = new SwerveDriveKinematics(
+        _fl.getModuleLocation(),
         _fr.getModuleLocation(),
         _bl.getModuleLocation(),
-        _br.getModuleLocation());
+        _br.getModuleLocation()
+      );
 
-    odometry = new SwerveDriveOdometry(kinematics, new Rotation2d(gyro.getYaw()), getModuleStates());
+    odometry = new SwerveDriveOdometry(kinematics, new Rotation2d(gyro.getYaw()), getModulePositions());
   }
 
-  public SwerveModulePosition[] getModuleStates() {
-    SwerveModulePosition[] states = new SwerveModulePosition[4];
+  public SwerveModuleState[] getModuleStates() {
+    SwerveModuleState[] states = new SwerveModuleState[4];
     for (SwerveModule mod : modules) {
       states[mod.moduleNumber] = mod.getState();
     }
     return states;
   }
-
+  
+  public SwerveModulePosition[] getModulePositions(){
+    SwerveModulePosition[] positions = new SwerveModulePosition[4];
+    for(SwerveModule mod : modules){
+        positions[mod.moduleNumber] = mod.getPosition();
+    }
+    return positions;
+  }
+  
   public void control(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop) {
     SmartDashboard.putNumber("swerve/rotation", rotation);
     SwerveModuleState[] swerveModuleStates = kinematics.toSwerveModuleStates(
@@ -184,12 +217,13 @@ public class Swerve extends SubsystemBase {
     }
   }
 
+
+
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
 
     for (int i = 0; i < modules.length; i++) {
-      SmartDashboard.putString("swerve/module_" + i + "_angle", modules[i].getAngle().toString());
+      SmartDashboard.putString("swerve/module_" + i + "_state", getModuleStates()[i].toString());
     }
 
   }

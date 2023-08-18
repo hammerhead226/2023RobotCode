@@ -1,4 +1,4 @@
-package frc.libs.seafloorsourcechecks;
+package frc.libs.whirlpool;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
@@ -20,9 +20,9 @@ public class SwerveModule {
     private Rotation2d angleOffset;
     private Rotation2d lastAngle;
 
-    private LazyTalonFX steer;
-    private LazyTalonFX drive;
-    private ThreadedEncoder<?> steerCoder;
+    private TalonFX steer;
+    private TalonFX drive;
+    private CANCoder steerCoder;
 
     private Translation2d module_location;
 
@@ -32,10 +32,10 @@ public class SwerveModule {
 
     private static final double MODULE_GEAR_RATIO = 1 / 6.75;
 
-    public SwerveModule(int moduleNumber, LazyTalonFX drive, LazyTalonFX steer, ThreadedEncoder<?> steerCoder, Translation2d moduleLocation) {
+    public SwerveModule(int moduleNumber, TalonFX drive, TalonFX steer, CANCoder steerCoder, Translation2d moduleLocation, Rotation2d angleOffset) {
         this.moduleNumber = moduleNumber;
 
-        this.angleOffset = new Rotation2d(steerCoder.getOffsetPosition());
+        this.angleOffset = angleOffset;
 
         this.drive = drive;
         this.steer = steer;
@@ -57,10 +57,10 @@ public class SwerveModule {
     //     // this.steerCoder = new LazyTalo
     // }
 
-    public SwerveModulePosition getState(){
-        return new SwerveModulePosition(
-            drive.getVelocity(), 
-            getAngle()
+    public SwerveModuleState getState(){
+        return new SwerveModuleState(
+            Conversions.falconToMPS(drive.getSelectedSensorVelocity(), 2 * (4 / 2) * Math.PI, MODULE_GEAR_RATIO), 
+            getAngle() 
         ); 
     }
 
@@ -75,7 +75,7 @@ public class SwerveModule {
     private void setAngle(SwerveModuleState desiredState){
         Rotation2d angle = (Math.abs(desiredState.speedMetersPerSecond) <= (5 * 0.01)) ? lastAngle : desiredState.angle; //Prevent rotating module if speed is less then 1%. Prevents Jittering.
         
-        steer.setPosition(Conversions.degreesToFalcon(angle.getDegrees(), MODULE_GEAR_RATIO));
+        steer.set(ControlMode.Position, Conversions.degreesToFalcon(angle.getDegrees(), MODULE_GEAR_RATIO));
         
         // steer.set(turn_controller.calculate(getAngle().getRadians(), angle.getRadians()));
         lastAngle = angle;
@@ -84,14 +84,13 @@ public class SwerveModule {
     private void setSpeed(SwerveModuleState desiredState, boolean isOpenLoop){
         if(isOpenLoop){
             double percentOutput = desiredState.speedMetersPerSecond / 5;
-            drive.set(percentOutput);
+            drive.set(ControlMode.PercentOutput, percentOutput);
         }
         else {
             double velocity = desiredState.speedMetersPerSecond;
-            drive.setVelocityInMeters(velocity);
+            drive.set(ControlMode.Velocity, velocity);
         }
     }
-
 
     public void setDesiredState(SwerveModuleState desiredState, boolean isOpenLoop){
         /* This is a custom optimize function, since default WPILib optimize assumes continuous controller which CTRE and Rev onboard is not */
@@ -100,15 +99,22 @@ public class SwerveModule {
         setSpeed(desiredState, isOpenLoop);
     }
 
+    public SwerveModulePosition getPosition(){
+        return new SwerveModulePosition(
+            Conversions.falconToMeters(drive.getSelectedSensorPosition(), 2 * (4 / 2) * Math.PI, MODULE_GEAR_RATIO), 
+            getAngle()
+        );
+    }
+
     public Rotation2d getCanCoder(){
-        return Rotation2d.fromDegrees(steerCoder.getRawPosition());
+        return Rotation2d.fromDegrees(steerCoder.getAbsolutePosition());
     }
 
     public void resetToAbsolute(){
-        // double absolutePosition = Conversions.degreesToFalcon(getCanCoder().getDegrees() - angleOffset.getDegrees(), MODULE_GEAR_RATIO);
+        double absolutePosition = Conversions.degreesToFalcon(getCanCoder().getDegrees() - angleOffset.getDegrees(), MODULE_GEAR_RATIO);
         // double absolutePosition = Conversions.degreesToFalcon(getCanCoder().getDegrees())
 
-        steer.setSelectedSensorPosition(0);
+        steer.setSelectedSensorPosition(absolutePosition);
     }
 
 }
