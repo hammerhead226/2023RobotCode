@@ -44,7 +44,7 @@ public class TeleOpSwerve extends CommandBase {
     double rotationVal = MathUtil.applyDeadband(rotationSup.getAsDouble(), Constants.CONTROLLER_DEADBAND);
 
     swerve.control(
-      new Translation2d(translationalVal, strafeVal).times(5), 
+      new Translation2d(translationalVal, strafeVal).times(5),
       rotationVal * Math.PI,
       !robotCentricSup.getAsBoolean(),
        true);

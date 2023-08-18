@@ -69,4 +69,16 @@ public class LazyTalonFX implements LazyMotorController<TalonFX> {
     public double getVelocity() {
         return (motor.getSelectedSensorVelocity() * 10)/(ticksPerMeter);
     }
+
+    public void setSelectedSensorPosition(double absolutePosition) {
+        motor.setSelectedSensorPosition(absolutePosition);
+    }
+
+    public double getSelectedSensorPosition() {
+        return motor.getSelectedSensorPosition();
+    }
+
+    public void configAllSetting(TalonFXConfiguration config) {
+        motor.configAllSettings(config);
+    }
 }
