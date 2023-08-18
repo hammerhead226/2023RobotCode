@@ -9,7 +9,9 @@ public class TunableBoolean extends TunableElement<Boolean> {
      * @param defaultValue : the default value for the element (boolean)
      */
     public TunableBoolean(String key, Boolean defaultValue) {
-        SmartDashboard.putBoolean(key, defaultValue);
+        this.key = key;
+        // System.out.println(key);
+        SmartDashboard.putBoolean(this.key, defaultValue);
         this.defaultValue = defaultValue;
     }
 
@@ -26,6 +28,7 @@ public class TunableBoolean extends TunableElement<Boolean> {
      * @return the current value (double)
      */
     public Boolean getValue() {
-        return SmartDashboard.getBoolean(key, defaultValue);
+        // System.out.println(this.key);
+        return SmartDashboard.getBoolean(this.key, defaultValue);
     }
 }

@@ -72,11 +72,12 @@ public class Intake extends SubsystemBase {
 
   private boolean runOutward;
   
-  Boolean PIVOT_BRAKE = false;
-  TunableBoolean pivot_brake_tunable = new TunableBoolean("intake/pivot_brake_toggle", PIVOT_BRAKE);
+  Boolean PIVOT_BRAKE;
+  TunableBoolean pivot_brake_tunable;
 
   public Intake() {
-
+    PIVOT_BRAKE = false;
+    pivot_brake_tunable = new TunableBoolean("intake/pivot_brake_toggle", PIVOT_BRAKE);
     TalonFX pivot = new TalonFX(RobotMap.INTAKE_PORT, Constants.CANBUS);
     TalonFX roll = new TalonFX(RobotMap.ROLLER_PORT, Constants.CANBUS);
     TalonSRX encoder = new TalonSRX(RobotMap.INTAKE_ENCODER_PORT);
