@@ -21,6 +21,9 @@ import com.revrobotics.Rev2mDistanceSensor.RangeProfile;
 import com.revrobotics.Rev2mDistanceSensor.Unit;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 // import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -48,6 +51,8 @@ public class Intake extends SubsystemBase {
   private boolean intakeOn;
   private boolean intakeLowered;
   private PIDController intakePID;
+
+  private ProfiledPIDController intakePofiledController;
 
   private boolean runningOut;
 
@@ -95,6 +100,9 @@ public class Intake extends SubsystemBase {
     roller = new GenericMotor(roll);
     intakeEncoder = new GenericMotor(encoder);
     intakePID = new PIDController(Constants.INTAKE_GAINS_RETRACT[0], Constants.INTAKE_GAINS_RETRACT[1], Constants.INTAKE_GAINS_RETRACT[2]);
+
+    TrapezoidProfile.Constraints constraints = new TrapezoidProfile.Constraints(2, 1);
+    intakePofiledController = new ProfiledPIDController(Constants.INTAKE_GAINS_RETRACT[0], Constants.INTAKE_GAINS_RETRACT[1], Constants.INTAKE_GAINS_RETRACT[2], constraints);
 
     target = Constants.INTAKE_EXTEND;
 
