@@ -160,12 +160,12 @@ public class Swerve {
         double xLinearVelocity = linearVelocity * Math.cos(directionalMotion);
         double yLinearVelocity = linearVelocity * Math.sin(directionalMotion);
 
-        double adjustedXLinearVel = xLinearVelocity + translationalPIDController.calculate(currentSwerveState[0], position[0]);
-        double adjustedYLinearVel = yLinearVelocity + translationalPIDController.calculate(currentSwerveState[1], position[1]);
+        double adjustedXLinearVel = xLinearVelocity * translationalPIDController.calculate(currentSwerveState[0], position[0]);
+        double adjustedYLinearVel = yLinearVelocity * translationalPIDController.calculate(currentSwerveState[1], position[1]);
 
         // SmartDashboard.putNumber("y error/t", position[0] - currentSwerveState[0]);
 
-        double adjustedAngularVel = angularVelocity + rotationalPIDController.calculate(currentSwerveState[2], position[2]);
+        double adjustedAngularVel = angularVelocity * rotationalPIDController.calculate(currentSwerveState[2], position[2]);
 
         // SmartDashboard.putNumber("rotate error/t", position[2] - currentSwerveState[2]);
 

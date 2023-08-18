@@ -164,8 +164,9 @@ public final class Constants {
   // public static final double INTAKE_EXTEND = -760;
   // public static final double INTAKE_LOWERED = 300 + 2500;
   // public static final double INTAKE_RETRACT = 500;
-  public static final double INTAKE_EXTEND = 3290;
-  public static final double INTAKE_RETRACT = 4540;
+  public static final double INTAKE_EXTEND = -1500;
+  public static final double INTAKE_RETRACT = -100;
+  public static final double INTAKE_OUTTAKE = -700;
 
   public static final double INTAKE_THRESHOLD = 500;
       
@@ -203,7 +204,7 @@ public final class Constants {
   public static final double ELEVATOR_HIGH = -500;
   public static final double ELEVATOR_MID = 800;
   public static final double ELEVATOR_HOLD = 1113;
-  public static final double ELEVATOR_SUBSTATION = 800;
+  public static final double ELEVATOR_SUBSTATION = 375;
 
 
   // public static final double ELEVATOR_HIGH = -700 + 100;

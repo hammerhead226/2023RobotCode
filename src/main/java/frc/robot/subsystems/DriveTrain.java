@@ -62,7 +62,7 @@ public class DriveTrain extends SubsystemBase {
             TalonFX drive = new TalonFX(RobotMap.DRIVE_MOTORS[i], Constants.CANBUS);
             TalonFX steer = new TalonFX(RobotMap.STEER_MOTORS[i], Constants.CANBUS);
 
-            drive.configOpenloopRamp(0.1);
+            drive.configOpenloopRamp(0.5);
             drive.setNeutralMode(NeutralMode.Brake);
 
             drives[i] = new LazyTalonFX(drive, Constants.TICKS_PER_METER);

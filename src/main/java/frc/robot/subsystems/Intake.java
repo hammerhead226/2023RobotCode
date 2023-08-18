@@ -84,7 +84,7 @@ public class Intake extends SubsystemBase {
     roll.setInverted(false);
     pivot.setInverted(true);
     
-    encoder.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute);
+    encoder.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
 
     // dist = new Rev2mDistanceSensor(Port.kOnboard);
 
@@ -272,6 +272,7 @@ public class Intake extends SubsystemBase {
     // if (intakeOn) {
       // runOutward = true;
       intakeState = INTAKE_STATES.OUTWARD;
+      target = Constants.INTAKE_OUTTAKE;
       // roller.set(-0.3);
       // runningOut = true;
     // }
