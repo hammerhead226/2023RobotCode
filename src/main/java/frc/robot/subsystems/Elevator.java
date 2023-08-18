@@ -54,7 +54,7 @@ public class Elevator extends SubsystemBase {
 
     elevatorPID = new PIDController(Constants.ELEVATOR_GAINS[0], Constants.ELEVATOR_GAINS[1],
         Constants.ELEVATOR_GAINS[2]);
-    right.follow(left);
+    // right.follow(left);
 
     elevatorLeft = new GenericMotor(left);
     elevatorEncoder = new GenericMotor(encoder);
@@ -101,6 +101,7 @@ public class Elevator extends SubsystemBase {
 
   public void control(double speed) {
     elevatorLeft.set(speed);
+    elevatorRight.set(speed);
   }
 
   @Override
