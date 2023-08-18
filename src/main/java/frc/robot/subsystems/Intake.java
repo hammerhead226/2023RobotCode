@@ -78,7 +78,7 @@ public class Intake extends SubsystemBase {
 
     roll.setStatusFramePeriod(StatusFrameEnhanced.Status_8_PulseWidth, 100);
 
-    pivot.setNeutralMode(NeutralMode.Brake);
+    pivot.setNeutralMode(NeutralMode.Coast);
     roll.setNeutralMode(NeutralMode.Brake);
 
     roll.setInverted(false);

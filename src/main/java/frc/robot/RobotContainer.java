@@ -111,6 +111,8 @@ public class RobotContainer {
 
   private final double ADJ_SPEED = 0.65;
 
+  private final boolean bool = true;
+
   public RobotContainer() {
     configureBindings();
 
@@ -147,12 +149,19 @@ public class RobotContainer {
     // elevator
     // ));
 
+    // dt.setDefaultCommand(
+    //     new TeleOpSwerve(dt,
+    //         () -> -driver.getLeftJoyY(),
+    //         () -> -driver.getLeftJoyX(),
+    //         () -> -driver.getRightJoyX(),
+    //         () -> driver.getLBButton().getAsBoolean()));
+
     dt.setDefaultCommand(
-        new TeleOpSwerve(dt,
-            () -> -driver.getLeftJoyY(),
-            () -> -driver.getLeftJoyX(),
-            () -> -driver.getRightJoyX(),
-            () -> driver.getLBButton().getAsBoolean()));
+      new TeleOpSwerve(dt,
+          () -> -driver.getLeftJoyY(),
+          () -> -driver.getLeftJoyX(),
+          () -> -driver.getRightJoyX(),
+          () -> driver.getLBButton().getAsBoolean()));
 
     // gripper.setDefaultCommand(new RunCommand(gripper::run, gripper));
     // intake.setDefaultCommand(new RunCommand(intake::run, intake));

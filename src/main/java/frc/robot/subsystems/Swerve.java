@@ -39,7 +39,7 @@ public class Swerve extends SubsystemBase {
   private static final double anglePeakCurrentLimit = 0;
   private static final double anglePeakCurrentDuration = 0;
 
-  private static final boolean CANCODER_INVERT = true;
+  private static final boolean CANCODER_INVERT = false;
 
   public static Swerve getInstance() {
     return INSTANCE;
@@ -88,15 +88,16 @@ public class Swerve extends SubsystemBase {
           angleContinuousCurrentLimit,
           anglePeakCurrentLimit,
           anglePeakCurrentDuration);
-      angleConfig.slot0.kP = 0.2;
+      angleConfig.slot0.kP = 0.3;
       angleConfig.slot0.kI = 0.0;
       angleConfig.slot0.kD = 0.0;
-      angleConfig.slot0.kF = 0.0;
+      angleConfig.slot0.kF = 0.1;
       angleConfig.supplyCurrLimit = angleSupplyLimit;
 
       // DRIVE MOTOR CONFIGURATION
       TalonFXConfiguration driveConfig = new TalonFXConfiguration();
-      driveConfig.slot0.kP = 0.05; // TODO: Tune this
+      // driveConfig.slot0.kP = 0.05; // TODO: Tune this
+      driveConfig.slot0.kP = 0;
       driveConfig.slot0.kI = 0; 
       driveConfig.slot0.kD = 0;
       driveConfig.slot0.kF = 0;        
@@ -224,6 +225,7 @@ public class Swerve extends SubsystemBase {
 
     for (int i = 0; i < modules.length; i++) {
       SmartDashboard.putString("swerve/module_" + i + "_state", getModuleStates()[i].toString());
+      SmartDashboard.putNumber("swerve/current" + i, modules[i].getAngle().getDegrees());
     }
 
   }

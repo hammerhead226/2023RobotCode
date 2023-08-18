@@ -10,6 +10,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.libs.electronics.encoders.ThreadedEncoder;
 import frc.libs.electronics.motors.LazyMotorController;
 import frc.libs.electronics.motors.LazyTalonFX;
@@ -32,6 +33,8 @@ public class SwerveModule {
 
     private static final double MODULE_GEAR_RATIO = 1 / 6.75;
 
+    private PIDController steerTroller;
+
     public SwerveModule(int moduleNumber, TalonFX drive, TalonFX steer, CANCoder steerCoder, Translation2d moduleLocation, Rotation2d angleOffset) {
         this.moduleNumber = moduleNumber;
 
@@ -43,6 +46,8 @@ public class SwerveModule {
         this.steerCoder = steerCoder;
 
         this.module_location = moduleLocation;
+
+        this.steerTroller = new PIDController(0.0009, 0, 0);
 
         lastAngle = getState().angle;
 
@@ -73,10 +78,15 @@ public class SwerveModule {
     }
 
     private void setAngle(SwerveModuleState desiredState){
-        Rotation2d angle = (Math.abs(desiredState.speedMetersPerSecond) <= (5 * 0.01)) ? lastAngle : desiredState.angle; //Prevent rotating module if speed is less then 1%. Prevents Jittering.
-        
-        steer.set(ControlMode.Position, Conversions.degreesToFalcon(angle.getDegrees(), MODULE_GEAR_RATIO));
-        
+        Rotation2d angle = (Math.abs(desiredState.speedMetersPerSecond) <= (5 * 0.02)) ? lastAngle : desiredState.angle; //Prevent rotating module if speed is less then 1%. Prevents Jittering.
+        SmartDashboard.putNumber("swerve/desired state" + moduleNumber, angle.getDegrees());
+
+        // 
+        double calculation = steerTroller.calculate(getAngle().getDegrees(), angle.getDegrees());
+
+        steer.set(ControlMode.PercentOutput, calculation);
+        // steer.set(ControlMode.Position, Conversions.degreesToFalcon(angle.getDegrees(), MODULE_GEAR_RATIO));
+        SmartDashboard.putNumber("swerve/stter percent" + moduleNumber, calculation);
         // steer.set(turn_controller.calculate(getAngle().getRadians(), angle.getRadians()));
         lastAngle = angle;
     }
