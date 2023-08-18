@@ -152,10 +152,10 @@ public class RobotContainer {
     //      elevator
     //     ));
 
-    // gripper.setDefaultCommand(new RunCommand(gripper::run, gripper));
-    // intake.setDefaultCommand(new RunCommand(intake::run, intake));
-    // linearSlide.setDefaultCommand(new RunCommand(linearSlide::run, linearSlide));
-    // elevator.setDefaultCommand(new RunCommand(elevator::run, elevator));
+    gripper.setDefaultCommand(new RunCommand(gripper::run, gripper));
+    intake.setDefaultCommand(new RunCommand(intake::run, intake));
+    linearSlide.setDefaultCommand(new RunCommand(linearSlide::run, linearSlide));
+    elevator.setDefaultCommand(new RunCommand(elevator::run, elevator));
 
     led.setDefaultCommand(new SetColorMode());
 
@@ -228,9 +228,9 @@ public class RobotContainer {
     manip.getRBButton().onTrue(new Scoring());
     manip.getRightStickPress().onTrue(new Substation());
 
-    driver.getAButton().onTrue(new InstantCommand(intake::runOut, intake));
-    driver.getAButton().onFalse(new InstantCommand(intake::stop, intake));
-    driver.getAButton().onFalse(new InstantCommand(intake::retractIntake, intake));
+    driver.getBButton().onTrue(new InstantCommand(intake::runOut, intake));
+    driver.getBButton().onFalse(new InstantCommand(intake::stop, intake));
+    driver.getBButton().onFalse(new InstantCommand(intake::retractIntake, intake));
     
 
     driver.getYButton().onTrue(new InstantCommand(intake::runIn, intake));

@@ -204,7 +204,7 @@ public final class Constants {
   public static final double ELEVATOR_HIGH = -500;
   public static final double ELEVATOR_MID = 800;
   public static final double ELEVATOR_HOLD = 1113;
-  public static final double ELEVATOR_SUBSTATION = 800;
+  public static final double ELEVATOR_SUBSTATION = 375;
 
 
   // public static final double ELEVATOR_HIGH = -700 + 100;
