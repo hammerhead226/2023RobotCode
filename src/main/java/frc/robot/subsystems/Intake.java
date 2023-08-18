@@ -9,8 +9,11 @@ import java.util.concurrent.TimeUnit;
 
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.StatorCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
+import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.Rev2mDistanceSensor;
@@ -76,6 +79,8 @@ public class Intake extends SubsystemBase {
     TalonFX roll = new TalonFX(RobotMap.ROLLER_PORT, Constants.CANBUS);
     TalonSRX encoder = new TalonSRX(RobotMap.INTAKE_ENCODER_PORT);
 
+    pivot.configFactoryDefault();
+
     roll.setStatusFramePeriod(StatusFrameEnhanced.Status_8_PulseWidth, 100);
 
     pivot.setNeutralMode(NeutralMode.Coast);
@@ -91,6 +96,26 @@ public class Intake extends SubsystemBase {
     // dist.setRangeProfile(RangeProfile.kHighSpeed);
     // dist.setDistanceUnits(Unit.kInches);
 
+    TalonFXConfiguration pivotConfig = new TalonFXConfiguration();
+    SupplyCurrentLimitConfiguration pivotSupplyCurrentLimit = new SupplyCurrentLimitConfiguration();
+    pivotSupplyCurrentLimit.enable = true;
+    pivotSupplyCurrentLimit.triggerThresholdCurrent = 25;
+    pivotSupplyCurrentLimit.triggerThresholdTime = 0.5;
+    pivotSupplyCurrentLimit.currentLimit = 10;
+
+    pivotConfig.supplyCurrLimit = pivotSupplyCurrentLimit;
+    pivotConfig.openloopRamp = 0.5;
+    pivotConfig.closedloopRamp = 0.5;
+    
+    pivot.configAllSettings(pivotConfig);
+
+    // StatorCurrentLimitConfiguration pivotStatorCurrentLimit = new StatorCurrentLimitConfiguration();
+    // pivotStatorCurrentLimit.enable = true;
+    // pivotStatorCurrentLimit.triggerThresholdCurrent = 30;
+    // pivotStatorCurrentLimit.triggerThresholdTime = 1;
+    // pivotStatorCurrentLimit.currentLimit = 5;
+
+
     intake = new GenericMotor(pivot);
     roller = new GenericMotor(roll);
     intakeEncoder = new GenericMotor(encoder);
@@ -105,9 +130,6 @@ public class Intake extends SubsystemBase {
     lastSpeed = 0;
 
     distanceSensor = new AnalogInput(1);
- 
-
-   
 
     SharkExecutor.createRunnable("intake.extend", this::extendIntake);
     SharkExecutor.createRunnable("intake.runIn", this::runIn);
@@ -118,13 +140,7 @@ public class Intake extends SubsystemBase {
   }
 
   public void run() {
-    
-    // if(Robot.m_robotContainer.gripper.getCubeMode()
-    //  || Robot.m_robotContainer.gripper.getArmTarget() == Constants.ARM_SCORE
-    // //  || Robot.m_robotContainer.elevator.getTarget() != Constants.ELEVATOR_HOLD
-    //  ) {
-    //   intakeOn = true;
-    // }
+
     if (target == Constants.INTAKE_EXTEND) {
       intakePID.setPID(Constants.INTAKE_GAINS_EXTEND[0], Constants.INTAKE_GAINS_EXTEND[1], Constants.INTAKE_GAINS_EXTEND[2]);
     } else {
@@ -160,10 +176,6 @@ public class Intake extends SubsystemBase {
     speed = clamp(speed, Constants.MAX_SPEED_DOWN, Constants.MAX_SPEED_UP);
     
     boolean condition = (speed > 0 && lastSpeed < 0) || (speed < 0 && lastSpeed > 0);
-
-    // if (intake.getFalconCurrent() >= 35 && !condition) {
-    //   speed = 0;
-    // }
 
     lastSpeed = speed;
 
@@ -331,21 +343,6 @@ public class Intake extends SubsystemBase {
     SmartDashboard.putNumber("intake diff", Math.abs(intakeEncoder.getSensorPose() - target));
 
     SmartDashboard.putNumber("intake target", target);
-    
-    // if (detected() && !runningOut) { 
-      
-    // //   // runInUntilSpike(1.3);
-    
-    //   retractIntake();
-    //   // deadStop();
-    // //   // Robot.m_robotContainer.manager.
-    // //   // deadStop();
-    
-      
-      
 
-    // } 
-    // SmartDashboard.putNumber("limelight stuff", LimeLight.getHorizontalOffset());
-    // SmartDashboard.putNumber("limelight stuff 2", LimeLight.getValue());
   }
 }
