@@ -69,9 +69,9 @@ public class DriveTrain extends SubsystemBase {
             StatorCurrentLimitConfiguration currentLimit = new StatorCurrentLimitConfiguration();
 
             currentLimit.enable = true;
-            currentLimit.triggerThresholdCurrent = 70;
+            currentLimit.triggerThresholdCurrent = 60;
             currentLimit.triggerThresholdTime = 1;
-            currentLimit.currentLimit = 50;
+            currentLimit.currentLimit = 40;
 
             driveConfig.statorCurrLimit = currentLimit;
 
