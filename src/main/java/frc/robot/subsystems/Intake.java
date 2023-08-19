@@ -83,6 +83,8 @@ public class Intake extends SubsystemBase {
 
     roll.setInverted(false);
     pivot.setInverted(true);
+
+    pivot.configOpenloopRamp(0.1);
     
     encoder.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
 

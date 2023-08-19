@@ -157,8 +157,10 @@ public final class Constants {
   public static final double ROLLER_RUN_SPEED = 0.43;
   // public static final double[] INTAKE_GAINS = { 0.0009, 0, 0 };
   // public static final double[] INTAKE_GAINS = {0.0017, 0, 0 };
-  public static final double[] INTAKE_GAINS_RETRACT = {0.0008, 0.0003 , 0};
-  public static final double[] INTAKE_GAINS_EXTEND = {0.0012, 0.0004, 0 };
+  // public static final double[] INTAKE_GAINS_RETRACT = {0.0008, 0.0003 , 0};
+  // public static final double[] INTAKE_GAINS_EXTEND = {0.0012, 0.0004, 0 };
+  public static final double[] INTAKE_GAINS_RETRACT = {0.0005, 0.00005 , 0};
+  public static final double[] INTAKE_GAINS_EXTEND = {0.00046, 0.00025, 0 };
   public static final int INTAKE_OFFSET = 0;
 
   // public static final double INTAKE_EXTEND = -760;
@@ -203,7 +205,7 @@ public final class Constants {
 
   public static final double ELEVATOR_HIGH = -500;
   public static final double ELEVATOR_MID = 800;
-  public static final double ELEVATOR_HOLD = 1113;
+  public static final double ELEVATOR_HOLD = 1080;
   public static final double ELEVATOR_SUBSTATION = 375;
 
 
@@ -223,7 +225,8 @@ public final class Constants {
 
 
   public static final double ARM_HOLD = 5820;
-  public static final double ARM_SCORE = 4680;
+  // public static final double ARM_SCORE = 4680;
+  public static final double ARM_SCORE = 4760;
   public static final double ARM_STOW = 7110;
   // public static final double ARM_SUBSTATION = 5420;
   public static final double ARM_SUBSTATION = 5400;
