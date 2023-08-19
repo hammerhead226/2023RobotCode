@@ -65,6 +65,8 @@ public class DriveTrain extends SubsystemBase {
             drive.configOpenloopRamp(0.5);
             drive.setNeutralMode(NeutralMode.Brake);
 
+            steer.configOpenloopRamp(0.2);
+            
             drives[i] = new LazyTalonFX(drive, Constants.TICKS_PER_METER);
             steers[i] = new LazyTalonFX(steer, Constants.TICKS_PER_METER);
 

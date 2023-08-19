@@ -42,7 +42,7 @@ public class Elevator extends SubsystemBase {
     TalonSRX encoder = new TalonSRX(RobotMap.ELEVATOR_ENCODER);
 
     left.setNeutralMode(NeutralMode.Brake);
-    right.setNeutralMode(NeutralMode.Brake);
+    right.setNeutralMode(NeutralMode.Coast);
 
     left.setInverted(true);
     right.setInverted(true);
