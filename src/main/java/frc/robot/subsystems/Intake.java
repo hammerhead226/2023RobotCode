@@ -98,7 +98,7 @@ public class Intake extends SubsystemBase {
     intakeEncoder = new GenericMotor(encoder);
     intakePID = new PIDController(Constants.INTAKE_GAINS_RETRACT[0], Constants.INTAKE_GAINS_RETRACT[1], Constants.INTAKE_GAINS_RETRACT[2]);
 
-    target = Constants.INTAKE_EXTEND;
+    target = Constants.INTAKE_RETRACT;
 
     intakeState = INTAKE_STATES.STOP;
 
