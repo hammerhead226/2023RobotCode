@@ -5,7 +5,9 @@ import com.ctre.phoenix.motorcontrol.DemandType;
 import java.util.Arrays;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 import com.ctre.phoenix.sensors.CANCoder;
 
 import edu.wpi.first.math.controller.PIDController;
@@ -61,6 +63,19 @@ public class DriveTrain extends SubsystemBase {
         for(int i = 0; i < Constants.NUMBER_OF_MODULES; i++) {
             TalonFX drive = new TalonFX(RobotMap.DRIVE_MOTORS[i], Constants.CANBUS);
             TalonFX steer = new TalonFX(RobotMap.STEER_MOTORS[i], Constants.CANBUS);
+
+            TalonFXConfiguration driveConfig = new TalonFXConfiguration();
+            SupplyCurrentLimitConfiguration currentLimit = new SupplyCurrentLimitConfiguration();
+
+            currentLimit.enable = true;
+            currentLimit.triggerThresholdCurrent = 60;
+            currentLimit.triggerThresholdTime = 0.8;
+            currentLimit.currentLimit = 30;
+
+            driveConfig.supplyCurrLimit = currentLimit;
+
+            drive.configAllSettings(driveConfig);
+
 
             drive.configOpenloopRamp(0.5);
             drive.setNeutralMode(NeutralMode.Brake);
