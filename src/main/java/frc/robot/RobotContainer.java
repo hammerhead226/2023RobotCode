@@ -124,14 +124,14 @@ public class RobotContainer {
     //     dt
     //     ));
 
-        dt.setDefaultCommand(
+        /*dt.setDefaultCommand(
           new RunCommand(
             () -> dt.control((clamp(Math.pow(driver.getLeftJoyX(), 2), 0, ADJ_SPEED) * (driver.getLeftJoyX() < 0 ? -1 : 1)),
                              (clamp(Math.pow(driver.getLeftJoyY(), 2), 0, ADJ_SPEED) * (driver.getLeftJoyY() < 0 ? -1 : 1)), 
                              -clamp(Math.pow(driver.getRightJoyX(), 2), 0, ADJ_SPEED) * (driver.getRightJoyX() < 0 ? -1 : 1)),
             dt
             ));
-
+    */
     // linearSlide.setDefaultCommand(
     //   new RunCommand(() -> linearSlide.control(clamp(manip.getLeftJoyY(), -0.6, 0.6)), linearSlide)
     // );
@@ -152,10 +152,10 @@ public class RobotContainer {
     //      elevator
     //     ));
 
-    gripper.setDefaultCommand(new RunCommand(gripper::run, gripper));
-    intake.setDefaultCommand(new RunCommand(intake::run, intake));
-    linearSlide.setDefaultCommand(new RunCommand(linearSlide::run, linearSlide));
-    elevator.setDefaultCommand(new RunCommand(elevator::run, elevator));
+    // gripper.setDefaultCommand(new RunCommand(gripper::run, gripper));
+    // intake.setDefaultCommand(new RunCommand(intake::run, intake));
+    // linearSlide.setDefaultCommand(new RunCommand(linearSlide::run, linearSlide));
+    // elevator.setDefaultCommand(new RunCommand(elevator::run, elevator));
 
     led.setDefaultCommand(new SetColorMode());
 

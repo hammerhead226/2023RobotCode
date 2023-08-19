@@ -15,6 +15,7 @@ import frc.libs.wrappers.GenericMotor.PassiveMode;
 import frc.robot.Constants;
 import frc.robot.RobotMap;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -116,5 +117,6 @@ public class LinearSlide extends SubsystemBase {
   @Override
   public void periodic() {
     SmartDashboard.putNumber("slide deez nuts into yo", getPosition());
+    
   }
 }
