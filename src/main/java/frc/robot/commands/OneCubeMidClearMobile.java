@@ -29,6 +29,7 @@ public class OneCubeMidClearMobile extends SequentialCommandGroup {
       new WaitCommand(0.5),
       new InstantCommand(() -> DriveTrain.getInstance().reset(), DriveTrain.getInstance()),
       // do whatever here that strafes to the left
+      // positive x goes left
       new RunCommand(() -> DriveTrain.getInstance().control(0, 0.275, 0), DriveTrain.getInstance()).withTimeout(4.25),
       // new RunCommand(() -> DriveTrain.getInstance().control(0,0, 0.275), DriveTrain.getInstance()).withTimeout(0.5),
       new InstantCommand(() -> DriveTrain.getInstance().control(0, 0, 0), DriveTrain.getInstance())
