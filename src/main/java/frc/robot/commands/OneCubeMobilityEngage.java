@@ -24,7 +24,7 @@ public class OneCubeMobilityEngage extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
 
-    back = alliance.equals("red") ? 0.7 : 0.75;
+    back = alliance.equals("red") ? 0.7 : 0.65;
     addCommands(
       new WaitUntilCommand(Robot.m_robotContainer.manager::intakeTargetReached),
       new Level2(),
@@ -41,7 +41,7 @@ public class OneCubeMobilityEngage extends SequentialCommandGroup {
       new RunCommand(() -> DriveTrain.getInstance().control(0, 0.175, 0), DriveTrain.getInstance()).withTimeout(1.8),
       new InstantCommand(() -> DriveTrain.getInstance().control(0, 0, 0), DriveTrain.getInstance()),
       new WaitCommand(1),
-      new RunCommand(() -> DriveTrain.getInstance().control(0, -0.7, 0), DriveTrain.getInstance()).until(DriveTrain.getInstance()::isChassisUnstable),
+      new RunCommand(() -> DriveTrain.getInstance().control(0, -back, 0), DriveTrain.getInstance()).until(DriveTrain.getInstance()::isChassisUnstable),
       new WaitCommand(0.1),
       new InstantCommand(() -> DriveTrain.getInstance().control(0, 0, 0), DriveTrain.getInstance()),
       new AutoBalance(false, 0.012)

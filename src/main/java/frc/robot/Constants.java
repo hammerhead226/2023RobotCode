@@ -167,7 +167,7 @@ public final class Constants {
   // public static final double INTAKE_EXTEND = -760;
   // public static final double INTAKE_LOWERED = 300 + 2500;
   // public static final double INTAKE_RETRACT = 500;
-  public static final double INTAKE_EXTEND = -1500;
+  public static final double INTAKE_EXTEND = -1450;
   public static final double INTAKE_RETRACT = -100;
   public static final double INTAKE_OUTTAKE = -700;
 

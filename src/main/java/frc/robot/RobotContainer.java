@@ -28,6 +28,7 @@ import frc.robot.subsystems.Elevator;
 import frc.libs.wrappers.Controller;
 import frc.robot.commands.AutoBalance;
 import frc.robot.commands.BlueOneConeMobile;
+import frc.robot.commands.DropPieceMid;
 import frc.robot.commands.EmptyAuto;
 import frc.robot.commands.Level2;
 import frc.robot.commands.Level3;
@@ -165,7 +166,7 @@ public class RobotContainer {
     // rememebr to fill in the csv files from reformatter
 
     selecter.addOption("one cone mid mobility", new OneConeMidMobility());
-
+    selecter.addOption("drop", new DropPieceMid());
     selecter.addOption("one and half piece mobility", new OneAndHalfPieceMobility());
     selecter.addOption("red one cone low mobility engage", new OneConeLowMobilityEngage("Red"));
     selecter.addOption("blue one cone low mobility engage", new OneConeLowMobilityEngage("Blue"));
@@ -236,13 +237,23 @@ public class RobotContainer {
     driver.getBButton().onTrue(new InstantCommand(intake::runOut, intake));
     driver.getBButton().onFalse(new InstantCommand(intake::stop, intake));
     driver.getBButton().onFalse(new InstantCommand(intake::retractIntake, intake));
-    
 
     driver.getYButton().onTrue(new InstantCommand(intake::runIn, intake));
     driver.getYButton().onFalse(new InstantCommand(intake::deadStop, intake));
 
     driver.getYButton().onTrue(new InstantCommand(intake::extendIntake, intake));
     driver.getYButton().onFalse(new InstantCommand(intake::retractIntake, intake));
+
+
+    driver.getRBButton().onTrue(new InstantCommand(intake::runOut, intake));
+    driver.getRBButton().onFalse(new InstantCommand(intake::stop, intake));
+    driver.getRBButton().onFalse(new InstantCommand(intake::retractIntake, intake));
+
+    driver.getLBButton().onTrue(new InstantCommand(intake::runIn, intake));
+    driver.getLBButton().onFalse(new InstantCommand(intake::deadStop, intake));
+
+    driver.getLBButton().onTrue(new InstantCommand(intake::extendIntake, intake));
+    driver.getLBButton().onFalse(new InstantCommand(intake::retractIntake, intake));
 
     // manip.getAButton().onTrue(new Handoff());
 
