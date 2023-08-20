@@ -176,7 +176,8 @@ public class RobotContainer {
     selecter.addOption("score cube low", new OneCubeLow());
     selecter.addOption("mobility engage", new MobilityEngage());
     selecter.addOption("one cone mobile and engage", new OneConeMobilityEngage());
-    selecter.addOption("one cube mobile and engage", new OneCubeMobilityEngage());
+    selecter.addOption("red one cube mobile and engage", new OneCubeMobilityEngage("red"));
+    selecter.addOption("blue one cube mobile and engage", new OneCubeMobilityEngage("blue"));
     selecter.addOption("red three piece no bump", new ThreePieceAutons("red3nb"));
     selecter.addOption("red three piece bump", new ThreePieceAutons("red3b"));
     selecter.addOption("blue three piece no bump", new ThreePieceAutons("blue3nb"));

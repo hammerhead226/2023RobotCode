@@ -18,10 +18,13 @@ import frc.robot.subsystems.Elevator;
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class OneCubeMobilityEngage extends SequentialCommandGroup {
+  private double back;
   /** Creates a new OneConeMobilityEngage. */
-  public OneCubeMobilityEngage() {
+  public OneCubeMobilityEngage(String alliance) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
+
+    back = alliance.equals("red") ? 0.7 : 0.75;
     addCommands(
       new WaitUntilCommand(Robot.m_robotContainer.manager::intakeTargetReached),
       new Level2(),
@@ -32,7 +35,7 @@ public class OneCubeMobilityEngage extends SequentialCommandGroup {
       new InstantCommand(() -> DriveTrain.getInstance().reset(), DriveTrain.getInstance()),
     //   new InstantCommand(() -> DriveTrain.getInstance().toggleAuto(), DriveTrain.getInstance()),
       // new RunCommand(() -> DriveTrain.getInstance().control(-0.08, 0.7, 0), DriveTrain.getInstance()).until(DriveTrain.getInstance()::isChassisUnstable),
-      new RunCommand(() -> DriveTrain.getInstance().control(0, 0.7, 0), DriveTrain.getInstance()).until(DriveTrain.getInstance()::isChassisUnstable),
+      new RunCommand(() -> DriveTrain.getInstance().control(0, back, 0), DriveTrain.getInstance()).until(DriveTrain.getInstance()::isChassisUnstable),
       // new RunCommand(() -> DriveTrain.getInstance().control(0.15, -0.7, 0), DriveTrain.getInstance()).until(DriveTrain.getInstance()::isChassisUnstable),
       new RunCommand(() -> DriveTrain.getInstance().control(0, 0.35, 0), DriveTrain.getInstance()).until(DriveTrain.getInstance()::isChassisStable),
       new RunCommand(() -> DriveTrain.getInstance().control(0, 0.175, 0), DriveTrain.getInstance()).withTimeout(1.8),
