@@ -155,7 +155,7 @@ public final class Constants {
 
   // Intake Constants
   // public static final double ROLLER_RUN_SPEED = 0.43;
-  public static final double ROLLER_RUN_SPEED = 0.2;
+  public static final double ROLLER_RUN_SPEED = 0.38;
   // public static final double[] INTAKE_GAINS = { 0.0009, 0, 0 };
   // public static final double[] INTAKE_GAINS = {0.0017, 0, 0 };
   // public static final double[] INTAKE_GAINS_RETRACT = {0.0008, 0.0003 , 0};
@@ -228,7 +228,8 @@ public final class Constants {
   public static final double ARM_HOLD = 5820;
   // public static final double ARM_SCORE = 4680;
   public static final double ARM_SCORE = 4760;
-  public static final double ARM_STOW = 7110;
+  // public static final double ARM_STOW = 7110;
+  public static final double ARM_STOW = 7250;
   // public static final double ARM_SUBSTATION = 5420;
   public static final double ARM_SUBSTATION = 5400;
   // public static final double ARM_HANDOFF = 3900;

@@ -103,6 +103,7 @@ public class DriveTrain extends SubsystemBase {
         config.rotationalPIDGains = new double[]{1.4, 0.0, 0.0};
         config.drivePIDFGains = new double[]{0.05, 0.0, 0.0, 1.0/Constants.MAX_MODULE_SPEED};
         config.steerPIDGains = new double[]{0.69, 0.0, 0.0};
+        // config.steerPIDGains = new double[]{0.54, 0, 0};
         config.MAX_MODULE_SPEED = Constants.MAX_MODULE_SPEED;
         config.radius = Math.hypot(0.5794/2, 0.5794/2);
         config.numberOfModules = Constants.NUMBER_OF_MODULES;

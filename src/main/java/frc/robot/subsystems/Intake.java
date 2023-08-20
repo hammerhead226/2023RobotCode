@@ -139,7 +139,7 @@ public class Intake extends SubsystemBase {
         runningOut = false;
         break;
       case OUTWARD:
-        roller.set(-0.3);
+        roller.set(-0.2);
         runningOut = true;
         break;
       case DEAD_STOP:
