@@ -93,7 +93,7 @@ public class RobotContainer {
   public static final LED led = new LED();
 
   //toggles 
-  public static boolean intakeToggle; 
+  public static boolean intakeToggle = true; 
   // private SlewRateLimiter limiter = new SlewRateLimiter(20);
   // public static final Vision vision = new Vision();
 

@@ -20,7 +20,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.libs.swerveyshark.sharkexe.SharkExecutor;
 import frc.libs.wrappers.GenericMotor;
 import frc.robot.Constants;
-
+import frc.robot.RobotContainer;
 import frc.robot.RobotMap;
 
 
@@ -219,6 +219,7 @@ public class Intake extends SubsystemBase {
 
   @Override
   public void periodic() {
+   if(RobotContainer.intakeToggle) { 
     if (target == Constants.INTAKE_EXTEND) {
       intakePID.setPID(Constants.INTAKE_GAINS_EXTEND[0], Constants.INTAKE_GAINS_EXTEND[1], Constants.INTAKE_GAINS_EXTEND[2]);
     } else {
@@ -258,6 +259,7 @@ public class Intake extends SubsystemBase {
     lastSpeed = speed;
 
     control(speed);
+   }
     
     SmartDashboard.putNumber("intake enc", getIntake());
     SmartDashboard.putNumber("distance", distanceSensor.getValue());
