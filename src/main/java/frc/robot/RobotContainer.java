@@ -92,6 +92,8 @@ public class RobotContainer {
   public static final LinearSlide linearSlide = new LinearSlide();
   public static final LED led = new LED();
 
+  //toggles 
+  public static boolean intakeToggle; 
   // private SlewRateLimiter limiter = new SlewRateLimiter(20);
   // public static final Vision vision = new Vision();
 
@@ -152,9 +154,8 @@ public class RobotContainer {
     //      elevator
     //     ));
 
-    gripper.setDefaultCommand(new RunCommand(gripper::periodic, gripper));
-    intake.setDefaultCommand(new RunCommand(intake::periodic, intake));
-    linearSlide.setDefaultCommand(new RunCommand(linearSlide::periodic, linearSlide));
+    gripper.setDefaultCommand(new RunCommand(gripper::run, gripper));
+    linearSlide.setDefaultCommand(new RunCommand(linearSlide::run, linearSlide));
     elevator.setDefaultCommand(new RunCommand(elevator::run, elevator));
 
     led.setDefaultCommand(new SetColorMode());
