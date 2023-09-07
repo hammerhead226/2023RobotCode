@@ -11,11 +11,11 @@ import com.ctre.phoenix.motorcontrol.can.TalonFX;
 // -60000 high
 // -29966 mid
 // -8180
-import frc.libs.wrappers.GenericMotor.PassiveMode;
+
 import frc.robot.Constants;
+import frc.robot.RobotContainer;
 import frc.robot.RobotMap;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -52,52 +52,7 @@ public class LinearSlide extends SubsystemBase {
   }
 
   int sustain = 0;
-  public void run() {
-    if (!manual) {
-      double err = Math.abs(target - getPosition());
-      pid.setPID(Constants.LINEAR_SLIDE_GAINS_HIGH[0], Constants.LINEAR_SLIDE_GAINS_HIGH[1], Constants.LINEAR_SLIDE_GAINS_HIGH[2]);
-      if (err <= 31000) {
-        pid.setPID(Constants.LINEAR_SLIDE_GAINS_HIGH[0], Constants.LINEAR_SLIDE_GAINS_HIGH[1], Constants.LINEAR_SLIDE_GAINS_HIGH[2]);
-      } else {
-        pid.setPID(Constants.LINEAR_SLIDE_GAINS_LOW[0], Constants.LINEAR_SLIDE_GAINS_LOW[1], Constants.LINEAR_SLIDE_GAINS_LOW[2]);
-      }
-      
-      double motorSpeed = pid.calculate(slider.getSelectedSensorPosition(), target);
-      if(target == Constants.LS_RETRACTED) {
-        if (motorSpeed > retractSpeedLimit) {
-          motorSpeed = retractSpeedLimit;
-        } else if (motorSpeed < -retractSpeedLimit) {
-          motorSpeed = -retractSpeedLimit;
-        }
-
-        // if (Math.abs(slider.getSelectedSensorPosition()) <= 0.8 * Math.abs(target)) {
-        //   motorSpeed = 0;
-        // }
-      }
-      else {
-        if (motorSpeed > extendSpeedLimit) {
-          motorSpeed = extendSpeedLimit;
-        } else if (motorSpeed < -extendSpeedLimit) {
-          motorSpeed = -extendSpeedLimit;
-        }
-
-        // if (Math.abs(slider.getSelectedSensorPosition()) <= 0.8 * Math.abs(target)) {
-        //   motorSpeed = 0;
-        // }
-      }
-
-      if (Math.abs(err) <= 100) {
-        motorSpeed = 0;
-      }
-      
-      // SmartDashboard.putNumber("motor speed", motorSpeed);
-      // control(Robot.m_robotContainer.manip.getLeftJoyY());
-      // motorSpeed = Math.abs(motorSpeed) < 0.09 ? 0 : motorSpeed;
-      control(motorSpeed);
-    }
-    SmartDashboard.putNumber("linear slide extension", slider.getSelectedSensorPosition());
-  }
-
+ 
   public void setTarget(double t) {
     target = t;
   }
@@ -116,6 +71,45 @@ public class LinearSlide extends SubsystemBase {
 
   @Override
   public void periodic() {
+   if (RobotContainer.linearSlideToggle){
+    if (!manual) {
+        double err = Math.abs(target - getPosition());
+        pid.setPID(Constants.LINEAR_SLIDE_GAINS_HIGH[0], Constants.LINEAR_SLIDE_GAINS_HIGH[1], Constants.LINEAR_SLIDE_GAINS_HIGH[2]);
+        if (err <= 31000) {
+          pid.setPID(Constants.LINEAR_SLIDE_GAINS_HIGH[0], Constants.LINEAR_SLIDE_GAINS_HIGH[1], Constants.LINEAR_SLIDE_GAINS_HIGH[2]);
+        } else {
+          pid.setPID(Constants.LINEAR_SLIDE_GAINS_LOW[0], Constants.LINEAR_SLIDE_GAINS_LOW[1], Constants.LINEAR_SLIDE_GAINS_LOW[2]);
+        }
+      
+        double motorSpeed = pid.calculate(slider.getSelectedSensorPosition(), target);
+        if(target == Constants.LS_RETRACTED) {
+          if (motorSpeed > retractSpeedLimit) {
+            motorSpeed = retractSpeedLimit;
+          } else if (motorSpeed < -retractSpeedLimit) {
+            motorSpeed = -retractSpeedLimit;
+          }
+
+       
+        }
+        else {
+          if (motorSpeed > extendSpeedLimit) {
+            motorSpeed = extendSpeedLimit;
+          } else if (motorSpeed < -extendSpeedLimit) {
+            motorSpeed = -extendSpeedLimit;
+          }
+
+        
+        }
+
+        if (Math.abs(err) <= 100) {
+          motorSpeed = 0;
+        }
+      
+     
+        control(motorSpeed);
+    }
+  }
+    SmartDashboard.putNumber("linear slide extension", slider.getSelectedSensorPosition());
     SmartDashboard.putNumber("slide deez nuts into yo", getPosition());
     
   }

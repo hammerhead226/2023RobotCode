@@ -6,7 +6,7 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
+
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
@@ -17,12 +17,13 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.libs.wrappers.GenericMotor;
 import frc.robot.Constants;
 import frc.robot.Robot;
+import frc.robot.RobotContainer;
 import frc.robot.RobotMap;
 
 public class Elevator extends SubsystemBase {
   /** Creates a new Elevator. */
   private GenericMotor elevatorLeft;
-  private GenericMotor elevatorRight;
+  
   private GenericMotor elevatorEncoder; 
 
   private DigitalInput upperLimitSwitch;
@@ -105,6 +106,20 @@ public class Elevator extends SubsystemBase {
 
   @Override
   public void periodic() {
+    if(RobotContainer.elevatorToggle){
+
+      
+    double motorSpeed = elevatorPID.calculate(get(), target);
+
+    if(motorSpeed > speedLimit) motorSpeed = speedLimit;
+    else if(motorSpeed < -speedLimit) motorSpeed = -speedLimit;
+
+    if(!upperLimitSwitch.get()) {
+      motorSpeed = 0;
+    }
+
+    control(motorSpeed);
+    }
     SmartDashboard.putNumber("elevator encoder offset", get());
     SmartDashboard.putNumber("elevator encoder raw", elevatorEncoder.getSensorPose());
 

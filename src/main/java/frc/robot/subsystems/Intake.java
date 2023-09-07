@@ -101,52 +101,7 @@ public class Intake extends SubsystemBase {
 
   }
 
-  public void run() {
-    
-   
-    if (target == Constants.INTAKE_EXTEND) {
-      intakePID.setPID(Constants.INTAKE_GAINS_EXTEND[0], Constants.INTAKE_GAINS_EXTEND[1], Constants.INTAKE_GAINS_EXTEND[2]);
-    } else {
-      intakePID.setPID(Constants.INTAKE_GAINS_RETRACT[0], Constants.INTAKE_GAINS_RETRACT[1], Constants.INTAKE_GAINS_RETRACT[2]);
-    }
-
-    switch (intakeState) {
-      case INWARD:
-        roller.set(Constants.ROLLER_RUN_SPEED);
-        runningOut = false;
-        break;
-      case OUTWARD:
-        roller.set(-0.3);
-        runningOut = true;
-        break;
-      case DEAD_STOP:
-        if (Math.abs(intakeEncoder.getSensorPose() - target) >= 300) {
-          roller.set(0.15);
-        } else {
-          intakeState = INTAKE_STATES.STOP;
-          }
-        break; 
-      case STOP:
-        roller.set(0);
-        break;
-      default:
-        SmartDashboard.putString("deez", "nuts");
-        break;
-    }
-
-    double speed = intakePID.calculate(intakeEncoder.getSensorPose(), target);
-
-    speed = clamp(speed, Constants.MAX_SPEED_DOWN, Constants.MAX_SPEED_UP);
-    
-   
-
-    lastSpeed = speed;
-
-    control(speed);
-
-    
-    
-  }
+  
 
   private double clamp(double value, double min, double max) {
     return Math.max(min, Math.min(value, max));
@@ -219,6 +174,7 @@ public class Intake extends SubsystemBase {
 
   @Override
   public void periodic() {
+    
    if(RobotContainer.intakeToggle) { 
     if (target == Constants.INTAKE_EXTEND) {
       intakePID.setPID(Constants.INTAKE_GAINS_EXTEND[0], Constants.INTAKE_GAINS_EXTEND[1], Constants.INTAKE_GAINS_EXTEND[2]);

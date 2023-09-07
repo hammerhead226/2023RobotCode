@@ -4,26 +4,25 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkMaxAbsoluteEncoder;
+
+
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.SparkMaxAbsoluteEncoder.Type;
-// import com.revrobotics.SparkMaxRelativeEncoder.Type;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.AnalogInput;
-import edu.wpi.first.wpilibj.DutyCycleEncoder;
+
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.libs.wrappers.GenericMotor;
 import frc.libs.wrappers.GenericMotor.PassiveMode;
 import frc.robot.Constants;
+import frc.robot.RobotContainer;
 import frc.robot.RobotMap;
-// import frc.robot.commands.FlashGreen;
+
 
 public class Gripper extends SubsystemBase {
   /**
@@ -43,27 +42,25 @@ public class Gripper extends SubsystemBase {
 
   private PIDController armPID;
   private PIDController wheeledClawPID;
-  // private PIDController wristPID;
+  
 
-  // private AbsoluteEncoder armEncoder;
-  private CANSparkMax armEncoder;
 
-  private DutyCycleEncoder armCoder;
+
 
   private CANSparkMax armSpark;
 
   private AbsoluteEncoder aCoder;
 
-  // private Rev2mDistanceSensor distanceSensor;
+  
 
   private AnalogInput proximitySensor;
 
-  // private boolean wristToggle = true;
+ 
   private boolean armToggle = true;
 
   private double armTarget = Constants.ARM_STOW;
 
-  // private boolean clawToggle = true;
+  
 
   private boolean cubeMode = false;
 
@@ -111,39 +108,7 @@ public class Gripper extends SubsystemBase {
 
   }
 
-  public void run() {
-    // if(substationMode) {
-    //   stopClawWhenSeen();
-    // }
-
-    if (toggleBrake) {
-      arm.setNeutralMode(PassiveMode.BRAKE);
-    } else {
-      arm.setNeutralMode(PassiveMode.COAST);
-    }
-    
-
-    // wheeledClaw.set(0.3);
-    // if(cubeMode) {
-    //   wheeledClaw.set(wheeledClawPID.calculate(wheeledClaw.getSensorPose(), Constants.CLAW_CLOSE_CUBE));
-    // }
-    // else {
-    //   wheeledClaw.set(wheeledClawPID.calculate(wheeledClaw.getSensorPose(), Constants.CLAW_CLOSE_CONE));
-    // }
-    
-    
-    double armSpeed = armPID.calculate(aCoder.getPosition(), armTarget);
-
-    if(armSpeed > armSpeedLimit) armSpeed = armSpeedLimit;
-    else if(armSpeed < -armSpeedLimit) armSpeed = -armSpeedLimit;
-
-    arm.set(-armSpeed);
-
-    // arm.set(Robot.m_robotContainer.manip.getLeftJoyY());
-    // SmartDashboard.putBoolean("claw toggle", clawToggle);
-    // SmartDashboard.putBoolean("cube mode", cubeMode);
-    
-    }
+ 
 
   public void toggleBrakeMode() {
     toggleBrake = !toggleBrake;
@@ -271,6 +236,20 @@ public class Gripper extends SubsystemBase {
 
   @Override
   public void periodic() {
+    if(RobotContainer.gripperToggle){
+      if (toggleBrake) {
+        arm.setNeutralMode(PassiveMode.BRAKE);
+      } else {
+        arm.setNeutralMode(PassiveMode.COAST);
+      }
+      
+      double armSpeed = armPID.calculate(aCoder.getPosition(), armTarget);
+  
+      if(armSpeed > armSpeedLimit) armSpeed = armSpeedLimit;
+      else if(armSpeed < -armSpeedLimit) armSpeed = -armSpeedLimit;
+  
+      arm.set(-armSpeed);
+    }
     SmartDashboard.putNumber("Gripper Sustain", sustain);
     SmartDashboard.putBoolean("Cube Mode", cubeMode);
 
@@ -279,6 +258,7 @@ public class Gripper extends SubsystemBase {
 
     SmartDashboard.putNumber("Arm Enc", aCoder.getPosition());
   }
+
 }
 
 // 2249166 ur bals
