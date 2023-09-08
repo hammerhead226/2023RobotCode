@@ -9,12 +9,8 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.subsystems.LED;
-import edu.wpi.first.math.filter.SlewRateLimiter;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -27,7 +23,6 @@ import frc.robot.subsystems.ScoringStateManager;
 import frc.robot.subsystems.Elevator;
 import frc.libs.wrappers.Controller;
 import frc.robot.commands.AutoBalance;
-import frc.robot.commands.BlueOneConeMobile;
 import frc.robot.commands.DropPieceMid;
 import frc.robot.commands.EmptyAuto;
 import frc.robot.commands.Level2;
@@ -35,7 +30,6 @@ import frc.robot.commands.Level3;
 import frc.robot.commands.LimelightLineUp;
 import frc.robot.commands.MobilityEngage;
 import frc.robot.commands.OneAndHalfPieceMobility;
-import frc.robot.commands.OneConeEngage;
 import frc.robot.commands.OneConeLowMobilityEngage;
 import frc.robot.commands.OneConeMidMobility;
 import frc.robot.commands.OneConeMobilityEngage;
@@ -43,34 +37,15 @@ import frc.robot.commands.OneCubeLow;
 import frc.robot.commands.OneCubeMobilityEngage;
 import frc.robot.commands.OnePieceLowMobility;
 import frc.robot.commands.ScoreConeOrCube;
-// import frc.robot.commands.RedOneConeMobile;
 import frc.robot.commands.Scoring;
 import frc.robot.commands.Stow;
 import frc.robot.commands.Substation;
 import frc.robot.commands.ThreePieceAutons;
 import frc.robot.commands.ballsballs;
-// import frc.robot.commands.OneConeEngage;
-import frc.robot.commands.OneConeMobilityEngage;
-// import frc.robot.commands.OneCubeMobilityEngage;
-// import frc.robot.commands.RedOneConeMobile;
-// import frc.robot.commands.RedThreePieceBump;
-// import frc.robot.commands.RedThreePieceNoBump;
-// import frc.robot.commands.RedTwoPieceBump;
-// import frc.robot.commands.RedTwoPieceNoBump;
 import frc.robot.commands.SetColorMode;
-// import frc.robot.commands.TestAuto;
-// import frc.robot.commands.BlueOneConeMobile;
-// import frc.robot.commands.BlueThreePieceBump;
-// import frc.robot.commands.BlueThreePieceNoBump;
-// import frc.robot.commands.BlueTwoPieceBump;
-// import frc.robot.commands.BlueTwoPieceNoBump;
 import frc.robot.commands.FlashGreen;
-import frc.robot.commands.Handoff;
-// import frc.robot.commands.OneConeEngage;
 import frc.robot.subsystems.DriveTrain;
-import frc.robot.subsystems.Vision;
 import frc.robot.subsystems.balls;
-import frc.robot.subsystems.ballsTwo;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -94,13 +69,10 @@ public class RobotContainer {
   public static final LinearSlide linearSlide = new LinearSlide();
   public static final LED led = new LED();
 
-  // private SlewRateLimiter limiter = new SlewRateLimiter(20);
-  // public static final Vision vision = new Vision();
 
   public static final ScoringStateManager manager = new ScoringStateManager();
 
   public static final balls lock = new balls();
-  // public static final ballsTwo lockTwo = new ballsTwo();
 
   public static final Command animation = new FlashGreen(0.1, 10, led)
                                           .alongWith(new InstantCommand(() -> RobotContainer.driver.getJoystick().setRumble(RumbleType.kBothRumble, 1)))
@@ -157,7 +129,6 @@ public class RobotContainer {
     gripper.setDefaultCommand(new RunCommand(gripper::run, gripper));
     intake.setDefaultCommand(new RunCommand(intake::run, intake));
     linearSlide.setDefaultCommand(new RunCommand(linearSlide::run, linearSlide));
-    //TODO:: reenable the elevator you dumbass
     elevator.setDefaultCommand(new RunCommand(elevator::run, elevator));
 
     led.setDefaultCommand(new SetColorMode());
@@ -255,9 +226,6 @@ public class RobotContainer {
     driver.getLBButton().onTrue(new InstantCommand(intake::extendIntake, intake));
     driver.getLBButton().onFalse(new InstantCommand(intake::retractIntake, intake));
 
-    // manip.getAButton().onTrue(new Handoff());
-
-    // manip.getBButton().onTrue(new InstantCommand(gripper::toggleBrakeMode));
     // manip.getAButton().onTrue(new InstantCommand(() -> linearSlide.setTarget(Constants.LS_MID), linearSlide));
     // manip.getBButton().onTrue(new InstantCommand(() -> linearSlide.setTarget(Constants.LS_RETRACTED), linearSlide));
     // manip.getYButton().onTrue(new InstantCommand(() -> linearSlide.setTarget(Constants.LS_HIGH), linearSlide));

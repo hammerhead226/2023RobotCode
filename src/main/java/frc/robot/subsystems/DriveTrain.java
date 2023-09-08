@@ -1,29 +1,19 @@
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.DemandType;
-import java.util.Arrays;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.StatorCurrentLimitConfiguration;
-import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
-import com.ctre.phoenix.sensors.CANCoder;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.libs.electronics.IMU.Pigeon;
 import frc.libs.electronics.IMU.Pigeon2IMU;
 import frc.libs.electronics.encoders.ThreadedCANcoder;
 import frc.libs.electronics.motors.LazyTalonFX;
 import frc.libs.swerveyshark.Swerve;
 import frc.libs.swerveyshark.SwerveConfiguration;
-import frc.libs.swerveyshark.sharkexe.SharkExecutor;
-import frc.libs.wrappers.GenericEncoder;
-import frc.libs.wrappers.GenericMotor;
-import frc.libs.wrappers.Gyro;
 import frc.robot.Constants;
 import frc.robot.Robot;
 import frc.robot.RobotMap;
