@@ -183,7 +183,8 @@ public final class Constants {
   public static final double ARM_POS_1 = 0;
   public static final double ARM_POS_2 = -130000;
 
-  public static final double[] ARM_GAINS = {0.00047, 0, 0};
+  public static final double[] ARM_GAINS = {0.000466, 0, 0};
+  // public static final double[] ARM_GAINS = {0.00047, 0, 0};
   public static final double[] CLAW_GAINS = {0.00003, 0, 0};
 
   public static final double ARM_THRESHOLD = 1000;
@@ -227,9 +228,9 @@ public final class Constants {
 
   public static final double ARM_HOLD = 5820;
   // public static final double ARM_SCORE = 4680;
-  public static final double ARM_SCORE = 4760;
+  public static final double ARM_SCORE = 4820;
   // public static final double ARM_STOW = 7110;
-  public static final double ARM_STOW = 7250;
+  public static final double ARM_STOW = 7585;
   // public static final double ARM_SUBSTATION = 5420;
   public static final double ARM_SUBSTATION = 5400;
   // public static final double ARM_HANDOFF = 3900;
