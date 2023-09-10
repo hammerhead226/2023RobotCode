@@ -85,7 +85,7 @@ public class RobotContainer {
     return Math.max(min, Math.min(value, max));
   }
 
-  private final double ADJ_SPEED = 0.71;
+  private final double ADJ_SPEED = 0.65;
   
   public RobotContainer() {
     configureBindings();
@@ -129,7 +129,7 @@ public class RobotContainer {
     gripper.setDefaultCommand(new RunCommand(gripper::run, gripper));
     intake.setDefaultCommand(new RunCommand(intake::run, intake));
     linearSlide.setDefaultCommand(new RunCommand(linearSlide::run, linearSlide));
-    elevator.setDefaultCommand(new RunCommand(elevator::run, elevator));
+    // elevator.setDefaultCommand(new RunCommand(elevator::run, elevator));
 
     led.setDefaultCommand(new SetColorMode());
 
@@ -142,7 +142,7 @@ public class RobotContainer {
     // selecter.addOption("red one cone low mobility engage", new OneConeLowMobilityEngage("Red"));
     // selecter.addOption("blue one cone low mobility engage", new OneConeLowMobilityEngage("Blue"));
 
-    // selecter.addOption("one piece low mobility", new OnePieceLowMobility());
+    selecter.addOption("one piece low mobility", new OnePieceLowMobility());
 
     // selecter.addOption("score cone or cube", new ScoreConeOrCube());
     // selecter.addOption("score cube low", new OneCubeLow());
