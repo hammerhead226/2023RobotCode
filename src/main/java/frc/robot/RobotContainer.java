@@ -85,7 +85,7 @@ public class RobotContainer {
     return Math.max(min, Math.min(value, max));
   }
 
-  private final double ADJ_SPEED = 0.65;
+  private final double ADJ_SPEED = 0.71;
   
   public RobotContainer() {
     configureBindings();
@@ -137,27 +137,27 @@ public class RobotContainer {
     // rememebr to fill in the csv files from reformatter
 
     selecter.addOption("one cone mid mobility", new OneConeMidMobility());
-    selecter.addOption("drop", new DropPieceMid());
-    selecter.addOption("one and half piece mobility", new OneAndHalfPieceMobility());
-    selecter.addOption("red one cone low mobility engage", new OneConeLowMobilityEngage("Red"));
-    selecter.addOption("blue one cone low mobility engage", new OneConeLowMobilityEngage("Blue"));
+    selecter.addOption("drop piece mid", new DropPieceMid());
+    // selecter.addOption("one and half piece mobility", new OneAndHalfPieceMobility());
+    // selecter.addOption("red one cone low mobility engage", new OneConeLowMobilityEngage("Red"));
+    // selecter.addOption("blue one cone low mobility engage", new OneConeLowMobilityEngage("Blue"));
 
-    selecter.addOption("one piece low mobility", new OnePieceLowMobility());
+    // selecter.addOption("one piece low mobility", new OnePieceLowMobility());
 
-    selecter.addOption("score cone or cube", new ScoreConeOrCube());
-    selecter.addOption("score cube low", new OneCubeLow());
-    selecter.addOption("mobility engage", new MobilityEngage());
+    // selecter.addOption("score cone or cube", new ScoreConeOrCube());
+    // selecter.addOption("score cube low", new OneCubeLow());
+    // selecter.addOption("mobility engage", new MobilityEngage());
     selecter.addOption("one cone mobile and engage", new OneConeMobilityEngage());
     selecter.addOption("red one cube mobile and engage", new OneCubeMobilityEngage("red"));
     selecter.addOption("blue one cube mobile and engage", new OneCubeMobilityEngage("blue"));
-    selecter.addOption("red three piece no bump", new ThreePieceAutons("red3nb"));
-    selecter.addOption("red three piece bump", new ThreePieceAutons("red3b"));
-    selecter.addOption("blue three piece no bump", new ThreePieceAutons("blue3nb"));
-    selecter.addOption("blue three peice bump", new ThreePieceAutons("blue3b"));
+    // selecter.addOption("red three piece no bump", new ThreePieceAutons("red3nb"));
+    // selecter.addOption("red three piece bump", new ThreePieceAutons("red3b"));
+    // selecter.addOption("blue three piece no bump", new ThreePieceAutons("blue3nb"));
+    // selecter.addOption("blue three peice bump", new ThreePieceAutons("blue3b"));
 
     selecter.addOption("empty", new EmptyAuto());
 
-    selecter.addOption("balls", new ballsballs("balls"));
+    // selecter.addOption("balls", new ballsballs("balls"));
 
     // selecter.setDefaultOption("one and engage", new OneConeEngage());
     // selecter.addOption("blue one cone mobile", new BlueOneConeMobile());
