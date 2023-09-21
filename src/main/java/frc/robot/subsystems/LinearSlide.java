@@ -8,10 +8,14 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
+// -60000 high
+// -29966 mid
+// -8180
 import frc.libs.wrappers.GenericMotor.PassiveMode;
 import frc.robot.Constants;
 import frc.robot.RobotMap;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -26,7 +30,7 @@ public class LinearSlide extends SubsystemBase {
   private PIDController pid;
 
   public LinearSlide() {
-    slider = new TalonFX(RobotMap.SLIDER_PORT,"CAN Bus 2");
+    slider = new TalonFX(RobotMap.SLIDER_PORT, Constants.CANBUS);
     slider.setInverted(Constants.LS_SET_INVERTED);
 
     slider.configOpenloopRamp(0.6);
@@ -38,8 +42,8 @@ public class LinearSlide extends SubsystemBase {
     pid = new PIDController(Constants.LINEAR_SLIDE_GAINS_HIGH[0], Constants.LINEAR_SLIDE_GAINS_HIGH[1],
         Constants.LINEAR_SLIDE_GAINS_HIGH[2]);
 
-    extendSpeedLimit = 0.80;
-    retractSpeedLimit = 0.65;
+    extendSpeedLimit = 0.45;
+    retractSpeedLimit = 0.45;
     manual = false;
   }
 
@@ -52,7 +56,7 @@ public class LinearSlide extends SubsystemBase {
     if (!manual) {
       double err = Math.abs(target - getPosition());
       pid.setPID(Constants.LINEAR_SLIDE_GAINS_HIGH[0], Constants.LINEAR_SLIDE_GAINS_HIGH[1], Constants.LINEAR_SLIDE_GAINS_HIGH[2]);
-      if (err <= 20000) {
+      if (err <= 31000) {
         pid.setPID(Constants.LINEAR_SLIDE_GAINS_HIGH[0], Constants.LINEAR_SLIDE_GAINS_HIGH[1], Constants.LINEAR_SLIDE_GAINS_HIGH[2]);
       } else {
         pid.setPID(Constants.LINEAR_SLIDE_GAINS_LOW[0], Constants.LINEAR_SLIDE_GAINS_LOW[1], Constants.LINEAR_SLIDE_GAINS_LOW[2]);
@@ -80,6 +84,14 @@ public class LinearSlide extends SubsystemBase {
         // if (Math.abs(slider.getSelectedSensorPosition()) <= 0.8 * Math.abs(target)) {
         //   motorSpeed = 0;
         // }
+      }
+
+      if (Math.abs(err) <= 100) {
+        motorSpeed = 0;
+      }
+
+      if ((target == Constants.LS_RETRACTED) && (Math.abs(err) <= 700)) {
+        motorSpeed = 0;
       }
       
       // SmartDashboard.putNumber("motor speed", motorSpeed);
@@ -109,5 +121,6 @@ public class LinearSlide extends SubsystemBase {
   @Override
   public void periodic() {
     SmartDashboard.putNumber("slide deez nuts into yo", getPosition());
+    
   }
 }

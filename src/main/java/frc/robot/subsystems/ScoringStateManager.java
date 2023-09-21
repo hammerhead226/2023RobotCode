@@ -33,6 +33,22 @@ public class ScoringStateManager extends SubsystemBase {
     controller.vibrate();
   }
 
+  public void runIn() {
+    intake.runIn();
+  }
+
+  public void stopIntake() {
+    intake.stop();
+  }
+
+  public void setCubeMode(boolean bool) {
+    if (bool) {
+      gripper.cubeModeOn();
+    } else {
+      gripper.cubeModeOff();
+    }
+  }
+
   public double getIntakeState() {
     return intake.getIntake();
   }
@@ -109,15 +125,16 @@ public class ScoringStateManager extends SubsystemBase {
   }
 
   public boolean intakeTargetReached() {
-    return (0.85 * (Math.abs(getIntakeState() - intake.getTarget())) <= Constants.INTAKE_THRESHOLD);
+    // return (0.85 * (Math.abs(getIntakeState() - intake.getTarget())) <= Constants.INTAKE_THRESHOLD);
+    return ((Math.abs(getIntakeState() - intake.getTarget())) <= Constants.INTAKE_THRESHOLD);
   }
 
   public boolean linearSlideTargetReached() { // make threshold a constant later
-    return (0.5 * (Math.abs(getLinearSlideState() - linearSlide.getTarget())) <= Constants.LS_THRESHOLD);
+    return ((Math.abs(getLinearSlideState() - linearSlide.getTarget())) <= Constants.LS_THRESHOLD);
   }  
 
   public boolean elevatorTargetReached() { // make threshold a constant later 
-    return (0.8 * (Math.abs(getElevatorState() - elevator.getTarget())) <= Constants.ELEVATOR_THRESHOLD);
+    return ((Math.abs(getElevatorState() - elevator.getTarget())) <= Constants.ELEVATOR_THRESHOLD);
   }
 
   public boolean armTargetReached() {

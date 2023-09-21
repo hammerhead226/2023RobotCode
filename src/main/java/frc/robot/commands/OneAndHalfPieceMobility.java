@@ -14,26 +14,22 @@ import frc.robot.subsystems.DriveTrain;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class OneConeLowMobilityEngage extends SequentialCommandGroup {
-  /** Creates a new OneConeLowMobilityEngage. */
-  public OneConeLowMobilityEngage(String alliance) {
+public class OneAndHalfPieceMobility extends SequentialCommandGroup {
+  /** Creates a new OneAndHalfPieceMobility. */
+  public OneAndHalfPieceMobility() {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    double velocityMultiplier = alliance.equals("Red") ? 1 : -1; 
     addCommands(
       new InstantCommand(Robot.m_robotContainer.intake::runOut, Robot.m_robotContainer.lock),
-      new WaitCommand(1),
+      new WaitCommand(2),
       new InstantCommand(Robot.m_robotContainer.intake::stop, Robot.m_robotContainer.lock),
       new InstantCommand(() -> DriveTrain.getInstance().reset(), DriveTrain.getInstance()),
-      new RunCommand(() -> DriveTrain.getInstance().control(0, 0.7, 0), DriveTrain.getInstance()).until(DriveTrain.getInstance()::isChassisUnstable),
-      new RunCommand(() -> DriveTrain.getInstance().control(0, 0.35, 0), DriveTrain.getInstance()).until(DriveTrain.getInstance()::isChassisStable),
-      new RunCommand(() -> DriveTrain.getInstance().control(0, 0.175, 0), DriveTrain.getInstance()).withTimeout(1.5),
-      new InstantCommand(() -> DriveTrain.getInstance().control(0, 0, 0), DriveTrain.getInstance()),
-      new WaitCommand(1),
-      new RunCommand(() -> DriveTrain.getInstance().control(0, -0.7, 0), DriveTrain.getInstance()).until(DriveTrain.getInstance()::isChassisUnstable),
-      new WaitCommand(0.1),
-      new InstantCommand(() -> DriveTrain.getInstance().control(0, 0, 0), DriveTrain.getInstance()),
-      new AutoBalance(false, 0.012)
+      // new RunCommand(() -> DriveTrain.getInstance().control(0, -0.275, 0), DriveTrain.getInstance()).withTimeout(4.25),
+      new RunCommand(() -> DriveTrain.getInstance().control(0, -0.275, 0), DriveTrain.getInstance()).withTimeout(3.75),
+      new RunCommand(() -> DriveTrain.getInstance().control(0, 0, Math.PI)),
+      new WaitCommand(0.75),
+      new RunCommand(() -> DriveTrain.getInstance().control(0, -0.275, 0), DriveTrain.getInstance()).withTimeout(0.5),
+      new InstantCommand(() -> DriveTrain.getInstance().control(0, 0, 0), DriveTrain.getInstance())
     );
   }
 }

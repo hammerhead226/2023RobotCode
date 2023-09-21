@@ -154,18 +154,18 @@ public class Swerve {
         highSpeedMode = !highSpeedMode;
     }
 
-    public void setSwerveState(double[] position, double linearVelocity, double angularVelocity, double heading) {
+    public void setSwerveState(double[] position, double linearVelocity, double angularVelocity, double directionalMotion) {
         double[] currentSwerveState = getSwerveState();
 
-        double xLinearVelocity = linearVelocity * Math.cos(heading);
-        double yLinearVelocity = linearVelocity * Math.sin(heading);
+        double xLinearVelocity = linearVelocity * Math.cos(directionalMotion);
+        double yLinearVelocity = linearVelocity * Math.sin(directionalMotion);
 
-        double adjustedXLinearVel = xLinearVelocity + translationalPIDController.calculate(currentSwerveState[0], position[0]);
-        double adjustedYLinearVel = yLinearVelocity + translationalPIDController.calculate(currentSwerveState[1], position[1]);
+        double adjustedXLinearVel = xLinearVelocity * translationalPIDController.calculate(currentSwerveState[0], position[0]);
+        double adjustedYLinearVel = yLinearVelocity * translationalPIDController.calculate(currentSwerveState[1], position[1]);
 
         // SmartDashboard.putNumber("y error/t", position[0] - currentSwerveState[0]);
 
-        double adjustedAngularVel = angularVelocity + rotationalPIDController.calculate(currentSwerveState[2], position[2]);
+        double adjustedAngularVel = angularVelocity * rotationalPIDController.calculate(currentSwerveState[2], position[2]);
 
         // SmartDashboard.putNumber("rotate error/t", position[2] - currentSwerveState[2]);
 
@@ -173,7 +173,7 @@ public class Swerve {
         // SmartDashboard.putNumber("adjustedY", adjustedYLinearVel);
         // SmartDashboard.putNumber("adjustedR", adjustedAngularVel*radius);
 
-        control(adjustedXLinearVel, adjustedYLinearVel, adjustedAngularVel * radius);
+        control(adjustedXLinearVel, adjustedYLinearVel, -adjustedAngularVel * radius);
     }
 
     public double[] getSwerveState() {

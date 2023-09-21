@@ -234,6 +234,10 @@ public class GenericMotor {
         falcon.configAllSettings(config);
     }
 
+    public double getFalconCurrent() {
+        return falcon.getStatorCurrent();
+    }
+
     public void configTalon(TalonSRXConfiguration config) {
         talon.configAllSettings(config);
     }

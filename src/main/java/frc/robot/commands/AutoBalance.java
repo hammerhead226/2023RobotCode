@@ -36,7 +36,7 @@ public class AutoBalance extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    DriveTrain.getInstance().control(0, -con.calculate(DriveTrain.getInstance().getGyroPitch()), 0); 
+    DriveTrain.getInstance().control(0, con.calculate(DriveTrain.getInstance().getGyroPitch()), 0); 
   }
 
   // Called once the command ends or is interrupted.
