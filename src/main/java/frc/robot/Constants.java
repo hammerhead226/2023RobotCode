@@ -205,10 +205,15 @@ public final class Constants {
   // public static final double ELEVATOR_INTAKE = 1700;
   // public static final double ELEVATOR_SUBSTATION = -50;
 
-  public static final double ELEVATOR_HIGH = -500;
-  public static final double ELEVATOR_MID = 800;
-  public static final double ELEVATOR_HOLD = 1080;
-  public static final double ELEVATOR_SUBSTATION = 375;
+  // public static final double ELEVATOR_HIGH = -500;
+  // public static final double ELEVATOR_MID = 800;
+  // public static final double ELEVATOR_HOLD = 1080;
+  // public static final double ELEVATOR_SUBSTATION = 375;
+
+  public static final double ELEVATOR_HIGH = -500 - 200;
+  public static final double ELEVATOR_MID = 800 - 340;
+  public static final double ELEVATOR_HOLD = 1080 - 368;
+  public static final double ELEVATOR_SUBSTATION = 375 - 320;
 
 
   // public static final double ELEVATOR_HIGH = -700 + 100;

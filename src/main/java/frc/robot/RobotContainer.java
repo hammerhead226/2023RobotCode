@@ -126,8 +126,8 @@ public class RobotContainer {
     //      elevator
     //     ));
 
-    gripper.setDefaultCommand(new RunCommand(gripper::run, gripper));
-    // intake.setDefaultCommand(new RunCommand(intake::run, intake));
+    // gripper.setDefaultCommand(new RunCommand(gripper::run, gripper));
+    intake.setDefaultCommand(new RunCommand(intake::run, intake));
     // linearSlide.setDefaultCommand(new RunCommand(linearSlide::run, linearSlide));
     // elevator.setDefaultCommand(new RunCommand(elevator::run, elevator));
 
@@ -137,27 +137,27 @@ public class RobotContainer {
     // rememebr to fill in the csv files from reformatter
 
     selecter.addOption("one cone mid mobility", new OneConeMidMobility());
-    selecter.addOption("drop", new DropPieceMid());
-    selecter.addOption("one and half piece mobility", new OneAndHalfPieceMobility());
-    selecter.addOption("red one cone low mobility engage", new OneConeLowMobilityEngage("Red"));
-    selecter.addOption("blue one cone low mobility engage", new OneConeLowMobilityEngage("Blue"));
+    selecter.addOption("drop piece mid", new DropPieceMid());
+    // selecter.addOption("one and half piece mobility", new OneAndHalfPieceMobility());
+    // selecter.addOption("red one cone low mobility engage", new OneConeLowMobilityEngage("Red"));
+    // selecter.addOption("blue one cone low mobility engage", new OneConeLowMobilityEngage("Blue"));
 
     selecter.addOption("one piece low mobility", new OnePieceLowMobility());
 
-    selecter.addOption("score cone or cube", new ScoreConeOrCube());
-    selecter.addOption("score cube low", new OneCubeLow());
-    selecter.addOption("mobility engage", new MobilityEngage());
+    // selecter.addOption("score cone or cube", new ScoreConeOrCube());
+    // selecter.addOption("score cube low", new OneCubeLow());
+    // selecter.addOption("mobility engage", new MobilityEngage());
     selecter.addOption("one cone mobile and engage", new OneConeMobilityEngage());
     selecter.addOption("red one cube mobile and engage", new OneCubeMobilityEngage("red"));
     selecter.addOption("blue one cube mobile and engage", new OneCubeMobilityEngage("blue"));
-    selecter.addOption("red three piece no bump", new ThreePieceAutons("red3nb"));
-    selecter.addOption("red three piece bump", new ThreePieceAutons("red3b"));
-    selecter.addOption("blue three piece no bump", new ThreePieceAutons("blue3nb"));
-    selecter.addOption("blue three peice bump", new ThreePieceAutons("blue3b"));
+    // selecter.addOption("red three piece no bump", new ThreePieceAutons("red3nb"));
+    // selecter.addOption("red three piece bump", new ThreePieceAutons("red3b"));
+    // selecter.addOption("blue three piece no bump", new ThreePieceAutons("blue3nb"));
+    // selecter.addOption("blue three peice bump", new ThreePieceAutons("blue3b"));
 
     selecter.addOption("empty", new EmptyAuto());
 
-    selecter.addOption("balls", new ballsballs("balls"));
+    // selecter.addOption("balls", new ballsballs("balls"));
 
     // selecter.setDefaultOption("one and engage", new OneConeEngage());
     // selecter.addOption("blue one cone mobile", new BlueOneConeMobile());
@@ -201,32 +201,46 @@ public class RobotContainer {
     // manip.getBButton().onTrue(new Level2());
     // manip.getAButton().onTrue(new Stow());
 
-    //make is so when slide is fully in after scoring akul controller buzzes
+    // manip.getAButton().onTrue(new InstantCommand(() -> elevator.setTarget(Constants.ELEVATOR_MID)));
+    // manip.getBButton().onTrue(new InstantCommand(() -> elevator.setTarget(Constants.ELEVATOR_HOLD)));
+    // manip.getYButton().onTrue(new InstantCommand(() -> elevator.setTarget(Constants.ELEVATOR_SUBSTATION)));
+
+    // make is so when slide is fully in after scoring akul controller buzzes
     // manip.getRBButton().onTrue(new Scoring());
     // manip.getRightStickPress().onTrue(new Substation());
 
+    manip.getXButton().onTrue(new InstantCommand(intake::runOut, intake));
+    manip.getXButton().onFalse(new InstantCommand(intake::stop, intake));
+    manip.getXButton().onFalse(new InstantCommand(intake::retractIntake, intake));
+
+    manip.getLBButton().onTrue(new InstantCommand(intake::runIn, intake));
+    manip.getLBButton().onFalse(new InstantCommand(intake::deadStop, intake));
+
+    manip.getLBButton().onTrue(new InstantCommand(intake::extendIntake, intake));
+    manip.getLBButton().onFalse(new InstantCommand(intake::retractIntake, intake));
+
     // manip.getAButton()
 
-    driver.getBButton().onTrue(new InstantCommand(intake::runOut, intake));
-    driver.getBButton().onFalse(new InstantCommand(intake::stop, intake));
-    driver.getBButton().onFalse(new InstantCommand(intake::retractIntake, intake));
+    // driver.getBButton().onTrue(new InstantCommand(intake::runOut, intake));
+    // driver.getBButton().onFalse(new InstantCommand(intake::stop, intake));
+    // driver.getBButton().onFalse(new InstantCommand(intake::retractIntake, intake));
 
-    driver.getYButton().onTrue(new InstantCommand(intake::runIn, intake));
-    driver.getYButton().onFalse(new InstantCommand(intake::deadStop, intake));
+    // driver.getYButton().onTrue(new InstantCommand(intake::runIn, intake));
+    // driver.getYButton().onFalse(new InstantCommand(intake::deadStop, intake));
 
-    driver.getYButton().onTrue(new InstantCommand(intake::extendIntake, intake));
-    driver.getYButton().onFalse(new InstantCommand(intake::retractIntake, intake));
+    // driver.getYButton().onTrue(new InstantCommand(intake::extendIntake, intake));
+    // driver.getYButton().onFalse(new InstantCommand(intake::retractIntake, intake));
 
 
-    driver.getRBButton().onTrue(new InstantCommand(intake::runOut, intake));
-    driver.getRBButton().onFalse(new InstantCommand(intake::stop, intake));
-    driver.getRBButton().onFalse(new InstantCommand(intake::retractIntake, intake));
+    // driver.getRBButton().onTrue(new InstantCommand(intake::runOut, intake));
+    // driver.getRBButton().onFalse(new InstantCommand(intake::stop, intake));
+    // driver.getRBButton().onFalse(new InstantCommand(intake::retractIntake, intake));
 
-    driver.getLBButton().onTrue(new InstantCommand(intake::runIn, intake));
-    driver.getLBButton().onFalse(new InstantCommand(intake::deadStop, intake));
+    // driver.getLBButton().onTrue(new InstantCommand(intake::runIn, intake));
+    // driver.getLBButton().onFalse(new InstantCommand(intake::deadStop, intake));
 
-    driver.getLBButton().onTrue(new InstantCommand(intake::extendIntake, intake));
-    driver.getLBButton().onFalse(new InstantCommand(intake::retractIntake, intake));
+    // driver.getLBButton().onTrue(new InstantCommand(intake::extendIntake, intake));
+    // driver.getLBButton().onFalse(new InstantCommand(intake::retractIntake, intake));
 
     // manip.getAButton().onTrue(new InstantCommand(() -> linearSlide.setTarget(Constants.LS_MID), linearSlide));
     // manip.getBButton().onTrue(new InstantCommand(() -> linearSlide.setTarget(Constants.LS_RETRACTED), linearSlide));
@@ -237,11 +251,11 @@ public class RobotContainer {
     // manip.getYButton().onTrue(new InstantCommand(() -> elevator.setTarget(Constants.ELEVATOR_HOLD), elevator));
     // manip.getXButton().onTrue(new InstantCommand(() -> elevator.setTarget(Constants.ELEVATOR_SUBSTATION), elevator));
 
-    manip.getAButton().onTrue(new InstantCommand(() -> gripper.setArmTarget(Constants.ARM_STOW), gripper));
+    // manip.getAButton().onTrue(new InstantCommand(() -> gripper.setArmTarget(Constants.ARM_STOW), gripper));
     
-    manip.getBButton().onTrue(new InstantCommand(() -> gripper.setArmTarget(Constants.ARM_SCORE), gripper));
-    manip.getYButton().onTrue(new InstantCommand(() -> gripper.setArmTarget(Constants.ARM_HOLD), gripper));
-    manip.getXButton().onTrue(new InstantCommand(() -> gripper.setArmTarget(Constants.ARM_SUBSTATION), gripper));
+    // manip.getBButton().onTrue(new InstantCommand(() -> gripper.setArmTarget(Constants.ARM_SCORE), gripper));
+    // manip.getYButton().onTrue(new InstantCommand(() -> gripper.setArmTarget(Constants.ARM_HOLD), gripper));
+    // manip.getXButton().onTrue(new InstantCommand(() -> gripper.setArmTarget(Constants.ARM_SUBSTATION), gripper));
 
     manip.getSTARTButton().onTrue(new InstantCommand(gripper::toggleCubeMode, gripper));
   }
