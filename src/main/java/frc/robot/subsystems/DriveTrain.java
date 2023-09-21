@@ -1,26 +1,19 @@
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.DemandType;
-import java.util.Arrays;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.StatorCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
-import com.ctre.phoenix.sensors.CANCoder;
+import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.libs.electronics.IMU.Pigeon;
 import frc.libs.electronics.IMU.Pigeon2IMU;
 import frc.libs.electronics.encoders.ThreadedCANcoder;
 import frc.libs.electronics.motors.LazyTalonFX;
 import frc.libs.swerveyshark.Swerve;
 import frc.libs.swerveyshark.SwerveConfiguration;
-import frc.libs.swerveyshark.sharkexe.SharkExecutor;
-import frc.libs.wrappers.GenericEncoder;
-import frc.libs.wrappers.GenericMotor;
-import frc.libs.wrappers.Gyro;
 import frc.robot.Constants;
 import frc.robot.Robot;
 import frc.robot.RobotMap;
@@ -62,9 +55,24 @@ public class DriveTrain extends SubsystemBase {
             TalonFX drive = new TalonFX(RobotMap.DRIVE_MOTORS[i], Constants.CANBUS);
             TalonFX steer = new TalonFX(RobotMap.STEER_MOTORS[i], Constants.CANBUS);
 
+            TalonFXConfiguration driveConfig = new TalonFXConfiguration();
+            StatorCurrentLimitConfiguration currentLimit = new StatorCurrentLimitConfiguration();
+
+            currentLimit.enable = true;
+            currentLimit.triggerThresholdCurrent = 70;
+            currentLimit.triggerThresholdTime = 1;
+            currentLimit.currentLimit = 50;
+
+            driveConfig.statorCurrLimit = currentLimit;
+
+            drive.configAllSettings(driveConfig);
+
+
             drive.configOpenloopRamp(0.5);
             drive.setNeutralMode(NeutralMode.Brake);
 
+            steer.configOpenloopRamp(0.1);
+            
             drives[i] = new LazyTalonFX(drive, Constants.TICKS_PER_METER);
             steers[i] = new LazyTalonFX(steer, Constants.TICKS_PER_METER);
 
@@ -85,6 +93,7 @@ public class DriveTrain extends SubsystemBase {
         config.rotationalPIDGains = new double[]{1.4, 0.0, 0.0};
         config.drivePIDFGains = new double[]{0.05, 0.0, 0.0, 1.0/Constants.MAX_MODULE_SPEED};
         config.steerPIDGains = new double[]{0.69, 0.0, 0.0};
+        // config.steerPIDGains = new double[]{0.54, 0, 0};
         config.MAX_MODULE_SPEED = Constants.MAX_MODULE_SPEED;
         config.radius = Math.hypot(0.5794/2, 0.5794/2);
         config.numberOfModules = Constants.NUMBER_OF_MODULES;

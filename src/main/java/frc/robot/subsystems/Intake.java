@@ -4,34 +4,21 @@
 
 package frc.robot.subsystems;
 
-import java.util.Date;
-import java.util.concurrent.TimeUnit;
 
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-import com.revrobotics.CANSparkMax;
-//import com.revrobotics.Rev2mDistanceSensor;
-import com.revrobotics.CANSparkMax.IdleMode;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-//import com.revrobotics.Rev2mDistanceSensor.Port;
-//import com.revrobotics.Rev2mDistanceSensor.RangeProfile;
-//import com.revrobotics.Rev2mDistanceSensor.Unit;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-// import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.libs.swerveyshark.sharkexe.SharkExecutor;
 import frc.libs.wrappers.GenericMotor;
-import frc.libs.wrappers.LimeLight;
 import frc.robot.Constants;
-import frc.robot.Robot;
 import frc.robot.RobotMap;
-import frc.robot.commands.LimelightLineUp;
 
 public class Intake extends SubsystemBase {
 
@@ -45,15 +32,13 @@ public class Intake extends SubsystemBase {
 
   // private String intakePosition;
 
-  private boolean intakeOn;
-  private boolean intakeLowered;
   private PIDController intakePID;
 
   private boolean runningOut;
 
   private double target;
 
-  private boolean intakeExtended;
+
 
   private double lastSpeed;
 
@@ -66,9 +51,6 @@ public class Intake extends SubsystemBase {
 
   private INTAKE_STATES intakeState;
 
-  private boolean runInward;
-
-  private boolean runOutward;
 
 
   public Intake() {
@@ -84,7 +66,7 @@ public class Intake extends SubsystemBase {
     roll.setInverted(false);
     pivot.setInverted(true);
 
-    pivot.configOpenloopRamp(0.1);
+    pivot.configOpenloopRamp(0.05);
     
     encoder.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
 
@@ -139,7 +121,7 @@ public class Intake extends SubsystemBase {
         runningOut = false;
         break;
       case OUTWARD:
-        roller.set(-0.3);
+        roller.set(-0.2);
         runningOut = true;
         break;
       case DEAD_STOP:

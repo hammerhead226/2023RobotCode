@@ -42,8 +42,8 @@ public class LinearSlide extends SubsystemBase {
     pid = new PIDController(Constants.LINEAR_SLIDE_GAINS_HIGH[0], Constants.LINEAR_SLIDE_GAINS_HIGH[1],
         Constants.LINEAR_SLIDE_GAINS_HIGH[2]);
 
-    extendSpeedLimit = 0.80;
-    retractSpeedLimit = 0.65;
+    extendSpeedLimit = 0.45;
+    retractSpeedLimit = 0.45;
     manual = false;
   }
 
@@ -87,6 +87,10 @@ public class LinearSlide extends SubsystemBase {
       }
 
       if (Math.abs(err) <= 100) {
+        motorSpeed = 0;
+      }
+
+      if ((target == Constants.LS_RETRACTED) && (Math.abs(err) <= 700)) {
         motorSpeed = 0;
       }
       

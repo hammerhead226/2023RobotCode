@@ -56,16 +56,16 @@ public class Robot extends TimedRobot {
     //camera.setFPS(30);
     m_robotContainer = new RobotContainer();
     state = Phase.DISABLED;
-    try {
-      SharkExecutor.loadAndConfigurePath("blue3nb", "/paths/blue_three_piece_nobump_wip.csv", (target) -> DriveTrain.getInstance().toPose(target));
-      // SharkExecutor.loadAndConfigurePath("red3nb", "/paths/red_three_piece_nobump_wip.csv", (target) -> DriveTrain.getInstance().toPose(target));
-      SharkExecutor.loadAndConfigurePath("blue3b", "/paths/blue_three_piece_bump.csv", (target) -> DriveTrain.getInstance().toPose(target));
-      SharkExecutor.loadAndConfigurePath("red3b", "/paths/red_three_piece_bump.csv", (target) -> DriveTrain.getInstance().toPose(target));
-      SharkExecutor.loadAndConfigurePath("balls", "/paths/blue_New_New_New_New_Path.csv", (target) -> DriveTrain.getInstance().toPose(target));
-    } catch (IOException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    }
+    // try {
+    //   SharkExecutor.loadAndConfigurePath("blue3nb", "/paths/blue_three_piece_nobump_wip.csv", (target) -> DriveTrain.getInstance().toPose(target));
+    //   // SharkExecutor.loadAndConfigurePath("red3nb", "/paths/red_three_piece_nobump_wip.csv", (target) -> DriveTrain.getInstance().toPose(target));
+    //   SharkExecutor.loadAndConfigurePath("blue3b", "/paths/blue_three_piece_bump.csv", (target) -> DriveTrain.getInstance().toPose(target));
+    //   SharkExecutor.loadAndConfigurePath("red3b", "/paths/red_three_piece_bump.csv", (target) -> DriveTrain.getInstance().toPose(target));
+    //   SharkExecutor.loadAndConfigurePath("balls", "/paths/blue_New_New_New_New_Path.csv", (target) -> DriveTrain.getInstance().toPose(target));
+    // } catch (IOException e) {
+    //   // TODO Auto-generated catch block
+    //   e.printStackTrace();
+    // }
     
      
     // Robot.m_robotContainer.intake.setDistanceSensor(true);

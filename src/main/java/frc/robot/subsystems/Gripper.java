@@ -4,12 +4,9 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkMaxAbsoluteEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.SparkMaxAbsoluteEncoder.Type;
 // import com.revrobotics.SparkMaxRelativeEncoder.Type;
@@ -23,47 +20,25 @@ import frc.libs.wrappers.GenericMotor;
 import frc.libs.wrappers.GenericMotor.PassiveMode;
 import frc.robot.Constants;
 import frc.robot.RobotMap;
-// import frc.robot.commands.FlashGreen;
 
 public class Gripper extends SubsystemBase {
-  /**
-   * Three servos in total
-   * 1 NEO motor as the arm
-   * 1 NEO motor to open/close the gripper
-   * 1 servo to rotate hand
-   * up and down position for arm (toggle) --> A button
-   * pincing (toggle) --> B button
-   * wrist rotation (180 or 0 degrees; also toggle) --> X button
-   */
-
-  // private TalonFX wrist;
-  // private CANSparkMax wrist;
   private GenericMotor arm;
   private GenericMotor wheeledClaw; 
 
   private PIDController armPID;
-  private PIDController wheeledClawPID;
-  // private PIDController wristPID;
-
-  // private AbsoluteEncoder armEncoder;
-  private CANSparkMax armEncoder;
-
   private DutyCycleEncoder armCoder;
 
   private CANSparkMax armSpark;
 
   private AbsoluteEncoder aCoder;
 
-  // private Rev2mDistanceSensor distanceSensor;
 
   private AnalogInput proximitySensor;
 
-  // private boolean wristToggle = true;
   private boolean armToggle = true;
 
   private double armTarget = Constants.ARM_STOW;
 
-  // private boolean clawToggle = true;
 
   private boolean cubeMode = false;
 
@@ -73,7 +48,6 @@ public class Gripper extends SubsystemBase {
 
   int sustain = 0;
 
-  private boolean toggleBrake;
 
   public Gripper() {
     // wrist = new CANSparkMax(RobotMap.GRIPPER_WRIST, MotorType.kBrushless);
@@ -100,28 +74,14 @@ public class Gripper extends SubsystemBase {
     // arm.setNeutralMode(PassiveMode.BRAKE);
 
     armPID = new PIDController(Constants.ARM_GAINS[0], Constants.ARM_GAINS[1], Constants.ARM_GAINS[2]);
-    wheeledClawPID = new PIDController(Constants.CLAW_GAINS[0], Constants.CLAW_GAINS[1], Constants.CLAW_GAINS[2]);
-    // wristPID = new PIDController(Constants.WRIST_GAINS[0], Constants.WRIST_GAINS[1], Constants.WRIST_GAINS[2]);
-
-    // distanceSensor = new Rev2mDistanceSensor(Port.kOnboard, Unit.kInches, RangeProfile.kHighAccuracy);
     armSpeedLimit = 0.65;
     this.proximitySensor = new AnalogInput(0);
-
-    toggleBrake = true;
-
   }
 
   public void run() {
     // if(substationMode) {
     //   stopClawWhenSeen();
     // }
-
-    if (toggleBrake) {
-      arm.setNeutralMode(PassiveMode.BRAKE);
-    } else {
-      arm.setNeutralMode(PassiveMode.COAST);
-    }
-    
 
     // wheeledClaw.set(0.3);
     // if(cubeMode) {
@@ -144,11 +104,6 @@ public class Gripper extends SubsystemBase {
     // SmartDashboard.putBoolean("cube mode", cubeMode);
     
     }
-
-  public void toggleBrakeMode() {
-    toggleBrake = !toggleBrake;
-  }
-
   
   public void setDoubleSubstation() {
     setArmTarget(Constants.ARM_SUBSTATION);

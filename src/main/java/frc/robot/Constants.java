@@ -154,19 +154,20 @@ public final class Constants {
 
 
   // Intake Constants
-  public static final double ROLLER_RUN_SPEED = 0.43;
+  // public static final double ROLLER_RUN_SPEED = 0.43;
+  public static final double ROLLER_RUN_SPEED = 0.38;
   // public static final double[] INTAKE_GAINS = { 0.0009, 0, 0 };
   // public static final double[] INTAKE_GAINS = {0.0017, 0, 0 };
   // public static final double[] INTAKE_GAINS_RETRACT = {0.0008, 0.0003 , 0};
   // public static final double[] INTAKE_GAINS_EXTEND = {0.0012, 0.0004, 0 };
   public static final double[] INTAKE_GAINS_RETRACT = {0.0005, 0.00005 , 0};
-  public static final double[] INTAKE_GAINS_EXTEND = {0.00046, 0.00025, 0 };
+  public static final double[] INTAKE_GAINS_EXTEND = {0.00046, 0.00032, 0 };
   public static final int INTAKE_OFFSET = 0;
 
   // public static final double INTAKE_EXTEND = -760;
   // public static final double INTAKE_LOWERED = 300 + 2500;
   // public static final double INTAKE_RETRACT = 500;
-  public static final double INTAKE_EXTEND = -1500;
+  public static final double INTAKE_EXTEND = -1450;
   public static final double INTAKE_RETRACT = -100;
   public static final double INTAKE_OUTTAKE = -700;
 
@@ -182,7 +183,8 @@ public final class Constants {
   public static final double ARM_POS_1 = 0;
   public static final double ARM_POS_2 = -130000;
 
-  public static final double[] ARM_GAINS = {0.00047, 0, 0};
+  public static final double[] ARM_GAINS = {0.000466, 0, 0};
+  // public static final double[] ARM_GAINS = {0.00047, 0, 0};
   public static final double[] CLAW_GAINS = {0.00003, 0, 0};
 
   public static final double ARM_THRESHOLD = 1000;
@@ -226,8 +228,9 @@ public final class Constants {
 
   public static final double ARM_HOLD = 5820;
   // public static final double ARM_SCORE = 4680;
-  public static final double ARM_SCORE = 4760;
-  public static final double ARM_STOW = 7110;
+  public static final double ARM_SCORE = 4820;
+  // public static final double ARM_STOW = 7110;
+  public static final double ARM_STOW = 7585;
   // public static final double ARM_SUBSTATION = 5420;
   public static final double ARM_SUBSTATION = 5400;
   // public static final double ARM_HANDOFF = 3900;
