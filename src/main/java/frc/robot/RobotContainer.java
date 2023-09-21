@@ -126,9 +126,9 @@ public class RobotContainer {
     //      elevator
     //     ));
 
-    gripper.setDefaultCommand(new RunCommand(gripper::run, gripper));
+    // gripper.setDefaultCommand(new RunCommand(gripper::run, gripper));
     intake.setDefaultCommand(new RunCommand(intake::run, intake));
-    linearSlide.setDefaultCommand(new RunCommand(linearSlide::run, linearSlide));
+    // linearSlide.setDefaultCommand(new RunCommand(linearSlide::run, linearSlide));
     // elevator.setDefaultCommand(new RunCommand(elevator::run, elevator));
 
     led.setDefaultCommand(new SetColorMode());
@@ -198,12 +198,16 @@ public class RobotContainer {
 
 
     // manip.getYButton().onTrue(new Level3());
-    manip.getBButton().onTrue(new Level2());
-    manip.getAButton().onTrue(new Stow());
+    // manip.getBButton().onTrue(new Level2());
+    // manip.getAButton().onTrue(new Stow());
+
+    // manip.getAButton().onTrue(new InstantCommand(() -> elevator.setTarget(Constants.ELEVATOR_MID)));
+    // manip.getBButton().onTrue(new InstantCommand(() -> elevator.setTarget(Constants.ELEVATOR_HOLD)));
+    // manip.getYButton().onTrue(new InstantCommand(() -> elevator.setTarget(Constants.ELEVATOR_SUBSTATION)));
 
     // make is so when slide is fully in after scoring akul controller buzzes
-    manip.getRBButton().onTrue(new Scoring());
-    manip.getRightStickPress().onTrue(new Substation());
+    // manip.getRBButton().onTrue(new Scoring());
+    // manip.getRightStickPress().onTrue(new Substation());
 
     manip.getXButton().onTrue(new InstantCommand(intake::runOut, intake));
     manip.getXButton().onFalse(new InstantCommand(intake::stop, intake));
