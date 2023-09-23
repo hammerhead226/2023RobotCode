@@ -96,10 +96,6 @@ public class ScoringStateManager extends SubsystemBase {
     }
   }
 
-  public void setIntakeLower() {
-    intake.lowerIntake();
-  }
-
   public void setLinearSlideTarget(double t) {
     linearSlide.setTarget(t);
   }

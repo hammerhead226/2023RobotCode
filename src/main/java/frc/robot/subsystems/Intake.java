@@ -5,10 +5,12 @@
 package frc.robot.subsystems;
 
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.math.controller.PIDController;
@@ -23,24 +25,16 @@ import frc.robot.RobotMap;
 public class Intake extends SubsystemBase {
 
   private GenericMotor roller;
-  private GenericMotor intake;
+  private TalonFX intake;
   private GenericMotor intakeEncoder;
-
-  // private Rev2mDistanceSensor dist;
 
   private AnalogInput distanceSensor;
 
-  // private String intakePosition;
-
-  private PIDController intakePID;
 
   private boolean runningOut;
 
   private double target;
 
-
-
-  private double lastSpeed;
 
   private enum INTAKE_STATES{
     INWARD,
@@ -58,6 +52,33 @@ public class Intake extends SubsystemBase {
     TalonFX roll = new TalonFX(RobotMap.ROLLER_PORT, Constants.CANBUS);
     TalonSRX encoder = new TalonSRX(RobotMap.INTAKE_ENCODER_PORT);
 
+
+    TalonFXConfiguration intakeConfig = new TalonFXConfiguration();
+
+
+    // TODO:: probably going to have to retune this stuff
+    intakeConfig.slot0.kP = 0.0005;
+    intakeConfig.slot0.kI = 0.00005;
+    intakeConfig.slot0.kD = 0;
+    intakeConfig.slot0.kF = 0;
+
+
+    // to be changed later
+    intakeConfig.slot1.kP = 0.00046;
+    intakeConfig.slot1.kI = 0.00032;
+    intakeConfig.slot1.kD = 0;
+    intakeConfig.slot1.kF = 0;
+
+
+    intakeConfig.neutralDeadband = 0.04;
+
+    intakeConfig.motionCruiseVelocity = 300;
+    intakeConfig.motionAcceleration = 150;
+    
+
+    pivot.configAllSettings(intakeConfig);
+
+
     roll.setStatusFramePeriod(StatusFrameEnhanced.Status_8_PulseWidth, 100);
 
     pivot.setNeutralMode(NeutralMode.Coast);
@@ -66,53 +87,33 @@ public class Intake extends SubsystemBase {
     roll.setInverted(false);
     pivot.setInverted(true);
 
-    pivot.configOpenloopRamp(0.05);
-    
     encoder.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
 
-    // dist = new Rev2mDistanceSensor(Port.kOnboard);
-
-    // dist.setRangeProfile(RangeProfile.kHighSpeed);
-    // dist.setDistanceUnits(Unit.kInches);
-
-    intake = new GenericMotor(pivot);
+    intake = pivot;
     roller = new GenericMotor(roll);
     intakeEncoder = new GenericMotor(encoder);
-    intakePID = new PIDController(Constants.INTAKE_GAINS_RETRACT[0], Constants.INTAKE_GAINS_RETRACT[1], Constants.INTAKE_GAINS_RETRACT[2]);
 
     target = Constants.INTAKE_RETRACT;
 
     intakeState = INTAKE_STATES.STOP;
 
     runningOut = true;
-
-    lastSpeed = 0;
-
-    distanceSensor = new AnalogInput(1);
  
-
-   
 
     SharkExecutor.createRunnable("intake.extend", this::extendIntake);
     SharkExecutor.createRunnable("intake.runIn", this::runIn);
     SharkExecutor.createRunnable("intake.runOut", this::runOut);
     SharkExecutor.createRunnable("intake.stop", this::stop);
-    SharkExecutor.createRunnable("intake.lower", this::lowerIntake);
-
   }
 
   public void run() {
-    
-    // if(Robot.m_robotContainer.gripper.getCubeMode()
-    //  || Robot.m_robotContainer.gripper.getArmTarget() == Constants.ARM_SCORE
-    // //  || Robot.m_robotContainer.elevator.getTarget() != Constants.ELEVATOR_HOLD
-    //  ) {
-    //   intakeOn = true;
-    // }
-    if (target == Constants.INTAKE_EXTEND) {
-      intakePID.setPID(Constants.INTAKE_GAINS_EXTEND[0], Constants.INTAKE_GAINS_EXTEND[1], Constants.INTAKE_GAINS_EXTEND[2]);
+    intake.setSelectedSensorPosition(getIntake());
+
+    if (target == Constants.INTAKE_RETRACT) {
+      // TODO:: determine primary or aux later
+      intake.selectProfileSlot(0, 0);
     } else {
-      intakePID.setPID(Constants.INTAKE_GAINS_RETRACT[0], Constants.INTAKE_GAINS_RETRACT[1], Constants.INTAKE_GAINS_RETRACT[2]);
+      intake.selectProfileSlot(1, 0);
     }
 
     switch (intakeState) {
@@ -138,85 +139,14 @@ public class Intake extends SubsystemBase {
         SmartDashboard.putString("deez", "nuts");
         break;
     }
-
-    double speed = intakePID.calculate(intakeEncoder.getSensorPose(), target);
-
-    speed = clamp(speed, Constants.MAX_SPEED_DOWN, Constants.MAX_SPEED_UP);
     
-    boolean condition = (speed > 0 && lastSpeed < 0) || (speed < 0 && lastSpeed > 0);
 
-    // if (intake.getFalconCurrent() >= 35 && !condition) {
-    //   speed = 0;
-    // }
-
-    lastSpeed = speed;
-
-    control(speed);
-
-    
-    // if ()
-    // switch (intakePosition){
-    //   case EXTEND:
-    //     target = Constants.INTAKE_EXTEND;
-    //     double extendSpeed = intakePID.calculate(intakeEncoder.getSensorPose(), target);
-    //     if (Math.abs(extendSpeed) > Constants.MAX_SPEED_UP) {
-    //       extendSpeed = Constants.MAX_SPEED_UP;
-    //     }
-    //     control(extendSpeed);
-    //     break;
-
-    //   case RETRACT:
-    //     target = Constants.INTAKE_RETRACT;
-    //     double retractSpeed = intakePID.calculate(intakeEncoder.getSensorPose(), target);
-    //     if (Math.abs(retractSpeed) > Constants.MAX_SPEED_DOWN){
-    //       retractSpeed = -Constants.MAX_SPEED_DOWN;
-    //     }
-    //     control(retractSpeed);
-    //     break;
-    //   case LOWER:
-    //     target = Constants.INTAKE_LOWERED;
-    //     double lowerSpeed = intakePID.calculate(intakeEncoder.getSensorPose(), target);
-    //     control(lowerSpeed);
-    //     break;
-    //   default:
-    //     SmartDashboard.putString("cry about it", "cry about it");
-    // }
-
-    // if (intakeLowered){
-    //   target = Constants.INTAKE_LOWERED;
-    //   double lowerSpeed = intakePID.calculate(intakeEncoder.getSensorPose(), target);
-    //   control(lowerSpeed);
-    // } else {
-    //     if (intakeOn) {
-    //       target = Constants.INTAKE_EXTEND;
-    //       double extendSpeed = intakePID.calculate(intakeEncoder.getSensorPose(), target);
-    //       if (extendSpeed > Constants.MAX_SPEED_UP) {
-    //         extendSpeed = Constants.MAX_SPEED_UP;
-    //       }
-    //       control(extendSpeed);
-    //     } else {
-    //       target = Constants.INTAKE_RETRACT;
-    //       double retractSpeed = intakePID.calculate(intakeEncoder.getSensorPose(), target);
-    //       if (Math.abs(retractSpeed) > Constants.MAX_SPEED_DOWN){
-    //         retractSpeed = -Constants.MAX_SPEED_DOWN;
-    //       }
-    //       control(retractSpeed);
-    //       SmartDashboard.putNumber("intake speed", retractSpeed);
-    //       // SmartDashboard.putNumber("intake pose", intakeEncoder.getSensorPose());
-    //     }
-    // }
-     
-    // SmartDashboard.putNumber("intake stator", intake.getFalcon().getStatorCurrent());
-    // SmartDashboard.putNumber("intake supply", intake.getFalcon().getSupplyCurrent());
+    goTo(target);
   }
 
   private double clamp(double value, double min, double max) {
     return Math.max(min, Math.min(value, max));
   }
-
-  // public void toggleIntake() {
-  //   intakeOn = !intakeOn;
-  // }
 
   public void extendIntake() {
     target = Constants.INTAKE_EXTEND;
@@ -226,40 +156,14 @@ public class Intake extends SubsystemBase {
     target = Constants.INTAKE_RETRACT;
   }
 
-  // public void toggleLowerIntake() {
-  //   intakeLowered = !intakeLowered;
-  // }
-
-  public void lowerIntake() {
-    // intakePosition = IntakePosition.LOWER;
-    // intakeLowered = true;
-  }
-
   // Roller Methods
   public void runIn() {
-    // if (intakeOn) {
-      // extendIntake();
-      intakeState = INTAKE_STATES.INWARD;
-      // roller.set(Constants.ROLLER_RUN_SPEED);
-      // runningOut = false;
-      // Robot.m_robotContainer.manip.get
-      // if (!detected()) {
-      //   roller.set(Constants.ROLLER_RUN_SPEED);
-      // } else {
-      //   stop();
-      // }
-      
-    // }
+    intakeState = INTAKE_STATES.INWARD;
   }
 
   public void runOut() {
-    // if (intakeOn) {
-      // runOutward = true;
-      intakeState = INTAKE_STATES.OUTWARD;
-      target = Constants.INTAKE_OUTTAKE;
-      // roller.set(-0.3);
-      // runningOut = true;
-    // }
+    intakeState = INTAKE_STATES.OUTWARD;
+    target = Constants.INTAKE_OUTTAKE;
   }
 
   public void stop() {
@@ -271,7 +175,11 @@ public class Intake extends SubsystemBase {
     intakeState = INTAKE_STATES.DEAD_STOP;
   }
   public void control(double speed) {
-    intake.set(speed);
+    intake.set(ControlMode.PercentOutput, speed);
+  }
+
+  public void goTo(double target) {
+    intake.set(ControlMode.MotionMagic, target);
   }
 
   public double getIntake() {
@@ -282,54 +190,17 @@ public class Intake extends SubsystemBase {
     return target;
   }
 
-  public void runInUntilSpike(double amps) {
-    while(roller.getFalconCurrent() < amps) {
-      roller.set(0.06);
-    }
-    stop();
-  }
-
-  // public void setDistanceSensor(boolean bool) {
-    // dist.setEnabled(bool);
-  // }
-
-  // public void setDistanceSensorAuto(boolean bool) {
-    // dist.setAutomaticMode(bool);
-  // }
-
-  public boolean detected() {
-    return distanceSensor.getValue() >= 700 && distanceSensor.getValue() < 2500;
-  }
-
-  // public boolean detectedDelay() {
-  //   return detected() && 
-  // }
-
   @Override
   public void periodic() {
     SmartDashboard.putNumber("intake enc", getIntake());
-    SmartDashboard.putNumber("distance", distanceSensor.getValue());
 
     SmartDashboard.putString("intake state", intakeState.toString());
 
     SmartDashboard.putNumber("intake diff", Math.abs(intakeEncoder.getSensorPose() - target));
 
     SmartDashboard.putNumber("intake target", target);
-    
-    // if (detected() && !runningOut) { 
-      
-    // //   // runInUntilSpike(1.3);
-    
-    //   retractIntake();
-    //   // deadStop();
-    // //   // Robot.m_robotContainer.manager.
-    // //   // deadStop();
-    
-      
-      
 
-    // } 
-    // SmartDashboard.putNumber("limelight stuff", LimeLight.getHorizontalOffset());
-    // SmartDashboard.putNumber("limelight stuff 2", LimeLight.getValue());
+    SmartDashboard.putNumber("intake motor percent", intake.getMotorOutputPercent());
+  
   }
 }
