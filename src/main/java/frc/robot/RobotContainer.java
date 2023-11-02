@@ -85,7 +85,7 @@ public class RobotContainer {
     return Math.max(min, Math.min(value, max));
   }
 
-  private final double ADJ_SPEED = 0.65;
+  private final double ADJ_SPEED = 0.75;
   
   public RobotContainer() {
     configureBindings();
@@ -209,15 +209,15 @@ public class RobotContainer {
     // manip.getRBButton().onTrue(new Scoring());
     // manip.getRightStickPress().onTrue(new Substation());
 
-    manip.getXButton().onTrue(new InstantCommand(intake::runOut, intake));
-    manip.getXButton().onFalse(new InstantCommand(intake::stop, intake));
-    manip.getXButton().onFalse(new InstantCommand(intake::retractIntake, intake));
+    driver.getBButton().onTrue(new InstantCommand(intake::runOut, intake));
+    driver.getBButton().onFalse(new InstantCommand(intake::stop, intake));
+    driver.getBButton().onFalse(new InstantCommand(intake::retractIntake, intake));
 
-    manip.getLBButton().onTrue(new InstantCommand(intake::runIn, intake));
-    manip.getLBButton().onFalse(new InstantCommand(intake::deadStop, intake));
+    driver.getRBButton().onTrue(new InstantCommand(intake::runIn, intake));
+    driver.getRBButton().onFalse(new InstantCommand(intake::deadStop, intake));
 
-    manip.getLBButton().onTrue(new InstantCommand(intake::extendIntake, intake));
-    manip.getLBButton().onFalse(new InstantCommand(intake::retractIntake, intake));
+    driver.getRBButton().onTrue(new InstantCommand(intake::extendIntake, intake));
+    driver.getRBButton().onFalse(new InstantCommand(intake::retractIntake, intake));
 
     // manip.getAButton()
 

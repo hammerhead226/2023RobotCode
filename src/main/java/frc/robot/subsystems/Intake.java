@@ -89,8 +89,6 @@ public class Intake extends SubsystemBase {
     lastSpeed = 0;
 
     distanceSensor = new AnalogInput(1);
- 
-
    
 
     SharkExecutor.createRunnable("intake.extend", this::extendIntake);
