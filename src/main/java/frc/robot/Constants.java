@@ -22,7 +22,7 @@ public final class Constants {
 
   public static final String CANBUS = "CAN Bus 2";
 
-  public static final double DRIVETRAIN_TILT_THRESHOLD = 15;
+  public static final double DRIVETRAIN_TILT_THRESHOLD = 14;
 
   //Swervey Configuration Parameters
  
@@ -146,8 +146,10 @@ public final class Constants {
 
   // LED Constants
   public static final double LED_ALLIANCE = 0.87; //blue
-  public static final double LED_ALLIANCE_BLUE = 0.87; //blue
-  public static final double LED_ALLIANCE_RED = 0.61;
+  // public static final double LED_ALLIANCE_BLUE = 0.87; //blue
+  // public static final double LED_ALLIANCE_RED = 0.61;
+  public static final double LED_ALLIANCE_BLUE = -0.35; //blue
+  public static final double LED_ALLIANCE_RED = -0.55;
 
   public static final double LED_YELLOW = 0.66;
   public static final double LED_VIOLET = 0.91;
@@ -156,10 +158,8 @@ public final class Constants {
   // Intake Constants
   // public static final double ROLLER_RUN_SPEED = 0.43;
   public static final double ROLLER_RUN_SPEED = 0.38;
-  // public static final double[] INTAKE_GAINS = { 0.0009, 0, 0 };
-  // public static final double[] INTAKE_GAINS = {0.0017, 0, 0 };
-  // public static final double[] INTAKE_GAINS_RETRACT = {0.0008, 0.0003 , 0};
-  // public static final double[] INTAKE_GAINS_EXTEND = {0.0012, 0.0004, 0 };
+  // public static final double[] INTAKE_GAINS_RETRACT = {0.0005, 0.00005 , 0};
+  // public static final double[] INTAKE_GAINS_EXTEND = {0.00046, 0.00032, 0 };
   public static final double[] INTAKE_GAINS_RETRACT = {0.0005, 0.00005 , 0};
   public static final double[] INTAKE_GAINS_EXTEND = {0.00046, 0.00032, 0 };
   public static final int INTAKE_OFFSET = 0;
