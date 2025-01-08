@@ -24,20 +24,17 @@ public class OneCubeMobilityEngage extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
 
-    back = alliance.equals("red") ? 0.7 : 0.65;
+    back = alliance.equals("red") ? 0.40 : 0.40;
     addCommands(
-      new WaitUntilCommand(Robot.m_robotContainer.manager::intakeTargetReached),
-      new Level2(),
-      new WaitUntilCommand(Robot.m_robotContainer.manager::linearSlideTargetReached),
-      new WaitCommand(0.35),
-      new Scoring(),
-      new WaitCommand(0.5),
+      new InstantCommand(Robot.m_robotContainer.intake::runOut, Robot.m_robotContainer.lock),
+      new WaitCommand(1),
+      new InstantCommand(Robot.m_robotContainer.intake::stop, Robot.m_robotContainer.lock),
+      new InstantCommand(Robot.m_robotContainer.intake::retractIntake, Robot.m_robotContainer.lock),
+      new WaitCommand(0.75),
+
       new InstantCommand(() -> DriveTrain.getInstance().reset(), DriveTrain.getInstance()),
-    //   new InstantCommand(() -> DriveTrain.getInstance().toggleAuto(), DriveTrain.getInstance()),
-      // new RunCommand(() -> DriveTrain.getInstance().control(-0.08, 0.7, 0), DriveTrain.getInstance()).until(DriveTrain.getInstance()::isChassisUnstable),
       new RunCommand(() -> DriveTrain.getInstance().control(0, back, 0), DriveTrain.getInstance()).until(DriveTrain.getInstance()::isChassisUnstable),
-      // new RunCommand(() -> DriveTrain.getInstance().control(0.15, -0.7, 0), DriveTrain.getInstance()).until(DriveTrain.getInstance()::isChassisUnstable),
-      new RunCommand(() -> DriveTrain.getInstance().control(0, 0.35, 0), DriveTrain.getInstance()).until(DriveTrain.getInstance()::isChassisStable),
+      new RunCommand(() -> DriveTrain.getInstance().control(0, 0.25, 0), DriveTrain.getInstance()).until(DriveTrain.getInstance()::isChassisStable),
       new RunCommand(() -> DriveTrain.getInstance().control(0, 0.175, 0), DriveTrain.getInstance()).withTimeout(1.8),
       new InstantCommand(() -> DriveTrain.getInstance().control(0, 0, 0), DriveTrain.getInstance()),
       new WaitCommand(1),
@@ -45,8 +42,6 @@ public class OneCubeMobilityEngage extends SequentialCommandGroup {
       new WaitCommand(0.1),
       new InstantCommand(() -> DriveTrain.getInstance().control(0, 0, 0), DriveTrain.getInstance()),
       new AutoBalance(false, 0.012)
-      // new RunCommand(() -> DriveTrain.getInstance().control(0, 0.12, 0), DriveTrain.getInstance()).withTimeout(1),
-      // new InstantCommand(() -> DriveTrain.getInstance().control(0, 0, 0), DriveTrain.getInstance())
     );
   }
 }

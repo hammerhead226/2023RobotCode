@@ -52,7 +52,13 @@ public class LED extends SubsystemBase {
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
-    ledSpark.set(sparkSpeed);
+    
+    // ledSpark.set(sparkSpeed);
+
+    if(DriverStation.getAlliance() == Alliance.Blue){
+      ledSpark.set(Constants.LED_ALLIANCE_BLUE);
+    }else{
+      ledSpark.set(Constants.LED_ALLIANCE_RED);
+    }
   }
 }

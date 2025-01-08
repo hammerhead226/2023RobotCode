@@ -85,7 +85,8 @@ public class RobotContainer {
     return Math.max(min, Math.min(value, max));
   }
 
-  private final double ADJ_SPEED = 0.75;
+  private final double TRX_ADJ_SPEED = 0.90; // Translation max speed
+  private final double ROT_ADJ_SPEED = 0.85; // Rotation max speed
   
   public RobotContainer() {
     configureBindings();
@@ -100,9 +101,9 @@ public class RobotContainer {
 
     dt.setDefaultCommand(
           new RunCommand(
-            () -> dt.control((clamp(Math.pow(driver.getLeftJoyX(), 2), 0, ADJ_SPEED) * (driver.getLeftJoyX() < 0 ? -1 : 1)),
-                             (clamp(Math.pow(driver.getLeftJoyY(), 2), 0, ADJ_SPEED) * (driver.getLeftJoyY() < 0 ? -1 : 1)), 
-                             -clamp(Math.pow(driver.getRightJoyX(), 2), 0, ADJ_SPEED) * (driver.getRightJoyX() < 0 ? -1 : 1)),
+            () -> dt.control((clamp(Math.pow(driver.getLeftJoyX(), 2), 0, TRX_ADJ_SPEED) * (driver.getLeftJoyX() < 0 ? -1 : 1)),
+                             (clamp(Math.pow(driver.getLeftJoyY(), 2), 0, TRX_ADJ_SPEED) * (driver.getLeftJoyY() < 0 ? -1 : 1)), 
+                             -clamp(Math.pow(driver.getRightJoyX(), 2), 0, ROT_ADJ_SPEED) * (driver.getRightJoyX() < 0 ? -1 : 1)),
             dt
             ));
  
@@ -148,8 +149,8 @@ public class RobotContainer {
     // selecter.addOption("score cube low", new OneCubeLow());
     // selecter.addOption("mobility engage", new MobilityEngage());
     selecter.addOption("one cone mobile and engage", new OneConeMobilityEngage());
-    selecter.addOption("red one cube mobile and engage", new OneCubeMobilityEngage("red"));
-    selecter.addOption("blue one cube mobile and engage", new OneCubeMobilityEngage("blue"));
+    selecter.addOption("cube mobile and engage RUN THIS ONE", new OneCubeMobilityEngage("red"));
+    // selecter.addOption("blue one cube mobile and engage", new OneCubeMobilityEngage("blue"));
     // selecter.addOption("red three piece no bump", new ThreePieceAutons("red3nb"));
     // selecter.addOption("red three piece bump", new ThreePieceAutons("red3b"));
     // selecter.addOption("blue three piece no bump", new ThreePieceAutons("blue3nb"));
